@@ -37,12 +37,22 @@ struct TrainingSessionView: View {
             .padding()
         }
         .safeAreaInset(edge: .bottom) {
-            if voiceEnabled {
+            if speechRecognizer.isListening {
                 VoiceCommandBar(speechRecognizer: speechRecognizer, lastCommand: $lastVoiceCommand)
             }
         }
         .navigationTitle("Training")
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button {
+                    speechRecognizer.toggleListening()
+                } label: {
+                    Image(systemName: speechRecognizer.isListening ? "mic.fill" : "mic")
+                        .foregroundStyle(speechRecognizer.isListening ? .red : .cyan)
+                }
+            }
+        }
         .overlay {
             if viewModel.isCheckingIn {
                 ZStack {
@@ -107,7 +117,7 @@ struct TrainingSessionView: View {
                     .foregroundStyle(.orange)
                 Text("How are you feeling?")
                     .font(.title2.bold())
-                Text("Tap a mood to quick check-in before training.")
+                Text("Tap a mood or say it out loud with the mic.")
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
                     .multilineTextAlignment(.center)

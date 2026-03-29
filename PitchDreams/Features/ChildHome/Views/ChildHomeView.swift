@@ -32,20 +32,18 @@ struct ChildHomeView: View {
             .padding()
         }
         .safeAreaInset(edge: .bottom) {
-            if voiceEnabled {
+            if speechRecognizer.isListening {
                 VoiceCommandBar(speechRecognizer: speechRecognizer, lastCommand: $lastVoiceCommand)
             }
         }
         .navigationTitle(viewModel.profile?.nickname ?? "Home")
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
-                if voiceEnabled {
-                    Button {
-                        speechRecognizer.toggleListening()
-                    } label: {
-                        Image(systemName: speechRecognizer.isListening ? "mic.fill" : "mic")
-                            .foregroundStyle(speechRecognizer.isListening ? .red : .primary)
-                    }
+                Button {
+                    speechRecognizer.toggleListening()
+                } label: {
+                    Image(systemName: speechRecognizer.isListening ? "mic.fill" : "mic")
+                        .foregroundStyle(speechRecognizer.isListening ? .red : .cyan)
                 }
             }
             ToolbarItem(placement: .navigationBarTrailing) {

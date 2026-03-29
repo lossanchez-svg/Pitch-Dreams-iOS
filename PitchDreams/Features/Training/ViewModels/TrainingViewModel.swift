@@ -93,23 +93,17 @@ final class TrainingViewModel: ObservableObject {
     }
 
     func loadTodayCheckIn() async {
-        do {
-            // API returns null when no check-in today, so decode as optional
-            let checkIn: CheckIn? = try? await apiClient.request(
-                APIRouter.todayCheckIn(childId: childId)
+        // API returns null when no check-in today — that's normal
+        guard let checkIn: CheckIn = try? await apiClient.request(
+            APIRouter.todayCheckIn(childId: childId)
+        ) else { return }
+
+        checkInState = CheckInResponse(
+            checkIn: checkIn,
+            modeResult: SessionModeResult(
+                mode: checkIn.mode,
+                explanation: checkIn.modeExplanation ?? "Continue with your session."
             )
-            if let checkIn {
-                checkInState = CheckInResponse(
-                    checkIn: checkIn,
-                    modeResult: SessionModeResult(
-                        mode: checkIn.mode,
-                        explanation: checkIn.modeExplanation ?? "Continue with your session."
-                    )
-                )
-            }
-            // nil means no check-in today — that's fine, show mood picker
-        } catch {
-            // Network error — ignore, show mood picker
-        }
+        )
     }
 }

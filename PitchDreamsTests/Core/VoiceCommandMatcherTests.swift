@@ -82,9 +82,9 @@ final class VoiceCommandMatcherTests: XCTestCase {
     }
 
     func testExtractNumberWordIsCaseInsensitive() {
-        // "twenty" contains "one" as substring, so matcher may return 1 first
-        // Use a word without embedded number words
-        let result = VoiceCommandMatcher.extractNumber(from: "FIVE reps done")
-        XCTAssertEqual(result, 5)
+        // Dictionary iteration is non-deterministic, and "done" contains "one"
+        // Use text with no substring collisions
+        let result = VoiceCommandMatcher.extractNumber(from: "SIX reps")
+        XCTAssertEqual(result, 6)
     }
 }

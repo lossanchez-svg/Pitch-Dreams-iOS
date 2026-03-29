@@ -92,20 +92,22 @@ final class ChildDetailViewModel: ObservableObject {
         isLoading = true
         errorMessage = nil
 
-        async let streakTask: StreakData? = try? apiClient.request(
-            APIRouter.getStreaks(childId: childId)
-        )
-        async let sessionsTask: [SessionLog] = (try? apiClient.request(
-            APIRouter.listSessions(childId: childId, limit: 100)
-        )) ?? []
-        async let activitiesTask: [ActivityItem] = (try? apiClient.request(
-            APIRouter.listActivities(childId: childId, limit: 50)
-        )) ?? []
+        do {
+            streakData = try await apiClient.request(APIRouter.getStreaks(childId: childId))
+        } catch { /* non-critical */ }
 
-        let (s, sess, acts) = await (streakTask, sessionsTask, activitiesTask)
-        streakData = s
-        sessions = sess
-        activities = acts
+        do {
+            sessions = try await apiClient.request(APIRouter.listSessions(childId: childId, limit: 100))
+        } catch {
+            sessions = []
+        }
+
+        do {
+            activities = try await apiClient.request(APIRouter.listActivities(childId: childId, limit: 50))
+        } catch {
+            activities = []
+        }
+
         isLoading = false
     }
 

@@ -20,27 +20,42 @@ struct LearnView: View {
                     }
                     .listRowBackground(Color.clear)
                 }
-            } else if viewModel.lessonProgress.isEmpty {
-                Section {
-                    VStack(spacing: 12) {
-                        Image(systemName: "book.closed")
-                            .font(.largeTitle)
-                            .foregroundStyle(.secondary)
-                        Text("No Lessons Yet")
-                            .font(.headline)
-                        Text("Start a training arc to unlock lessons.")
-                            .font(.subheadline)
-                            .foregroundStyle(.secondary)
-                            .multilineTextAlignment(.center)
-                    }
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 24)
-                    .listRowBackground(Color.clear)
-                }
             } else {
-                Section("Lessons") {
-                    ForEach(viewModel.lessonProgress) { lesson in
-                        lessonRow(lesson)
+                // Progress summary
+                Section {
+                    HStack {
+                        Image(systemName: "book.fill")
+                            .foregroundStyle(.cyan)
+                        Text("\(viewModel.completedCount) of \(viewModel.totalCount) lessons completed")
+                            .font(.subheadline.weight(.medium))
+                        Spacer()
+                    }
+                }
+
+                // Lessons by track
+                ForEach(viewModel.lessonsByTrack, id: \.track) { group in
+                    Section {
+                        ForEach(group.lessons) { enriched in
+                            NavigationLink {
+                                LessonDetailView(
+                                    lesson: enriched.tacticalLesson,
+                                    childId: childId,
+                                    isCompleted: enriched.isCompleted,
+                                    quizScore: enriched.quizScore,
+                                    quizTotal: enriched.quizTotal,
+                                    onMarkComplete: {
+                                        await viewModel.markComplete(lessonId: enriched.id)
+                                    }
+                                )
+                            } label: {
+                                lessonCard(enriched)
+                            }
+                        }
+                    } header: {
+                        HStack(spacing: 6) {
+                            Image(systemName: TacticalLessonRegistry.trackIcon(group.track))
+                            Text(TacticalLessonRegistry.trackDisplayName(group.track))
+                        }
                     }
                 }
             }
@@ -63,32 +78,37 @@ struct LearnView: View {
         }
     }
 
-    // MARK: - Lesson Row
+    // MARK: - Lesson Card
 
-    private func lessonRow(_ lesson: LessonProgress) -> some View {
+    private func lessonCard(_ enriched: EnrichedLesson) -> some View {
         HStack {
-            Image(systemName: lesson.completed ? "checkmark.circle.fill" : "circle")
+            Image(systemName: enriched.isCompleted ? "checkmark.circle.fill" : "circle")
                 .font(.title3)
-                .foregroundStyle(lesson.completed ? .green : .secondary)
+                .foregroundStyle(enriched.isCompleted ? .green : .secondary)
                 .frame(width: 32)
 
-            VStack(alignment: .leading, spacing: 2) {
-                Text(LessonRegistry.title(for: lesson.lessonId))
+            VStack(alignment: .leading, spacing: 4) {
+                Text(enriched.tacticalLesson.title)
                     .font(.subheadline.weight(.medium))
-                if lesson.completed {
-                    Text("Completed")
-                        .font(.caption)
-                        .foregroundStyle(.green)
-                } else {
-                    Text("In Progress")
-                        .font(.caption)
+
+                HStack(spacing: 8) {
+                    Text(enriched.tacticalLesson.difficulty.capitalized)
+                        .font(.caption2.weight(.semibold))
+                        .padding(.horizontal, 6)
+                        .padding(.vertical, 2)
+                        .background(difficultyColor(enriched.tacticalLesson.difficulty).opacity(0.15))
+                        .foregroundStyle(difficultyColor(enriched.tacticalLesson.difficulty))
+                        .clipShape(Capsule())
+
+                    Label("\(enriched.tacticalLesson.readingTimeMinutes) min", systemImage: "clock")
+                        .font(.caption2)
                         .foregroundStyle(.secondary)
                 }
             }
 
             Spacer()
 
-            if let score = lesson.quizScore, let total = lesson.quizTotal {
+            if let score = enriched.quizScore, let total = enriched.quizTotal {
                 VStack(alignment: .trailing, spacing: 2) {
                     Text("\(score)/\(total)")
                         .font(.subheadline.weight(.semibold))
@@ -104,10 +124,13 @@ struct LearnView: View {
 
     // MARK: - Helpers
 
-    private func formatLessonId(_ id: String) -> String {
-        id.replacingOccurrences(of: "_", with: " ")
-            .replacingOccurrences(of: "-", with: " ")
-            .capitalized
+    private func difficultyColor(_ difficulty: String) -> Color {
+        switch difficulty {
+        case "beginner": return .green
+        case "intermediate": return .orange
+        case "advanced": return .red
+        default: return .secondary
+        }
     }
 
     private func quizColor(score: Int, total: Int) -> Color {

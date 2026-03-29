@@ -26,6 +26,11 @@ final class ActiveTrainingViewModel: ObservableObject {
     @Published var highlightOptions: [HighlightChip] = []
     @Published var nextFocusOptions: [NextFocusChip] = []
 
+    // MARK: - Voice Coaching
+    @Published var coachVoice = CoachVoice()
+    private var hasSpokedMidDrill = false
+    private var hasSpoken30s = false
+
     // MARK: - Session Meta
     @Published var isLoading = false
     @Published var errorMessage: String?
@@ -73,6 +78,18 @@ final class ActiveTrainingViewModel: ObservableObject {
         if sessionStartTime == nil {
             sessionStartTime = Date()
         }
+        hasSpokedMidDrill = false
+        hasSpoken30s = false
+
+        // Voice: announce drill start
+        if let drill = currentDrill {
+            let durationMinutes = max(1, drill.duration / 60)
+            coachVoice.speak(
+                "\(drill.name). You've got \(durationMinutes) minutes. \(drill.coachTip)",
+                personality: "manager"
+            )
+        }
+
         isTimerRunning = true
         timerCancellable = Timer.publish(every: 1, on: .main, in: .common)
             .autoconnect()
@@ -81,11 +98,25 @@ final class ActiveTrainingViewModel: ObservableObject {
                     guard let self, self.isTimerRunning else { return }
                     if self.timeRemaining > 0 {
                         self.timeRemaining -= 1
+                        self.checkVoiceMilestones()
                     } else {
                         self.completeDrill()
                     }
                 }
             }
+    }
+
+    private func checkVoiceMilestones() {
+        // Mid-drill at 60s remaining
+        if timeRemaining == 60 && !hasSpokedMidDrill {
+            hasSpokedMidDrill = true
+            coachVoice.speak("Keep going. \(timeRemaining) seconds to go.", personality: "hype")
+        }
+        // 30s remaining
+        if timeRemaining == 30 && !hasSpoken30s {
+            hasSpoken30s = true
+            coachVoice.speak("Thirty seconds! Finish strong.", personality: "hype")
+        }
     }
 
     func pauseTimer() {
@@ -96,12 +127,16 @@ final class ActiveTrainingViewModel: ObservableObject {
     func completeDrill() {
         pauseTimer()
         phase = .repConfirm
+        // Voice: timer expired
+        coachVoice.speak("Time! How many reps did you get?", personality: "manager")
     }
 
     func confirmReps() {
         if isLastDrill {
             phase = .reflection
             loadReflectionOptions()
+            // Voice: reflection start
+            coachVoice.speak("Quick reflection. How hard was that, 1 to 10?", personality: "zen")
         } else {
             nextDrill()
         }
@@ -172,6 +207,8 @@ final class ActiveTrainingViewModel: ObservableObject {
             }
             sessionSaved = true
             phase = .complete
+            // Voice: session complete
+            coachVoice.speak("Well done. Session complete.", personality: "manager")
         } catch {
             errorMessage = "Failed to save session. Please try again."
         }

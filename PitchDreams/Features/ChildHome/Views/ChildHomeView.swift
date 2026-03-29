@@ -116,63 +116,11 @@ struct ChildHomeView: View {
     // MARK: - Streak
 
     private var streakCard: some View {
-        VStack(spacing: 12) {
-            HStack(spacing: 16) {
-                VStack(spacing: 4) {
-                    Text(flameEmoji)
-                        .font(.system(size: 44))
-                    Text("\(viewModel.streakCount)")
-                        .font(.title.bold())
-                        .foregroundStyle(.orange)
-                        .contentTransition(.numericText())
-                    Text("day streak")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                }
-                .frame(width: 80)
-
-                Divider()
-                    .frame(height: 60)
-
-                VStack(alignment: .leading, spacing: 8) {
-                    if viewModel.freezeCount > 0 {
-                        Label("\(viewModel.freezeCount) freezes available", systemImage: "shield.fill")
-                            .font(.subheadline)
-                            .foregroundStyle(.cyan)
-                    }
-
-                    if let milestones = viewModel.streakData?.milestones, !milestones.isEmpty {
-                        Label("Best: \(milestones.max() ?? 0) days", systemImage: "trophy.fill")
-                            .font(.subheadline)
-                            .foregroundStyle(.yellow)
-                    }
-
-                    Text(streakMessage)
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                }
-                .frame(maxWidth: .infinity, alignment: .leading)
-            }
-        }
-        .padding()
-        .background(.regularMaterial)
-        .clipShape(RoundedRectangle(cornerRadius: 16))
-    }
-
-    private var flameEmoji: String {
-        let count = viewModel.streakCount
-        if count == 0 { return "💤" }
-        if count < 7 { return "✨" }
-        return "🔥"
-    }
-
-    private var streakMessage: String {
-        let count = viewModel.streakCount
-        if count == 0 { return "Start your streak today!" }
-        if count < 3 { return "Building momentum..." }
-        if count < 7 { return "Keep it going!" }
-        if count < 14 { return "Great consistency!" }
-        return "Outstanding dedication!"
+        ConsistencyRingView(
+            streak: viewModel.streakCount,
+            maxStreak: 30,
+            freezes: viewModel.freezeCount
+        )
     }
 
     // MARK: - Quick Actions

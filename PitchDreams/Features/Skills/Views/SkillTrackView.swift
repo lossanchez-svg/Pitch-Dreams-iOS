@@ -40,7 +40,15 @@ struct SkillTrackView: View {
             } else {
                 Section("Your Drills") {
                     ForEach(viewModel.drillStats) { stat in
-                        drillRow(stat)
+                        if let drill = DrillRegistry.all.first(where: { $0.id == stat.drillKey }) {
+                            NavigationLink {
+                                DrillDetailView(drill: drill, childId: childId)
+                            } label: {
+                                drillRow(stat)
+                            }
+                        } else {
+                            drillRow(stat)
+                        }
                     }
                 }
             }

@@ -2,12 +2,16 @@ import SwiftUI
 
 struct ChildDetailView: View {
     let child: ChildSummary
-    @State private var streakData: StreakData?
-    @State private var isLoading = true
+    @StateObject private var viewModel: ChildDetailViewModel
     @State private var showExportAlert = false
     @State private var showDeleteAlert = false
 
     private let apiClient: APIClientProtocol = APIClient()
+
+    init(child: ChildSummary) {
+        self.child = child
+        _viewModel = StateObject(wrappedValue: ChildDetailViewModel(childId: child.id))
+    }
 
     var body: some View {
         List {
@@ -36,8 +40,60 @@ struct ChildDetailView: View {
                 .padding(.vertical, 8)
             }
 
+            // Monthly overview
+            Section("This Month") {
+                LabeledContent("Sessions") {
+                    Text("\(viewModel.monthlySessionCount)")
+                        .font(.body.bold())
+                }
+                LabeledContent("Training Time") {
+                    Text(viewModel.formattedTotalTime)
+                        .font(.body.bold())
+                }
+                LabeledContent("Current Streak") {
+                    HStack(spacing: 4) {
+                        Image(systemName: "flame.fill")
+                            .foregroundStyle(.orange)
+                        Text("\(viewModel.currentStreak) days")
+                            .font(.body.bold())
+                    }
+                }
+                LabeledContent("Avg Intensity") {
+                    Text(viewModel.avgRPE > 0 ? String(format: "%.1f / 10", viewModel.avgRPE) : "N/A")
+                        .font(.body.bold())
+                }
+                LabeledContent("Avg Game IQ") {
+                    Text(viewModel.avgGameIQLabel)
+                        .font(.body.bold())
+                        .foregroundStyle(gameIQColor(viewModel.avgGameIQLabel))
+                }
+            }
+
+            // Activity Breakdown
+            if !viewModel.activityBreakdown.isEmpty {
+                Section("Activity Breakdown") {
+                    ForEach(viewModel.activityBreakdown, id: \.type) { item in
+                        HStack {
+                            Image(systemName: activityIcon(item.type))
+                                .foregroundStyle(.orange)
+                                .frame(width: 24)
+                            Text(ActivityType(rawValue: item.type)?.displayName ?? item.type)
+                                .font(.subheadline)
+                            Spacer()
+                            VStack(alignment: .trailing, spacing: 2) {
+                                Text("\(item.count) sessions")
+                                    .font(.caption.weight(.semibold))
+                                Text("\(item.minutes) min")
+                                    .font(.caption2)
+                                    .foregroundStyle(.secondary)
+                            }
+                        }
+                    }
+                }
+            }
+
             // Streak section
-            if let streak = streakData {
+            if let streak = viewModel.streakData {
                 Section("Streaks") {
                     LabeledContent("Freezes Available", value: "\(streak.freezes)")
                     LabeledContent("Freezes Used", value: "\(streak.freezesUsed)")
@@ -73,8 +129,16 @@ struct ChildDetailView: View {
         }
         .navigationTitle(child.nickname)
         .navigationBarTitleDisplayMode(.inline)
+        .overlay {
+            if viewModel.isLoading && viewModel.sessions.isEmpty {
+                ProgressView()
+            }
+        }
+        .refreshable {
+            await viewModel.loadData()
+        }
         .task {
-            await loadData()
+            await viewModel.loadData()
         }
         .alert("Export Data", isPresented: $showExportAlert) {
             Button("Export") { Task { await exportData() } }
@@ -90,14 +154,31 @@ struct ChildDetailView: View {
         }
     }
 
-    private func loadData() async {
-        isLoading = true
-        streakData = try? await apiClient.request(APIRouter.getStreaks(childId: child.id))
-        isLoading = false
+    // MARK: - Helpers
+
+    private func gameIQColor(_ label: String) -> Color {
+        switch label {
+        case "High": return .green
+        case "Medium": return .orange
+        case "Low": return .red
+        default: return .secondary
+        }
+    }
+
+    private func activityIcon(_ type: String) -> String {
+        switch type {
+        case "SELF_TRAINING": return "figure.run"
+        case "COACH_1ON1": return "person.2.fill"
+        case "TEAM_TRAINING": return "person.3.fill"
+        case "FACILITY_CLASS": return "building.2.fill"
+        case "OFFICIAL_GAME": return "sportscourt.fill"
+        case "FUTSAL_GAME": return "soccerball"
+        case "INDOOR_LEAGUE_GAME": return "soccerball.inverse"
+        default: return "figure.run"
+        }
     }
 
     private func exportData() async {
-        // TODO: Handle export response (download/share JSON)
         let _: ExportResponse? = try? await apiClient.request(APIRouter.exportChildData(childId: child.id))
     }
 

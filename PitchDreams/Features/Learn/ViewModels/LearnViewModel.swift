@@ -1,5 +1,15 @@
 import Foundation
 
+struct EnrichedLesson: Identifiable {
+    let id: String
+    let tacticalLesson: TacticalLesson
+    let progress: LessonProgress?
+
+    var isCompleted: Bool { progress?.completed ?? false }
+    var quizScore: Int? { progress?.quizScore }
+    var quizTotal: Int? { progress?.quizTotal }
+}
+
 @MainActor
 final class LearnViewModel: ObservableObject {
     @Published var lessonProgress: [LessonProgress] = []
@@ -12,6 +22,31 @@ final class LearnViewModel: ObservableObject {
     init(childId: String, apiClient: APIClientProtocol = APIClient()) {
         self.childId = childId
         self.apiClient = apiClient
+    }
+
+    /// All lessons from the registry enriched with progress data
+    var enrichedLessons: [EnrichedLesson] {
+        TacticalLessonRegistry.all.map { lesson in
+            let progress = lessonProgress.first { $0.lessonId == lesson.id }
+            return EnrichedLesson(id: lesson.id, tacticalLesson: lesson, progress: progress)
+        }
+    }
+
+    /// Lessons grouped by track
+    var lessonsByTrack: [(track: String, lessons: [EnrichedLesson])] {
+        TacticalLessonRegistry.tracks.compactMap { track in
+            let lessons = enrichedLessons.filter { $0.tacticalLesson.track == track }
+            guard !lessons.isEmpty else { return nil }
+            return (track: track, lessons: lessons)
+        }
+    }
+
+    var completedCount: Int {
+        enrichedLessons.filter(\.isCompleted).count
+    }
+
+    var totalCount: Int {
+        enrichedLessons.count
     }
 
     func loadProgress() async {

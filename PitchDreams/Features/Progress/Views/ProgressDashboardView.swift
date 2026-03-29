@@ -58,6 +58,20 @@ struct ProgressDashboardView: View {
                 color: .orange
             )
             statCard(
+                title: "Max Streak",
+                value: "\(viewModel.maxStreak)",
+                unit: "days",
+                icon: "trophy.fill",
+                color: .yellow
+            )
+            statCard(
+                title: "This Month",
+                value: "\(viewModel.thisMonthSessions)",
+                unit: "sessions",
+                icon: "calendar",
+                color: .cyan
+            )
+            statCard(
                 title: "Total Sessions",
                 value: "\(viewModel.totalSessions)",
                 unit: "sessions",
@@ -66,14 +80,14 @@ struct ProgressDashboardView: View {
             )
             statCard(
                 title: "Training Time",
-                value: formattedTime(viewModel.totalMinutes),
+                value: viewModel.formattedTotalTime,
                 unit: "",
                 icon: "clock.fill",
                 color: .green
             )
             statCard(
-                title: "Avg Intensity",
-                value: String(format: "%.1f", viewModel.averageEffort),
+                title: "Avg RPE",
+                value: viewModel.averageEffort > 0 ? String(format: "%.1f", viewModel.averageEffort) : "--",
                 unit: "/ 10",
                 icon: "bolt.fill",
                 color: .purple
@@ -190,41 +204,120 @@ struct ProgressDashboardView: View {
     }
 
     private func sessionRow(_ session: SessionLog) -> some View {
-        HStack {
-            Image(systemName: sessionIcon(session.activityType))
-                .font(.body)
-                .foregroundStyle(.orange)
-                .frame(width: 28)
+        VStack(alignment: .leading, spacing: 8) {
+            HStack {
+                Image(systemName: sessionIcon(session.activityType))
+                    .font(.body)
+                    .foregroundStyle(.orange)
+                    .frame(width: 28)
 
-            VStack(alignment: .leading, spacing: 2) {
-                Text(sessionTypeName(session.activityType))
-                    .font(.subheadline.weight(.medium))
-                Text(formattedDate(session.createdAt))
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(sessionTypeName(session.activityType))
+                        .font(.subheadline.weight(.medium))
+                    Text(formattedDate(session.createdAt))
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+
+                Spacer()
+
+                VStack(alignment: .trailing, spacing: 2) {
+                    if let duration = session.duration {
+                        Text("\(duration) min")
+                            .font(.subheadline.weight(.semibold))
+                    }
+                    HStack(spacing: 8) {
+                        if let effort = session.effortLevel {
+                            rpeBadge(effort)
+                        }
+                        if let mood = session.mood {
+                            moodBadge(mood)
+                        }
+                    }
+                }
             }
 
-            Spacer()
-
-            VStack(alignment: .trailing, spacing: 2) {
-                if let duration = session.duration {
-                    Text("\(duration) min")
-                        .font(.subheadline.weight(.semibold))
-                }
-                if let effort = session.effortLevel {
-                    HStack(spacing: 2) {
-                        Image(systemName: "bolt.fill")
+            // Highlight chips
+            let highlights = viewModel.parseChips(session.win)
+            if !highlights.isEmpty {
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(spacing: 6) {
+                        Image(systemName: "star.fill")
                             .font(.caption2)
-                        Text("\(effort)")
-                            .font(.caption)
+                            .foregroundStyle(.yellow)
+                        ForEach(highlights, id: \.self) { chip in
+                            Text(chip)
+                                .font(.caption2)
+                                .padding(.horizontal, 6)
+                                .padding(.vertical, 2)
+                                .background(.yellow.opacity(0.12))
+                                .foregroundStyle(.orange)
+                                .clipShape(Capsule())
+                        }
                     }
-                    .foregroundStyle(.secondary)
+                }
+            }
+
+            // Next focus chips
+            let focuses = viewModel.parseChips(session.focus)
+            if !focuses.isEmpty {
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(spacing: 6) {
+                        Image(systemName: "scope")
+                            .font(.caption2)
+                            .foregroundStyle(.cyan)
+                        ForEach(focuses, id: \.self) { chip in
+                            Text(chip)
+                                .font(.caption2)
+                                .padding(.horizontal, 6)
+                                .padding(.vertical, 2)
+                                .background(.cyan.opacity(0.12))
+                                .foregroundStyle(.cyan)
+                                .clipShape(Capsule())
+                        }
+                    }
                 }
             }
         }
         .padding(12)
         .background(.regularMaterial)
         .clipShape(RoundedRectangle(cornerRadius: 10))
+    }
+
+    private func rpeBadge(_ effort: Int) -> some View {
+        HStack(spacing: 2) {
+            Image(systemName: "bolt.fill")
+                .font(.caption2)
+            Text("\(effort)")
+                .font(.caption.weight(.semibold))
+        }
+        .padding(.horizontal, 6)
+        .padding(.vertical, 2)
+        .background(rpeColor(effort).opacity(0.15))
+        .foregroundStyle(rpeColor(effort))
+        .clipShape(Capsule())
+    }
+
+    private func moodBadge(_ mood: String) -> some View {
+        Text(moodEmoji(mood))
+            .font(.caption)
+    }
+
+    private func rpeColor(_ rpe: Int) -> Color {
+        if rpe <= 3 { return .green }
+        if rpe <= 6 { return .orange }
+        return .red
+    }
+
+    private func moodEmoji(_ mood: String) -> String {
+        switch mood.uppercased() {
+        case "EXCITED": return "😊"
+        case "FOCUSED": return "🎯"
+        case "OKAY": return "😐"
+        case "TIRED": return "😴"
+        case "STRESSED": return "😤"
+        default: return "😐"
+        }
     }
 
     // MARK: - Empty State
@@ -247,13 +340,6 @@ struct ProgressDashboardView: View {
     }
 
     // MARK: - Helpers
-
-    private func formattedTime(_ minutes: Int) -> String {
-        if minutes < 60 { return "\(minutes)m" }
-        let hours = minutes / 60
-        let mins = minutes % 60
-        return mins > 0 ? "\(hours)h \(mins)m" : "\(hours)h"
-    }
 
     private func sessionIcon(_ type: String?) -> String {
         guard let type else { return "figure.run" }

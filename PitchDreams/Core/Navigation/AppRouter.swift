@@ -29,9 +29,10 @@ struct LaunchScreenView: View {
         ZStack {
             Color.hudBackground.ignoresSafeArea()
             VStack(spacing: 16) {
-                Image(systemName: "sportscourt.fill")
-                    .font(.system(size: 60))
-                    .foregroundColor(.hudCyan)
+                Image("Logo")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 120, height: 120)
                 Text("PitchDreams")
                     .font(.largeTitle.bold())
                     .foregroundColor(.white)

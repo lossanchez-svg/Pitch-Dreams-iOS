@@ -13,9 +13,10 @@ struct LoginChoiceView: View {
                 VStack(spacing: 32) {
                     Spacer()
 
-                    Image(systemName: "sportscourt.fill")
-                        .font(.system(size: 72))
-                        .foregroundColor(.hudCyan)
+                    Image("Logo")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 150, height: 150)
 
                     VStack(spacing: 8) {
                         Text("PitchDreams")

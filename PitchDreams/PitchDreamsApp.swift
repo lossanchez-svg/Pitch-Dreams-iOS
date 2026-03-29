@@ -9,7 +9,7 @@ struct PitchDreamsApp: App {
             AppRouter()
                 .environmentObject(authManager)
                 .task {
-                    await authManager.restoreSession()
+                    authManager.restoreSession()
                 }
         }
     }

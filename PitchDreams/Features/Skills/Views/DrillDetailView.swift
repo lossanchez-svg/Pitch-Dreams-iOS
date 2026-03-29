@@ -7,6 +7,9 @@ struct DrillDetailView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
+                // Skill Diagram
+                SkillDiagramView(drillId: drill.id, category: drill.category)
+
                 // Header
                 VStack(alignment: .leading, spacing: 8) {
                     HStack {

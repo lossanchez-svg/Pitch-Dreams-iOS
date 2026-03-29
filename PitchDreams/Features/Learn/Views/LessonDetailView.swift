@@ -38,6 +38,17 @@ struct LessonDetailView: View {
                     .font(.body)
                     .foregroundStyle(.secondary)
 
+                // Tactical Pitch Diagram
+                if !lesson.diagram.isEmpty {
+                    VStack(alignment: .leading, spacing: 8) {
+                        Label("Tactical View", systemImage: "sportscourt.fill")
+                            .font(.headline)
+
+                        TacticalPitchView(elements: lesson.diagram)
+                            .padding(.vertical, 4)
+                    }
+                }
+
                 // Learning Steps
                 VStack(alignment: .leading, spacing: 12) {
                     Label("Learning Steps", systemImage: "list.number")

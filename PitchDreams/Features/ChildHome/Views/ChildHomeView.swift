@@ -127,14 +127,36 @@ struct ChildHomeView: View {
     // MARK: - Welcome
 
     private var welcomeSection: some View {
-        VStack(alignment: .leading, spacing: 4) {
-            Text("\(viewModel.greeting), \(viewModel.profile?.nickname ?? "player")!")
-                .font(.title2.bold())
-            Text("Every session counts.")
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
+        HStack(spacing: 14) {
+            avatarImage
+                .frame(width: 52, height: 52)
+                .clipShape(Circle())
+
+            VStack(alignment: .leading, spacing: 4) {
+                Text("\(viewModel.greeting), \(viewModel.profile?.nickname ?? "player")!")
+                    .font(.title2.bold())
+                Text("Every session counts.")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+            }
+            Spacer()
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
+    }
+
+    @ViewBuilder
+    private var avatarImage: some View {
+        if let avatarId = viewModel.profile?.avatarId,
+           UIImage(named: avatarId) != nil {
+            Image(avatarId)
+                .resizable()
+                .scaledToFill()
+        } else {
+            Image(systemName: "figure.soccer")
+                .font(.title)
+                .foregroundStyle(.cyan)
+                .frame(width: 52, height: 52)
+                .background(.cyan.opacity(0.12))
+        }
     }
 
     // MARK: - Streak
@@ -227,27 +249,48 @@ struct ChildHomeView: View {
     // MARK: - Coach Nudge
 
     private func coachNudgeCard(_ nudge: CoachNudge) -> some View {
-        VStack(alignment: .leading, spacing: 8) {
-            HStack {
-                Image(systemName: "message.fill")
-                    .foregroundStyle(.cyan)
-                Text(nudge.title)
-                    .font(.headline)
-            }
-            Text(nudge.message)
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
+        HStack(alignment: .top, spacing: 12) {
+            coachPortrait
+                .frame(width: 44, height: 44)
+                .clipShape(Circle())
 
-            Button(nudge.actionLabel) {
-                // Action handled in future
+            VStack(alignment: .leading, spacing: 8) {
+                HStack {
+                    Image(systemName: "message.fill")
+                        .foregroundStyle(.cyan)
+                    Text(nudge.title)
+                        .font(.headline)
+                }
+                Text(nudge.message)
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+
+                Button(nudge.actionLabel) {
+                    // Action handled in future
+                }
+                .font(.subheadline.weight(.semibold))
+                .foregroundStyle(.cyan)
             }
-            .font(.subheadline.weight(.semibold))
-            .foregroundStyle(.cyan)
         }
         .padding()
         .frame(maxWidth: .infinity, alignment: .leading)
         .background(.cyan.opacity(0.08))
         .clipShape(RoundedRectangle(cornerRadius: 12))
+    }
+
+    @ViewBuilder
+    private var coachPortrait: some View {
+        if UIImage(named: "Coach") != nil {
+            Image("Coach")
+                .resizable()
+                .scaledToFill()
+        } else {
+            Image(systemName: "person.crop.circle.fill")
+                .font(.title)
+                .foregroundStyle(.cyan)
+                .frame(width: 44, height: 44)
+                .background(.cyan.opacity(0.12))
+        }
     }
 
     // MARK: - Explore

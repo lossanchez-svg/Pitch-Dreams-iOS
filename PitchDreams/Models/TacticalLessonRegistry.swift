@@ -8,6 +8,7 @@ struct TacticalLesson: Identifiable {
     let difficulty: String  // beginner, intermediate, advanced
     let steps: [String]
     let readingTimeMinutes: Int
+    let diagram: [PitchElement]
 }
 
 enum TacticalLessonRegistry {
@@ -25,7 +26,20 @@ enum TacticalLessonRegistry {
                 "Receive the ball with your body already open to the best option.",
                 "Practice scanning at least twice before every touch in training."
             ],
-            readingTimeMinutes: 3
+            readingTimeMinutes: 3,
+            diagram: [
+                PitchElement(id: "self", type: .player, x: 50, y: 55, label: "You", highlight: true),
+                PitchElement(id: "t1", type: .teammate, x: 15, y: 48, label: "LW"),
+                PitchElement(id: "t2", type: .teammate, x: 56, y: 33, label: "CF"),
+                PitchElement(id: "passer", type: .teammate, x: 45, y: 82, label: "Passer"),
+                PitchElement(id: "o1", type: .opponent, x: 38, y: 32),
+                PitchElement(id: "o2", type: .opponent, x: 62, y: 32),
+                PitchElement(id: "ball", type: .ball, x: 45, y: 80),
+                PitchElement(id: "pass", type: .arrow, x: 45, y: 80, toX: 49, toY: 58, arrowType: "pass"),
+                PitchElement(id: "scan-left", type: .arrow, x: 50, y: 55, toX: 30, toY: 45, arrowType: "scan"),
+                PitchElement(id: "scan-right", type: .arrow, x: 50, y: 55, toX: 70, toY: 45, arrowType: "scan"),
+                PitchElement(id: "scan-behind", type: .arrow, x: 50, y: 55, toX: 50, toY: 70, arrowType: "scan"),
+            ]
         ),
         TacticalLesson(
             id: "receive-decide-execute",
@@ -39,7 +53,21 @@ enum TacticalLessonRegistry {
                 "Execute: Carry out your decision without second-guessing. Speed of action beats perfection.",
                 "After each action, immediately reset and scan for the next cycle."
             ],
-            readingTimeMinutes: 3
+            readingTimeMinutes: 3,
+            diagram: [
+                PitchElement(id: "self", type: .player, x: 50, y: 50, label: "You", highlight: true),
+                PitchElement(id: "passer", type: .teammate, x: 50, y: 78, label: "Passer"),
+                PitchElement(id: "opt1", type: .teammate, x: 25, y: 38, label: "Option 1"),
+                PitchElement(id: "opt2", type: .teammate, x: 55, y: 28, label: "Option 2"),
+                PitchElement(id: "opt3", type: .teammate, x: 78, y: 42, label: "Option 3"),
+                PitchElement(id: "o1", type: .opponent, x: 40, y: 42),
+                PitchElement(id: "o2", type: .opponent, x: 65, y: 38),
+                PitchElement(id: "ball", type: .ball, x: 50, y: 75),
+                PitchElement(id: "receive", type: .arrow, x: 50, y: 75, toX: 50, toY: 53, arrowType: "pass"),
+                PitchElement(id: "pass1", type: .arrow, x: 50, y: 50, toX: 27, toY: 40, arrowType: "pass"),
+                PitchElement(id: "pass2", type: .arrow, x: 50, y: 50, toX: 55, toY: 30, arrowType: "pass"),
+                PitchElement(id: "pass3", type: .arrow, x: 50, y: 50, toX: 76, toY: 44, arrowType: "pass"),
+            ]
         ),
         TacticalLesson(
             id: "patience-in-possession",
@@ -54,7 +82,23 @@ enum TacticalLessonRegistry {
                 "Watch for a teammate making a late run as the signal to accelerate.",
                 "Practice keeping the ball for 10 consecutive passes in small-sided games."
             ],
-            readingTimeMinutes: 4
+            readingTimeMinutes: 4,
+            diagram: [
+                PitchElement(id: "self", type: .player, x: 50, y: 55, label: "You", highlight: true),
+                PitchElement(id: "t1", type: .teammate, x: 20, y: 55, label: "LM"),
+                PitchElement(id: "t2", type: .teammate, x: 80, y: 55, label: "RM"),
+                PitchElement(id: "t3", type: .teammate, x: 50, y: 75, label: "CDM"),
+                PitchElement(id: "t4", type: .teammate, x: 50, y: 30, label: "ST"),
+                PitchElement(id: "o1", type: .opponent, x: 45, y: 42),
+                PitchElement(id: "o2", type: .opponent, x: 55, y: 42),
+                PitchElement(id: "o3", type: .opponent, x: 35, y: 50),
+                PitchElement(id: "ball", type: .ball, x: 48, y: 53),
+                PitchElement(id: "side-pass", type: .arrow, x: 50, y: 55, toX: 22, toY: 55, arrowType: "pass"),
+                PitchElement(id: "back-pass", type: .arrow, x: 50, y: 55, toX: 50, toY: 73, arrowType: "pass"),
+                PitchElement(id: "late-run", type: .arrow, x: 80, y: 55, toX: 70, toY: 35, arrowType: "run"),
+                // Congested forward zone
+                PitchElement(id: "blocked-zone", type: .zone, x: 35, y: 30, toX: 65, toY: 48, arrowType: nil),
+            ]
         ),
         TacticalLesson(
             id: "check-your-shoulder",
@@ -69,7 +113,18 @@ enum TacticalLessonRegistry {
                 "Practice the shoulder check every single time you receive in training.",
                 "Aim for two shoulder checks per possession as a baseline."
             ],
-            readingTimeMinutes: 3
+            readingTimeMinutes: 3,
+            diagram: [
+                PitchElement(id: "self", type: .player, x: 50, y: 50, label: "You", highlight: true),
+                PitchElement(id: "passer", type: .teammate, x: 50, y: 80, label: "Passer"),
+                PitchElement(id: "defender", type: .opponent, x: 50, y: 40, label: "Defender"),
+                PitchElement(id: "ball", type: .ball, x: 50, y: 77),
+                PitchElement(id: "pass-in", type: .arrow, x: 50, y: 77, toX: 50, toY: 53, arrowType: "pass"),
+                PitchElement(id: "shoulder-check", type: .arrow, x: 50, y: 50, toX: 50, toY: 38, arrowType: "scan"),
+                // Two options after check
+                PitchElement(id: "turn-option", type: .arrow, x: 50, y: 50, toX: 35, toY: 35, arrowType: "run"),
+                PitchElement(id: "safe-option", type: .arrow, x: 50, y: 50, toX: 50, toY: 65, arrowType: "pass"),
+            ]
         ),
         TacticalLesson(
             id: "press-triggers",
@@ -84,7 +139,23 @@ enum TacticalLessonRegistry {
                 "If no trigger is present, hold your position and stay compact.",
                 "Communicate with teammates so you press as a unit, not alone."
             ],
-            readingTimeMinutes: 4
+            readingTimeMinutes: 4,
+            diagram: [
+                PitchElement(id: "self", type: .player, x: 50, y: 55, label: "You", highlight: true),
+                PitchElement(id: "t1", type: .teammate, x: 30, y: 55, label: "LM"),
+                PitchElement(id: "t2", type: .teammate, x: 70, y: 55, label: "RM"),
+                PitchElement(id: "target", type: .opponent, x: 50, y: 42, label: "Target"),
+                PitchElement(id: "o2", type: .opponent, x: 30, y: 35),
+                PitchElement(id: "o3", type: .opponent, x: 70, y: 35),
+                PitchElement(id: "ball", type: .ball, x: 50, y: 40),
+                // Press run
+                PitchElement(id: "press-run", type: .arrow, x: 50, y: 55, toX: 50, toY: 44, arrowType: "run"),
+                // Teammates cut lanes
+                PitchElement(id: "cut-left", type: .arrow, x: 30, y: 55, toX: 35, toY: 38, arrowType: "run"),
+                PitchElement(id: "cut-right", type: .arrow, x: 70, y: 55, toX: 65, toY: 38, arrowType: "run"),
+                // Compact zone
+                PitchElement(id: "press-zone", type: .zone, x: 25, y: 35, label: "Press Zone", toX: 75, toY: 57, arrowType: nil),
+            ]
         ),
         TacticalLesson(
             id: "third-man-run",
@@ -99,7 +170,23 @@ enum TacticalLessonRegistry {
                 "Player B plays a first-time or quick pass into the path of Player C.",
                 "Practice the timing so Player C arrives in space just as the ball does."
             ],
-            readingTimeMinutes: 5
+            readingTimeMinutes: 5,
+            diagram: [
+                PitchElement(id: "playerA", type: .teammate, x: 50, y: 70, label: "A (Passer)", highlight: false),
+                PitchElement(id: "playerB", type: .teammate, x: 50, y: 50, label: "B (Link)"),
+                PitchElement(id: "playerC", type: .player, x: 30, y: 55, label: "C (You)", highlight: true),
+                PitchElement(id: "defender1", type: .opponent, x: 50, y: 42),
+                PitchElement(id: "defender2", type: .opponent, x: 40, y: 38),
+                PitchElement(id: "ball", type: .ball, x: 50, y: 68),
+                // Step 1: A to B
+                PitchElement(id: "pass1", type: .arrow, x: 50, y: 68, toX: 50, toY: 53, arrowType: "pass"),
+                // Step 2: C makes the run
+                PitchElement(id: "third-run", type: .arrow, x: 30, y: 55, toX: 45, toY: 30, arrowType: "run"),
+                // Step 3: B to C
+                PitchElement(id: "pass2", type: .arrow, x: 50, y: 50, toX: 44, toY: 32, arrowType: "pass"),
+                // Space zone
+                PitchElement(id: "space", type: .zone, x: 30, y: 25, label: "Space", toX: 55, toY: 40, arrowType: nil),
+            ]
         ),
         TacticalLesson(
             id: "switching-the-play",
@@ -114,7 +201,23 @@ enum TacticalLessonRegistry {
                 "The receiving player should already be in position with an open body shape.",
                 "After switching, the team should attack quickly before the defense can reorganize."
             ],
-            readingTimeMinutes: 4
+            readingTimeMinutes: 4,
+            diagram: [
+                PitchElement(id: "self", type: .player, x: 25, y: 55, label: "You", highlight: true),
+                PitchElement(id: "t1", type: .teammate, x: 80, y: 50, label: "RW"),
+                PitchElement(id: "t2", type: .teammate, x: 15, y: 40, label: "LW"),
+                PitchElement(id: "t3", type: .teammate, x: 50, y: 65, label: "CM"),
+                PitchElement(id: "o1", type: .opponent, x: 30, y: 42),
+                PitchElement(id: "o2", type: .opponent, x: 40, y: 48),
+                PitchElement(id: "o3", type: .opponent, x: 20, y: 50),
+                PitchElement(id: "ball", type: .ball, x: 23, y: 53),
+                // Switch pass
+                PitchElement(id: "switch", type: .arrow, x: 25, y: 55, toX: 78, toY: 50, arrowType: "pass"),
+                // Defenders shifted left
+                PitchElement(id: "shifted-zone", type: .zone, x: 10, y: 38, label: "Congested", toX: 48, toY: 56, arrowType: nil),
+                // Space on right
+                PitchElement(id: "open-zone", type: .zone, x: 60, y: 38, label: "Open Space", highlight: true, toX: 90, toY: 58, arrowType: nil),
+            ]
         ),
         TacticalLesson(
             id: "blind-side-movement",
@@ -129,7 +232,8 @@ enum TacticalLessonRegistry {
                 "Use a short, sharp burst of acceleration to separate from the marker.",
                 "Practice starting your run from a standing position to disguise your intent."
             ],
-            readingTimeMinutes: 5
+            readingTimeMinutes: 5,
+            diagram: []
         ),
         TacticalLesson(
             id: "controlling-the-tempo",
@@ -144,7 +248,8 @@ enum TacticalLessonRegistry {
                 "A quick one-touch pass signals acceleration; a controlled receive signals patience.",
                 "Practice by alternating between fast-combination play and slow build-up in training games."
             ],
-            readingTimeMinutes: 5
+            readingTimeMinutes: 5,
+            diagram: []
         ),
         TacticalLesson(
             id: "breathing-under-pressure",
@@ -159,7 +264,8 @@ enum TacticalLessonRegistry {
                 "Focus on the next action only -- do not dwell on the previous mistake.",
                 "Practice this breathing routine during training so it becomes automatic in matches."
             ],
-            readingTimeMinutes: 3
+            readingTimeMinutes: 3,
+            diagram: []
         ),
     ]
 

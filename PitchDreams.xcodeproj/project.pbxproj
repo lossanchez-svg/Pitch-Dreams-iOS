@@ -46,6 +46,7 @@
 		6D62BE5E7508141F6BDF0E52 /* VoiceCommandBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3440DF015FEA28E3CD89903 /* VoiceCommandBar.swift */; };
 		737516CBE865BB615C03B286 /* LessonRegistry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60E25817949E901A9E7C4E7F /* LessonRegistry.swift */; };
 		76B25594E7CC4F405353FB96 /* ConfettiView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64BA9594EB7E4CBBB0615C83 /* ConfettiView.swift */; };
+		78FF0E8B5BAF43F8796DF8BF /* TacticalPitchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9807C18EC82926CD51A51393 /* TacticalPitchView.swift */; };
 		7A9BD6239102534F57555511 /* Color+HUD.swift in Sources */ = {isa = PBXBuildFile; fileRef = B328823B75923C3011024AB2 /* Color+HUD.swift */; };
 		7AB67005D4953FD72E515CAA /* QuickLogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A69AF56C9F54B2AF1EAC1FC1 /* QuickLogView.swift */; };
 		7F4F7AD7E908D4BB4DEBAB2D /* StreakMilestoneModal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95BB1FA4C299F4CA31E895AF /* StreakMilestoneModal.swift */; };
@@ -64,6 +65,7 @@
 		9D5E0683EC438D281DFD5773 /* ActivityLogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09B21CF70FC8D88A0697F318 /* ActivityLogView.swift */; };
 		9D61459D1E8D0B17B1180940 /* ChipPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 142B29E8E77F7305488E3C88 /* ChipPickerView.swift */; };
 		9E87859EFC859BA6463D6F26 /* OnboardingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B70630B7FD0AC0DF9F84C4C /* OnboardingViewModel.swift */; };
+		A08F361E69CEEDEC7C3BF0B5 /* SkillDiagramView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E1FB3F890E9C4DB6129BFCD /* SkillDiagramView.swift */; };
 		A734A88719E42A1E5F20AF7B /* NewActivityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9DC36F93995532A66BDF7FA /* NewActivityView.swift */; };
 		A86E2E55DA4A4363F89ACE8E /* AuthenticatedUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 528D338C57FDF31E1DF0206D /* AuthenticatedUser.swift */; };
 		AC1292FFAE7783075F6B5369 /* TrainingSessionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 238032F237E996BE29A2DFB9 /* TrainingSessionView.swift */; };
@@ -166,8 +168,10 @@
 		7E263B4BEE1493BBC8A70A08 /* DrillDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrillDetailView.swift; sourceTree = "<group>"; };
 		7ECCC455B75112195B5BCAFC /* DesignSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignSystem.swift; sourceTree = "<group>"; };
 		844FB83D8C4E132523399E1E /* PitchDreamsTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = PitchDreamsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		8E1FB3F890E9C4DB6129BFCD /* SkillDiagramView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkillDiagramView.swift; sourceTree = "<group>"; };
 		8F9995BBBE177FE21C32CEAD /* FirstTouchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstTouchViewModel.swift; sourceTree = "<group>"; };
 		95BB1FA4C299F4CA31E895AF /* StreakMilestoneModal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreakMilestoneModal.swift; sourceTree = "<group>"; };
+		9807C18EC82926CD51A51393 /* TacticalPitchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TacticalPitchView.swift; sourceTree = "<group>"; };
 		98613E0C90A5B1D32CC21EEF /* SpeechRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeechRecognizer.swift; sourceTree = "<group>"; };
 		98951F192FE6A6FA357A44A7 /* ReflectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReflectionView.swift; sourceTree = "<group>"; };
 		9CBFBA4D27B0830B2644DFC1 /* CelebrationModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CelebrationModifier.swift; sourceTree = "<group>"; };
@@ -290,6 +294,7 @@
 			isa = PBXGroup;
 			children = (
 				7E263B4BEE1493BBC8A70A08 /* DrillDetailView.swift */,
+				8E1FB3F890E9C4DB6129BFCD /* SkillDiagramView.swift */,
 				66ECF64E8E6B5B5B44E75426 /* SkillTrackView.swift */,
 			);
 			path = Views;
@@ -300,6 +305,7 @@
 			children = (
 				CB95ADF7A15FA44B042B786F /* LearnView.swift */,
 				6BD4217228F01A19820F6F8A /* LessonDetailView.swift */,
+				9807C18EC82926CD51A51393 /* TacticalPitchView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -888,6 +894,7 @@
 				033E25A527E050A9D6613962 /* SessionCompleteView.swift in Sources */,
 				E3FE56F5BC33F0563A07AB00 /* SignupStepView.swift in Sources */,
 				DC37AF388069E379B74E09A6 /* SkeletonView.swift in Sources */,
+				A08F361E69CEEDEC7C3BF0B5 /* SkillDiagramView.swift in Sources */,
 				AD57D0500C16B7370F200026 /* SkillTrackView.swift in Sources */,
 				80231F8FD6F5103D8304A74D /* SkillsViewModel.swift in Sources */,
 				D7873EAEFBAFB42911476445 /* SpaceSelectionView.swift in Sources */,
@@ -895,6 +902,7 @@
 				435F920CA58CC48D7D0D33E5 /* Streak.swift in Sources */,
 				7F4F7AD7E908D4BB4DEBAB2D /* StreakMilestoneModal.swift in Sources */,
 				9CF6F59F56A96C7FB68AE260 /* TacticalLessonRegistry.swift in Sources */,
+				78FF0E8B5BAF43F8796DF8BF /* TacticalPitchView.swift in Sources */,
 				B48746BA8C5FD30943F93EAC /* Tags.swift in Sources */,
 				FF7D36B342566DB0AF76663E /* TokenInterceptor.swift in Sources */,
 				D111DCAE9FE5C015138C2D7C /* TrainingArc.swift in Sources */,

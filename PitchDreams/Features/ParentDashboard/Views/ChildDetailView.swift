@@ -18,11 +18,8 @@ struct ChildDetailView: View {
             // Profile section
             Section {
                 HStack(spacing: 16) {
-                    Image(systemName: "figure.soccer")
-                        .font(.largeTitle)
-                        .foregroundStyle(.cyan)
+                    childProfileAvatar
                         .frame(width: 60, height: 60)
-                        .background(.cyan.opacity(0.12))
                         .clipShape(Circle())
 
                     VStack(alignment: .leading, spacing: 4) {
@@ -154,6 +151,24 @@ struct ChildDetailView: View {
         }
     }
 
+    // MARK: - Avatar
+
+    @ViewBuilder
+    private var childProfileAvatar: some View {
+        if let avatarId = child.avatarId,
+           UIImage(named: avatarId) != nil {
+            Image(avatarId)
+                .resizable()
+                .scaledToFill()
+        } else {
+            Image(systemName: "figure.soccer")
+                .font(.largeTitle)
+                .foregroundStyle(.cyan)
+                .frame(width: 60, height: 60)
+                .background(.cyan.opacity(0.12))
+        }
+    }
+
     // MARK: - Helpers
 
     private func gameIQColor(_ label: String) -> Color {
@@ -209,6 +224,6 @@ struct ExportSession: Codable {
 
 #Preview {
     NavigationStack {
-        ChildDetailView(child: ChildSummary(id: "1", nickname: "Jude", age: 9, position: "Midfielder"))
+        ChildDetailView(child: ChildSummary(id: "1", nickname: "Jude", age: 9, position: "Midfielder", avatarId: nil))
     }
 }

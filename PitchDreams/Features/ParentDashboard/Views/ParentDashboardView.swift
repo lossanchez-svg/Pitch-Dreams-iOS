@@ -31,11 +31,8 @@ struct ParentDashboardView: View {
                     ForEach(children) { child in
                         NavigationLink(value: child) {
                             HStack(spacing: 14) {
-                                Image(systemName: "figure.soccer")
-                                    .font(.title2)
-                                    .foregroundStyle(.cyan)
+                                childAvatarView(child: child)
                                     .frame(width: 40, height: 40)
-                                    .background(.cyan.opacity(0.12))
                                     .clipShape(Circle())
 
                                 VStack(alignment: .leading, spacing: 2) {
@@ -72,6 +69,22 @@ struct ParentDashboardView: View {
         }
         .task {
             await loadChildren()
+        }
+    }
+
+    @ViewBuilder
+    private func childAvatarView(child: ChildSummary) -> some View {
+        if let avatarId = child.avatarId,
+           UIImage(named: avatarId) != nil {
+            Image(avatarId)
+                .resizable()
+                .scaledToFill()
+        } else {
+            Image(systemName: "figure.soccer")
+                .font(.title2)
+                .foregroundStyle(.cyan)
+                .frame(width: 40, height: 40)
+                .background(.cyan.opacity(0.12))
         }
     }
 

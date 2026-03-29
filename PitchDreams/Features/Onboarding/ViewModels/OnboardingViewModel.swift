@@ -102,7 +102,7 @@ final class OnboardingViewModel: ObservableObject {
         isLoading = true
         errorMessage = nil
         do {
-            var body = CreateChildBody(
+            let body = CreateChildBody(
                 nickname: nickname,
                 age: age,
                 position: position == "Just playing for fun" ? nil : position,

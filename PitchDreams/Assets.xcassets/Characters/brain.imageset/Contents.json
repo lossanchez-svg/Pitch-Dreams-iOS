@@ -1,4 +1,4 @@
 {
-  "images": [{"filename": "brain.webp", "idiom": "universal", "scale": "1x"}],
+  "images": [{"filename": "brain.png", "idiom": "universal", "scale": "1x"}],
   "info": {"author": "xcode", "version": 1}
 }

@@ -22,12 +22,16 @@ struct ChildHomeView: View {
 
     var body: some View {
         ScrollView {
-            VStack(spacing: 20) {
+            VStack(alignment: .leading, spacing: 16) {
                 if viewModel.isLoading && viewModel.profile == nil {
                     skeletonContent
                 } else {
                     welcomeSection
-                    streakCard
+                    ConsistencyRingView(
+                        streak: viewModel.streakCount,
+                        maxStreak: 30,
+                        freezes: viewModel.freezeCount
+                    )
                     quickActions
                     checkInStatus
 
@@ -38,8 +42,10 @@ struct ChildHomeView: View {
                     exploreSection
                 }
             }
-            .padding()
-            .padding(.bottom, 20)
+            .padding(.horizontal)
+            .padding(.top, 8)
+            .padding(.bottom, 32)
+            .frame(maxWidth: .infinity, alignment: .leading)
         }
         .safeAreaInset(edge: .bottom) {
             if speechRecognizer.isListening {

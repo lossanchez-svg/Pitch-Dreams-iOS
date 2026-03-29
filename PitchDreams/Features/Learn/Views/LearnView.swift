@@ -73,7 +73,7 @@ struct LearnView: View {
                 .frame(width: 32)
 
             VStack(alignment: .leading, spacing: 2) {
-                Text(formatLessonId(lesson.lessonId))
+                Text(LessonRegistry.title(for: lesson.lessonId))
                     .font(.subheadline.weight(.medium))
                 if lesson.completed {
                     Text("Completed")

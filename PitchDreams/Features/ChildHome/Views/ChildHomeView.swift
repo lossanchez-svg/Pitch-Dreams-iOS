@@ -3,6 +3,12 @@ import SwiftUI
 struct ChildHomeView: View {
     let childId: String
     @StateObject private var viewModel: ChildHomeViewModel
+    @StateObject private var speechRecognizer = SpeechRecognizer()
+    @EnvironmentObject var authManager: AuthManager
+    @State private var lastVoiceCommand: String?
+    @State private var voiceEnabled = false
+    @State private var navigateToTraining = false
+    @State private var navigateToQuickLog = false
 
     init(childId: String) {
         self.childId = childId
@@ -25,17 +31,83 @@ struct ChildHomeView: View {
             }
             .padding()
         }
+        .safeAreaInset(edge: .bottom) {
+            if voiceEnabled {
+                VoiceCommandBar(speechRecognizer: speechRecognizer, lastCommand: $lastVoiceCommand)
+            }
+        }
         .navigationTitle(viewModel.profile?.nickname ?? "Home")
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                if voiceEnabled {
+                    Button {
+                        speechRecognizer.toggleListening()
+                    } label: {
+                        Image(systemName: speechRecognizer.isListening ? "mic.fill" : "mic")
+                            .foregroundStyle(speechRecognizer.isListening ? .red : .primary)
+                    }
+                }
+            }
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Menu {
+                    Button(role: .destructive) {
+                        authManager.logout()
+                    } label: {
+                        Label("Log Out", systemImage: "rectangle.portrait.and.arrow.right")
+                    }
+                } label: {
+                    Image(systemName: "person.circle")
+                        .font(.title3)
+                }
+            }
+        }
         .refreshable {
             await viewModel.loadData()
         }
         .task {
             await viewModel.loadData()
+            voiceEnabled = viewModel.profile?.voiceEnabled ?? false
         }
         .overlay {
             if viewModel.isLoading && viewModel.profile == nil {
                 ProgressView("Loading...")
             }
+        }
+        .onChange(of: speechRecognizer.transcript) { newTranscript in
+            guard !newTranscript.isEmpty else { return }
+            processVoiceCommand(newTranscript)
+        }
+        .background {
+            NavigationLink(isActive: $navigateToTraining) {
+                TrainingSessionView(childId: childId)
+            } label: {
+                EmptyView()
+            }
+            .hidden()
+
+            NavigationLink(isActive: $navigateToQuickLog) {
+                QuickLogView(childId: childId)
+            } label: {
+                EmptyView()
+            }
+            .hidden()
+        }
+    }
+
+    // MARK: - Voice
+
+    private func processVoiceCommand(_ transcript: String) {
+        let commands: [VoiceCommand] = [
+            VoiceCommand(label: "Start Training", phrases: ["start training", "train", "let's train"]) {
+                navigateToTraining = true
+            },
+            VoiceCommand(label: "Log Session", phrases: ["log session", "log it", "quick log"]) {
+                navigateToQuickLog = true
+            },
+        ]
+        if let matched = VoiceCommandMatcher.match(transcript: transcript, commands: commands) {
+            lastVoiceCommand = matched.label
+            matched.action()
         }
     }
 
@@ -63,6 +135,7 @@ struct ChildHomeView: View {
                     Text("\(viewModel.streakCount)")
                         .font(.title.bold())
                         .foregroundStyle(.orange)
+                        .contentTransition(.numericText())
                     Text("day streak")
                         .font(.caption)
                         .foregroundStyle(.secondary)
@@ -288,5 +361,6 @@ struct ChildHomeView: View {
 #Preview {
     NavigationStack {
         ChildHomeView(childId: "preview-child")
+            .environmentObject(AuthManager())
     }
 }

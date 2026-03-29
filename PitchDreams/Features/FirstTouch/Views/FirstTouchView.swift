@@ -1,8 +1,18 @@
 import SwiftUI
+import Combine
 
 struct FirstTouchView: View {
     let childId: String
     @StateObject private var viewModel: FirstTouchViewModel
+    @StateObject private var speechRecognizer = SpeechRecognizer()
+    @StateObject private var coachVoice = CoachVoice()
+    @State private var lastVoiceCommand: String?
+    @State private var voiceEnabled = false
+
+    // Timer challenge state
+    @State private var timerActive = false
+    @State private var timerRemaining: Int = 30
+    @State private var timerCancellable: AnyCancellable?
 
     init(childId: String) {
         self.childId = childId
@@ -17,11 +27,84 @@ struct FirstTouchView: View {
                 drillSelectionView
             }
         }
+        .safeAreaInset(edge: .bottom) {
+            if voiceEnabled && viewModel.activeDrillKey != nil {
+                VoiceCommandBar(speechRecognizer: speechRecognizer, lastCommand: $lastVoiceCommand)
+            }
+        }
         .navigationTitle("First Touch")
         .navigationBarTitleDisplayMode(.inline)
         .task {
             await viewModel.loadStats()
+            await loadVoiceSetting()
         }
+        .onChange(of: speechRecognizer.transcript) { newTranscript in
+            guard !newTranscript.isEmpty, viewModel.activeDrillKey != nil else { return }
+            processVoiceCommand(newTranscript)
+        }
+    }
+
+    // MARK: - Voice
+
+    private func loadVoiceSetting() async {
+        let apiClient: APIClientProtocol = APIClient()
+        if let profile: ChildProfileDetail = try? await apiClient.request(APIRouter.getProfile(childId: childId)) {
+            voiceEnabled = profile.voiceEnabled
+        }
+    }
+
+    private func processVoiceCommand(_ transcript: String) {
+        let commands = buildDrillVoiceCommands()
+        if let matched = VoiceCommandMatcher.match(transcript: transcript, commands: commands) {
+            lastVoiceCommand = matched.label
+            matched.action()
+            return
+        }
+        // Try to extract a number for setting count
+        if let number = VoiceCommandMatcher.extractNumber(from: transcript) {
+            lastVoiceCommand = "\(number) reps"
+            viewModel.activeCount = number
+        }
+    }
+
+    private func buildDrillVoiceCommands() -> [VoiceCommand] {
+        [
+            VoiceCommand(label: "Save", phrases: ["save", "done", "finish"]) {
+                Task { await viewModel.saveDrill() }
+            },
+            VoiceCommand(label: "Cancel", phrases: ["cancel", "stop", "quit"]) {
+                viewModel.cancelDrill()
+                stopTimerChallenge()
+            },
+        ]
+    }
+
+    // MARK: - Timer Challenge
+
+    private func startTimerChallenge() {
+        viewModel.activeCount = 0
+        timerRemaining = 30
+        timerActive = true
+        timerCancellable = Timer.publish(every: 1, on: .main, in: .common)
+            .autoconnect()
+            .sink { _ in
+                if timerRemaining > 0 {
+                    timerRemaining -= 1
+                } else {
+                    timerActive = false
+                    timerCancellable?.cancel()
+                    timerCancellable = nil
+                    // Auto-save when timer ends
+                    Task { await viewModel.saveDrill() }
+                }
+            }
+    }
+
+    private func stopTimerChallenge() {
+        timerActive = false
+        timerRemaining = 30
+        timerCancellable?.cancel()
+        timerCancellable = nil
     }
 
     // MARK: - Drill Selection
@@ -127,6 +210,14 @@ struct FirstTouchView: View {
             Text(viewModel.activeDrillKey?.replacingOccurrences(of: "_", with: " ").capitalized ?? "")
                 .font(.title2.weight(.semibold))
 
+            // Timer display when challenge is active
+            if timerActive {
+                Text("\(timerRemaining)s")
+                    .font(.system(size: 28, weight: .bold, design: .rounded))
+                    .foregroundStyle(timerRemaining <= 5 ? .red : .cyan)
+                    .contentTransition(.numericText())
+            }
+
             // Big counter
             Text("\(viewModel.activeCount)")
                 .font(.system(size: 96, weight: .bold, design: .rounded))
@@ -146,6 +237,23 @@ struct FirstTouchView: View {
                     .foregroundStyle(.white)
                     .clipShape(Circle())
             }
+            .applyHapticFeedback(trigger: viewModel.activeCount)
+
+            // 30s Challenge button
+            if !timerActive {
+                Button {
+                    startTimerChallenge()
+                } label: {
+                    Label("30s Challenge", systemImage: "timer")
+                        .font(.subheadline.weight(.semibold))
+                        .padding(.horizontal, 20)
+                        .padding(.vertical, 10)
+                        .background(.cyan.opacity(0.15))
+                        .foregroundStyle(.cyan)
+                        .clipShape(Capsule())
+                }
+                .buttonStyle(.plain)
+            }
 
             Spacer()
 
@@ -153,6 +261,7 @@ struct FirstTouchView: View {
             HStack(spacing: 24) {
                 Button {
                     viewModel.cancelDrill()
+                    stopTimerChallenge()
                 } label: {
                     Text("Cancel")
                         .frame(maxWidth: .infinity)
@@ -162,7 +271,15 @@ struct FirstTouchView: View {
                 }
 
                 Button {
-                    Task { await viewModel.saveDrill() }
+                    Task {
+                        let previousBest = bestForActiveDrill()
+                        await viewModel.saveDrill()
+                        stopTimerChallenge()
+                        // Announce PR if beaten
+                        if voiceEnabled, let best = previousBest, viewModel.activeCount > best {
+                            coachVoice.speak("New personal record! \(viewModel.activeCount) reps!", personality: "hype")
+                        }
+                    }
                 } label: {
                     Text(viewModel.saveSuccess ? "Saved!" : "Save \(viewModel.activeCount) reps")
                         .fontWeight(.semibold)
@@ -177,6 +294,36 @@ struct FirstTouchView: View {
             .padding(.horizontal)
             .padding(.bottom, 24)
         }
+    }
+
+    // MARK: - Helpers
+
+    private func bestForActiveDrill() -> Int? {
+        guard let key = viewModel.activeDrillKey,
+              let stat = viewModel.drillStats.first(where: { $0.drillKey == key }) else {
+            return nil
+        }
+        return stat.totalAttempts
+    }
+}
+
+// MARK: - Haptic Feedback Modifier
+
+private struct HapticFeedbackModifier: ViewModifier {
+    let trigger: Int
+
+    func body(content: Content) -> some View {
+        if #available(iOS 17.0, *) {
+            content.sensoryFeedback(.impact, trigger: trigger)
+        } else {
+            content
+        }
+    }
+}
+
+extension View {
+    func applyHapticFeedback(trigger: Int) -> some View {
+        modifier(HapticFeedbackModifier(trigger: trigger))
     }
 }
 

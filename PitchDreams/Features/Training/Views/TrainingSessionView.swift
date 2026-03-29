@@ -3,7 +3,11 @@ import SwiftUI
 struct TrainingSessionView: View {
     let childId: String
     @StateObject private var viewModel: TrainingViewModel
+    @StateObject private var speechRecognizer = SpeechRecognizer()
+    @StateObject private var coachVoice = CoachVoice()
     @State private var showFullCheckIn = false
+    @State private var lastVoiceCommand: String?
+    @State private var voiceEnabled = false
 
     init(childId: String) {
         self.childId = childId
@@ -32,6 +36,11 @@ struct TrainingSessionView: View {
             }
             .padding()
         }
+        .safeAreaInset(edge: .bottom) {
+            if voiceEnabled {
+                VoiceCommandBar(speechRecognizer: speechRecognizer, lastCommand: $lastVoiceCommand)
+            }
+        }
         .navigationTitle("Training")
         .navigationBarTitleDisplayMode(.inline)
         .overlay {
@@ -50,6 +59,41 @@ struct TrainingSessionView: View {
         }
         .task {
             await viewModel.loadTodayCheckIn()
+            await loadVoiceSetting()
+        }
+        .onChange(of: speechRecognizer.transcript) { newTranscript in
+            guard !newTranscript.isEmpty else { return }
+            processVoiceCommand(newTranscript)
+        }
+    }
+
+    // MARK: - Voice
+
+    private func loadVoiceSetting() async {
+        let apiClient: APIClientProtocol = APIClient()
+        if let profile: ChildProfileDetail = try? await apiClient.request(APIRouter.getProfile(childId: childId)) {
+            voiceEnabled = profile.voiceEnabled
+        }
+    }
+
+    private func processVoiceCommand(_ transcript: String) {
+        let moodCommands = buildMoodCommands()
+        if let matched = VoiceCommandMatcher.match(transcript: transcript, commands: moodCommands) {
+            lastVoiceCommand = matched.label
+            matched.action()
+        }
+    }
+
+    private func buildMoodCommands() -> [VoiceCommand] {
+        moods.map { mood in
+            VoiceCommand(label: mood.label, phrases: [mood.name.lowercased(), mood.label.lowercased()]) {
+                Task {
+                    await viewModel.quickCheckIn(mood: mood.name)
+                    if let explanation = viewModel.modeExplanation {
+                        coachVoice.speak(explanation, personality: "manager")
+                    }
+                }
+            }
         }
     }
 
@@ -75,6 +119,9 @@ struct TrainingSessionView: View {
                     Button {
                         Task {
                             await viewModel.quickCheckIn(mood: mood.name)
+                            if let explanation = viewModel.modeExplanation {
+                                coachVoice.speak(explanation, personality: "manager")
+                            }
                         }
                     } label: {
                         VStack(spacing: 8) {

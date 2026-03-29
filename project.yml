@@ -21,6 +21,10 @@ targets:
         INFOPLIST_VALUES: >-
           UILaunchScreen_Generation=YES
           UIApplicationSceneManifest_Generation=YES
+          UISupportedInterfaceOrientations_iPad=UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight
+          UISupportedInterfaceOrientations=UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight
+          NSMicrophoneUsageDescription=PitchDreams uses the microphone for voice commands during training
+          NSSpeechRecognitionUsageDescription=PitchDreams uses speech recognition for hands-free training commands
         GENERATE_INFOPLIST_FILE: YES
         CURRENT_PROJECT_VERSION: 1
         MARKETING_VERSION: 0.1.0

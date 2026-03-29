@@ -4,6 +4,7 @@ struct QuickLogView: View {
     let childId: String
     @StateObject private var viewModel: QuickLogViewModel
     @Environment(\.dismiss) private var dismiss
+    @State private var showSuccessCheckmark = false
 
     init(childId: String) {
         self.childId = childId
@@ -69,6 +70,11 @@ struct QuickLogView: View {
                 Button {
                     Task {
                         await viewModel.save()
+                        if viewModel.saveSuccess {
+                            withAnimation(.spring(response: 0.4, dampingFraction: 0.6)) {
+                                showSuccessCheckmark = true
+                            }
+                        }
                     }
                 } label: {
                     HStack {
@@ -98,6 +104,17 @@ struct QuickLogView: View {
 
             if viewModel.saveSuccess {
                 Section {
+                    HStack {
+                        Spacer()
+                        Image(systemName: "checkmark.circle.fill")
+                            .font(.system(size: 48))
+                            .foregroundStyle(.green)
+                            .scaleEffect(showSuccessCheckmark ? 1.0 : 0.0)
+                            .animation(.spring(response: 0.4, dampingFraction: 0.6), value: showSuccessCheckmark)
+                        Spacer()
+                    }
+                    .listRowBackground(Color.clear)
+
                     HStack {
                         Image(systemName: "checkmark.circle.fill")
                             .foregroundStyle(.green)

@@ -223,6 +223,12 @@ struct ChildHomeView: View {
             Text("Explore")
                 .font(.headline)
 
+            NavigationLink {
+                FirstTouchView(childId: childId)
+            } label: {
+                exploreCard(title: "First Touch", icon: "soccerball", color: .orange, subtitle: "Juggling & wall ball drills")
+            }
+
             HStack(spacing: 12) {
                 NavigationLink {
                     SkillTrackView(childId: childId)

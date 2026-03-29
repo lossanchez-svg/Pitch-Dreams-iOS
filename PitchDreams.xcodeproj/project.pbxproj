@@ -25,6 +25,8 @@
 		435F920CA58CC48D7D0D33E5 /* Streak.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11B3DAC7E608FCF46D319A36 /* Streak.swift */; };
 		471F6B97A98556FADF043526 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = C648472983CD531E1B08C552 /* Logger.swift */; };
 		579598C622E552442C7A9E7A /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B4898AC3F86F2C2D77C8565 /* Constants.swift */; };
+		5A63704ABCE1911C3D0FCD8E /* FirstTouchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D58C010CD51311C08A15A2 /* FirstTouchView.swift */; };
+		5ACCB26D62632EBB27E9E76C /* FirstTouchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F9995BBBE177FE21C32CEAD /* FirstTouchViewModel.swift */; };
 		6754254677B7A9FFB21B0FE0 /* LearnViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 080C4139AD11130A55A00F89 /* LearnViewModel.swift */; };
 		6D0EDCE1E49B2D3AC0BE3388 /* AppRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E6DBBDCC9E2E3C3845BA832 /* AppRouter.swift */; };
 		7A9BD6239102534F57555511 /* Color+HUD.swift in Sources */ = {isa = PBXBuildFile; fileRef = B328823B75923C3011024AB2 /* Color+HUD.swift */; };
@@ -109,7 +111,9 @@
 		66ECF64E8E6B5B5B44E75426 /* SkillTrackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkillTrackView.swift; sourceTree = "<group>"; };
 		6B0A2F7AD3D393DFF0F49500 /* ParentLoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParentLoginView.swift; sourceTree = "<group>"; };
 		70D02BCD1734281F9F306858 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		75D58C010CD51311C08A15A2 /* FirstTouchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstTouchView.swift; sourceTree = "<group>"; };
 		844FB83D8C4E132523399E1E /* PitchDreamsTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = PitchDreamsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		8F9995BBBE177FE21C32CEAD /* FirstTouchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstTouchViewModel.swift; sourceTree = "<group>"; };
 		9F3324B857A9AA11635238B1 /* APIEndpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIEndpoint.swift; sourceTree = "<group>"; };
 		A69AF56C9F54B2AF1EAC1FC1 /* QuickLogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickLogView.swift; sourceTree = "<group>"; };
 		A7A1CDBFAD6B59D638849FD9 /* ChildLoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChildLoginView.swift; sourceTree = "<group>"; };
@@ -259,6 +263,22 @@
 			path = Training;
 			sourceTree = "<group>";
 		};
+		48DBAB1E64CDC3D14BE29256 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				75D58C010CD51311C08A15A2 /* FirstTouchView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		4BCAE8F6462323F8A925CD88 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				8F9995BBBE177FE21C32CEAD /* FirstTouchViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
 		509EC5ACBB52A859FA98231E /* PitchDreamsTests */ = {
 			isa = PBXGroup;
 			children = (
@@ -275,6 +295,7 @@
 				C6257728C0DEB6A74AE4930A /* ActivityLog */,
 				03CC46D480D6A7E0342D7A4C /* Auth */,
 				149BCA3B54D80CE6EF987B93 /* ChildHome */,
+				A45B9164B7352FCA42713349 /* FirstTouch */,
 				60073BA01E797C507E0E2762 /* Learn */,
 				2290215939762F78F47BAECB /* ParentControls */,
 				280B0A2E34C7A78F0B26D2B9 /* ParentDashboard */,
@@ -383,6 +404,15 @@
 				ADDF00203559FD14E35F38D9 /* ProgressDashboardView.swift */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		A45B9164B7352FCA42713349 /* FirstTouch */ = {
+			isa = PBXGroup;
+			children = (
+				4BCAE8F6462323F8A925CD88 /* ViewModels */,
+				48DBAB1E64CDC3D14BE29256 /* Views */,
+			);
+			path = FirstTouch;
 			sourceTree = "<group>";
 		};
 		B8AD7ACC64279AF76599AD25 /* Utilities */ = {
@@ -659,6 +689,8 @@
 				579598C622E552442C7A9E7A /* Constants.swift in Sources */,
 				F853A3ABE46F09027F521EA5 /* Date+Formatting.swift in Sources */,
 				180CD0EBCC82E6B63B5C28E3 /* Drill.swift in Sources */,
+				5A63704ABCE1911C3D0FCD8E /* FirstTouchView.swift in Sources */,
+				5ACCB26D62632EBB27E9E76C /* FirstTouchViewModel.swift in Sources */,
 				367BDFE1E4DACA17181E849A /* FullCheckInSheet.swift in Sources */,
 				8334CD8061C657EC67961CF8 /* KeychainService.swift in Sources */,
 				CF1E273CA551EE9C0ECCADD9 /* LearnView.swift in Sources */,

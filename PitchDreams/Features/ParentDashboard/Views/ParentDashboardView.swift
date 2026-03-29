@@ -52,6 +52,7 @@ struct ParentDashboardView: View {
             }
         }
         .navigationTitle("Dashboard")
+        .navigationBarTitleDisplayMode(.inline)
         .navigationDestination(for: ChildSummary.self) { child in
             ChildDetailView(child: child)
         }

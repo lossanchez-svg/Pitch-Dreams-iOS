@@ -39,6 +39,7 @@ struct ChildHomeView: View {
                 }
             }
             .padding()
+            .padding(.bottom, 20)
         }
         .safeAreaInset(edge: .bottom) {
             if speechRecognizer.isListening {
@@ -46,6 +47,7 @@ struct ChildHomeView: View {
             }
         }
         .navigationTitle(viewModel.profile?.nickname ?? "Home")
+        .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
                 Button {

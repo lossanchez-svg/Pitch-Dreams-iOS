@@ -49,7 +49,7 @@ struct ChildHomeView: View {
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
                 Button {
-                    speechRecognizer.toggleListening()
+                    Task { await speechRecognizer.toggleListening() }
                 } label: {
                     Image(systemName: speechRecognizer.isListening ? "mic.fill" : "mic")
                         .foregroundStyle(speechRecognizer.isListening ? .red : .cyan)

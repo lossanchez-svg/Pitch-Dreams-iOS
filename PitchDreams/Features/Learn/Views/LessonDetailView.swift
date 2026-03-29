@@ -9,120 +9,169 @@ struct LessonDetailView: View {
     let onMarkComplete: () async -> Void
 
     @State private var isMarking = false
+    @State private var completedSteps: Set<Int> = []
+    @State private var visibleSteps: Set<Int> = []
 
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
-                // Header badges
-                HStack(spacing: 8) {
-                    trackBadge
-                    difficultyBadge
-                    Spacer()
-                    Label("\(lesson.readingTimeMinutes) min read", systemImage: "clock")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                }
-
-                // Title
-                Text(lesson.title)
-                    .font(.title.bold())
-
-                if isCompleted {
-                    Label("Completed", systemImage: "checkmark.seal.fill")
-                        .font(.subheadline.weight(.semibold))
-                        .foregroundStyle(.green)
-                }
-
-                // Description
-                Text(lesson.description)
-                    .font(.body)
-                    .foregroundStyle(.secondary)
-
-                // Tactical Pitch Diagram
-                if !lesson.diagram.isEmpty {
-                    VStack(alignment: .leading, spacing: 8) {
-                        Label("Tactical View", systemImage: "sportscourt.fill")
-                            .font(.headline)
-
-                        TacticalPitchView(elements: lesson.diagram)
-                            .padding(.vertical, 4)
-                    }
-                }
-
-                // Learning Steps
-                VStack(alignment: .leading, spacing: 12) {
-                    Label("Learning Steps", systemImage: "list.number")
-                        .font(.headline)
-
-                    ForEach(Array(lesson.steps.enumerated()), id: \.offset) { index, step in
-                        HStack(alignment: .top, spacing: 12) {
-                            Text("\(index + 1)")
-                                .font(.caption.bold())
-                                .foregroundStyle(.white)
-                                .frame(width: 24, height: 24)
-                                .background(trackSwiftUIColor)
-                                .clipShape(Circle())
-
-                            Text(step)
-                                .font(.subheadline)
-                                .fixedSize(horizontal: false, vertical: true)
-                        }
-                    }
-                }
-
-                // Quiz results if available
-                if let score = quizScore, let total = quizTotal {
-                    VStack(alignment: .leading, spacing: 8) {
-                        Label("Quiz Result", systemImage: "checkmark.circle.fill")
-                            .font(.headline)
-
-                        HStack {
-                            Text("\(score)/\(total)")
-                                .font(.title2.bold())
-                                .foregroundStyle(quizColor(score: score, total: total))
-                            Text("correct")
-                                .font(.subheadline)
-                                .foregroundStyle(.secondary)
-                        }
-                        .padding()
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .background(.regularMaterial)
-                        .clipShape(RoundedRectangle(cornerRadius: 12))
-                    }
-                }
-
-                // Mark Complete button
-                if !isCompleted {
-                    Button {
-                        isMarking = true
-                        Task {
-                            await onMarkComplete()
-                            isMarking = false
-                        }
-                    } label: {
-                        if isMarking {
-                            ProgressView()
-                                .frame(maxWidth: .infinity)
-                                .padding()
-                                .background(.green.gradient)
-                                .clipShape(RoundedRectangle(cornerRadius: 14))
-                        } else {
-                            Label("Mark Complete", systemImage: "checkmark.circle.fill")
-                                .font(.headline)
-                                .frame(maxWidth: .infinity)
-                                .padding()
-                                .background(.green.gradient)
-                                .foregroundStyle(.white)
-                                .clipShape(RoundedRectangle(cornerRadius: 14))
-                        }
-                    }
-                    .disabled(isMarking)
-                }
+                headerSection
+                diagramSection
+                stepsSection
+                quizSection
+                completeButton
             }
             .padding()
         }
         .navigationTitle(lesson.title)
         .navigationBarTitleDisplayMode(.inline)
+    }
+
+    // MARK: - Sections
+
+    @ViewBuilder
+    private var headerSection: some View {
+        HStack(spacing: 8) {
+            trackBadge
+            difficultyBadge
+            Spacer()
+            Label("\(lesson.readingTimeMinutes) min read", systemImage: "clock")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+        }
+
+        Text(lesson.title)
+            .font(.title.bold())
+
+        if isCompleted {
+            Label("Completed", systemImage: "checkmark.seal.fill")
+                .font(.subheadline.weight(.semibold))
+                .foregroundStyle(.green)
+        }
+
+        Text(lesson.description)
+            .font(.body)
+            .foregroundStyle(.secondary)
+    }
+
+    @ViewBuilder
+    private var diagramSection: some View {
+        if !lesson.diagram.isEmpty {
+            VStack(alignment: .leading, spacing: 8) {
+                Label("Tactical View", systemImage: "sportscourt.fill")
+                    .font(.headline)
+                TacticalPitchView(elements: lesson.diagram)
+                    .padding(.bottom, 20)
+            }
+        }
+    }
+
+    private var stepsSection: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Label("Learning Steps", systemImage: "list.number")
+                .font(.headline)
+
+            ForEach(Array(lesson.steps.enumerated()), id: \.offset) { index, step in
+                stepRow(index: index, step: step)
+            }
+        }
+        .onAppear {
+            for index in lesson.steps.indices {
+                DispatchQueue.main.asyncAfter(deadline: .now() + Double(index) * 0.1) {
+                    withAnimation { _ = visibleSteps.insert(index) }
+                }
+            }
+        }
+    }
+
+    private func stepRow(index: Int, step: String) -> some View {
+        Button {
+            withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+                if completedSteps.contains(index) {
+                    completedSteps.remove(index)
+                } else {
+                    completedSteps.insert(index)
+                }
+            }
+        } label: {
+            HStack(alignment: .top, spacing: 12) {
+                Circle()
+                    .fill(completedSteps.contains(index) ? Color.green : trackSwiftUIColor)
+                    .frame(width: 24, height: 24)
+                    .overlay {
+                        if completedSteps.contains(index) {
+                            Image(systemName: "checkmark")
+                                .font(.caption.bold())
+                                .foregroundStyle(.white)
+                        } else {
+                            Text("\(index + 1)")
+                                .font(.caption.bold())
+                                .foregroundStyle(.white)
+                        }
+                    }
+
+                Text(step)
+                    .font(.subheadline)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .foregroundStyle(completedSteps.contains(index) ? .secondary : .primary)
+                    .strikethrough(completedSteps.contains(index))
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+        }
+        .buttonStyle(.plain)
+        .opacity(visibleSteps.contains(index) ? 1 : 0)
+        .offset(x: visibleSteps.contains(index) ? 0 : -20)
+        .animation(.spring(response: 0.4, dampingFraction: 0.8).delay(Double(index) * 0.1), value: visibleSteps)
+    }
+
+    @ViewBuilder
+    private var quizSection: some View {
+        if let score = quizScore, let total = quizTotal {
+            VStack(alignment: .leading, spacing: 8) {
+                Label("Quiz Result", systemImage: "checkmark.circle.fill")
+                    .font(.headline)
+                HStack {
+                    Text("\(score)/\(total)")
+                        .font(.title2.bold())
+                        .foregroundStyle(quizColor(score: score, total: total))
+                    Text("correct")
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                }
+                .padding()
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .background(.regularMaterial)
+                .clipShape(RoundedRectangle(cornerRadius: 12))
+            }
+        }
+    }
+
+    @ViewBuilder
+    private var completeButton: some View {
+        if !isCompleted {
+            Button {
+                isMarking = true
+                Task {
+                    await onMarkComplete()
+                    isMarking = false
+                }
+            } label: {
+                Group {
+                    if isMarking {
+                        ProgressView()
+                    } else {
+                        Label("Mark Complete", systemImage: "checkmark.circle.fill")
+                            .font(.headline)
+                            .foregroundStyle(.white)
+                    }
+                }
+                .frame(maxWidth: .infinity)
+                .padding()
+                .background(.green.gradient)
+                .clipShape(RoundedRectangle(cornerRadius: 14))
+            }
+            .disabled(isMarking)
+        }
     }
 
     // MARK: - Helpers

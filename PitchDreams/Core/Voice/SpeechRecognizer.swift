@@ -120,15 +120,13 @@ final class SpeechRecognizer: ObservableObject {
         isListening = false
     }
 
-    func toggleListening() {
+    func toggleListening() async {
         if isListening {
             stopListening()
         } else {
-            Task {
-                let granted = await requestPermission()
-                if granted {
-                    startListening()
-                }
+            let granted = await requestPermission()
+            if granted {
+                startListening()
             }
         }
     }

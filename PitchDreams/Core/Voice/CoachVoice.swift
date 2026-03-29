@@ -19,6 +19,10 @@ final class CoachVoice: ObservableObject {
     func speak(_ text: String, personality: String = "manager") {
         stop()
 
+        // Configure audio session for speech output (SpeechRecognizer sets .record which blocks TTS)
+        try? AVAudioSession.sharedInstance().setCategory(.playback, mode: .default)
+        try? AVAudioSession.sharedInstance().setActive(true)
+
         let utterance = AVSpeechUtterance(string: text)
         utterance.voice = AVSpeechSynthesisVoice(language: "en-US")
 

@@ -10,7 +10,7 @@ struct VoiceCommandBar: View {
         HStack(spacing: 12) {
             // Mic button
             Button {
-                speechRecognizer.toggleListening()
+                Task { await speechRecognizer.toggleListening() }
             } label: {
                 Image(systemName: speechRecognizer.isListening ? "mic.fill" : "mic")
                     .font(.title3)

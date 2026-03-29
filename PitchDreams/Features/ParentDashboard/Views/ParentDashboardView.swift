@@ -2,69 +2,97 @@ import SwiftUI
 
 struct ParentDashboardView: View {
     @EnvironmentObject var authManager: AuthManager
+    @State private var children: [ChildSummary] = []
+    @State private var isLoading = true
+    @State private var errorText: String?
+
+    private let apiClient: APIClientProtocol = APIClient()
 
     var body: some View {
-        NavigationStack {
-            ZStack {
-                Color(red: 0.05, green: 0.05, blue: 0.12)
-                    .ignoresSafeArea()
-
-                VStack(spacing: 24) {
-                    Image(systemName: "person.2.fill")
-                        .font(.system(size: 48))
-                        .foregroundColor(.cyan)
-
-                    Text("Parent Dashboard")
-                        .font(.title)
-                        .fontWeight(.bold)
-                        .foregroundColor(.white)
-
-                    Text("Coming Soon")
-                        .font(.headline)
-                        .foregroundColor(.cyan)
-
-                    Text("Manage your children's accounts and monitor their progress.")
-                        .font(.subheadline)
-                        .foregroundColor(.gray)
+        List {
+            Section {
+                if isLoading {
+                    HStack {
+                        Spacer()
+                        ProgressView()
+                        Spacer()
+                    }
+                    .listRowBackground(Color.clear)
+                } else if let errorText {
+                    Text("Error: \(errorText)")
+                        .foregroundStyle(.red)
+                        .font(.caption)
+                        .padding(.vertical, 24)
+                } else if children.isEmpty {
+                    Text("No children added yet.\nAdd a child at pitchdreams.soccer")
+                        .foregroundStyle(.secondary)
                         .multilineTextAlignment(.center)
-                        .padding(.horizontal, 32)
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 24)
+                } else {
+                    ForEach(children) { child in
+                        NavigationLink(value: child) {
+                            HStack(spacing: 14) {
+                                Image(systemName: "figure.soccer")
+                                    .font(.title2)
+                                    .foregroundStyle(.cyan)
+                                    .frame(width: 40, height: 40)
+                                    .background(.cyan.opacity(0.12))
+                                    .clipShape(Circle())
 
-                    // Children list placeholder
-                    VStack(spacing: 12) {
-                        Text("Your Children")
-                            .font(.headline)
-                            .foregroundColor(.white)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-
-                        RoundedRectangle(cornerRadius: 12)
-                            .fill(Color.white.opacity(0.05))
-                            .frame(height: 80)
-                            .overlay(
-                                Text("No children added yet")
-                                    .foregroundColor(.gray)
-                            )
+                                VStack(alignment: .leading, spacing: 2) {
+                                    Text(child.nickname)
+                                        .font(.headline)
+                                    Text("Age \(child.age)\(child.position.map { " \u{2022} \($0)" } ?? "")")
+                                        .font(.subheadline)
+                                        .foregroundStyle(.secondary)
+                                }
+                            }
+                            .padding(.vertical, 4)
+                        }
                     }
-                    .padding(.horizontal, 24)
-
-                    Spacer()
                 }
-                .padding(.top, 40)
+            } header: {
+                Text("Your Children")
             }
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button {
-                        authManager.logout()
-                    } label: {
-                        Image(systemName: "rectangle.portrait.and.arrow.right")
-                            .foregroundColor(.cyan)
-                    }
+        }
+        .navigationTitle("Dashboard")
+        .navigationDestination(for: ChildSummary.self) { child in
+            ChildDetailView(child: child)
+        }
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button {
+                    authManager.logout()
+                } label: {
+                    Image(systemName: "rectangle.portrait.and.arrow.right")
                 }
             }
         }
+        .refreshable {
+            await loadChildren()
+        }
+        .task {
+            await loadChildren()
+        }
+    }
+
+    private func loadChildren() async {
+        isLoading = true
+        errorText = nil
+        do {
+            children = try await apiClient.request(APIRouter.listChildren)
+        } catch {
+            errorText = "\(error)"
+            print("Failed to load children: \(error)")
+        }
+        isLoading = false
     }
 }
 
 #Preview {
-    ParentDashboardView()
-        .environmentObject(AuthManager())
+    NavigationStack {
+        ParentDashboardView()
+            .environmentObject(AuthManager())
+    }
 }

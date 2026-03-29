@@ -9,7 +9,7 @@ struct ChildProfile: Codable, Identifiable {
     let avatarColor: String?
 }
 
-struct ChildSummary: Codable, Identifiable {
+struct ChildSummary: Codable, Identifiable, Hashable {
     let id: String
     let nickname: String
     let age: Int

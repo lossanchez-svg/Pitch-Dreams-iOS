@@ -25,11 +25,9 @@ final class APIClient: APIClientProtocol, @unchecked Sendable {
         self.interceptor = interceptor
 
         self.decoder = JSONDecoder()
-        decoder.keyDecodingStrategy = .convertFromSnakeCase
         decoder.dateDecodingStrategy = .iso8601
 
         self.encoder = JSONEncoder()
-        encoder.keyEncodingStrategy = .convertToSnakeCase
     }
 
     func request<T: Decodable>(_ endpoint: APIEndpoint) async throws -> T {

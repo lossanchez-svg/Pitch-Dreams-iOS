@@ -13,14 +13,23 @@
 		16288083B64F0BCB16EB5057 /* ParentDashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E664960E667F9B87AC14FB5 /* ParentDashboardView.swift */; };
 		179C606F00C40A088DCFC232 /* APIEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F3324B857A9AA11635238B1 /* APIEndpoint.swift */; };
 		180CD0EBCC82E6B63B5C28E3 /* Drill.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1543DF2E668283C486D57BD /* Drill.swift */; };
+		1B833F7762BB328D4933A44E /* Trend.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACA8D43C962506A82767816B /* Trend.swift */; };
 		1DA08F0B9EF210CFB06D743A /* APIRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E8A1FE5D16285D19B4A920A /* APIRouter.swift */; };
+		21763B576816FEB95C21CEC2 /* ChildDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57C6BFA02F61938478B529F2 /* ChildDetailView.swift */; };
+		21F651183D1134A359FC9C06 /* ParentControlsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530A972AEC110004D406073A /* ParentControlsView.swift */; };
 		24EA6515495F4402C9605F57 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70D02BCD1734281F9F306858 /* User.swift */; };
 		29D934035A6AE394F91A6779 /* AuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3612E00A7532F669E3852990 /* AuthManager.swift */; };
+		3491800DC0967C3B40219E88 /* QuickLogViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2348EDF74B205A9360456B3A /* QuickLogViewModel.swift */; };
+		367BDFE1E4DACA17181E849A /* FullCheckInSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10B74EC14B38A671B680B438 /* FullCheckInSheet.swift */; };
+		3E7A78B58AF22A1BF1D6F7ED /* ActivityLogViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC03A1C59166260EB69B2A7C /* ActivityLogViewModel.swift */; };
 		435F920CA58CC48D7D0D33E5 /* Streak.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11B3DAC7E608FCF46D319A36 /* Streak.swift */; };
 		471F6B97A98556FADF043526 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = C648472983CD531E1B08C552 /* Logger.swift */; };
 		579598C622E552442C7A9E7A /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B4898AC3F86F2C2D77C8565 /* Constants.swift */; };
+		6754254677B7A9FFB21B0FE0 /* LearnViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 080C4139AD11130A55A00F89 /* LearnViewModel.swift */; };
 		6D0EDCE1E49B2D3AC0BE3388 /* AppRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E6DBBDCC9E2E3C3845BA832 /* AppRouter.swift */; };
 		7A9BD6239102534F57555511 /* Color+HUD.swift in Sources */ = {isa = PBXBuildFile; fileRef = B328823B75923C3011024AB2 /* Color+HUD.swift */; };
+		7AB67005D4953FD72E515CAA /* QuickLogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A69AF56C9F54B2AF1EAC1FC1 /* QuickLogView.swift */; };
+		80231F8FD6F5103D8304A74D /* SkillsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 121837DE0296D70A172A4AA2 /* SkillsViewModel.swift */; };
 		8334CD8061C657EC67961CF8 /* KeychainService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B97711913DDDFF1FB84A062C /* KeychainService.swift */; };
 		85518ED856F1E6E424BF8433 /* ParentLoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B0A2F7AD3D393DFF0F49500 /* ParentLoginView.swift */; };
 		895A082C72C68F0D949BBDDD /* MockKeychainService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 481915AE6ED8220FAD63C274 /* MockKeychainService.swift */; };
@@ -29,15 +38,19 @@
 		948BC407ACA1F076E06637A7 /* ChildLoginViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC06CE82C91B2857B35D558A /* ChildLoginViewModelTests.swift */; };
 		9CF828C12BE63AB0B41C34EC /* ChildTabNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E3A1F2AD92B03F449941535 /* ChildTabNavigation.swift */; };
 		9D5E0683EC438D281DFD5773 /* ActivityLogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09B21CF70FC8D88A0697F318 /* ActivityLogView.swift */; };
+		A734A88719E42A1E5F20AF7B /* NewActivityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9DC36F93995532A66BDF7FA /* NewActivityView.swift */; };
 		A86E2E55DA4A4363F89ACE8E /* AuthenticatedUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 528D338C57FDF31E1DF0206D /* AuthenticatedUser.swift */; };
 		AC1292FFAE7783075F6B5369 /* TrainingSessionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 238032F237E996BE29A2DFB9 /* TrainingSessionView.swift */; };
 		AD57D0500C16B7370F200026 /* SkillTrackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66ECF64E8E6B5B5B44E75426 /* SkillTrackView.swift */; };
 		B0173F7C3466C6AF284D744B /* TestFixtures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55725CC2638A2BE120CB57EB /* TestFixtures.swift */; };
 		B41A5D5622F683237AF41C16 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E9C25A374026A93FA31F3EFE /* Assets.xcassets */; };
 		B48746BA8C5FD30943F93EAC /* Tags.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C7A5056FB1866BF93CD09B6 /* Tags.swift */; };
+		B4C2A4C09BDD18F64D0F6522 /* TrainingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FB34840A263C9E27A101C4A /* TrainingViewModel.swift */; };
+		B8B390096CE421AC516C887E /* ProgressViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5EA271E724737F8E1BA202E /* ProgressViewModel.swift */; };
 		BCC7C40789F6210D41C7B0F3 /* AuthManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EE5BA06AF4BDDADB575E0A8 /* AuthManagerTests.swift */; };
 		C348CB2772829510EB8D7991 /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7C85199E8E50451D3143937 /* APIClient.swift */; };
 		C717E88B9E74869B66D653ED /* ChildLoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D45CCBB1D9DC0BD851F9F329 /* ChildLoginViewModel.swift */; };
+		CE73475F033E5F83C979863C /* ChildHomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B09C94FE0B72A93E2DFF2AD /* ChildHomeViewModel.swift */; };
 		CF1E273CA551EE9C0ECCADD9 /* LearnView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB95ADF7A15FA44B042B786F /* LearnView.swift */; };
 		D111DCAE9FE5C015138C2D7C /* TrainingArc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 625761F9B4C85A65D7D30FFC /* TrainingArc.swift */; };
 		D133054D92EA03F93924CB3B /* ParentLoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E72073B55A4C01C5A02CE50 /* ParentLoginViewModel.swift */; };
@@ -64,13 +77,18 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		080C4139AD11130A55A00F89 /* LearnViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LearnViewModel.swift; sourceTree = "<group>"; };
 		09B21CF70FC8D88A0697F318 /* ActivityLogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityLogView.swift; sourceTree = "<group>"; };
 		0CFEF3E36C44AB88A95016A9 /* Date+Formatting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Formatting.swift"; sourceTree = "<group>"; };
 		0E8A1FE5D16285D19B4A920A /* APIRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIRouter.swift; sourceTree = "<group>"; };
+		10B74EC14B38A671B680B438 /* FullCheckInSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullCheckInSheet.swift; sourceTree = "<group>"; };
 		11B3DAC7E608FCF46D319A36 /* Streak.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Streak.swift; sourceTree = "<group>"; };
+		121837DE0296D70A172A4AA2 /* SkillsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkillsViewModel.swift; sourceTree = "<group>"; };
 		1E6DBBDCC9E2E3C3845BA832 /* AppRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppRouter.swift; sourceTree = "<group>"; };
 		1E72073B55A4C01C5A02CE50 /* ParentLoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParentLoginViewModel.swift; sourceTree = "<group>"; };
+		2348EDF74B205A9360456B3A /* QuickLogViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickLogViewModel.swift; sourceTree = "<group>"; };
 		238032F237E996BE29A2DFB9 /* TrainingSessionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrainingSessionView.swift; sourceTree = "<group>"; };
+		2B09C94FE0B72A93E2DFF2AD /* ChildHomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChildHomeViewModel.swift; sourceTree = "<group>"; };
 		3612E00A7532F669E3852990 /* AuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthManager.swift; sourceTree = "<group>"; };
 		3C7A5056FB1866BF93CD09B6 /* Tags.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tags.swift; sourceTree = "<group>"; };
 		3E3A1F2AD92B03F449941535 /* ChildTabNavigation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChildTabNavigation.swift; sourceTree = "<group>"; };
@@ -80,8 +98,11 @@
 		4B4898AC3F86F2C2D77C8565 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		4BC100653CB247610196D5D7 /* Session.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Session.swift; sourceTree = "<group>"; };
 		4E664960E667F9B87AC14FB5 /* ParentDashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParentDashboardView.swift; sourceTree = "<group>"; };
+		4FB34840A263C9E27A101C4A /* TrainingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrainingViewModel.swift; sourceTree = "<group>"; };
 		528D338C57FDF31E1DF0206D /* AuthenticatedUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticatedUser.swift; sourceTree = "<group>"; };
+		530A972AEC110004D406073A /* ParentControlsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParentControlsView.swift; sourceTree = "<group>"; };
 		55725CC2638A2BE120CB57EB /* TestFixtures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestFixtures.swift; sourceTree = "<group>"; };
+		57C6BFA02F61938478B529F2 /* ChildDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChildDetailView.swift; sourceTree = "<group>"; };
 		58EFD7E15FDD78303FBCDCFF /* LoginChoiceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginChoiceView.swift; sourceTree = "<group>"; };
 		625761F9B4C85A65D7D30FFC /* TrainingArc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrainingArc.swift; sourceTree = "<group>"; };
 		65457031842F65AA11A1A0C9 /* Activity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Activity.swift; sourceTree = "<group>"; };
@@ -90,7 +111,10 @@
 		70D02BCD1734281F9F306858 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		844FB83D8C4E132523399E1E /* PitchDreamsTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = PitchDreamsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9F3324B857A9AA11635238B1 /* APIEndpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIEndpoint.swift; sourceTree = "<group>"; };
+		A69AF56C9F54B2AF1EAC1FC1 /* QuickLogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickLogView.swift; sourceTree = "<group>"; };
 		A7A1CDBFAD6B59D638849FD9 /* ChildLoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChildLoginView.swift; sourceTree = "<group>"; };
+		A9DC36F93995532A66BDF7FA /* NewActivityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewActivityView.swift; sourceTree = "<group>"; };
+		ACA8D43C962506A82767816B /* Trend.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Trend.swift; sourceTree = "<group>"; };
 		ADCE789A5091C8F7AE3FB282 /* PitchDreams.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = PitchDreams.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		ADDF00203559FD14E35F38D9 /* ProgressDashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressDashboardView.swift; sourceTree = "<group>"; };
 		AFB4E330B001D69EB42A0451 /* MockAPIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockAPIClient.swift; sourceTree = "<group>"; };
@@ -107,6 +131,8 @@
 		C9871D0DD27D344A90A57643 /* ParentLoginViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParentLoginViewModelTests.swift; sourceTree = "<group>"; };
 		CB95ADF7A15FA44B042B786F /* LearnView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LearnView.swift; sourceTree = "<group>"; };
 		D45CCBB1D9DC0BD851F9F329 /* ChildLoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChildLoginViewModel.swift; sourceTree = "<group>"; };
+		D5EA271E724737F8E1BA202E /* ProgressViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressViewModel.swift; sourceTree = "<group>"; };
+		DC03A1C59166260EB69B2A7C /* ActivityLogViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityLogViewModel.swift; sourceTree = "<group>"; };
 		DC06CE82C91B2857B35D558A /* ChildLoginViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChildLoginViewModelTests.swift; sourceTree = "<group>"; };
 		E9C25A374026A93FA31F3EFE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		EE762806223B4B777D201D4C /* PitchDreamsApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PitchDreamsApp.swift; sourceTree = "<group>"; };
@@ -126,6 +152,7 @@
 			isa = PBXGroup;
 			children = (
 				09B21CF70FC8D88A0697F318 /* ActivityLogView.swift */,
+				A9DC36F93995532A66BDF7FA /* NewActivityView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -141,9 +168,18 @@
 		149BCA3B54D80CE6EF987B93 /* ChildHome */ = {
 			isa = PBXGroup;
 			children = (
+				EA0A44D3593621DDA269C530 /* ViewModels */,
 				BA14F8A988AAF4FA9ED34BC4 /* Views */,
 			);
 			path = ChildHome;
+			sourceTree = "<group>";
+		};
+		18458F2062356E95B3285B65 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				2348EDF74B205A9360456B3A /* QuickLogViewModel.swift */,
+			);
+			path = ViewModels;
 			sourceTree = "<group>";
 		};
 		210E68FB0124EF1381021BBA /* Views */ = {
@@ -156,9 +192,18 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
+		2290215939762F78F47BAECB /* ParentControls */ = {
+			isa = PBXGroup;
+			children = (
+				E4ADEF18F3114AA7F5776C20 /* Views */,
+			);
+			path = ParentControls;
+			sourceTree = "<group>";
+		};
 		235F5C232A1B5CD26943F482 /* Progress */ = {
 			isa = PBXGroup;
 			children = (
+				D062955588F8E5DB5CDDC869 /* ViewModels */,
 				A106CB3D19193D3267B9AEF4 /* Views */,
 			);
 			path = Progress;
@@ -197,9 +242,18 @@
 			path = Features;
 			sourceTree = "<group>";
 		};
+		36D9B601FE0E1310FD765A89 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				4FB34840A263C9E27A101C4A /* TrainingViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
 		3C7961512E8194E6C8D313C2 /* Training */ = {
 			isa = PBXGroup;
 			children = (
+				36D9B601FE0E1310FD765A89 /* ViewModels */,
 				923F8A6B0F184D4DE7A5C60C /* Views */,
 			);
 			path = Training;
@@ -222,8 +276,10 @@
 				03CC46D480D6A7E0342D7A4C /* Auth */,
 				149BCA3B54D80CE6EF987B93 /* ChildHome */,
 				60073BA01E797C507E0E2762 /* Learn */,
+				2290215939762F78F47BAECB /* ParentControls */,
 				280B0A2E34C7A78F0B26D2B9 /* ParentDashboard */,
 				235F5C232A1B5CD26943F482 /* Progress */,
+				97AB8F994593A5F4C2496609 /* QuickLog */,
 				75BDDD485C32301BA4FFCDD6 /* Skills */,
 				3C7961512E8194E6C8D313C2 /* Training */,
 			);
@@ -243,6 +299,7 @@
 		60073BA01E797C507E0E2762 /* Learn */ = {
 			isa = PBXGroup;
 			children = (
+				A04D6170A5C5DD370766084D /* ViewModels */,
 				261E37E99FF8F86CC6B4CC6D /* Views */,
 			);
 			path = Learn;
@@ -270,6 +327,7 @@
 		75BDDD485C32301BA4FFCDD6 /* Skills */ = {
 			isa = PBXGroup;
 			children = (
+				F0E62D1BF62C55177FFB8320 /* ViewModels */,
 				24334D64C58B6A0B90FA61A8 /* Views */,
 			);
 			path = Skills;
@@ -296,9 +354,27 @@
 		923F8A6B0F184D4DE7A5C60C /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				10B74EC14B38A671B680B438 /* FullCheckInSheet.swift */,
 				238032F237E996BE29A2DFB9 /* TrainingSessionView.swift */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		97AB8F994593A5F4C2496609 /* QuickLog */ = {
+			isa = PBXGroup;
+			children = (
+				18458F2062356E95B3285B65 /* ViewModels */,
+				EEC835B39FE2D14E487B18F8 /* Views */,
+			);
+			path = QuickLog;
+			sourceTree = "<group>";
+		};
+		A04D6170A5C5DD370766084D /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				080C4139AD11130A55A00F89 /* LearnViewModel.swift */,
+			);
+			path = ViewModels;
 			sourceTree = "<group>";
 		};
 		A106CB3D19193D3267B9AEF4 /* Views */ = {
@@ -341,9 +417,18 @@
 		C6257728C0DEB6A74AE4930A /* ActivityLog */ = {
 			isa = PBXGroup;
 			children = (
+				E12338AE3A800F8799BFE74F /* ViewModels */,
 				05F9C6624170FE80173FDE17 /* Views */,
 			);
 			path = ActivityLog;
+			sourceTree = "<group>";
+		};
+		D062955588F8E5DB5CDDC869 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				D5EA271E724737F8E1BA202E /* ProgressViewModel.swift */,
+			);
+			path = ViewModels;
 			sourceTree = "<group>";
 		};
 		D3A3E4BD1D2863570FE67A90 /* Core */ = {
@@ -378,9 +463,18 @@
 				11B3DAC7E608FCF46D319A36 /* Streak.swift */,
 				3C7A5056FB1866BF93CD09B6 /* Tags.swift */,
 				625761F9B4C85A65D7D30FFC /* TrainingArc.swift */,
+				ACA8D43C962506A82767816B /* Trend.swift */,
 				70D02BCD1734281F9F306858 /* User.swift */,
 			);
 			path = Models;
+			sourceTree = "<group>";
+		};
+		E12338AE3A800F8799BFE74F /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				DC03A1C59166260EB69B2A7C /* ActivityLogViewModel.swift */,
+			);
+			path = ViewModels;
 			sourceTree = "<group>";
 		};
 		E30765B1008B0A785DB09C98 /* Navigation */ = {
@@ -393,12 +487,45 @@
 			path = Navigation;
 			sourceTree = "<group>";
 		};
+		E4ADEF18F3114AA7F5776C20 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				530A972AEC110004D406073A /* ParentControlsView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
 		E644DAA91289133977CF730E /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				57C6BFA02F61938478B529F2 /* ChildDetailView.swift */,
 				4E664960E667F9B87AC14FB5 /* ParentDashboardView.swift */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		EA0A44D3593621DDA269C530 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				2B09C94FE0B72A93E2DFF2AD /* ChildHomeViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		EEC835B39FE2D14E487B18F8 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				A69AF56C9F54B2AF1EAC1FC1 /* QuickLogView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		F0E62D1BF62C55177FFB8320 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				121837DE0296D70A172A4AA2 /* SkillsViewModel.swift */,
+			);
+			path = ViewModels;
 			sourceTree = "<group>";
 		};
 		FBB6DFF373678E51B4B18A4C /* API */ = {
@@ -518,10 +645,13 @@
 				1DA08F0B9EF210CFB06D743A /* APIRouter.swift in Sources */,
 				929CC4CB02291AE16D71E494 /* Activity.swift in Sources */,
 				9D5E0683EC438D281DFD5773 /* ActivityLogView.swift in Sources */,
+				3E7A78B58AF22A1BF1D6F7ED /* ActivityLogViewModel.swift in Sources */,
 				6D0EDCE1E49B2D3AC0BE3388 /* AppRouter.swift in Sources */,
 				29D934035A6AE394F91A6779 /* AuthManager.swift in Sources */,
 				A86E2E55DA4A4363F89ACE8E /* AuthenticatedUser.swift in Sources */,
+				21763B576816FEB95C21CEC2 /* ChildDetailView.swift in Sources */,
 				0CFD823CE028962FE819D3C7 /* ChildHomeView.swift in Sources */,
+				CE73475F033E5F83C979863C /* ChildHomeViewModel.swift in Sources */,
 				12BFAC684989D4A5868B9E9D /* ChildLoginView.swift in Sources */,
 				C717E88B9E74869B66D653ED /* ChildLoginViewModel.swift in Sources */,
 				9CF828C12BE63AB0B41C34EC /* ChildTabNavigation.swift in Sources */,
@@ -529,24 +659,34 @@
 				579598C622E552442C7A9E7A /* Constants.swift in Sources */,
 				F853A3ABE46F09027F521EA5 /* Date+Formatting.swift in Sources */,
 				180CD0EBCC82E6B63B5C28E3 /* Drill.swift in Sources */,
+				367BDFE1E4DACA17181E849A /* FullCheckInSheet.swift in Sources */,
 				8334CD8061C657EC67961CF8 /* KeychainService.swift in Sources */,
 				CF1E273CA551EE9C0ECCADD9 /* LearnView.swift in Sources */,
+				6754254677B7A9FFB21B0FE0 /* LearnViewModel.swift in Sources */,
 				F8790E2F831DCB033D90A126 /* Lesson.swift in Sources */,
 				471F6B97A98556FADF043526 /* Logger.swift in Sources */,
 				F314FCE45D8AA2153C37DB96 /* LoginChoiceView.swift in Sources */,
+				A734A88719E42A1E5F20AF7B /* NewActivityView.swift in Sources */,
+				21F651183D1134A359FC9C06 /* ParentControlsView.swift in Sources */,
 				16288083B64F0BCB16EB5057 /* ParentDashboardView.swift in Sources */,
 				85518ED856F1E6E424BF8433 /* ParentLoginView.swift in Sources */,
 				D133054D92EA03F93924CB3B /* ParentLoginViewModel.swift in Sources */,
 				D5BCBB8873850516CCF50355 /* ParentNavigation.swift in Sources */,
 				F4388EA6E2C9417394822486 /* PitchDreamsApp.swift in Sources */,
 				DF9BCCA7DA76BE683589E82C /* ProgressDashboardView.swift in Sources */,
+				B8B390096CE421AC516C887E /* ProgressViewModel.swift in Sources */,
+				7AB67005D4953FD72E515CAA /* QuickLogView.swift in Sources */,
+				3491800DC0967C3B40219E88 /* QuickLogViewModel.swift in Sources */,
 				E8AB9928EBD380D69AAF6A23 /* Session.swift in Sources */,
 				AD57D0500C16B7370F200026 /* SkillTrackView.swift in Sources */,
+				80231F8FD6F5103D8304A74D /* SkillsViewModel.swift in Sources */,
 				435F920CA58CC48D7D0D33E5 /* Streak.swift in Sources */,
 				B48746BA8C5FD30943F93EAC /* Tags.swift in Sources */,
 				FF7D36B342566DB0AF76663E /* TokenInterceptor.swift in Sources */,
 				D111DCAE9FE5C015138C2D7C /* TrainingArc.swift in Sources */,
 				AC1292FFAE7783075F6B5369 /* TrainingSessionView.swift in Sources */,
+				B4C2A4C09BDD18F64D0F6522 /* TrainingViewModel.swift in Sources */,
+				1B833F7762BB328D4933A44E /* Trend.swift in Sources */,
 				24EA6515495F4402C9605F57 /* User.swift in Sources */,
 				924247957C75C372486F1985 /* View+Loading.swift in Sources */,
 			);

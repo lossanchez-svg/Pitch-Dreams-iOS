@@ -29,7 +29,7 @@ struct ActivityItem: Codable, Identifiable {
     let childId: String
     let activityType: String
     let durationMinutes: Int
-    let intensityRpe: Int?
-    let gameIqImpact: String?
+    let intensityRPE: Int?
+    let gameIQImpact: String?
     let createdAt: String
 }

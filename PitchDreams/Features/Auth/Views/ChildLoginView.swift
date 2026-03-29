@@ -28,6 +28,8 @@ struct ChildLoginView: View {
                             .autocorrectionDisabled()
                             .textInputAutocapitalization(.never)
                             .focused($focusedField, equals: .email)
+                            .submitLabel(.next)
+                            .onSubmit { focusedField = .nickname }
                             .padding()
                             .background(Color.hudCardBackground)
                             .foregroundColor(.white)
@@ -36,6 +38,8 @@ struct ChildLoginView: View {
                         TextField("Your nickname", text: $viewModel.nickname)
                             .autocorrectionDisabled()
                             .focused($focusedField, equals: .nickname)
+                            .submitLabel(.next)
+                            .onSubmit { focusedField = .pin }
                             .padding()
                             .background(Color.hudCardBackground)
                             .foregroundColor(.white)
@@ -59,6 +63,7 @@ struct ChildLoginView: View {
                     }
 
                     Button {
+                        focusedField = nil
                         Task { await viewModel.login() }
                     } label: {
                         Text("Let's Go!")
@@ -72,10 +77,20 @@ struct ChildLoginView: View {
                     .disabled(!viewModel.isValid || viewModel.isLoading)
                 }
                 .padding(.horizontal, 24)
+                .padding(.bottom, 40)
             }
         }
         .loadingOverlay(viewModel.isLoading)
         .navigationBarTitleDisplayMode(.inline)
         .toolbarColorScheme(.dark, for: .navigationBar)
+        .toolbar {
+            ToolbarItemGroup(placement: .keyboard) {
+                Spacer()
+                Button("Done") {
+                    focusedField = nil
+                }
+                .fontWeight(.semibold)
+            }
+        }
     }
 }

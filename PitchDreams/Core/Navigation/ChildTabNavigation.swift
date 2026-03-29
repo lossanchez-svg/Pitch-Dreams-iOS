@@ -27,6 +27,13 @@ struct ChildTabNavigation: View {
             }
 
             NavigationStack {
+                SkillTrackView(childId: childId)
+            }
+            .tabItem {
+                Label("Skills", systemImage: "star.fill")
+            }
+
+            NavigationStack {
                 ProgressDashboardView(childId: childId)
             }
             .tabItem {

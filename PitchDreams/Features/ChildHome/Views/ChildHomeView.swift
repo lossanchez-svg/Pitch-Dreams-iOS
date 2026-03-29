@@ -130,7 +130,7 @@ struct ChildHomeView: View {
             }
 
             NavigationLink {
-                ActivityLogView(childId: childId)
+                QuickLogView(childId: childId)
             } label: {
                 Label("Log Session", systemImage: "plus.circle.fill")
                     .font(.headline)

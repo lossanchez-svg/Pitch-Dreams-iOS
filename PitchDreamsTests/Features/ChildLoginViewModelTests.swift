@@ -6,56 +6,49 @@ final class ChildLoginViewModelTests: XCTestCase {
 
     private var sut: ChildLoginViewModel!
     private var mockAPI: MockAPIClient!
-    private var mockKeychain: MockKeychainService!
     private var authManager: AuthManager!
 
     override func setUp() {
         super.setUp()
         mockAPI = MockAPIClient()
-        mockKeychain = MockKeychainService()
-        authManager = AuthManager(apiClient: mockAPI, keychainService: mockKeychain)
+        authManager = AuthManager(apiClient: mockAPI, keychain: MockKeychainService())
         sut = ChildLoginViewModel(authManager: authManager)
-    }
-
-    override func tearDown() {
-        sut = nil
-        authManager = nil
-        mockAPI = nil
-        mockKeychain = nil
-        super.tearDown()
     }
 
     // MARK: - Validation
 
-    func testIsValid_shortPin_returnsFalse() {
+    func testIsValidShortPinReturnsFalse() {
         sut.parentEmail = "parent@example.com"
-        sut.childNickname = "TestKid"
+        sut.nickname = "TestKid"
         sut.pin = "12"
-
         XCTAssertFalse(sut.isValid)
     }
 
-    func testIsValid_emptyNickname_returnsFalse() {
+    func testIsValidEmptyNicknameReturnsFalse() {
         sut.parentEmail = "parent@example.com"
-        sut.childNickname = ""
+        sut.nickname = ""
         sut.pin = "1234"
-
         XCTAssertFalse(sut.isValid)
     }
 
-    func testIsValid_validInputs_returnsTrue() {
+    func testIsValidValidInputsReturnsTrue() {
         sut.parentEmail = "parent@example.com"
-        sut.childNickname = "TestKid"
+        sut.nickname = "TestKid"
         sut.pin = "1234"
-
         XCTAssertTrue(sut.isValid)
     }
 
-    func testIsValid_emptyParentEmail_returnsFalse() {
+    func testIsValidEmptyEmailReturnsFalse() {
         sut.parentEmail = ""
-        sut.childNickname = "TestKid"
+        sut.nickname = "TestKid"
         sut.pin = "1234"
+        XCTAssertFalse(sut.isValid)
+    }
 
+    func testIsValidNonNumericPinReturnsFalse() {
+        sut.parentEmail = "parent@example.com"
+        sut.nickname = "TestKid"
+        sut.pin = "abcd"
         XCTAssertFalse(sut.isValid)
     }
 }

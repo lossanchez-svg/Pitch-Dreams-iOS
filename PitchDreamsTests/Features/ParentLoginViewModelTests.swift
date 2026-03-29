@@ -6,53 +6,45 @@ final class ParentLoginViewModelTests: XCTestCase {
 
     private var sut: ParentLoginViewModel!
     private var mockAPI: MockAPIClient!
-    private var mockKeychain: MockKeychainService!
     private var authManager: AuthManager!
 
     override func setUp() {
         super.setUp()
         mockAPI = MockAPIClient()
-        mockKeychain = MockKeychainService()
-        authManager = AuthManager(apiClient: mockAPI, keychainService: mockKeychain)
+        authManager = AuthManager(apiClient: mockAPI, keychain: MockKeychainService())
         sut = ParentLoginViewModel(authManager: authManager)
-    }
-
-    override func tearDown() {
-        sut = nil
-        authManager = nil
-        mockAPI = nil
-        mockKeychain = nil
-        super.tearDown()
     }
 
     // MARK: - Validation
 
-    func testIsValid_emptyEmail_returnsFalse() {
+    func testIsValidEmptyEmailReturnsFalse() {
         sut.email = ""
         sut.password = "password123"
-
         XCTAssertFalse(sut.isValid)
     }
 
-    func testIsValid_emptyPassword_returnsFalse() {
+    func testIsValidEmptyPasswordReturnsFalse() {
         sut.email = "test@example.com"
         sut.password = ""
-
         XCTAssertFalse(sut.isValid)
     }
 
-    func testIsValid_validEmailAndPassword_returnsTrue() {
+    func testIsValidShortPasswordReturnsFalse() {
+        sut.email = "test@example.com"
+        sut.password = "short"
+        XCTAssertFalse(sut.isValid)
+    }
+
+    func testIsValidValidInputReturnsTrue() {
         sut.email = "test@example.com"
         sut.password = "password123"
-
         XCTAssertTrue(sut.isValid)
     }
 
     // MARK: - Login
 
-    func testLogin_success_noError() async {
-        let tokenResponse = TestFixtures.tokenResponse()
-        mockAPI.mockResult = tokenResponse
+    func testLoginSuccessNoError() async {
+        mockAPI.enqueue(TestFixtures.makeTokenResponse())
         sut.email = "parent@example.com"
         sut.password = "password123"
 
@@ -62,8 +54,8 @@ final class ParentLoginViewModelTests: XCTestCase {
         XCTAssertFalse(sut.isLoading)
     }
 
-    func testLogin_failure_setsError() async {
-        mockAPI.mockError = APIError.unauthorized
+    func testLoginFailureSetsError() async {
+        mockAPI.enqueueError(APIError.unauthorized)
         sut.email = "bad@example.com"
         sut.password = "wrong"
 

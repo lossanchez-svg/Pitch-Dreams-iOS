@@ -1,22 +1,22 @@
 import Foundation
 @testable import PitchDreams
 
-final class MockKeychainService: KeychainServiceProtocol {
+final class MockKeychainService: KeychainServiceProtocol, @unchecked Sendable {
     private var store: [String: String] = [:]
 
-    func save(_ value: String, forKey key: String) throws {
+    func save(value: String, for key: String) throws {
         store[key] = value
     }
 
-    func load(forKey key: String) throws -> String? {
+    func retrieve(for key: String) -> String? {
         return store[key]
     }
 
-    func delete(forKey key: String) throws {
+    func delete(for key: String) throws {
         store.removeValue(forKey: key)
     }
 
-    func deleteAll() throws {
+    func clear() {
         store.removeAll()
     }
 }

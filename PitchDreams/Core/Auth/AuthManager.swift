@@ -10,7 +10,7 @@ enum AuthState: Equatable {
 final class AuthManager: ObservableObject {
     @Published var state: AuthState = .loading
 
-    private let apiClient: APIClient
+    private let apiClient: APIClientProtocol
     private let keychain: KeychainServiceProtocol
     private let decoder = JSONDecoder()
     private let encoder = JSONEncoder()
@@ -20,14 +20,16 @@ final class AuthManager: ObservableObject {
         return nil
     }
 
-    init(apiClient: APIClient = APIClient(), keychain: KeychainServiceProtocol = KeychainService()) {
+    init(apiClient: APIClientProtocol = APIClient(), keychain: KeychainServiceProtocol = KeychainService()) {
         self.apiClient = apiClient
         self.keychain = keychain
 
-        // Wire up 401 auto-logout
-        self.apiClient.onUnauthorized = { [weak self] in
-            Task { @MainActor in
-                self?.handleUnauthorized()
+        // Wire up 401 auto-logout (only works with concrete APIClient)
+        if let concreteClient = apiClient as? APIClient {
+            concreteClient.onUnauthorized = { [weak self] in
+                Task { @MainActor in
+                    self?.handleUnauthorized()
+                }
             }
         }
     }

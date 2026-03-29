@@ -12,7 +12,7 @@ final class AuthManagerTests: XCTestCase {
         super.setUp()
         mockAPI = MockAPIClient()
         mockKeychain = MockKeychainService()
-        sut = AuthManager(apiClient: mockAPI, keychainService: mockKeychain)
+        sut = AuthManager(apiClient: mockAPI, keychain: mockKeychain)
     }
 
     override func tearDown() {
@@ -24,48 +24,45 @@ final class AuthManagerTests: XCTestCase {
 
     // MARK: - Restore Session
 
-    func testRestoreSession_emptyKeychain_remainsUnauthenticated() async {
-        await sut.restoreSession()
-
+    func testRestoreSessionEmptyKeychainSetsUnauthenticated() {
+        sut.restoreSession()
         XCTAssertEqual(sut.state, .unauthenticated)
         XCTAssertNil(sut.currentUser)
     }
 
     // MARK: - Login Parent
 
-    func testLoginParent_success_setsAuthenticated() async throws {
-        let tokenResponse = TestFixtures.tokenResponse()
-        mockAPI.mockResult = tokenResponse
+    func testLoginParentSuccessSetsAuthenticated() async throws {
+        let response = TestFixtures.makeTokenResponse()
+        mockAPI.enqueue(response)
 
         try await sut.loginParent(email: "parent@example.com", password: "password123")
 
-        XCTAssertEqual(sut.state, .authenticated)
-        XCTAssertNotNil(sut.currentUser)
-        XCTAssertEqual(sut.currentUser?.role, .parent)
+        if case .authenticated(let user) = sut.state {
+            XCTAssertEqual(user.role, .parent)
+        } else {
+            XCTFail("Expected authenticated state")
+        }
     }
 
-    func testLoginParent_failure_remainsUnauthenticated() async {
-        mockAPI.mockError = APIError.unauthorized
+    func testLoginParentFailureThrows() async {
+        mockAPI.enqueueError(APIError.unauthorized)
 
         do {
             try await sut.loginParent(email: "bad@example.com", password: "wrong")
             XCTFail("Expected error to be thrown")
         } catch {
-            XCTAssertEqual(sut.state, .unauthenticated)
-            XCTAssertNil(sut.currentUser)
+            XCTAssertEqual(sut.state, .loading) // Never got set to authenticated
         }
     }
 
     // MARK: - Logout
 
-    func testLogout_clearsKeychainAndState() async throws {
-        // First log in
-        let tokenResponse = TestFixtures.tokenResponse()
-        mockAPI.mockResult = tokenResponse
+    func testLogoutClearsState() async throws {
+        let response = TestFixtures.makeTokenResponse()
+        mockAPI.enqueue(response)
         try await sut.loginParent(email: "parent@example.com", password: "password123")
-        XCTAssertEqual(sut.state, .authenticated)
 
-        // Then log out
         sut.logout()
 
         XCTAssertEqual(sut.state, .unauthenticated)

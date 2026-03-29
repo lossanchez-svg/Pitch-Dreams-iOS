@@ -1,27 +1,48 @@
 import Foundation
 @testable import PitchDreams
 
-final class MockAPIClient: APIClientProtocol {
-    var mockResult: Any?
-    var mockError: Error?
+final class MockAPIClient: APIClientProtocol, @unchecked Sendable {
+    var responses: [Any] = []
+    var errors: [Error?] = []
+    var calledEndpoints: [String] = []
+    private var callIndex = 0
 
-    func loginParent(email: String, password: String) async throws -> TokenResponse {
-        if let error = mockError { throw error }
-        return mockResult as! TokenResponse
+    func enqueue<T: Decodable>(_ response: T) {
+        responses.append(response)
+        errors.append(nil)
     }
 
-    func loginChild(parentEmail: String, childNickname: String, pin: String) async throws -> TokenResponse {
-        if let error = mockError { throw error }
-        return mockResult as! TokenResponse
+    func enqueueError(_ error: Error) {
+        responses.append(0)  // placeholder
+        errors.append(error)
     }
 
-    func refreshToken(_ token: String) async throws -> TokenResponse {
-        if let error = mockError { throw error }
-        return mockResult as! TokenResponse
+    func request<T: Decodable>(_ endpoint: APIEndpoint) async throws -> T {
+        calledEndpoints.append(endpoint.path)
+        guard callIndex < responses.count else {
+            throw APIError.unknown(0, "No mock response queued for call \(callIndex)")
+        }
+        let idx = callIndex
+        callIndex += 1
+        if let error = errors[idx] { throw error }
+        guard let response = responses[idx] as? T else {
+            throw APIError.decoding(NSError(domain: "MockAPIClient", code: 0, userInfo: [NSLocalizedDescriptionKey: "Type mismatch: expected \(T.self)"]))
+        }
+        return response
     }
 
-    func fetchChildren(token: String) async throws -> [ChildSummary] {
-        if let error = mockError { throw error }
-        return mockResult as! [ChildSummary]
+    func requestVoid(_ endpoint: APIEndpoint) async throws {
+        calledEndpoints.append(endpoint.path)
+        guard callIndex < errors.count else { return }
+        let idx = callIndex
+        callIndex += 1
+        if let error = errors[idx] { throw error }
+    }
+
+    func reset() {
+        responses.removeAll()
+        errors.removeAll()
+        calledEndpoints.removeAll()
+        callIndex = 0
     }
 }

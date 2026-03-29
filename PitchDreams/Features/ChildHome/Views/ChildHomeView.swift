@@ -21,31 +21,36 @@ struct ChildHomeView: View {
     }
 
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 16) {
-                if viewModel.isLoading && viewModel.profile == nil {
-                    skeletonContent
-                } else {
-                    welcomeSection
-                    ConsistencyRingView(
-                        streak: viewModel.streakCount,
-                        maxStreak: 30,
-                        freezes: viewModel.freezeCount
-                    )
-                    quickActions
-                    checkInStatus
+        ZStack {
+            Color(.systemBackground)
+                .ignoresSafeArea()
 
-                    if let nudge = viewModel.nudge {
-                        coachNudgeCard(nudge)
+            ScrollView(.vertical, showsIndicators: true) {
+                VStack(alignment: .leading, spacing: 16) {
+                    if viewModel.isLoading && viewModel.profile == nil {
+                        skeletonContent
+                    } else {
+                        welcomeSection
+                        ConsistencyRingView(
+                            streak: viewModel.streakCount,
+                            maxStreak: 30,
+                            freezes: viewModel.freezeCount
+                        )
+                        quickActions
+                        checkInStatus
+
+                        if let nudge = viewModel.nudge {
+                            coachNudgeCard(nudge)
+                        }
+
+                        exploreSection
                     }
-
-                    exploreSection
                 }
+                .padding(.horizontal, 16)
+                .padding(.top, 8)
+                .padding(.bottom, 32)
+                .frame(maxWidth: .infinity, alignment: .leading)
             }
-            .padding(.horizontal)
-            .padding(.top, 8)
-            .padding(.bottom, 32)
-            .frame(maxWidth: .infinity, alignment: .leading)
         }
         .safeAreaInset(edge: .bottom) {
             if speechRecognizer.isListening {

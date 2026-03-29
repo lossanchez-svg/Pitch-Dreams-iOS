@@ -41,20 +41,41 @@ final class ChildHomeViewModel: ObservableObject {
         isLoading = true
         errorMessage = nil
 
-        async let profileTask: ChildProfileDetail? = try? apiClient.request(APIRouter.getProfile(childId: childId))
-        async let streakTask: StreakData? = try? apiClient.request(APIRouter.getStreaks(childId: childId))
-        async let checkInTask: CheckIn? = try? apiClient.request(APIRouter.todayCheckIn(childId: childId))
-        async let nudgeTask: CoachNudge? = try? apiClient.request(APIRouter.getNudge(childId: childId))
+        // Load each independently — don't let one failure block others
+        do {
+            profile = try await apiClient.request(APIRouter.getProfile(childId: childId))
+        } catch {
+            Log.api.error("Profile load failed: \(error)")
+        }
 
-        let (p, s, c, n) = await (profileTask, streakTask, checkInTask, nudgeTask)
-        profile = p
-        streakData = s
-        todayCheckIn = c
-        nudge = n
+        do {
+            streakData = try await apiClient.request(APIRouter.getStreaks(childId: childId))
+        } catch {
+            Log.api.error("Streak load failed: \(error)")
+        }
+
+        // todayCheckIn returns null when no check-in exists — that's normal
+        do {
+            todayCheckIn = try await apiClient.request(APIRouter.todayCheckIn(childId: childId))
+        } catch {
+            todayCheckIn = nil // No check-in today is normal
+        }
+
+        // Nudge returns null when engagement is good — that's normal
+        do {
+            nudge = try await apiClient.request(APIRouter.getNudge(childId: childId))
+        } catch {
+            nudge = nil
+        }
+
         isLoading = false
 
-        // Auto-check streak freeze
-        let _: FreezeCheckResult? = try? await apiClient.request(APIRouter.checkFreeze(childId: childId))
+        // Auto-check streak freeze (fire and forget)
+        do {
+            let _: FreezeCheckResult = try await apiClient.request(APIRouter.checkFreeze(childId: childId))
+        } catch {
+            // Not critical
+        }
     }
 }
 

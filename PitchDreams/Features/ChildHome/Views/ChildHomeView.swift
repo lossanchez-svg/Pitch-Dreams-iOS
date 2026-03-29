@@ -77,20 +77,11 @@ struct ChildHomeView: View {
             guard !newTranscript.isEmpty else { return }
             processVoiceCommand(newTranscript)
         }
-        .background {
-            NavigationLink(isActive: $navigateToTraining) {
-                TrainingSessionView(childId: childId)
-            } label: {
-                EmptyView()
-            }
-            .hidden()
-
-            NavigationLink(isActive: $navigateToQuickLog) {
-                QuickLogView(childId: childId)
-            } label: {
-                EmptyView()
-            }
-            .hidden()
+        .navigationDestination(isPresented: $navigateToTraining) {
+            TrainingSessionView(childId: childId)
+        }
+        .navigationDestination(isPresented: $navigateToQuickLog) {
+            QuickLogView(childId: childId)
         }
     }
 

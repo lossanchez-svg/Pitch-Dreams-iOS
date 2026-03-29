@@ -143,10 +143,13 @@ struct ParentControlsView: View {
 
     private func loadCurrentSettings() async {
         isLoadingSettings = true
-        if let profile: ChildProfileDetail = try? await apiClient.request(APIRouter.getProfile(childId: childId)) {
+        do {
+            let profile: ChildProfileDetail = try await apiClient.request(APIRouter.getProfile(childId: childId))
             voiceEnabled = profile.voiceEnabled
-            // skipAnimations maps inversely to freeText in this context;
-            // load voiceEnabled from the profile
+            // Note: freeTextEnabled and coachPersonality are not returned by the profile API yet
+            // They save correctly but can't be pre-loaded until the API is updated
+        } catch {
+            print("Failed to load settings: \(error)")
         }
         isLoadingSettings = false
     }

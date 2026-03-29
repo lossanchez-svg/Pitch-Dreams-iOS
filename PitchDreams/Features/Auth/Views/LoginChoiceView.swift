@@ -60,6 +60,14 @@ struct LoginChoiceView: View {
                     }
                     .padding(.horizontal, 32)
 
+                    NavigationLink {
+                        OnboardingView(authManager: authManager)
+                    } label: {
+                        Text("Create Account")
+                            .font(.callout)
+                            .foregroundColor(.gray)
+                    }
+
                     Spacer().frame(height: 48)
                 }
             }

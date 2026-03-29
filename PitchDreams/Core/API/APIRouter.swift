@@ -5,11 +5,24 @@ enum APIRouter: APIEndpoint {
     case parentLogin(email: String, password: String)
     case childLogin(parentEmail: String, nickname: String, pin: String)
 
+    // MARK: - Auth (non-v1)
+    case signup(email: String, password: String)
+    case forgotPassword(email: String)
+    case resetPassword(token: String, password: String)
+
     // MARK: - Parent
     case listChildren
     case updateChildPermissions(childId: String, permissions: PermissionsUpdate)
     case exportChildData(childId: String)
     case deleteChild(childId: String)
+
+    // MARK: - Parent (non-v1)
+    case createChild(parentId: String, body: CreateChildBody)
+    case setChildPin(childId: String, pin: String)
+
+    // MARK: - Parent (v1)
+    case resetChildProgress(childId: String)
+    case deleteParentAccount
 
     // MARK: - Child Profile
     case getProfile(childId: String)
@@ -72,10 +85,26 @@ enum APIRouter: APIEndpoint {
 
     // MARK: - APIEndpoint
 
+    var apiBasePath: String {
+        switch self {
+        case .signup, .forgotPassword, .resetPassword, .createChild, .setChildPin:
+            return "/api"
+        default:
+            return Constants.apiBasePath
+        }
+    }
+
     var path: String {
         switch self {
         case .parentLogin, .childLogin: return "/auth/token"
+        case .signup: return "/auth/signup"
+        case .forgotPassword: return "/auth/forgot-password"
+        case .resetPassword: return "/auth/reset-password"
         case .listChildren: return "/parent/children"
+        case .createChild: return "/parent/children"
+        case .setChildPin(let id, _): return "/parent/children/\(id)/pin"
+        case .resetChildProgress(let id): return "/parent/reset-progress/\(id)"
+        case .deleteParentAccount: return "/parent/account"
         case .updateChildPermissions(let id, _): return "/parent/children/\(id)/permissions"
         case .exportChildData(let id): return "/parent/children/\(id)/export"
         case .deleteChild(let id): return "/parent/children/\(id)"
@@ -125,11 +154,14 @@ enum APIRouter: APIEndpoint {
              .createActivity, .createCheckIn, .createQuickCheckIn,
              .startArc, .updateArcProgress, .logDrill,
              .updateLessonProgress, .submitQuiz, .checkFreeze, .recordMilestone,
-             .createFacility, .createCoach, .createProgram:
+             .createFacility, .createCoach, .createProgram,
+             .signup, .forgotPassword, .resetPassword, .createChild, .resetChildProgress:
             return .post
         case .updateChildPermissions, .updateCheckIn, .updateArcState:
             return .patch
-        case .deleteChild:
+        case .setChildPin:
+            return .put
+        case .deleteChild, .deleteParentAccount:
             return .delete
         default:
             return .get
@@ -153,6 +185,14 @@ enum APIRouter: APIEndpoint {
             return ParentLoginBody(email: email, password: password)
         case .childLogin(let parentEmail, let nickname, let pin):
             return ChildLoginBody(parentEmail: parentEmail, nickname: nickname, pin: pin)
+        case .signup(let email, let password):
+            return SignupBody(email: email, password: password)
+        case .forgotPassword(let email):
+            return ForgotPasswordBody(email: email)
+        case .resetPassword(let token, let password):
+            return ResetPasswordBody(token: token, password: password)
+        case .createChild(_, let body): return body
+        case .setChildPin(_, let pin): return SetPinBody(pin: pin)
         case .createSession(_, let body): return body
         case .createQuickSession(_, let body): return body
         case .createActivity(_, let body): return body
@@ -176,8 +216,10 @@ enum APIRouter: APIEndpoint {
 
     var requiresAuth: Bool {
         switch self {
-        case .parentLogin, .childLogin: return false
-        default: return true
+        case .parentLogin, .childLogin, .signup, .forgotPassword, .resetPassword, .createChild:
+            return false
+        default:
+            return true
         }
     }
 }
@@ -186,6 +228,24 @@ enum APIRouter: APIEndpoint {
 
 struct ParentLoginBody: Encodable { let email: String; let password: String }
 struct ChildLoginBody: Encodable { let parentEmail: String; let nickname: String; let pin: String }
+struct SignupBody: Encodable { let email: String; let password: String }
+struct ForgotPasswordBody: Encodable { let email: String }
+struct ResetPasswordBody: Encodable { let token: String; let password: String }
+struct SetPinBody: Encodable { let pin: String }
+struct CreateChildBody: Encodable {
+    let nickname: String
+    let age: Int
+    let position: String?
+    let goals: [String]?
+    let avatarId: String
+    let avatarColor: String?
+    let freeTextEnabled: Bool?
+    let trainingWindowStart: String?
+    let trainingWindowEnd: String?
+    var parentId: String?
+}
+struct SignupResponse: Decodable { let success: Bool; let parentId: String }
+struct CreateChildResponse: Decodable { let success: Bool; let childId: String }
 struct CreateSessionBody: Encodable { var activityType: String?; let effortLevel: Int; let mood: String; let duration: Int; var win: String?; var focus: String? }
 struct QuickSessionBody: Encodable { let type: String; let duration: Int; let effort: Int }
 struct CreateActivityBody: Encodable { let activityType: String; let durationMinutes: Int; let gameIQImpact: String; var focusTagIds: [String]?; var highlightIds: [String]?; var nextFocusIds: [String]? }

@@ -55,8 +55,12 @@ struct ParentLoginView: View {
                     }
                     .disabled(!viewModel.isValid || viewModel.isLoading)
 
-                    Link("Forgot password?", destination: URL(string: "https://pitchdreams.soccer/forgot-password")!)
-                        .font(.callout)
+                    NavigationLink {
+                        ForgotPasswordView()
+                    } label: {
+                        Text("Forgot password?")
+                            .font(.callout)
+                    }
                 }
                 .padding(.horizontal, 24)
             }

@@ -47,7 +47,7 @@ final class APIClient: APIClientProtocol, @unchecked Sendable {
     // MARK: - Private
 
     private func performRequest(_ endpoint: APIEndpoint) async throws -> (Data, HTTPURLResponse) {
-        var urlComponents = URLComponents(url: baseURL.appendingPathComponent(Constants.apiBasePath + endpoint.path), resolvingAgainstBaseURL: true)!
+        var urlComponents = URLComponents(url: baseURL.appendingPathComponent(endpoint.apiBasePath + endpoint.path), resolvingAgainstBaseURL: true)!
         urlComponents.queryItems = endpoint.queryItems
 
         guard let url = urlComponents.url else {

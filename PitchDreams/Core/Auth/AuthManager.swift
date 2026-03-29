@@ -46,6 +46,15 @@ final class AuthManager: ObservableObject {
         Log.auth.info("Session restored for \(user.role.rawValue) \(user.id)")
     }
 
+    func signup(email: String, password: String) async throws {
+        let _: SignupResponse = try await apiClient.request(
+            APIRouter.signup(email: email, password: password)
+        )
+        // Auto-login after signup
+        try await loginParent(email: email, password: password)
+        Log.auth.info("Signup + login complete")
+    }
+
     func loginParent(email: String, password: String) async throws {
         let response: TokenResponse = try await apiClient.request(
             APIRouter.parentLogin(email: email, password: password)

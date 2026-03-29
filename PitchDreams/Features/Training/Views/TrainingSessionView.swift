@@ -205,8 +205,8 @@ struct TrainingSessionView: View {
 
     private var actionButtons: some View {
         VStack(spacing: 12) {
-            Button {
-                // Placeholder for starting a guided training session
+            NavigationLink {
+                SpaceSelectionView(childId: childId)
             } label: {
                 Label("Start Training", systemImage: "figure.run")
                     .font(.headline)

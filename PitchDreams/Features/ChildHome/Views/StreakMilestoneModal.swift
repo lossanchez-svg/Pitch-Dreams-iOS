@@ -1,0 +1,73 @@
+import SwiftUI
+
+struct StreakMilestoneModal: View {
+    let milestone: Int
+    let freezeAwarded: Bool
+    let onDismiss: () -> Void
+
+    @State private var flameScale: CGFloat = 0
+    @State private var showCelebration = false
+
+    var body: some View {
+        VStack(spacing: 28) {
+            Spacer()
+
+            // Flame animation
+            Text("🔥")
+                .font(.system(size: 72))
+                .scaleEffect(flameScale)
+                .onAppear {
+                    withAnimation(.spring(response: 0.5, dampingFraction: 0.5)) {
+                        flameScale = 1.2
+                    }
+                    withAnimation(.spring(response: 0.3, dampingFraction: 0.6).delay(0.5)) {
+                        flameScale = 1.0
+                    }
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                        showCelebration = true
+                    }
+                }
+
+            // Big number
+            Text("\(milestone)")
+                .font(.system(size: 72, weight: .bold, design: .rounded))
+                .foregroundStyle(.orange)
+
+            Text("Day Streak!")
+                .font(.title.bold())
+
+            if freezeAwarded {
+                HStack(spacing: 8) {
+                    Image(systemName: "shield.fill")
+                        .foregroundStyle(.cyan)
+                    Text("You earned a streak freeze!")
+                        .font(.subheadline.weight(.medium))
+                }
+                .padding()
+                .background(.cyan.opacity(0.1))
+                .clipShape(RoundedRectangle(cornerRadius: 12))
+            }
+
+            Spacer()
+
+            Button {
+                onDismiss()
+            } label: {
+                Text("Keep Going!")
+                    .font(.title3.weight(.semibold))
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(.orange.gradient)
+                    .foregroundStyle(.white)
+                    .clipShape(RoundedRectangle(cornerRadius: 16))
+            }
+            .padding(.horizontal, 32)
+            .padding(.bottom, 48)
+        }
+        .celebration(isPresented: $showCelebration)
+    }
+}
+
+#Preview {
+    StreakMilestoneModal(milestone: 30, freezeAwarded: true) { }
+}

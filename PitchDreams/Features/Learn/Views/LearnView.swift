@@ -13,10 +13,16 @@ struct LearnView: View {
         List {
             if viewModel.isLoading && viewModel.lessonProgress.isEmpty {
                 Section {
-                    HStack {
-                        Spacer()
-                        ProgressView()
-                        Spacer()
+                    ForEach(0..<4, id: \.self) { _ in
+                        HStack(spacing: 12) {
+                            SkeletonView(width: 28, height: 28)
+                            VStack(alignment: .leading, spacing: 6) {
+                                SkeletonView(width: 160, height: 14)
+                                SkeletonView(width: 100, height: 10)
+                            }
+                            Spacer()
+                        }
+                        .padding(.vertical, 4)
                     }
                     .listRowBackground(Color.clear)
                 }
@@ -93,12 +99,7 @@ struct LearnView: View {
 
                 HStack(spacing: 8) {
                     Text(enriched.tacticalLesson.difficulty.capitalized)
-                        .font(.caption2.weight(.semibold))
-                        .padding(.horizontal, 6)
-                        .padding(.vertical, 2)
-                        .background(difficultyColor(enriched.tacticalLesson.difficulty).opacity(0.15))
-                        .foregroundStyle(difficultyColor(enriched.tacticalLesson.difficulty))
-                        .clipShape(Capsule())
+                        .badge(color: difficultyColor(enriched.tacticalLesson.difficulty))
 
                     Label("\(enriched.tacticalLesson.readingTimeMinutes) min", systemImage: "clock")
                         .font(.caption2)

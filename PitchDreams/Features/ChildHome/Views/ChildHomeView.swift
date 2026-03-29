@@ -9,6 +9,11 @@ struct ChildHomeView: View {
     @State private var voiceEnabled = false
     @State private var navigateToTraining = false
     @State private var navigateToQuickLog = false
+    @State private var showMilestoneModal = false
+    @State private var newMilestone: Int?
+    @State private var milestoneFreeze = false
+    @State private var showFirstSessionGuide = false
+    @AppStorage("hasCompletedFirstSession") private var hasCompletedFirstSession = false
 
     init(childId: String) {
         self.childId = childId
@@ -18,16 +23,20 @@ struct ChildHomeView: View {
     var body: some View {
         ScrollView {
             VStack(spacing: 20) {
-                welcomeSection
-                streakCard
-                quickActions
-                checkInStatus
+                if viewModel.isLoading && viewModel.profile == nil {
+                    skeletonContent
+                } else {
+                    welcomeSection
+                    streakCard
+                    quickActions
+                    checkInStatus
 
-                if let nudge = viewModel.nudge {
-                    coachNudgeCard(nudge)
+                    if let nudge = viewModel.nudge {
+                        coachNudgeCard(nudge)
+                    }
+
+                    exploreSection
                 }
-
-                exploreSection
             }
             .padding()
         }
@@ -65,10 +74,25 @@ struct ChildHomeView: View {
         .task {
             await viewModel.loadData()
             voiceEnabled = viewModel.profile?.voiceEnabled ?? false
+            checkForMilestones()
+            checkFirstSession()
         }
-        .overlay {
-            if viewModel.isLoading && viewModel.profile == nil {
-                ProgressView("Loading...")
+        .fullScreenCover(isPresented: $showFirstSessionGuide) {
+            FirstSessionGuideView(childId: childId) {
+                hasCompletedFirstSession = true
+                showFirstSessionGuide = false
+                Task { await viewModel.loadData() }
+            }
+        }
+        .sheet(isPresented: $showMilestoneModal) {
+            if let milestone = newMilestone {
+                StreakMilestoneModal(
+                    milestone: milestone,
+                    freezeAwarded: milestoneFreeze
+                ) {
+                    showMilestoneModal = false
+                    recordMilestone(milestone)
+                }
             }
         }
         .onChange(of: speechRecognizer.transcript) { newTranscript in
@@ -267,9 +291,75 @@ struct ChildHomeView: View {
                 .foregroundStyle(.secondary)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
-        .padding()
-        .background(.regularMaterial)
-        .clipShape(RoundedRectangle(cornerRadius: 12))
+        .cardStyle()
+    }
+
+    // MARK: - Skeleton
+
+    private var skeletonContent: some View {
+        VStack(spacing: 20) {
+            // Welcome skeleton
+            VStack(alignment: .leading, spacing: 4) {
+                SkeletonView(width: 200, height: 22)
+                SkeletonView(width: 140, height: 14)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+
+            SkeletonStreakRing()
+            SkeletonQuickActions()
+            SkeletonCard()
+
+            // Explore skeleton
+            VStack(alignment: .leading, spacing: 12) {
+                SkeletonView(width: 80, height: 18)
+                SkeletonCard()
+                HStack(spacing: 12) {
+                    SkeletonCard()
+                    SkeletonCard()
+                }
+            }
+        }
+    }
+
+    // MARK: - Milestone Logic
+
+    private func checkForMilestones() {
+        guard let streakData = viewModel.streakData else { return }
+        let milestones = [7, 14, 30, 50, 100]
+        let achieved = Set(streakData.milestones)
+        let streakCount = viewModel.streakCount
+
+        for m in milestones {
+            if streakCount >= m && !achieved.contains(m) {
+                newMilestone = m
+                milestoneFreeze = milestones.firstIndex(of: m).map { $0 % 2 == 0 } ?? false
+                showMilestoneModal = true
+                break
+            }
+        }
+    }
+
+    private func checkFirstSession() {
+        // ChildHomeViewModel does not track sessions directly,
+        // so we rely on streakData as a proxy. If no streakData milestones
+        // and no check-in today, the player is likely new.
+        if !hasCompletedFirstSession {
+            let hasMilestones = !(viewModel.streakData?.milestones.isEmpty ?? true)
+            let hasCheckIn = viewModel.todayCheckIn != nil
+            if !hasMilestones && !hasCheckIn && viewModel.profile != nil {
+                showFirstSessionGuide = true
+            }
+        }
+    }
+
+    private func recordMilestone(_ milestone: Int) {
+        Task {
+            let apiClient: APIClientProtocol = APIClient()
+            let body = MilestoneBody(milestone: milestone)
+            let _: MilestoneResult? = try? await apiClient.request(
+                APIRouter.recordMilestone(childId: childId, body: body)
+            )
+        }
     }
 
     // MARK: - Helpers

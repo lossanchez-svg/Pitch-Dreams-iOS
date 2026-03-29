@@ -13,10 +13,17 @@ struct SkillTrackView: View {
         List {
             if viewModel.isLoading && viewModel.drillStats.isEmpty {
                 Section {
-                    HStack {
-                        Spacer()
-                        ProgressView()
-                        Spacer()
+                    ForEach(0..<4, id: \.self) { _ in
+                        HStack(spacing: 12) {
+                            SkeletonView(width: 28, height: 28)
+                            VStack(alignment: .leading, spacing: 6) {
+                                SkeletonView(width: 140, height: 14)
+                                SkeletonView(width: 100, height: 10)
+                            }
+                            Spacer()
+                            SkeletonView(width: 70, height: 12)
+                        }
+                        .padding(.vertical, 4)
                     }
                     .listRowBackground(Color.clear)
                 }

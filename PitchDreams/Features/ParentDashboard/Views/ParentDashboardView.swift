@@ -12,10 +12,8 @@ struct ParentDashboardView: View {
         List {
             Section {
                 if isLoading {
-                    HStack {
-                        Spacer()
-                        ProgressView()
-                        Spacer()
+                    ForEach(0..<3, id: \.self) { _ in
+                        SkeletonChildRow()
                     }
                     .listRowBackground(Color.clear)
                 } else if let errorText {

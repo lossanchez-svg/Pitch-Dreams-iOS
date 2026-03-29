@@ -13,9 +13,9 @@ struct ProgressDashboardView: View {
         ScrollView {
             VStack(spacing: 20) {
                 if viewModel.isLoading && viewModel.sessions.isEmpty {
-                    Spacer(minLength: 100)
-                    ProgressView("Loading progress...")
-                    Spacer(minLength: 100)
+                    SkeletonStatGrid()
+                    SkeletonCard()
+                    SkeletonCard()
                 } else if viewModel.sessions.isEmpty && viewModel.streakData == nil {
                     emptyState
                 } else {
@@ -117,9 +117,7 @@ struct ProgressDashboardView: View {
                 .foregroundStyle(.secondary)
                 .frame(maxWidth: .infinity, alignment: .leading)
         }
-        .padding()
-        .background(.regularMaterial)
-        .clipShape(RoundedRectangle(cornerRadius: 14))
+        .cardStyle()
     }
 
     // MARK: - Streak Section

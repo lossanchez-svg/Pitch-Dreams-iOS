@@ -19,8 +19,8 @@ final class CoachVoice: ObservableObject {
     func speak(_ text: String, personality: String = "manager") {
         stop()
 
-        // Configure audio session for speech output (SpeechRecognizer sets .record which blocks TTS)
-        try? AVAudioSession.sharedInstance().setCategory(.playback, mode: .default)
+        // Use .playAndRecord so TTS and mic can coexist without audio session conflicts
+        try? AVAudioSession.sharedInstance().setCategory(.playAndRecord, mode: .default, options: [.defaultToSpeaker, .duckOthers])
         try? AVAudioSession.sharedInstance().setActive(true)
 
         let utterance = AVSpeechUtterance(string: text)

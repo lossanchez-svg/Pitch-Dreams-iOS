@@ -52,16 +52,22 @@ final class SpeechRecognizer: ObservableObject {
             return
         }
 
+        // Clean up any previous session before starting
+        stopListeningInternal()
+
         do {
             let audioSession = AVAudioSession.sharedInstance()
-            try audioSession.setCategory(.record, mode: .measurement, options: .duckOthers)
+            try audioSession.setCategory(.playAndRecord, mode: .default, options: [.defaultToSpeaker, .duckOthers])
             try audioSession.setActive(true, options: .notifyOthersOnDeactivation)
 
             request = SFSpeechAudioBufferRecognitionRequest()
             guard let request else { return }
             request.shouldReportPartialResults = true
             if #available(iOS 16, *) {
-                request.requiresOnDeviceRecognition = true // privacy-first, no network
+                // Try on-device first for privacy, but fall back to server if unavailable
+                if recognizer.supportsOnDeviceRecognition {
+                    request.requiresOnDeviceRecognition = true
+                }
             }
 
             let inputNode = audioEngine.inputNode
@@ -111,13 +117,28 @@ final class SpeechRecognizer: ObservableObject {
     }
 
     func stopListening() {
-        audioEngine.stop()
-        audioEngine.inputNode.removeTap(onBus: 0)
+        stopListeningInternal()
+        isListening = false
+    }
+
+    /// Internal cleanup without setting isListening to false (used by startListening to reset state)
+    private func stopListeningInternal() {
+        if audioEngine.isRunning {
+            audioEngine.stop()
+        }
+        // Only remove tap if one was installed (engine has been prepared/started)
+        if audioEngine.inputNode.numberOfInputs > 0 {
+            audioEngine.inputNode.removeTap(onBus: 0)
+        }
         recognitionTask?.cancel()
         recognitionTask = nil
         request?.endAudio()
         request = nil
-        isListening = false
+    }
+
+    func restartListening() {
+        stopListening()
+        startListening()
     }
 
     func toggleListening() async {

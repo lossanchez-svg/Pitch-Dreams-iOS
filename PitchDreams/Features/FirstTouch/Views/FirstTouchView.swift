@@ -34,6 +34,18 @@ struct FirstTouchView: View {
         }
         .navigationTitle("First Touch")
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                if viewModel.activeDrillKey != nil {
+                    Button {
+                        Task { await speechRecognizer.toggleListening() }
+                    } label: {
+                        Image(systemName: speechRecognizer.isListening ? "mic.fill" : "mic")
+                            .foregroundStyle(speechRecognizer.isListening ? .red : .cyan)
+                    }
+                }
+            }
+        }
         .task {
             await viewModel.loadStats()
             await loadVoiceSetting()
@@ -69,12 +81,15 @@ struct FirstTouchView: View {
 
     private func buildDrillVoiceCommands() -> [VoiceCommand] {
         [
-            VoiceCommand(label: "Save", phrases: ["save", "done", "finish"]) {
+            VoiceCommand(label: "Save", phrases: ["save", "done", "finish", "complete"]) {
                 Task { await viewModel.saveDrill() }
             },
             VoiceCommand(label: "Cancel", phrases: ["cancel", "stop", "quit"]) {
                 viewModel.cancelDrill()
                 stopTimerChallenge()
+            },
+            VoiceCommand(label: "Mic Off", phrases: ["mic off", "stop listening", "mute mic"]) {
+                speechRecognizer.stopListening()
             },
         ]
     }

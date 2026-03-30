@@ -124,11 +124,14 @@ struct ChildHomeView: View {
 
     private func processVoiceCommand(_ transcript: String) {
         let commands: [VoiceCommand] = [
-            VoiceCommand(label: "Start Training", phrases: ["start training", "train", "let's train"]) {
+            VoiceCommand(label: "Start Training", phrases: ["start training", "let's train", "let's go", "begin", "start"]) {
                 navigateToTraining = true
             },
-            VoiceCommand(label: "Log Session", phrases: ["log session", "log it", "quick log"]) {
+            VoiceCommand(label: "Log Session", phrases: ["log session", "log it", "quick log", "log"]) {
                 navigateToQuickLog = true
+            },
+            VoiceCommand(label: "Mic Off", phrases: ["mic off", "stop listening", "mute mic"]) {
+                speechRecognizer.stopListening()
             },
         ]
         if let matched = VoiceCommandMatcher.match(transcript: transcript, commands: commands) {

@@ -75,6 +75,9 @@ struct TrainingSessionView: View {
             guard !newTranscript.isEmpty else { return }
             processVoiceCommand(newTranscript)
         }
+        .navigationDestination(isPresented: $navigateToSpaceSelection) {
+            SpaceSelectionView(childId: childId)
+        }
     }
 
     // MARK: - Voice
@@ -86,9 +89,11 @@ struct TrainingSessionView: View {
         }
     }
 
+    @State private var navigateToSpaceSelection = false
+
     private func processVoiceCommand(_ transcript: String) {
-        let moodCommands = buildMoodCommands()
-        if let matched = VoiceCommandMatcher.match(transcript: transcript, commands: moodCommands) {
+        let allCommands = buildMoodCommands() + buildNavigationCommands()
+        if let matched = VoiceCommandMatcher.match(transcript: transcript, commands: allCommands) {
             lastVoiceCommand = matched.label
             matched.action()
         }
@@ -105,6 +110,19 @@ struct TrainingSessionView: View {
                 }
             }
         }
+    }
+
+    private func buildNavigationCommands() -> [VoiceCommand] {
+        [
+            VoiceCommand(label: "Start Training", phrases: ["start training", "start", "let's go", "begin"]) {
+                if viewModel.checkInState != nil {
+                    navigateToSpaceSelection = true
+                }
+            },
+            VoiceCommand(label: "Mic Off", phrases: ["mic off", "stop listening", "mute mic"]) {
+                speechRecognizer.stopListening()
+            },
+        ]
     }
 
     // MARK: - Mood Picker

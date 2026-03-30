@@ -3,6 +3,9 @@ import SwiftUI
 struct ActiveDrillView: View {
     let childId: String
     @StateObject private var viewModel: ActiveTrainingViewModel
+    @StateObject private var speechRecognizer = SpeechRecognizer()
+    @State private var lastVoiceCommand: String?
+    @Environment(\.dismiss) private var dismiss
 
     init(childId: String, drills: [DrillDefinition], spaceType: String) {
         self.childId = childId
@@ -24,8 +27,68 @@ struct ActiveDrillView: View {
                 SessionCompleteView(viewModel: viewModel)
             }
         }
+        .safeAreaInset(edge: .bottom) {
+            if speechRecognizer.isListening {
+                VoiceCommandBar(speechRecognizer: speechRecognizer, lastCommand: $lastVoiceCommand)
+            }
+        }
         .navigationTitle("Training")
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button {
+                    Task { await speechRecognizer.toggleListening() }
+                } label: {
+                    Image(systemName: speechRecognizer.isListening ? "mic.fill" : "mic")
+                        .foregroundStyle(speechRecognizer.isListening ? .red : .cyan)
+                }
+            }
+        }
+        .onChange(of: speechRecognizer.transcript) { newTranscript in
+            guard !newTranscript.isEmpty else { return }
+            processDrillVoiceCommand(newTranscript)
+        }
+    }
+
+    // MARK: - Voice Commands
+
+    private func processDrillVoiceCommand(_ transcript: String) {
+        let commands: [VoiceCommand] = [
+            VoiceCommand(label: "Pause", phrases: ["pause", "hold", "wait"]) {
+                if viewModel.isTimerRunning {
+                    viewModel.pauseTimer()
+                }
+            },
+            VoiceCommand(label: "Resume", phrases: ["resume", "restart", "continue", "start"]) {
+                if !viewModel.isTimerRunning && viewModel.phase == .drilling {
+                    viewModel.startDrill()
+                }
+            },
+            VoiceCommand(label: "Done", phrases: ["done", "finish", "complete"]) {
+                viewModel.completeDrill()
+            },
+            VoiceCommand(label: "Next", phrases: ["next", "skip"]) {
+                viewModel.confirmReps()
+            },
+            VoiceCommand(label: "Cancel", phrases: ["cancel", "stop", "quit"]) {
+                dismiss()
+            },
+            VoiceCommand(label: "Mic Off", phrases: ["mic off", "stop listening", "mute mic"]) {
+                speechRecognizer.stopListening()
+            },
+        ]
+
+        if let matched = VoiceCommandMatcher.match(transcript: transcript, commands: commands) {
+            lastVoiceCommand = matched.label
+            matched.action()
+            return
+        }
+
+        // Try number extraction for rep count
+        if let number = VoiceCommandMatcher.extractNumber(from: transcript) {
+            lastVoiceCommand = "\(number) reps"
+            viewModel.repCount = number
+        }
     }
 
     // MARK: - Drill Phase

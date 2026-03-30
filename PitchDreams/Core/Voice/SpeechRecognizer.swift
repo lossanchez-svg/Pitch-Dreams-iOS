@@ -7,6 +7,8 @@ final class SpeechRecognizer: ObservableObject {
     @Published var transcript = ""
     @Published var error: String?
 
+    /// Tracks whether user wants continuous listening (vs internal restart cycles)
+    private var wantsListening = false
     private var recognizer: SFSpeechRecognizer?
     private var recognitionTask: SFSpeechRecognitionTask?
     private var audioEngine = AVAudioEngine()
@@ -17,7 +19,6 @@ final class SpeechRecognizer: ObservableObject {
     }
 
     func requestPermission() async -> Bool {
-        // Request speech recognition permission
         let speechStatus = await withCheckedContinuation { continuation in
             SFSpeechRecognizer.requestAuthorization { status in
                 continuation.resume(returning: status)
@@ -28,7 +29,6 @@ final class SpeechRecognizer: ObservableObject {
             return false
         }
 
-        // Request microphone permission
         let micGranted: Bool
         if #available(iOS 17.0, *) {
             micGranted = await AVAudioApplication.requestRecordPermission()
@@ -52,22 +52,19 @@ final class SpeechRecognizer: ObservableObject {
             return
         }
 
-        // Clean up any previous session before starting
-        stopListeningInternal()
+        cleanup()
+        wantsListening = true
 
         do {
             let audioSession = AVAudioSession.sharedInstance()
-            try audioSession.setCategory(.playAndRecord, mode: .default, options: [.defaultToSpeaker, .duckOthers])
+            try audioSession.setCategory(.playAndRecord, mode: .default, options: [.defaultToSpeaker, .duckOthers, .allowBluetooth])
             try audioSession.setActive(true, options: .notifyOthersOnDeactivation)
 
             request = SFSpeechAudioBufferRecognitionRequest()
             guard let request else { return }
             request.shouldReportPartialResults = true
-            if #available(iOS 16, *) {
-                // Try on-device first for privacy, but fall back to server if unavailable
-                if recognizer.supportsOnDeviceRecognition {
-                    request.requiresOnDeviceRecognition = true
-                }
+            if recognizer.supportsOnDeviceRecognition {
+                request.requiresOnDeviceRecognition = true
             }
 
             let inputNode = audioEngine.inputNode
@@ -81,31 +78,40 @@ final class SpeechRecognizer: ObservableObject {
             isListening = true
             transcript = ""
 
-            recognitionTask = recognizer.recognitionTask(with: request) { [weak self] result, error in
+            recognitionTask = recognizer.recognitionTask(with: request) { [weak self] result, recognitionError in
                 Task { @MainActor in
                     guard let self else { return }
+
                     if let result {
                         self.transcript = result.bestTranscription.formattedString
                     }
-                    if let error {
-                        // Silence timeout is normal -- not a real error
-                        let nsError = error as NSError
-                        if nsError.domain == "kAFAssistantErrorDomain" && nsError.code == 1110 {
-                            // Timeout -- restart if still listening
-                            if self.isListening {
-                                self.stopListening()
-                                self.startListening()
+
+                    if let recognitionError {
+                        let nsError = recognitionError as NSError
+                        // Silence timeout (1110) or end-of-speech (1101) — debounce restart
+                        if nsError.domain == "kAFAssistantErrorDomain" &&
+                           (nsError.code == 1110 || nsError.code == 1101) {
+                            self.cleanup()
+                            if self.wantsListening {
+                                try? await Task.sleep(nanoseconds: 600_000_000)
+                                if self.wantsListening {
+                                    self.startListening()
+                                }
                             }
                             return
                         }
-                        self.error = error.localizedDescription
+                        self.error = recognitionError.localizedDescription
                         self.stopListening()
+                        return
                     }
+
                     if result?.isFinal == true {
-                        // Recognition complete -- restart for continuous listening
-                        if self.isListening {
-                            self.stopListening()
-                            self.startListening()
+                        self.cleanup()
+                        if self.wantsListening {
+                            try? await Task.sleep(nanoseconds: 600_000_000)
+                            if self.wantsListening {
+                                self.startListening()
+                            }
                         }
                     }
                 }
@@ -117,32 +123,25 @@ final class SpeechRecognizer: ObservableObject {
     }
 
     func stopListening() {
-        stopListeningInternal()
+        wantsListening = false
+        cleanup()
         isListening = false
     }
 
-    /// Internal cleanup without setting isListening to false (used by startListening to reset state)
-    private func stopListeningInternal() {
+    private func cleanup() {
         if audioEngine.isRunning {
             audioEngine.stop()
         }
-        // Only remove tap if one was installed (engine has been prepared/started)
-        if audioEngine.inputNode.numberOfInputs > 0 {
-            audioEngine.inputNode.removeTap(onBus: 0)
-        }
+        audioEngine.inputNode.removeTap(onBus: 0)
         recognitionTask?.cancel()
         recognitionTask = nil
         request?.endAudio()
         request = nil
-    }
-
-    func restartListening() {
-        stopListening()
-        startListening()
+        isListening = false
     }
 
     func toggleListening() async {
-        if isListening {
+        if wantsListening {
             stopListening()
         } else {
             let granted = await requestPermission()

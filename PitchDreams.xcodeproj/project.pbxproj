@@ -209,7 +209,7 @@
 		A7A1CDBFAD6B59D638849FD9 /* ChildLoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChildLoginView.swift; sourceTree = "<group>"; };
 		A9DC36F93995532A66BDF7FA /* NewActivityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewActivityView.swift; sourceTree = "<group>"; };
 		ACA8D43C962506A82767816B /* Trend.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Trend.swift; sourceTree = "<group>"; };
-		ADCE789A5091C8F7AE3FB282 /* PitchDreams.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = PitchDreams.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		ADCE789A5091C8F7AE3FB282 /* PitchDreams.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PitchDreams.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		ADDF00203559FD14E35F38D9 /* ProgressDashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressDashboardView.swift; sourceTree = "<group>"; };
 		AF202DEAE7B13449D21447FA /* LessonRegistryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LessonRegistryTests.swift; sourceTree = "<group>"; };
 		AF4F4F122C94E6082AA7AB1E /* SkeletonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkeletonView.swift; sourceTree = "<group>"; };
@@ -853,8 +853,6 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
 				LastUpgradeCheck = 1600;
-				TargetAttributes = {
-				};
 			};
 			buildConfigurationList = 9BA52F5B105083D63DD23B55 /* Build configuration list for PBXProject "PitchDreams" */;
 			developmentRegion = en;
@@ -1031,6 +1029,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 57ZXN9D8W5;
 				INFOPLIST_FILE = PitchDreams/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1066,6 +1065,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 57ZXN9D8W5;
 				INFOPLIST_FILE = PitchDreams/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

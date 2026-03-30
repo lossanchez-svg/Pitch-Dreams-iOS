@@ -81,11 +81,22 @@ final class FirstTouchViewModel: ObservableObject {
         saveSuccess = false
 
         do {
-            let body = LogDrillBody(drillKey: drillKey, repsCount: activeCount, confidence: nil)
-            let _: LogDrillResult = try await apiClient.request(APIRouter.logDrill(childId: childId, body: body))
+            // Save as a quick session (first touch drills aren't in the skill registry)
+            let label = drillKey.replacingOccurrences(of: "_", with: " ").capitalized
+            let body = CreateSessionBody(
+                activityType: "first_touch_\(drillKey)",
+                effortLevel: 3,
+                mood: "focused",
+                duration: 1,
+                win: "\(activeCount) reps — \(label)",
+                focus: nil
+            )
+            struct SaveResult: Decodable { let sessionId: String }
+            let _: SaveResult = try await apiClient.request(
+                APIRouter.createSession(childId: childId, body: body)
+            )
             saveSuccess = true
             activeDrillKey = nil
-            await loadStats()
         } catch {
             errorMessage = error.localizedDescription
         }

@@ -191,7 +191,8 @@ final class ActiveTrainingViewModel: ObservableObject {
                 win: selectedHighlights.isEmpty ? nil : selectedHighlights.joined(separator: ", "),
                 focus: selectedNextFocus.isEmpty ? nil : selectedNextFocus.joined(separator: ", ")
             )
-            let _: SessionLog = try await apiClient.request(
+            struct SessionSaveResult: Decodable { let sessionId: String }
+            let _: SessionSaveResult = try await apiClient.request(
                 APIRouter.createSession(childId: childId, body: body)
             )
             // Log each drill

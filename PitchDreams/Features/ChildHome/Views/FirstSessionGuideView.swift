@@ -18,6 +18,26 @@ struct FirstSessionGuideView: View {
             Color(.systemBackground)
                 .ignoresSafeArea()
 
+            // Skip button always visible
+            VStack {
+                HStack {
+                    Spacer()
+                    Button {
+                        onComplete()
+                    } label: {
+                        Text("Skip")
+                            .font(.subheadline.weight(.medium))
+                            .foregroundStyle(.secondary)
+                            .padding(.horizontal, 16)
+                            .padding(.vertical, 8)
+                    }
+                }
+                .padding(.top, 8)
+                .padding(.trailing, 8)
+                Spacer()
+            }
+            .zIndex(1)
+
             switch step {
             case 1:
                 welcomeStep

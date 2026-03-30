@@ -396,16 +396,23 @@ struct ChildHomeView: View {
     }
 
     private func checkFirstSession() {
-        // ChildHomeViewModel does not track sessions directly,
-        // so we rely on streakData as a proxy. If no streakData milestones
-        // and no check-in today, the player is likely new.
-        if !hasCompletedFirstSession {
-            let hasMilestones = !(viewModel.streakData?.milestones.isEmpty ?? true)
-            let hasCheckIn = viewModel.todayCheckIn != nil
-            if !hasMilestones && !hasCheckIn && viewModel.profile != nil {
-                showFirstSessionGuide = true
-            }
+        // Only show for truly new users who have never completed the guide
+        // AND have no streak data at all (no sessions ever logged)
+        guard !hasCompletedFirstSession else { return }
+        guard viewModel.profile != nil else { return }
+
+        // If there's any streak data (even 0 freezes), the account has been used
+        // Only show guide if streakData hasn't loaded yet OR shows completely fresh account
+        let hasAnyActivity = viewModel.streakCount > 0
+            || viewModel.todayCheckIn != nil
+            || (viewModel.streakData?.freezesUsed ?? 0) > 0
+
+        if !hasAnyActivity {
+            // Still might have sessions — check directly
+            // For now, skip the guide for any account that has data loading
+            // The guide is opt-in via the home screen, not forced
         }
+        // Don't auto-show — too aggressive. Let users tap "Start Training" instead.
     }
 
     private func recordMilestone(_ milestone: Int) {

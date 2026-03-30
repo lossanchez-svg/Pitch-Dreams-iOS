@@ -68,8 +68,9 @@ final class SpeechRecognizer: ObservableObject {
             }
 
             let inputNode = audioEngine.inputNode
-            let recordingFormat = inputNode.outputFormat(forBus: 0)
-            inputNode.installTap(onBus: 0, bufferSize: 1024, format: recordingFormat) { buffer, _ in
+            // Use nil format — lets AVAudioEngine pick the hardware's native format
+            // Avoids "format mismatch" crash on certain iPhone models
+            inputNode.installTap(onBus: 0, bufferSize: 1024, format: nil) { buffer, _ in
                 request.append(buffer)
             }
 

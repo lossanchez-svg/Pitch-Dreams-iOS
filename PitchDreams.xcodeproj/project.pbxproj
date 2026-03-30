@@ -157,6 +157,7 @@
 		3612E00A7532F669E3852990 /* AuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthManager.swift; sourceTree = "<group>"; };
 		3C7A5056FB1866BF93CD09B6 /* Tags.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tags.swift; sourceTree = "<group>"; };
 		3D51924D534DEDF5D8D73810 /* SessionCompleteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionCompleteView.swift; sourceTree = "<group>"; };
+		3DF3AB4A57BA87CDF11F93FC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		3E3A1F2AD92B03F449941535 /* ChildTabNavigation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChildTabNavigation.swift; sourceTree = "<group>"; };
 		3EE5BA06AF4BDDADB575E0A8 /* AuthManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthManagerTests.swift; sourceTree = "<group>"; };
 		3F234FF9980AB9BE8CF156FC /* ChildProfileStepView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChildProfileStepView.swift; sourceTree = "<group>"; };
@@ -191,7 +192,7 @@
 		7BB347390810BBCECEE8C53F /* DrillRegistry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrillRegistry.swift; sourceTree = "<group>"; };
 		7E263B4BEE1493BBC8A70A08 /* DrillDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrillDetailView.swift; sourceTree = "<group>"; };
 		7ECCC455B75112195B5BCAFC /* DesignSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignSystem.swift; sourceTree = "<group>"; };
-		844FB83D8C4E132523399E1E /* PitchDreamsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PitchDreamsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		844FB83D8C4E132523399E1E /* PitchDreamsTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = PitchDreamsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		8A411FA943BF09A9FEEACA8F /* ChildDetailViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChildDetailViewModelTests.swift; sourceTree = "<group>"; };
 		8E1FB3F890E9C4DB6129BFCD /* SkillDiagramView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkillDiagramView.swift; sourceTree = "<group>"; };
 		8F9995BBBE177FE21C32CEAD /* FirstTouchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstTouchViewModel.swift; sourceTree = "<group>"; };
@@ -208,7 +209,7 @@
 		A7A1CDBFAD6B59D638849FD9 /* ChildLoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChildLoginView.swift; sourceTree = "<group>"; };
 		A9DC36F93995532A66BDF7FA /* NewActivityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewActivityView.swift; sourceTree = "<group>"; };
 		ACA8D43C962506A82767816B /* Trend.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Trend.swift; sourceTree = "<group>"; };
-		ADCE789A5091C8F7AE3FB282 /* PitchDreams.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PitchDreams.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		ADCE789A5091C8F7AE3FB282 /* PitchDreams.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = PitchDreams.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		ADDF00203559FD14E35F38D9 /* ProgressDashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressDashboardView.swift; sourceTree = "<group>"; };
 		AF202DEAE7B13449D21447FA /* LessonRegistryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LessonRegistryTests.swift; sourceTree = "<group>"; };
 		AF4F4F122C94E6082AA7AB1E /* SkeletonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkeletonView.swift; sourceTree = "<group>"; };
@@ -647,6 +648,7 @@
 			isa = PBXGroup;
 			children = (
 				E9C25A374026A93FA31F3EFE /* Assets.xcassets */,
+				3DF3AB4A57BA87CDF11F93FC /* Info.plist */,
 				EE762806223B4B777D201D4C /* PitchDreamsApp.swift */,
 				D3A3E4BD1D2863570FE67A90 /* Core */,
 				5400B7999548EF95B5AD72E6 /* Features */,
@@ -851,6 +853,8 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
 				LastUpgradeCheck = 1600;
+				TargetAttributes = {
+				};
 			};
 			buildConfigurationList = 9BA52F5B105083D63DD23B55 /* Build configuration list for PBXProject "PitchDreams" */;
 			developmentRegion = en;
@@ -1027,9 +1031,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 57ZXN9D8W5;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_VALUES = "UILaunchScreen_Generation=YES UIApplicationSceneManifest_Generation=YES UISupportedInterfaceOrientations_iPad=UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UISupportedInterfaceOrientations=UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight NSMicrophoneUsageDescription=PitchDreams uses the microphone for voice commands during training NSSpeechRecognitionUsageDescription=PitchDreams uses speech recognition for hands-free training commands";
+				INFOPLIST_FILE = PitchDreams/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1045,7 +1047,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
-				DEVELOPMENT_TEAM = 57ZXN9D8W5;
 				GENERATE_INFOPLIST_FILE = YES;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1065,9 +1066,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 57ZXN9D8W5;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_VALUES = "UILaunchScreen_Generation=YES UIApplicationSceneManifest_Generation=YES UISupportedInterfaceOrientations_iPad=UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UISupportedInterfaceOrientations=UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight NSMicrophoneUsageDescription=PitchDreams uses the microphone for voice commands during training NSSpeechRecognitionUsageDescription=PitchDreams uses speech recognition for hands-free training commands";
+				INFOPLIST_FILE = PitchDreams/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1083,7 +1082,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
-				DEVELOPMENT_TEAM = 57ZXN9D8W5;
 				GENERATE_INFOPLIST_FILE = YES;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

@@ -2,7 +2,9 @@ import SwiftUI
 
 struct ReflectionView: View {
     @ObservedObject var viewModel: ActiveTrainingViewModel
+    @ObservedObject var speechRecognizer: SpeechRecognizer
     @State private var reflectionStep = 0
+    @State private var lastVoiceCommand: String?
 
     private let moodOptions: [(name: String, emoji: String, label: String)] = [
         ("GREAT", "😄", "Great"),
@@ -89,6 +91,68 @@ struct ReflectionView: View {
                 }
             }
             .padding()
+        }
+        .onChange(of: speechRecognizer.transcript) { newTranscript in
+            guard !newTranscript.isEmpty else { return }
+            processReflectionVoiceCommand(newTranscript)
+        }
+    }
+
+    // MARK: - Voice Commands
+
+    private func processReflectionVoiceCommand(_ transcript: String) {
+        let lower = transcript.lowercased()
+
+        // "next" / "continue" → advance step
+        if lower.contains("next") || lower.contains("continue") {
+            if reflectionStep < 3 {
+                reflectionStep += 1
+                lastVoiceCommand = "Next"
+                return
+            }
+        }
+
+        // "back" / "previous" → go back
+        if lower.contains("back") || lower.contains("previous") {
+            if reflectionStep > 0 {
+                reflectionStep -= 1
+                lastVoiceCommand = "Back"
+                return
+            }
+        }
+
+        // "save" / "done" / "finish" → save session (only on last step)
+        if lower.contains("save") || lower.contains("done") || lower.contains("finish") {
+            if reflectionStep == 3 {
+                Task { await viewModel.saveSession() }
+                lastVoiceCommand = "Save"
+                return
+            } else {
+                // Auto-advance to save
+                reflectionStep = 3
+                lastVoiceCommand = "Skip to Save"
+                return
+            }
+        }
+
+        // On RPE step: numbers set the slider
+        if reflectionStep == 0 {
+            if let number = VoiceCommandMatcher.extractNumber(from: transcript), number >= 1, number <= 10 {
+                viewModel.reflectionRPE = number
+                lastVoiceCommand = "RPE: \(number)"
+                return
+            }
+        }
+
+        // On mood step: mood names select the mood
+        if reflectionStep == 3 {
+            for mood in moodOptions {
+                if lower.contains(mood.label.lowercased()) || lower.contains(mood.name.lowercased()) {
+                    viewModel.reflectionMood = mood.name.lowercased()
+                    lastVoiceCommand = mood.label
+                    return
+                }
+            }
         }
     }
 

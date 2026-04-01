@@ -58,7 +58,7 @@ final class ActiveTrainingViewModel: ObservableObject {
     }
 
     var sessionDurationMinutes: Int {
-        guard let start = sessionStartTime else { return 0 }
+        guard let start = sessionStartTime else { return 1 }
         return max(1, Int(Date().timeIntervalSince(start) / 60))
     }
 

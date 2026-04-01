@@ -22,7 +22,7 @@ struct ActiveDrillView: View {
             case .repConfirm:
                 repConfirmContent
             case .reflection:
-                ReflectionView(viewModel: viewModel)
+                ReflectionView(viewModel: viewModel, speechRecognizer: speechRecognizer)
             case .complete:
                 SessionCompleteView(viewModel: viewModel)
             }

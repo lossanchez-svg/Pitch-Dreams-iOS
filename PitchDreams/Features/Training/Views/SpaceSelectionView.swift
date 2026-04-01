@@ -2,6 +2,9 @@ import SwiftUI
 
 struct SpaceSelectionView: View {
     let childId: String
+    @StateObject private var speechRecognizer = SpeechRecognizer()
+    @State private var lastVoiceCommand: String?
+    @State private var navigateToSpace: String?
 
     private let spaces: [(id: String, title: String, subtitle: String, icon: String)] = [
         ("small_indoor", "Small Indoor", "Bedroom, hallway, or small room", "house.fill"),
@@ -65,7 +68,45 @@ struct SpaceSelectionView: View {
             }
             .padding()
         }
+        .safeAreaInset(edge: .bottom) {
+            if speechRecognizer.isListening {
+                VoiceCommandBar(speechRecognizer: speechRecognizer, lastCommand: $lastVoiceCommand)
+            }
+        }
         .navigationTitle("Pick a Space")
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button {
+                    Task { await speechRecognizer.toggleListening() }
+                } label: {
+                    Image(systemName: speechRecognizer.isListening ? "mic.fill" : "mic")
+                        .foregroundStyle(speechRecognizer.isListening ? .red : .cyan)
+                }
+            }
+        }
+        .onChange(of: speechRecognizer.transcript) { newTranscript in
+            guard !newTranscript.isEmpty else { return }
+            processVoiceCommand(newTranscript)
+        }
+    }
+
+    private func processVoiceCommand(_ transcript: String) {
+        let lower = transcript.lowercased()
+
+        // Space selection by voice
+        if lower.contains("small") || lower.contains("bedroom") || lower.contains("hallway") {
+            lastVoiceCommand = "Small Indoor"
+            navigateToSpace = "small_indoor"
+        } else if lower.contains("large") || lower.contains("gym") || lower.contains("garage") {
+            lastVoiceCommand = "Large Indoor"
+            navigateToSpace = "large_indoor"
+        } else if lower.contains("outdoor") || lower.contains("field") || lower.contains("park") || lower.contains("outside") {
+            lastVoiceCommand = "Outdoor"
+            navigateToSpace = "outdoor"
+        } else if lower.contains("mic off") || lower.contains("stop listening") {
+            speechRecognizer.stopListening()
+            lastVoiceCommand = "Mic Off"
+        }
     }
 }

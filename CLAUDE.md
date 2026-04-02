@@ -94,7 +94,7 @@ xcodebuild test -project PitchDreams.xcodeproj -scheme PitchDreams \
   -only-testing:PitchDreamsTests/EndToEndFlowTests
 ```
 
-Test account: `pitchdreams.soccer@gmail.com` / `DaddyAnq1` / Child: `Tester1` PIN `1111`
+Test account: `pitchdreams.soccer@gmail.com` / `DaddyAnq1` (⚠️ parent password returning 401 as of 2026-04-01 — may have been changed) / Child: `Tester1` PIN `1111`
 
 ## Project Generation
 

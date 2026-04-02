@@ -33,7 +33,7 @@ jobs:
           xcodebuild build \
             -project PitchDreams.xcodeproj \
             -scheme PitchDreams \
-            -destination 'platform=iOS Simulator,name=iPhone 16,OS=latest' \
+            -destination 'platform=iOS Simulator,name=iPhone 16' \
             -configuration Debug \
             CODE_SIGNING_ALLOWED=NO
 
@@ -42,7 +42,7 @@ jobs:
           xcodebuild test \
             -project PitchDreams.xcodeproj \
             -scheme PitchDreams \
-            -destination 'platform=iOS Simulator,name=iPhone 16,OS=latest' \
+            -destination 'platform=iOS Simulator,name=iPhone 16' \
             -configuration Debug \
             -skip-testing:PitchDreamsTests/APIContractTests \
             CODE_SIGNING_ALLOWED=NO \
@@ -80,7 +80,7 @@ jobs:
           xcodebuild test \
             -project PitchDreams.xcodeproj \
             -scheme PitchDreams \
-            -destination 'platform=iOS Simulator,name=iPhone 16,OS=latest' \
+            -destination 'platform=iOS Simulator,name=iPhone 16' \
             -configuration Debug \
             -only-testing:PitchDreamsTests/APIContractTests \
             CODE_SIGNING_ALLOWED=NO \

@@ -9,6 +9,8 @@ final class SpeechRecognizer: ObservableObject {
 
     /// Tracks whether user wants continuous listening (vs internal restart cycles)
     private var wantsListening = false
+    /// When on-device recognition fails, fall back to server-based
+    private var useOnDevice = true
     private var recognizer: SFSpeechRecognizer?
     private var recognitionTask: SFSpeechRecognitionTask?
     private var audioEngine = AVAudioEngine()
@@ -63,7 +65,7 @@ final class SpeechRecognizer: ObservableObject {
             request = SFSpeechAudioBufferRecognitionRequest()
             guard let request else { return }
             request.shouldReportPartialResults = true
-            if recognizer.supportsOnDeviceRecognition {
+            if useOnDevice && recognizer.supportsOnDeviceRecognition {
                 request.requiresOnDeviceRecognition = true
             }
 
@@ -99,6 +101,15 @@ final class SpeechRecognizer: ObservableObject {
                                     self.startListening()
                                 }
                             }
+                            return
+                        }
+                        // On-device model not available (201/203) — fall back to server
+                        if self.useOnDevice && nsError.domain == "kAFAssistantErrorDomain" &&
+                           (nsError.code == 201 || nsError.code == 203) {
+                            Log.ui.info("On-device speech model unavailable, falling back to server")
+                            self.useOnDevice = false
+                            self.cleanup()
+                            self.startListening()
                             return
                         }
                         self.error = recognitionError.localizedDescription

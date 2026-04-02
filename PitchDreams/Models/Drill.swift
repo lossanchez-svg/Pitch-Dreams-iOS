@@ -12,3 +12,7 @@ struct DrillStat: Codable, Identifiable {
 struct LogDrillResult: Codable {
     let logId: String
 }
+
+struct SessionSaveResult: Codable {
+    let sessionId: String
+}

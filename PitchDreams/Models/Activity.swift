@@ -33,3 +33,8 @@ struct ActivityItem: Codable, Identifiable {
     let gameIQImpact: String?
     let createdAt: String
 }
+
+/// Response from POST /children/{id}/activities — returns `activityId` not full ActivityItem
+struct ActivityCreateResult: Codable {
+    let activityId: String
+}

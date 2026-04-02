@@ -54,6 +54,35 @@ final class VoiceCommandMatcherTests: XCTestCase {
         XCTAssertEqual(result?.label, "start")
     }
 
+    // MARK: - Word-boundary tests
+
+    func testMatchDoesNotFalseMatchDoneAsOne() {
+        // "done" should NOT match a command with phrase "one"
+        let commands = [
+            VoiceCommand(label: "one", phrases: ["one"]) {},
+        ]
+        let result = VoiceCommandMatcher.match(transcript: "I'm done", commands: commands)
+        XCTAssertNil(result, "'done' must not match 'one' — word-boundary required")
+    }
+
+    func testMatchDoesNotFalseMatchPartialWord() {
+        // "starting" should NOT match "start" as a standalone phrase
+        let commands = [
+            VoiceCommand(label: "start", phrases: ["start"]) {},
+        ]
+        let result = VoiceCommandMatcher.match(transcript: "I was starting to warm up", commands: commands)
+        XCTAssertNil(result, "'starting' must not match 'start' — word-boundary required")
+    }
+
+    func testMatchAllowsWholeWordInSentence() {
+        let commands = [
+            VoiceCommand(label: "done", phrases: ["done"]) {},
+        ]
+        let result = VoiceCommandMatcher.match(transcript: "I am done now", commands: commands)
+        XCTAssertNotNil(result)
+        XCTAssertEqual(result?.label, "done")
+    }
+
     // MARK: - extractNumber tests
 
     func testExtractNumberFromWord() {
@@ -82,9 +111,18 @@ final class VoiceCommandMatcherTests: XCTestCase {
     }
 
     func testExtractNumberWordIsCaseInsensitive() {
-        // Dictionary iteration is non-deterministic, and "done" contains "one"
-        // Use text with no substring collisions
         let result = VoiceCommandMatcher.extractNumber(from: "SIX reps")
         XCTAssertEqual(result, 6)
+    }
+
+    func testExtractNumberDoneDoesNotMatchOne() {
+        // "done" must NOT match "one" — word-boundary prevents it
+        let result = VoiceCommandMatcher.extractNumber(from: "I'm done")
+        XCTAssertNil(result, "'done' must not extract number 1 from 'one' substring")
+    }
+
+    func testExtractNumberOneMatchesWholeWord() {
+        let result = VoiceCommandMatcher.extractNumber(from: "one rep")
+        XCTAssertEqual(result, 1)
     }
 }

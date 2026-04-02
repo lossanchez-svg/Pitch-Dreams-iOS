@@ -228,6 +228,10 @@ enum TestFixtures {
 
     // MARK: - Activity Item
 
+    static func makeActivityCreateResult(activityId: String = "act-001") -> ActivityCreateResult {
+        ActivityCreateResult(activityId: activityId)
+    }
+
     static func makeActivityItem(
         id: String = "act-001",
         childId: String = "child-def-456",
@@ -364,6 +368,10 @@ enum TestFixtures {
 
     static func makeLogDrillResult(logId: String = "log-001") -> LogDrillResult {
         LogDrillResult(logId: logId)
+    }
+
+    static func makeSessionSaveResult(sessionId: String = "sess-001") -> SessionSaveResult {
+        SessionSaveResult(sessionId: sessionId)
     }
 
     static func makeLessonProgressResult(progressId: String = "lpr-001") -> LessonProgressResult {

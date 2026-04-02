@@ -137,7 +137,7 @@ final class ActivityLogViewModel: ObservableObject {
                 highlightIds: selectedHighlights.isEmpty ? nil : Array(selectedHighlights),
                 nextFocusIds: selectedNextFocus.isEmpty ? nil : Array(selectedNextFocus)
             )
-            let _: ActivityItem = try await apiClient.request(
+            let _: ActivityCreateResult = try await apiClient.request(
                 APIRouter.createActivity(childId: childId, body: body)
             )
             saveSuccess = true

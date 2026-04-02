@@ -243,7 +243,7 @@ struct FirstSessionGuideView: View {
                     win: "First session completed!",
                     focus: nil
                 )
-                let _: SessionLog = try await apiClient.request(
+                let _: SessionSaveResult = try await apiClient.request(
                     APIRouter.createSession(childId: childId, body: body)
                 )
             } catch {

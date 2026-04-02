@@ -91,8 +91,7 @@ final class FirstTouchViewModel: ObservableObject {
                 win: "\(activeCount) reps — \(label)",
                 focus: nil
             )
-            struct SaveResult: Decodable { let sessionId: String }
-            let _: SaveResult = try await apiClient.request(
+            let _: SessionSaveResult = try await apiClient.request(
                 APIRouter.createSession(childId: childId, body: body)
             )
             saveSuccess = true

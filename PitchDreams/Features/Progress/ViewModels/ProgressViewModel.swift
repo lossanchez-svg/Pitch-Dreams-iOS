@@ -106,20 +106,15 @@ final class ProgressViewModel: ObservableObject {
         isLoading = true
         errorMessage = nil
 
-        async let streakTask: StreakData? = try? apiClient.request(
+        streakData = try? await apiClient.request(
             APIRouter.getStreaks(childId: childId)
-        )
-        async let sessionsTask: [SessionLog] = (try? apiClient.request(
+        ) as StreakData
+        sessions = (try? await apiClient.request(
             APIRouter.listSessions(childId: childId, limit: 100)
-        )) ?? []
-        async let trendsTask: [WeeklyTrend]? = try? apiClient.request(
+        ) as [SessionLog]) ?? []
+        trends = try? await apiClient.request(
             APIRouter.getTrends(childId: childId, weeks: 4)
-        )
-
-        let (s, sess, t) = await (streakTask, sessionsTask, trendsTask)
-        streakData = s
-        sessions = sess
-        trends = t
+        ) as [WeeklyTrend]
         isLoading = false
     }
 

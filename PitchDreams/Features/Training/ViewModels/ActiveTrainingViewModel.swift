@@ -191,7 +191,6 @@ final class ActiveTrainingViewModel: ObservableObject {
                 win: selectedHighlights.isEmpty ? nil : selectedHighlights.joined(separator: ", "),
                 focus: selectedNextFocus.isEmpty ? nil : selectedNextFocus.joined(separator: ", ")
             )
-            struct SessionSaveResult: Decodable { let sessionId: String }
             let _: SessionSaveResult = try await apiClient.request(
                 APIRouter.createSession(childId: childId, body: body)
             )
@@ -211,7 +210,8 @@ final class ActiveTrainingViewModel: ObservableObject {
             // Voice: session complete
             coachVoice.speak("Well done. Session complete.", personality: "manager")
         } catch {
-            errorMessage = "Failed to save session. Please try again."
+            Log.api.error("Session save failed: \(error)")
+            errorMessage = "Failed to save session: \(error.localizedDescription)"
         }
         isLoading = false
     }

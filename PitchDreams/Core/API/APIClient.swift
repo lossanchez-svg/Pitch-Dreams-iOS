@@ -35,7 +35,8 @@ final class APIClient: APIClientProtocol, @unchecked Sendable {
         do {
             return try decoder.decode(T.self, from: data)
         } catch {
-            Log.api.error("Decode error: \(error)")
+            let bodyPreview = String(data: data.prefix(500), encoding: .utf8) ?? "<non-utf8>"
+            Log.api.error("Decode \(String(describing: T.self)) failed: \(error)\nBody: \(bodyPreview)")
             throw APIError.decoding(error)
         }
     }

@@ -418,6 +418,92 @@ final class EndToEndFlowTests: XCTestCase {
         XCTAssertEqual(updated.id, checkInId)
     }
 
+    // MARK: - Flow: Export Child Data
+
+    func test95_Export_ChildData() async throws {
+        _ = try await loginAsParentOrSkip()
+        let cid = try await getChildId()
+        // Re-auth as parent since export is a parent endpoint
+        _ = try await loginAsParent()
+
+        let export: ExportResponse = try await api.request(
+            APIRouter.exportChildData(childId: cid)
+        )
+        XCTAssertFalse(export.child.nickname.isEmpty)
+        XCTAssertFalse(export.exportedAt.isEmpty)
+    }
+
+    // MARK: - Flow: Onboarding (Signup + Create Child + Set PIN)
+    // These tests create real data on the server. They use a unique email
+    // per run to avoid conflicts. If the email already exists, signup will
+    // fail with a server error and the test will be skipped.
+
+    func test96_Onboarding_Signup() async throws {
+        let uniqueEmail = "e2e-test-\(UUID().uuidString.prefix(8).lowercased())@test.pitchdreams.soccer"
+        do {
+            let response: SignupResponse = try await api.request(
+                APIRouter.signup(email: uniqueEmail, password: "TestPass123!")
+            )
+            XCTAssertTrue(response.success)
+            XCTAssertFalse(response.parentId.isEmpty)
+        } catch let error as APIError {
+            if case .server(let msg) = error, msg.lowercased().contains("already") {
+                throw XCTSkip("Email already exists on server")
+            }
+            throw error
+        }
+    }
+
+    func test97_Onboarding_FullFlow() async throws {
+        let uniqueEmail = "e2e-test-\(UUID().uuidString.prefix(8).lowercased())@test.pitchdreams.soccer"
+
+        // Step 1: Signup
+        let signupResponse: SignupResponse
+        do {
+            signupResponse = try await api.request(
+                APIRouter.signup(email: uniqueEmail, password: "TestPass123!")
+            )
+        } catch let error as APIError {
+            if case .server(let msg) = error, msg.lowercased().contains("already") {
+                throw XCTSkip("Email already exists on server")
+            }
+            throw error
+        }
+        XCTAssertTrue(signupResponse.success)
+        let parentId = signupResponse.parentId
+
+        // Step 2: Create Child
+        let childBody = CreateChildBody(
+            nickname: "E2EKid",
+            age: 10,
+            position: nil,
+            goals: ["ball_control"],
+            avatarId: "default",
+            avatarColor: nil,
+            freeTextEnabled: false,
+            trainingWindowStart: nil,
+            trainingWindowEnd: nil,
+            parentId: parentId
+        )
+        let childResponse: CreateChildResponse = try await api.request(
+            APIRouter.createChild(parentId: parentId, body: childBody)
+        )
+        XCTAssertTrue(childResponse.success)
+        XCTAssertFalse(childResponse.childId.isEmpty)
+
+        // Step 3: Login as the new parent (setChildPin requires auth)
+        let loginResponse: TokenResponse = try await api.request(
+            APIRouter.parentLogin(email: uniqueEmail, password: "TestPass123!")
+        )
+        try keychain.save(value: loginResponse.token, for: Constants.Keychain.tokenKey)
+
+        // Step 4: Set PIN
+        try await api.requestVoid(
+            APIRouter.setChildPin(childId: childResponse.childId, pin: "1234")
+        )
+        // If we get here without throwing, PIN was set successfully
+    }
+
     // MARK: - Helpers
 
     /// Logs in as child and stores JWT in Keychain so TokenInterceptor

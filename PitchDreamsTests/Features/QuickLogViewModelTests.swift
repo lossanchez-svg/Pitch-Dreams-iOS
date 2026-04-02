@@ -12,7 +12,8 @@ final class QuickLogViewModelTests: XCTestCase {
     }
 
     func testSaveSuccess() async {
-        // requestVoid — no enqueue needed, just no error
+        mockAPI.enqueue(TestFixtures.makeSessionSaveResult())
+
         await viewModel.save()
 
         XCTAssertTrue(viewModel.saveSuccess)
@@ -45,6 +46,7 @@ final class QuickLogViewModelTests: XCTestCase {
         viewModel.selectedType = "game"
         viewModel.duration = 90
         viewModel.effort = 5
+        mockAPI.enqueue(TestFixtures.makeSessionSaveResult())
 
         await viewModel.save()
 
@@ -54,6 +56,7 @@ final class QuickLogViewModelTests: XCTestCase {
     }
 
     func testSaveCallsCorrectEndpoint() async {
+        mockAPI.enqueue(TestFixtures.makeSessionSaveResult())
         await viewModel.save()
         XCTAssertTrue(mockAPI.calledEndpoints.contains("/children/test-child/sessions/quick"))
     }

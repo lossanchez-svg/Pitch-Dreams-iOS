@@ -71,7 +71,7 @@ final class LearnViewModel: ObservableObject {
             )
             await loadProgress()
         } catch {
-            errorMessage = "Failed to mark lesson complete."
+            errorMessage = "Failed to mark lesson complete: \(error.localizedDescription)"
         }
     }
 
@@ -84,7 +84,7 @@ final class LearnViewModel: ObservableObject {
             )
             await loadProgress()
         } catch {
-            errorMessage = "Failed to submit quiz result."
+            errorMessage = "Failed to submit quiz: \(error.localizedDescription)"
         }
     }
 }

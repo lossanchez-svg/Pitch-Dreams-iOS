@@ -121,7 +121,7 @@ final class OnboardingViewModel: ObservableObject {
             childId = response.childId
             nextStep()
         } catch {
-            errorMessage = "Failed to create child profile. Please try again."
+            errorMessage = "Failed to create child profile: \(error.localizedDescription)"
         }
         isLoading = false
     }
@@ -146,7 +146,7 @@ final class OnboardingViewModel: ObservableObject {
             try await apiClient.requestVoid(APIRouter.setChildPin(childId: cid, pin: pin))
             await finishOnboarding()
         } catch {
-            errorMessage = "Failed to set PIN. Please try again."
+            errorMessage = "Failed to set PIN: \(error.localizedDescription)"
             isLoading = false
         }
     }

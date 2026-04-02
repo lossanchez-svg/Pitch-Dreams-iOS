@@ -36,7 +36,7 @@ final class SkillsViewModel: ObservableObject {
             )
             await loadStats()
         } catch {
-            errorMessage = "Failed to log drill."
+            errorMessage = "Failed to log drill: \(error.localizedDescription)"
         }
     }
 }

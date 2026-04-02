@@ -144,7 +144,7 @@ final class ActivityLogViewModel: ObservableObject {
             resetForm()
             await loadRecent()
         } catch {
-            errorMessage = "Failed to save activity. Please try again."
+            errorMessage = "Failed to save activity: \(error.localizedDescription)"
         }
         isSaving = false
     }

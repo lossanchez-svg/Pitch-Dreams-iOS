@@ -50,13 +50,13 @@ final class QuickLogViewModel: ObservableObject {
                 duration: duration,
                 effort: effort
             )
-            try await apiClient.requestVoid(
+            let _: SessionSaveResult = try await apiClient.request(
                 APIRouter.createQuickSession(childId: childId, body: body)
             )
             saveSuccess = true
             resetForm()
         } catch {
-            errorMessage = "Failed to log session. Please try again."
+            errorMessage = "Failed to log session: \(error.localizedDescription)"
         }
         isSaving = false
     }

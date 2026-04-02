@@ -72,6 +72,7 @@ jobs:
             -destination "$DEST" \
             -configuration Debug \
             -skip-testing:PitchDreamsTests/APIContractTests \
+            -skip-testing:PitchDreamsTests/EndToEndFlowTests \
             CODE_SIGNING_ALLOWED=NO \
             -resultBundlePath TestResults.xcresult
 

@@ -13,8 +13,7 @@ final class ActivityLogViewModelTests: XCTestCase {
 
     func testSaveActivitySuccess() async {
         // saveActivity calls createActivity then loadRecent
-        let savedItem = TestFixtures.makeActivityItem()
-        mockAPI.enqueue(savedItem) // createActivity response
+        mockAPI.enqueue(TestFixtures.makeActivityCreateResult()) // createActivity response
         mockAPI.enqueue([TestFixtures.makeActivityItem()]) // loadRecent response
 
         await viewModel.saveActivity()
@@ -58,7 +57,7 @@ final class ActivityLogViewModelTests: XCTestCase {
         viewModel.durationMinutes = 90
         viewModel.currentStep = 2
 
-        mockAPI.enqueue(TestFixtures.makeActivityItem())
+        mockAPI.enqueue(TestFixtures.makeActivityCreateResult())
         mockAPI.enqueue([ActivityItem]()) // loadRecent
 
         await viewModel.saveActivity()

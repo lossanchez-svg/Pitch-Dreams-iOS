@@ -228,6 +228,10 @@ enum TestFixtures {
 
     // MARK: - Activity Item
 
+    static func makeActivityCreateResult(activityId: String = "act-001") -> ActivityCreateResult {
+        ActivityCreateResult(activityId: activityId)
+    }
+
     static func makeActivityItem(
         id: String = "act-001",
         childId: String = "child-def-456",

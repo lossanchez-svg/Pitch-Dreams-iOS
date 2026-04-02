@@ -7,12 +7,13 @@ struct VoiceCommand {
 }
 
 struct VoiceCommandMatcher {
-    // Match transcript against commands (case-insensitive substring)
+    /// Match transcript against commands using word-boundary matching.
+    /// Prevents false positives like "done" matching a "one" command.
     static func match(transcript: String, commands: [VoiceCommand]) -> VoiceCommand? {
         let lower = transcript.lowercased()
         for command in commands {
             for phrase in command.phrases {
-                if lower.contains(phrase.lowercased()) {
+                if containsWholePhrase(lower, phrase: phrase.lowercased()) {
                     return command
                 }
             }
@@ -20,7 +21,14 @@ struct VoiceCommandMatcher {
         return nil
     }
 
-    // Extract spoken numbers: "five" -> 5, "twenty three" -> 23, "42" -> 42
+    /// Checks if `text` contains `phrase` as whole words (word-boundary match).
+    /// "I am done" contains "done" ✓, but "d-one" does not contain "one" ✓
+    private static func containsWholePhrase(_ text: String, phrase: String) -> Bool {
+        let pattern = "\\b\(NSRegularExpression.escapedPattern(for: phrase))\\b"
+        return text.range(of: pattern, options: .regularExpression) != nil
+    }
+
+    /// Extract spoken numbers: "five" -> 5, "twenty three" -> 23, "42" -> 42
     static func extractNumber(from transcript: String) -> Int? {
         let lower = transcript.lowercased()
         let wordToNumber: [String: Int] = [
@@ -33,9 +41,9 @@ struct VoiceCommandMatcher {
             "eighty": 80, "ninety": 90, "hundred": 100,
         ]
 
-        // Try word-based first
+        // Try word-based first (word-boundary match)
         for (word, number) in wordToNumber {
-            if lower.contains(word) {
+            if containsWholePhrase(lower, phrase: word) {
                 return number
             }
         }

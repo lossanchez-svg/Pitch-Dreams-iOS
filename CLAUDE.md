@@ -104,10 +104,11 @@ xcodegen generate
 ```
 Then re-select Team in Signing & Capabilities.
 
-## Known Issues (in progress)
+## Known Issues (resolved)
 
-- Session save needs `SessionSaveResult` decode (not `SessionLog`)
-- Voice command matching uses substring contains — "done" matches "one"
-- End-to-end tests need token persistence between test methods
-- `requiresOnDeviceRecognition` may fail silently if model not downloaded
-- Audio format mismatch on some devices — use `nil` format for tap
+- ~~Session save needs `SessionSaveResult` decode~~ → Shared `SessionSaveResult` model in `Drill.swift`, error logging added
+- ~~Voice command matching uses substring contains~~ → Word-boundary regex matching (`\b...\b`)
+- ~~End-to-end tests need token persistence~~ → JWT stored in Keychain via `getChildId()`/`loginAsParent()`
+- ~~`requiresOnDeviceRecognition` may fail silently~~ → Falls back to server-based on error 201/203
+- ~~Audio format mismatch on some devices~~ → Uses `nil` format for tap (already fixed)
+- ~~`async let x: T? = try?` type inference bug~~ → Fixed in `ProgressViewModel.loadData()`

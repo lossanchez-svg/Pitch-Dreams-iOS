@@ -366,6 +366,10 @@ enum TestFixtures {
         LogDrillResult(logId: logId)
     }
 
+    static func makeSessionSaveResult(sessionId: String = "sess-001") -> SessionSaveResult {
+        SessionSaveResult(sessionId: sessionId)
+    }
+
     static func makeLessonProgressResult(progressId: String = "lpr-001") -> LessonProgressResult {
         LessonProgressResult(progressId: progressId)
     }

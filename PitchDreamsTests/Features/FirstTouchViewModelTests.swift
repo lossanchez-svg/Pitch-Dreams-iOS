@@ -31,14 +31,14 @@ final class FirstTouchViewModelTests: XCTestCase {
         viewModel.incrementCount()
         viewModel.incrementCount()
 
-        mockAPI.enqueue(TestFixtures.makeLogDrillResult())
-        mockAPI.enqueue([DrillStat]()) // reload stats
+        // saveDrill() calls createSession, which decodes SessionSaveResult { sessionId }
+        mockAPI.enqueue(TestFixtures.makeSessionSaveResult())
 
         await viewModel.saveDrill()
 
         XCTAssertTrue(viewModel.saveSuccess)
         XCTAssertNil(viewModel.activeDrillKey) // Cleared after save
-        XCTAssertTrue(mockAPI.calledEndpoints.contains("/children/test-child/drills"))
+        XCTAssertTrue(mockAPI.calledEndpoints.contains("/children/test-child/sessions"))
     }
 
     func testSaveDrillWithoutActiveKeyDoesNothing() async {

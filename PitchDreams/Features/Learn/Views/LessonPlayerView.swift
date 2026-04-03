@@ -4,14 +4,18 @@ import SwiftUI
 struct LessonPlayerView: View {
     @StateObject private var viewModel: LessonPlayerViewModel
     @StateObject private var coachVM = CoachCharacterViewModel()
+    @StateObject private var coachVoice = CoachVoice()
     @StateObject private var interactiveVM = InteractivePitchViewModel()
     @Environment(\.dismiss) private var dismiss
 
     private let trackColor: Color
+    private let injectedVoice: CoachVoiceProtocol?
 
     init(lesson: AnimatedTacticalLesson, voice: CoachVoiceProtocol? = nil) {
-        let vm = LessonPlayerViewModel(lesson: lesson, voice: voice)
-        _viewModel = StateObject(wrappedValue: vm)
+        self.injectedVoice = voice
+        // ViewModel gets wired to voice in onAppear since @StateObject
+        // isn't available in init for cross-referencing
+        _viewModel = StateObject(wrappedValue: LessonPlayerViewModel(lesson: lesson))
         trackColor = Self.color(for: lesson.track)
     }
 
@@ -38,6 +42,8 @@ struct LessonPlayerView: View {
         }
         .background(Color(.systemBackground))
         .onAppear {
+            let voice = injectedVoice ?? coachVoice
+            viewModel.setVoice(voice)
             viewModel.onAppear()
             coachVM.speak(viewModel.currentStep.narration)
         }

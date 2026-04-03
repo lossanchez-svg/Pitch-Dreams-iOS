@@ -10,7 +10,7 @@ final class LessonPlayerViewModel: ObservableObject {
     @Published var isCompleted: Bool = false
     @Published var voiceEnabled: Bool = true
 
-    private let voice: CoachVoiceProtocol?
+    private(set) var voice: CoachVoiceProtocol?
     private var autoAdvanceTask: Task<Void, Never>?
 
     // MARK: - Computed
@@ -32,6 +32,11 @@ final class LessonPlayerViewModel: ObservableObject {
 
     init(lesson: AnimatedTacticalLesson, voice: CoachVoiceProtocol? = nil) {
         self.lesson = lesson
+        self.voice = voice
+    }
+
+    /// Set voice after init (needed when @StateObject creates the voice separately).
+    func setVoice(_ voice: CoachVoiceProtocol) {
         self.voice = voice
     }
 

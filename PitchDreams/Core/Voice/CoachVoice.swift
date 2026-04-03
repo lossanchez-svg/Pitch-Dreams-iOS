@@ -1,7 +1,7 @@
 import AVFoundation
 
 @MainActor
-final class CoachVoice: ObservableObject {
+final class CoachVoice: ObservableObject, CoachVoiceProtocol {
     @Published var isSpeaking = false
 
     private let synthesizer = AVSpeechSynthesizer()

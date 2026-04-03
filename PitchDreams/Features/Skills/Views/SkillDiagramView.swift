@@ -5,9 +5,19 @@ import SwiftUI
 struct SkillDiagramView: View {
     let drillId: String
     let category: String
+    var animated: Bool = false
+    var isPlaying: Bool = false
+    var onAnimationComplete: (() -> Void)?
 
     var body: some View {
-        if let diagramType = resolveDiagramType() {
+        if animated, let animKey = resolveAnimationKey() {
+            SkillPerformAnimationView(
+                animationKey: animKey,
+                isPlaying: isPlaying,
+                onComplete: onAnimationComplete,
+                accentColor: accentColorForCategory
+            )
+        } else if let diagramType = resolveDiagramType() {
             Canvas { context, size in
                 switch diagramType {
                 case .scanning3Point:
@@ -69,6 +79,27 @@ struct SkillDiagramView: View {
         case "Dribbling": return .dribbling
         case "First Touch": return .ballMastery
         default: return nil
+        }
+    }
+
+    // MARK: - Animation Resolution
+
+    private func resolveAnimationKey() -> SkillAnimationKey? {
+        let key = SkillAnimationRegistry.resolve(drillId)
+        return key == .generic ? nil : key
+    }
+
+    private var accentColorForCategory: Color {
+        switch category {
+        case "Scanning": return .cyan
+        case "Decision Chain": return .purple
+        case "Tempo": return .orange
+        case "Ball Mastery", "Dribbling": return .green
+        case "Passing": return .blue
+        case "Shooting": return .red
+        case "First Touch": return .teal
+        case "Defending": return .yellow
+        default: return .cyan
         }
     }
 

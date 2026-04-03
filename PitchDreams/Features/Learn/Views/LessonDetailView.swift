@@ -11,11 +11,13 @@ struct LessonDetailView: View {
     @State private var isMarking = false
     @State private var completedSteps: Set<Int> = []
     @State private var visibleSteps: Set<Int> = []
+    @State private var showingLessonPlayer = false
 
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
                 headerSection
+                startLessonButton
                 diagramSection
                 stepsSection
                 quizSection
@@ -52,6 +54,31 @@ struct LessonDetailView: View {
         Text(lesson.description)
             .font(.body)
             .foregroundStyle(.secondary)
+    }
+
+    @ViewBuilder
+    private var startLessonButton: some View {
+        if TacticalLessonRegistry.animatedLesson(for: lesson.id) != nil {
+            Button {
+                showingLessonPlayer = true
+            } label: {
+                HStack(spacing: 8) {
+                    Image(systemName: "play.fill")
+                    Text("Start Lesson")
+                        .font(.headline)
+                }
+                .foregroundStyle(.white)
+                .frame(maxWidth: .infinity)
+                .padding()
+                .background(trackSwiftUIColor.gradient)
+                .clipShape(RoundedRectangle(cornerRadius: 14))
+            }
+            .fullScreenCover(isPresented: $showingLessonPlayer) {
+                if let animated = TacticalLessonRegistry.animatedLesson(for: lesson.id) {
+                    LessonPlayerView(lesson: animated)
+                }
+            }
+        }
     }
 
     @ViewBuilder

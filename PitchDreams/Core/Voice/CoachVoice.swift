@@ -6,6 +6,7 @@ final class CoachVoice: ObservableObject, CoachVoiceProtocol {
 
     private let synthesizer = AVSpeechSynthesizer()
     private var delegate: CoachVoiceDelegate?
+    private var resolvedVoice: AVSpeechSynthesisVoice?
 
     init() {
         delegate = CoachVoiceDelegate { [weak self] in
@@ -14,31 +15,43 @@ final class CoachVoice: ObservableObject, CoachVoiceProtocol {
             }
         }
         synthesizer.delegate = delegate
+        resolvedVoice = Self.bestAvailableVoice()
     }
 
     func speak(_ text: String, personality: String = "manager") {
         stop()
 
-        // Use .playAndRecord so TTS and mic can coexist without audio session conflicts
-        try? AVAudioSession.sharedInstance().setCategory(.playAndRecord, mode: .default, options: [.defaultToSpeaker, .duckOthers])
+        try? AVAudioSession.sharedInstance().setCategory(
+            .playAndRecord,
+            mode: .default,
+            options: [.defaultToSpeaker, .duckOthers, .allowBluetooth]
+        )
         try? AVAudioSession.sharedInstance().setActive(true)
 
         let utterance = AVSpeechUtterance(string: text)
-        utterance.voice = AVSpeechSynthesisVoice(language: "en-US")
+        utterance.voice = resolvedVoice ?? AVSpeechSynthesisVoice(language: "en-US")
+
+        // Natural pacing: slight pauses between sentences
+        utterance.preUtteranceDelay = 0.1
+        utterance.postUtteranceDelay = 0.05
 
         switch personality {
         case "hype":
-            utterance.rate = 0.52
-            utterance.pitchMultiplier = 1.1
+            utterance.rate = 0.50
+            utterance.pitchMultiplier = 1.08
+            utterance.volume = 1.0
         case "zen":
             utterance.rate = 0.42
-            utterance.pitchMultiplier = 0.9
+            utterance.pitchMultiplier = 0.95
+            utterance.volume = 0.9
         case "drill":
-            utterance.rate = 0.52
-            utterance.pitchMultiplier = 0.8
-        default: // manager
-            utterance.rate = 0.48
-            utterance.pitchMultiplier = 1.0
+            utterance.rate = 0.50
+            utterance.pitchMultiplier = 0.85
+            utterance.volume = 1.0
+        default: // manager — warm, encouraging coach tone
+            utterance.rate = 0.46
+            utterance.pitchMultiplier = 1.02
+            utterance.volume = 0.95
         }
 
         isSpeaking = true
@@ -50,6 +63,47 @@ final class CoachVoice: ObservableObject, CoachVoiceProtocol {
             synthesizer.stopSpeaking(at: .immediate)
         }
         isSpeaking = false
+    }
+
+    // MARK: - Voice Selection
+
+    /// Pick the best available en-US voice, preferring premium > enhanced > default.
+    /// Premium voices (Siri-quality) are downloaded on-device and sound very natural.
+    private static func bestAvailableVoice() -> AVSpeechSynthesisVoice? {
+        let allVoices = AVSpeechSynthesisVoice.speechVoices()
+        let enUS = allVoices.filter { $0.language == "en-US" }
+
+        // Preferred voice identifiers (warm, clear, good for coaching kids)
+        let preferred = [
+            "com.apple.voice.premium.en-US.Zoe",
+            "com.apple.voice.premium.en-US.Ava",
+            "com.apple.voice.premium.en-US.Evan",
+            "com.apple.voice.premium.en-US.Samantha",
+            "com.apple.voice.enhanced.en-US.Zoe",
+            "com.apple.voice.enhanced.en-US.Ava",
+            "com.apple.voice.enhanced.en-US.Evan",
+            "com.apple.voice.enhanced.en-US.Samantha",
+        ]
+
+        // Try preferred voices first
+        for id in preferred {
+            if let voice = enUS.first(where: { $0.identifier == id }) {
+                return voice
+            }
+        }
+
+        // Fall back to any premium voice
+        if let premium = enUS.first(where: { $0.quality == .premium }) {
+            return premium
+        }
+
+        // Fall back to any enhanced voice
+        if let enhanced = enUS.first(where: { $0.quality == .enhanced }) {
+            return enhanced
+        }
+
+        // Last resort: default system voice
+        return AVSpeechSynthesisVoice(language: "en-US")
     }
 }
 

@@ -299,6 +299,10 @@ enum TacticalLessonRegistry {
         }
     }
 
+    static func animatedLesson(for id: String) -> AnimatedTacticalLesson? {
+        AnimatedTacticalLessonRegistry.lesson(for: id)
+    }
+
     static func trackColor(_ track: String) -> String {
         switch track {
         case "scanning": return "cyan"

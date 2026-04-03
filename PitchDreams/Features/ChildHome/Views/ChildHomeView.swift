@@ -9,6 +9,7 @@ struct ChildHomeView: View {
     @State private var voiceEnabled = false
     @State private var navigateToTraining = false
     @State private var navigateToQuickLog = false
+    @State private var navigateToLearn = false
     @State private var showMilestoneModal = false
     @State private var newMilestone: Int?
     @State private var milestoneFreeze = false
@@ -117,6 +118,9 @@ struct ChildHomeView: View {
         }
         .navigationDestination(isPresented: $navigateToQuickLog) {
             QuickLogView(childId: childId)
+        }
+        .navigationDestination(isPresented: $navigateToLearn) {
+            LearnView(childId: childId)
         }
     }
 
@@ -282,7 +286,7 @@ struct ChildHomeView: View {
                     .foregroundStyle(.secondary)
 
                 Button(nudge.actionLabel) {
-                    // Action handled in future
+                    navigateToLearn = true
                 }
                 .font(.subheadline.weight(.semibold))
                 .foregroundStyle(.cyan)

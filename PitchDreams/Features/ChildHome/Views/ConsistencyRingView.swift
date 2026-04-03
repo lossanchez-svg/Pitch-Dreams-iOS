@@ -28,74 +28,74 @@ struct ConsistencyRingView: View {
     }
 
     private var flameEmoji: String {
-        if streak == 0 { return "💤" }
-        if streak < 7 { return "✨" }
-        if streak < 14 { return "🔥" }
-        return "🔥"
+        if streak == 0 { return "\u{1F4A4}" }  // zzz
+        if streak < 7 { return "\u{2728}" }     // sparkles
+        return "\u{1F525}"                       // fire
     }
 
     private var ringColor: Color {
         if streak == 0 { return .gray }
-        if streak < 7 { return .orange }
         if streak < 14 { return .orange }
         return .green
     }
 
     var body: some View {
-        VStack(spacing: 16) {
+        HStack(spacing: 20) {
+            // Ring on the left
             ZStack {
-                // Background ring
                 Circle()
-                    .stroke(ringColor.opacity(0.2), lineWidth: 10)
-                    .frame(width: 120, height: 120)
+                    .stroke(ringColor.opacity(0.15), lineWidth: 8)
 
-                // Progress ring
                 Circle()
                     .trim(from: 0, to: progress)
                     .stroke(
                         ringColor,
-                        style: StrokeStyle(lineWidth: 10, lineCap: .round)
+                        style: StrokeStyle(lineWidth: 8, lineCap: .round)
                     )
-                    .frame(width: 120, height: 120)
                     .rotationEffect(.degrees(-90))
                     .animation(.easeInOut(duration: 0.8), value: progress)
 
-                // Center content
                 VStack(spacing: 2) {
                     Text(flameEmoji)
-                        .font(.system(size: 28))
+                        .font(.system(size: 22))
                     Text("\(streak)")
-                        .font(.title2.bold())
+                        .font(.title3.bold().monospacedDigit())
                         .foregroundStyle(ringColor)
                         .contentTransition(.numericText())
                 }
             }
+            .frame(width: 100, height: 100)
 
-            // Stats row
-            HStack(spacing: 24) {
-                statItem(label: "Target", value: "\(maxStreak)", icon: "target")
-                statItem(label: "Progress", value: "\(progressPercent)%", icon: "chart.bar.fill")
-                statItem(label: "Freezes", value: "\(freezes)", icon: "shield.fill")
+            // Stats stacked on the right
+            VStack(alignment: .leading, spacing: 10) {
+                // Message at top
+                Text(message)
+                    .font(.headline)
+                    .foregroundStyle(.primary)
+
+                // Stats grid
+                HStack(spacing: 16) {
+                    statItem(label: "Target", value: "\(maxStreak)", icon: "target")
+                    statItem(label: "Progress", value: "\(progressPercent)%", icon: "chart.bar.fill")
+                    statItem(label: "Freezes", value: "\(freezes)", icon: "shield.fill")
+                }
             }
 
-            // Message
-            Text(message)
-                .font(.subheadline.weight(.medium))
-                .foregroundStyle(.secondary)
+            Spacer(minLength: 0)
         }
         .padding()
-        .frame(maxWidth: .infinity)
+        .frame(maxWidth: .infinity, alignment: .leading)
         .background(.regularMaterial)
         .clipShape(RoundedRectangle(cornerRadius: 16))
     }
 
     private func statItem(label: String, value: String, icon: String) -> some View {
-        VStack(spacing: 4) {
+        VStack(spacing: 3) {
             Image(systemName: icon)
-                .font(.caption)
+                .font(.caption2)
                 .foregroundStyle(.secondary)
             Text(value)
-                .font(.subheadline.bold())
+                .font(.subheadline.bold().monospacedDigit())
             Text(label)
                 .font(.caption2)
                 .foregroundStyle(.secondary)

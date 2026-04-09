@@ -8,7 +8,7 @@ struct ChildProfileStepView: View {
         "Improve dribbling", "Get faster", "Learn the game",
         "Make the team", "Better passing", "Have fun"
     ]
-    private let avatarIds = ["default", "lion", "eagle", "wolf", "fox", "shark", "panther", "bear"]
+    private let avatarOptions: [Avatar] = [.default, .lion, .eagle, .wolf, .fox, .shark, .panther, .bear]
 
     var body: some View {
         ScrollView {
@@ -101,21 +101,22 @@ struct ChildProfileStepView: View {
                         .font(.subheadline.weight(.medium))
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack(spacing: 12) {
-                            ForEach(avatarIds, id: \.self) { aid in
-                                let isSelected = viewModel.avatarId == aid
+                            ForEach(avatarOptions) { avatar in
+                                let isSelected = viewModel.avatarId == avatar.rawValue
                                 Button {
-                                    viewModel.avatarId = aid
+                                    viewModel.avatarId = avatar.rawValue
                                 } label: {
                                     VStack(spacing: 4) {
-                                        Image(systemName: avatarIcon(aid))
-                                            .font(.title)
-                                            .frame(width: 52, height: 52)
+                                        Image(avatar.assetName(stage: .rookie))
+                                            .resizable()
+                                            .scaledToFit()
+                                            .frame(width: 64, height: 64)
                                             .background(isSelected ? Color.accentColor.opacity(0.15) : Color(.secondarySystemBackground))
                                             .clipShape(Circle())
                                             .overlay(
                                                 Circle().stroke(isSelected ? Color.accentColor : Color.clear, lineWidth: 2)
                                             )
-                                        Text(aid.capitalized)
+                                        Text(avatar.displayName)
                                             .font(.caption2)
                                             .foregroundStyle(isSelected ? Color.accentColor : Color.secondary)
                                     }
@@ -147,18 +148,6 @@ struct ChildProfileStepView: View {
         }
     }
 
-    private func avatarIcon(_ id: String) -> String {
-        switch id {
-        case "lion": return "crown.fill"
-        case "eagle": return "bird.fill"
-        case "wolf": return "pawprint.fill"
-        case "fox": return "hare.fill"
-        case "shark": return "fish.fill"
-        case "panther": return "cat.fill"
-        case "bear": return "bear.fill"
-        default: return "person.crop.circle.fill"
-        }
-    }
 }
 
 // MARK: - Flow Layout (iOS 16 compatible)

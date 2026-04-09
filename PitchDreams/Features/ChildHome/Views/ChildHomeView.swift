@@ -14,6 +14,8 @@ struct ChildHomeView: View {
     @State private var newMilestone: Int?
     @State private var milestoneFreeze = false
     @State private var showFirstSessionGuide = false
+    @State private var showEvolutionModal = false
+    @State private var evolvedTo: AvatarStage?
     @AppStorage("hasCompletedFirstSession") private var hasCompletedFirstSession = false
 
     init(childId: String) {
@@ -90,6 +92,7 @@ struct ChildHomeView: View {
             voiceEnabled = viewModel.profile?.voiceEnabled ?? false
             checkForMilestones()
             checkFirstSession()
+            checkForAvatarEvolution()
         }
         .fullScreenCover(isPresented: $showFirstSessionGuide) {
             FirstSessionGuideView(childId: childId) {
@@ -106,6 +109,14 @@ struct ChildHomeView: View {
                 ) {
                     showMilestoneModal = false
                     recordMilestone(milestone)
+                }
+            }
+        }
+        .sheet(isPresented: $showEvolutionModal) {
+            if let stage = evolvedTo {
+                let avatar = Avatar.resolve(viewModel.profile?.avatarId)
+                EvolutionModal(avatar: avatar, newStage: stage) {
+                    showEvolutionModal = false
                 }
             }
         }
@@ -165,9 +176,12 @@ struct ChildHomeView: View {
 
     @ViewBuilder
     private var avatarImage: some View {
-        if let avatarId = viewModel.profile?.avatarId,
-           UIImage(named: avatarId) != nil {
-            Image(avatarId)
+        let assetName = Avatar.assetName(
+            for: viewModel.profile?.avatarId,
+            milestones: viewModel.streakData?.milestones ?? []
+        )
+        if UIImage(named: assetName) != nil {
+            Image(assetName)
                 .resizable()
                 .scaledToFill()
         } else {
@@ -385,6 +399,30 @@ struct ChildHomeView: View {
     }
 
     // MARK: - Milestone Logic
+
+    /// Detects when the child's avatar has crossed into a new evolution stage
+    /// since the last time we showed them the celebration. Last-seen stage is
+    /// stored locally per child in UserDefaults — server doesn't track this.
+    private func checkForAvatarEvolution() {
+        guard viewModel.profile?.avatarId != nil else { return }
+        let milestones = viewModel.streakData?.milestones ?? []
+        let currentStage = AvatarStage.current(forMilestones: milestones)
+
+        let storageKey = "lastSeenAvatarStage_\(childId)"
+        let lastSeenRaw = UserDefaults.standard.integer(forKey: storageKey)
+        // First load (no stored value): seed without celebrating.
+        if lastSeenRaw == 0 {
+            UserDefaults.standard.set(currentStage.rawValue, forKey: storageKey)
+            return
+        }
+
+        let lastSeen = AvatarStage(rawValue: lastSeenRaw) ?? .rookie
+        if currentStage > lastSeen {
+            evolvedTo = currentStage
+            showEvolutionModal = true
+            UserDefaults.standard.set(currentStage.rawValue, forKey: storageKey)
+        }
+    }
 
     private func checkForMilestones() {
         guard let streakData = viewModel.streakData else { return }

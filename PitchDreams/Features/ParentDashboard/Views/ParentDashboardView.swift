@@ -75,9 +75,11 @@ struct ParentDashboardView: View {
 
     @ViewBuilder
     private func childAvatarView(child: ChildSummary) -> some View {
-        if let avatarId = child.avatarId,
-           UIImage(named: avatarId) != nil {
-            Image(avatarId)
+        // Parent list doesn't fetch per-child streak data, so always show rookie stage here.
+        // The full evolved avatar appears on ChildDetailView once milestones are loaded.
+        let assetName = Avatar.assetName(for: child.avatarId, milestones: [])
+        if UIImage(named: assetName) != nil {
+            Image(assetName)
                 .resizable()
                 .scaledToFill()
         } else {

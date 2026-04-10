@@ -79,7 +79,7 @@ struct ChildHomeView: View {
                             .padding(.top, 40)
                     }
                 }
-                .padding(.bottom, 120)
+                .padding(.bottom, 140)
             }
         }
         .safeAreaInset(edge: .bottom) {
@@ -188,29 +188,43 @@ struct ChildHomeView: View {
 
     private var heroSection: some View {
         ZStack {
-            // Radial glow backdrop
+            // Layered radial glows for atmospheric depth
             RadialGradient(
                 colors: [
-                    avatarGlowColor.opacity(0.15),
+                    avatarGlowColor.opacity(0.25),
+                    avatarGlowColor.opacity(0.08),
                     Color.clear
                 ],
                 center: .center,
-                startRadius: 20,
-                endRadius: 250
+                startRadius: 10,
+                endRadius: 300
             )
             .frame(height: 420)
 
-            VStack(spacing: 12) {
-                // Greeting
+            // Secondary warm glow layer
+            RadialGradient(
+                colors: [
+                    Color.dsAccentOrange.opacity(0.06),
+                    Color.clear
+                ],
+                center: .init(x: 0.3, y: 0.6),
+                startRadius: 10,
+                endRadius: 200
+            )
+            .frame(height: 420)
+
+            VStack(spacing: 8) {
+                // Greeting — small, secondary
                 Text("\(viewModel.greeting), \(viewModel.profile?.nickname ?? "player")")
-                    .font(.system(size: 14, weight: .medium))
+                    .font(.system(size: 13, weight: .medium))
                     .foregroundStyle(Color.dsOnSurfaceVariant)
                     .tracking(0.5)
+                    .padding(.bottom, 4)
 
                 // Large avatar
                 ZStack(alignment: .bottomTrailing) {
                     heroAvatarImage
-                        .frame(width: 240, height: 240)
+                        .frame(width: 260, height: 260)
 
                     // PRO badge
                     if currentStage.rawValue >= AvatarStage.pro.rawValue {
@@ -264,7 +278,7 @@ struct ChildHomeView: View {
             Image(systemName: "figure.soccer")
                 .font(.system(size: 80))
                 .foregroundStyle(Color.dsSecondary)
-                .frame(width: 240, height: 240)
+                .frame(width: 260, height: 260)
                 .background(Color.dsSecondary.opacity(0.08))
                 .clipShape(Circle())
         }
@@ -366,16 +380,16 @@ struct ChildHomeView: View {
                     .rotationEffect(.degrees(-90))
                     .animation(.easeInOut(duration: 0.8), value: ringProgress)
 
-                VStack(spacing: 2) {
+                VStack(spacing: 1) {
                     Text("\(viewModel.streakCount)")
-                        .font(.system(size: 24, weight: .black, design: .rounded))
+                        .font(.system(size: 26, weight: .black, design: .rounded))
                         .foregroundStyle(Color.dsOnSurface)
                     Image(systemName: "flame.fill")
-                        .font(.system(size: 12))
+                        .font(.system(size: 13))
                         .foregroundStyle(Color.dsAccentOrange)
                 }
             }
-            .frame(width: 64, height: 64)
+            .frame(width: 72, height: 72)
 
             // Stat chips (right)
             HStack(spacing: 0) {
@@ -610,21 +624,21 @@ struct ChildHomeView: View {
                     NavigationLink {
                         FirstTouchView(childId: childId)
                     } label: {
-                        exploreSkillCard(title: "First Touch", color: .dsAccentOrange)
+                        exploreSkillCard(title: "First Touch", color: .dsAccentOrange, icon: "shoe.fill")
                     }
                     .buttonStyle(.plain)
 
                     NavigationLink {
                         SkillTrackView(childId: childId)
                     } label: {
-                        exploreSkillCard(title: "Skills", color: .dsSecondary)
+                        exploreSkillCard(title: "Skills", color: .dsSecondary, icon: "star.fill")
                     }
                     .buttonStyle(.plain)
 
                     NavigationLink {
                         LearnView(childId: childId)
                     } label: {
-                        exploreSkillCard(title: "Learn", color: Color(hex: "#8B5CF6"))
+                        exploreSkillCard(title: "Learn", color: Color(hex: "#8B5CF6"), icon: "book.fill")
                     }
                     .buttonStyle(.plain)
                 }
@@ -633,18 +647,36 @@ struct ChildHomeView: View {
         }
     }
 
-    private func exploreSkillCard(title: String, color: Color) -> some View {
+    private func exploreSkillCard(title: String, color: Color, icon: String = "soccerball") -> some View {
         ZStack(alignment: .bottomLeading) {
-            // Background with gradient overlay
+            // Background with colored accent glow
             RoundedRectangle(cornerRadius: CornerRadius.lg)
                 .fill(Color.dsSurfaceContainer)
                 .overlay(
-                    LinearGradient(
-                        colors: [Color.dsBackground, .clear],
-                        startPoint: .bottom,
-                        endPoint: .top
-                    )
+                    ZStack {
+                        // Center icon as visual content
+                        Image(systemName: icon)
+                            .font(.system(size: 44))
+                            .foregroundStyle(color.opacity(0.2))
+                            .offset(y: -20)
+
+                        // Colored accent glow
+                        RadialGradient(
+                            colors: [color.opacity(0.2), color.opacity(0.05), .clear],
+                            center: .init(x: 0.5, y: 0.35),
+                            startRadius: 5,
+                            endRadius: 90
+                        )
+
+                        // Bottom fade for text readability
+                        LinearGradient(
+                            colors: [Color.dsBackground.opacity(0.95), Color.dsBackground.opacity(0.3), .clear],
+                            startPoint: .bottom,
+                            endPoint: .center
+                        )
+                    }
                 )
+
             // Content
             VStack(alignment: .leading) {
                 Spacer()
@@ -653,7 +685,7 @@ struct ChildHomeView: View {
                     .tracking(1)
                     .foregroundStyle(Color.dsOnSurface)
             }
-            .padding(12)
+            .padding(14)
         }
         .frame(width: 140, height: 190)
         .clipShape(RoundedRectangle(cornerRadius: CornerRadius.lg))

@@ -3,6 +3,7 @@ import SwiftUI
 struct ChildTabNavigation: View {
     let childId: String
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+    @State private var selectedTab: ChildTab = .home
 
     var body: some View {
         if horizontalSizeClass == .regular {
@@ -45,53 +46,149 @@ struct ChildTabNavigation: View {
         }
     }
 
-    // MARK: - iPhone TabView
+    // MARK: - iPhone Custom Tab Layout
 
     private var iPhoneLayout: some View {
-        TabView {
-            NavigationStack {
-                ChildHomeView(childId: childId)
-            }
-            .tabItem {
-                Label("Home", systemImage: "house.fill")
+        ZStack(alignment: .bottom) {
+            // Content area
+            Group {
+                switch selectedTab {
+                case .home:
+                    NavigationStack {
+                        ChildHomeView(childId: childId)
+                    }
+                case .train:
+                    NavigationStack {
+                        TrainingSessionView(childId: childId)
+                    }
+                case .log:
+                    NavigationStack {
+                        ActivityLogView(childId: childId)
+                    }
+                case .skills:
+                    NavigationStack {
+                        SkillTrackView(childId: childId)
+                    }
+                case .progress:
+                    NavigationStack {
+                        ProgressDashboardView(childId: childId)
+                    }
+                case .learn:
+                    NavigationStack {
+                        LearnView(childId: childId)
+                    }
+                }
             }
 
-            NavigationStack {
-                TrainingSessionView(childId: childId)
-            }
-            .tabItem {
-                Label("Train", systemImage: "trophy.fill")
-            }
+            // Custom glassmorphic tab bar
+            customTabBar
+        }
+    }
 
-            NavigationStack {
-                ActivityLogView(childId: childId)
-            }
-            .tabItem {
-                Label("Log", systemImage: "doc.text.fill")
-            }
+    // MARK: - Custom Tab Bar
 
-            NavigationStack {
-                SkillTrackView(childId: childId)
+    private var customTabBar: some View {
+        HStack(spacing: 0) {
+            tabBarItem(tab: .home, icon: "house.fill", label: "Home")
+            tabBarItem(tab: .train, icon: "dumbbell.fill", label: "Train")
+            tabBarItem(tab: .log, icon: "square.and.pencil", label: "Log")
+            tabBarItem(tab: .skills, icon: "medal.fill", label: "Skills")
+            moreMenu
+        }
+        .padding(.horizontal, 16)
+        .padding(.top, 8)
+        .padding(.bottom, 28)
+        .background(
+            ZStack {
+                // Dark glass bg
+                Color(hex: "#0F172A").opacity(0.6)
+                    .background(.ultraThinMaterial)
             }
-            .tabItem {
-                Label("Skills", systemImage: "star.fill")
-            }
+        )
+        .clipShape(
+            UnevenRoundedRectangle(
+                topLeadingRadius: 48,
+                bottomLeadingRadius: 0,
+                bottomTrailingRadius: 0,
+                topTrailingRadius: 48
+            )
+        )
+        .shadow(color: .black.opacity(0.5), radius: 30, y: -10)
+    }
 
-            NavigationStack {
-                ProgressDashboardView(childId: childId)
+    private func tabBarItem(tab: ChildTab, icon: String, label: String) -> some View {
+        Button {
+            withAnimation(.easeInOut(duration: 0.2)) {
+                selectedTab = tab
             }
-            .tabItem {
+        } label: {
+            VStack(spacing: 4) {
+                Image(systemName: icon)
+                    .font(.system(size: 18))
+                Text(label.uppercased())
+                    .font(.system(size: 10, weight: .bold, design: .rounded))
+                    .tracking(0.5)
+            }
+            .foregroundStyle(selectedTab == tab ? Color.dsSecondary : Color.dsOnSurfaceVariant.opacity(0.4))
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 8)
+            .background(
+                Group {
+                    if selectedTab == tab {
+                        LinearGradient(
+                            colors: [Color.dsSecondary.opacity(0.2), .clear],
+                            startPoint: .top,
+                            endPoint: .bottom
+                        )
+                        .clipShape(RoundedRectangle(cornerRadius: 20))
+                        .shadow(color: Color.dsSecondary.opacity(0.3), radius: 15)
+                    }
+                }
+            )
+        }
+    }
+
+    private var moreMenu: some View {
+        Menu {
+            Button {
+                selectedTab = .progress
+            } label: {
                 Label("Progress", systemImage: "chart.line.uptrend.xyaxis")
             }
-
-            NavigationStack {
-                LearnView(childId: childId)
-            }
-            .tabItem {
+            Button {
+                selectedTab = .learn
+            } label: {
                 Label("Learn", systemImage: "book.fill")
             }
+        } label: {
+            VStack(spacing: 4) {
+                Image(systemName: "ellipsis")
+                    .font(.system(size: 18))
+                Text("MORE")
+                    .font(.system(size: 10, weight: .bold, design: .rounded))
+                    .tracking(0.5)
+            }
+            .foregroundStyle(
+                [.progress, .learn].contains(selectedTab)
+                    ? Color.dsSecondary
+                    : Color.dsOnSurfaceVariant.opacity(0.4)
+            )
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 8)
+            .background(
+                Group {
+                    if [.progress, .learn].contains(selectedTab) {
+                        LinearGradient(
+                            colors: [Color.dsSecondary.opacity(0.2), .clear],
+                            startPoint: .top,
+                            endPoint: .bottom
+                        )
+                        .clipShape(RoundedRectangle(cornerRadius: 20))
+                        .shadow(color: Color.dsSecondary.opacity(0.3), radius: 15)
+                    }
+                }
+            )
         }
-        .tint(.hudCyan)
     }
 }
 

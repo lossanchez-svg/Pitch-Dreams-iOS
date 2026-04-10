@@ -27,78 +27,68 @@ struct ConsistencyRingView: View {
         return "Outstanding!"
     }
 
-    private var flameEmoji: String {
-        if streak == 0 { return "\u{1F4A4}" }  // zzz
-        if streak < 7 { return "\u{2728}" }     // sparkles
-        return "\u{1F525}"                       // fire
-    }
-
-    private var ringColor: Color {
-        if streak == 0 { return .gray }
-        if streak < 14 { return .orange }
-        return .green
-    }
-
     var body: some View {
         HStack(spacing: 20) {
             // Ring on the left
             ZStack {
                 Circle()
-                    .stroke(ringColor.opacity(0.15), lineWidth: 8)
+                    .stroke(Color.dsSurfaceContainerHighest, lineWidth: 6)
 
                 Circle()
                     .trim(from: 0, to: progress)
                     .stroke(
-                        ringColor,
-                        style: StrokeStyle(lineWidth: 8, lineCap: .round)
+                        Color.dsSecondary,
+                        style: StrokeStyle(lineWidth: 6, lineCap: .round)
                     )
                     .rotationEffect(.degrees(-90))
                     .animation(.easeInOut(duration: 0.8), value: progress)
 
                 VStack(spacing: 2) {
-                    Text(flameEmoji)
-                        .font(.system(size: 22))
                     Text("\(streak)")
-                        .font(.title3.bold().monospacedDigit())
-                        .foregroundStyle(ringColor)
+                        .font(.system(size: 28, weight: .black, design: .rounded))
+                        .foregroundStyle(Color.dsOnSurface)
                         .contentTransition(.numericText())
+                    Image(systemName: "flame.fill")
+                        .font(.system(size: 14))
+                        .foregroundStyle(Color.dsAccentOrange)
                 }
             }
-            .frame(width: 100, height: 100)
+            .frame(width: 90, height: 90)
 
             // Stats stacked on the right
             VStack(alignment: .leading, spacing: 10) {
-                // Message at top
                 Text(message)
-                    .font(.headline)
-                    .foregroundStyle(.primary)
+                    .font(.system(size: 16, weight: .bold, design: .rounded))
+                    .foregroundStyle(Color.dsOnSurface)
 
-                // Stats grid
                 HStack(spacing: 16) {
-                    statItem(label: "Target", value: "\(maxStreak)", icon: "target")
-                    statItem(label: "Progress", value: "\(progressPercent)%", icon: "chart.bar.fill")
-                    statItem(label: "Freezes", value: "\(freezes)", icon: "shield.fill")
+                    statItem(icon: "bolt", color: .dsSecondary, value: "\(maxStreak)", label: "Target")
+                    statItem(icon: "chart.bar.fill", color: .dsTertiaryContainer, value: "\(progressPercent)%", label: "Progress")
+                    statItem(icon: "shield.fill", color: .dsError, value: "\(freezes)", label: "Freezes")
                 }
             }
 
             Spacer(minLength: 0)
         }
-        .padding()
+        .padding(Spacing.xl)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(.regularMaterial)
-        .clipShape(RoundedRectangle(cornerRadius: 16))
+        .background(Color.dsSurfaceContainerLow)
+        .clipShape(RoundedRectangle(cornerRadius: CornerRadius.lg))
+        .ghostBorder()
     }
 
-    private func statItem(label: String, value: String, icon: String) -> some View {
-        VStack(spacing: 3) {
+    private func statItem(icon: String, color: Color, value: String, label: String) -> some View {
+        VStack(spacing: 4) {
             Image(systemName: icon)
-                .font(.caption2)
-                .foregroundStyle(.secondary)
+                .font(.system(size: 12))
+                .foregroundStyle(color)
             Text(value)
-                .font(.subheadline.bold().monospacedDigit())
-            Text(label)
-                .font(.caption2)
-                .foregroundStyle(.secondary)
+                .font(.system(size: 13, weight: .bold, design: .rounded).monospacedDigit())
+                .foregroundStyle(Color.dsOnSurface)
+            Text(label.uppercased())
+                .font(.system(size: 9, weight: .bold))
+                .tracking(0.5)
+                .foregroundStyle(Color.dsOnSurfaceVariant)
         }
     }
 }
@@ -110,4 +100,5 @@ struct ConsistencyRingView: View {
         ConsistencyRingView(streak: 30, freezes: 1)
     }
     .padding()
+    .background(Color.dsBackground)
 }

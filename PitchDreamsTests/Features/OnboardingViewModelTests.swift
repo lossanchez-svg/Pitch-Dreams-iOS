@@ -26,7 +26,9 @@ final class OnboardingViewModelTests: XCTestCase {
         viewModel.nextStep()
         XCTAssertEqual(viewModel.step, 3)
         viewModel.nextStep()
-        XCTAssertEqual(viewModel.step, 3) // Max at 3
+        XCTAssertEqual(viewModel.step, 4)
+        viewModel.nextStep()
+        XCTAssertEqual(viewModel.step, 4) // Max at 4 (5 steps: 0-4)
     }
 
     func testPreviousStepNavigation() {

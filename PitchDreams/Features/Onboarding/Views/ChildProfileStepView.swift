@@ -1,5 +1,7 @@
 import SwiftUI
 
+/// Step 2 of onboarding: child profile form fields.
+/// Avatar was already selected in the previous step (AvatarSelectionStepView).
 struct ChildProfileStepView: View {
     @ObservedObject var viewModel: OnboardingViewModel
 
@@ -8,12 +10,9 @@ struct ChildProfileStepView: View {
         "Improve dribbling", "Get faster", "Learn the game",
         "Make the team", "Better passing", "Have fun"
     ]
-    private let avatarOptions: [Avatar] = [.wolf, .lion, .eagle, .fox, .shark, .panther, .bear, .default]
-
-    @State private var selectedAvatarIndex: Int = 0
 
     private var selectedAvatar: Avatar {
-        avatarOptions[selectedAvatarIndex]
+        Avatar.resolve(viewModel.avatarId)
     }
 
     var body: some View {
@@ -22,193 +21,84 @@ struct ChildProfileStepView: View {
                 .ignoresSafeArea()
 
             ScrollView {
-                VStack(spacing: 0) {
-                    // Header
-                    VStack(spacing: 4) {
-                        Text("SELECT STRIKER")
-                            .font(.system(size: 10, weight: .bold))
-                            .tracking(3)
-                            .foregroundStyle(Color.dsSecondary)
-
-                        Text("PICK YOUR\nPLAYER")
-                            .font(.system(size: 32, weight: .heavy, design: .rounded))
-                            .multilineTextAlignment(.center)
-                            .foregroundStyle(Color.dsOnSurface)
-
-                        Text("You'll evolve together")
-                            .font(.system(size: 14))
-                            .foregroundStyle(Color.dsOnSurfaceVariant)
-                            .padding(.top, 4)
-                    }
-                    .padding(.top, 16)
-
-                    // Avatar Carousel
-                    avatarCarousel
-                        .padding(.top, 24)
-
-                    // Character name
-                    Text(selectedAvatar.displayName.uppercased())
-                        .font(.system(size: 36, weight: .heavy, design: .rounded))
-                        .italic()
-                        .tracking(-1)
-                        .foregroundStyle(Color.dsPrimaryPeach)
-                        .padding(.top, 16)
-
-                    Text(avatarTagline(selectedAvatar))
-                        .font(.system(size: 12, weight: .bold))
-                        .tracking(2)
-                        .foregroundStyle(Color.dsOnSurfaceVariant)
-                        .textCase(.uppercase)
-
-                    // Evolution preview strip
-                    evolutionStages
-                        .padding(.top, 20)
+                VStack(spacing: Spacing.xl) {
+                    // Selected avatar preview (read-only)
+                    avatarPreview
+                        .padding(.top, 8)
 
                     // Form fields
                     formFields
-                        .padding(.top, 32)
-                        .padding(.horizontal, 24)
 
                     // CTA
                     Button {
-                        viewModel.avatarId = selectedAvatar.rawValue
                         Task { await viewModel.createChild() }
                     } label: {
-                        Text("CHOOSE \(selectedAvatar.displayName.uppercased())")
-                            .font(.system(size: 14, weight: .black, design: .rounded))
-                            .tracking(2)
-                            .foregroundStyle(Color(hex: "#5B1B00"))
-                            .frame(maxWidth: .infinity)
-                            .padding(.vertical, 18)
-                            .background(DSGradient.primaryCTA)
-                            .clipShape(Capsule())
-                            .dsPrimaryShadow()
+                        HStack(spacing: 8) {
+                            if viewModel.isLoading {
+                                ProgressView().tint(Color(hex: "#5B1B00"))
+                            } else {
+                                Text("CREATE PLAYER")
+                                    .font(.system(size: 14, weight: .black, design: .rounded))
+                                    .tracking(2)
+                                Image(systemName: "arrow.right")
+                                    .font(.system(size: 14, weight: .bold))
+                            }
+                        }
+                        .foregroundStyle(Color(hex: "#5B1B00"))
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 18)
+                        .background(viewModel.isChildProfileValid ? DSGradient.primaryCTA : LinearGradient(colors: [Color.dsSurfaceContainerHighest, Color.dsSurfaceContainerHighest], startPoint: .leading, endPoint: .trailing))
+                        .clipShape(RoundedRectangle(cornerRadius: CornerRadius.lg))
+                        .dsPrimaryShadow()
                     }
                     .disabled(!viewModel.isChildProfileValid || viewModel.isLoading)
                     .opacity(viewModel.isChildProfileValid ? 1 : 0.5)
-                    .padding(.horizontal, 24)
-                    .padding(.top, 32)
 
-                    Spacer(minLength: 60)
+                    Spacer(minLength: 40)
                 }
+                .padding(.horizontal, 24)
             }
-        }
-        .onAppear {
-            // Sync initial selection
-            if let idx = avatarOptions.firstIndex(where: { $0.rawValue == viewModel.avatarId }) {
-                selectedAvatarIndex = idx
-            }
-            viewModel.avatarId = selectedAvatar.rawValue
-        }
-        .onChange(of: selectedAvatarIndex) { _ in
-            viewModel.avatarId = selectedAvatar.rawValue
         }
     }
 
-    // MARK: - Avatar Carousel
+    // MARK: - Avatar Preview
 
-    private var avatarCarousel: some View {
-        TabView(selection: $selectedAvatarIndex) {
-            ForEach(Array(avatarOptions.enumerated()), id: \.offset) { index, avatar in
-                VStack {
-                    // Glowing platform
-                    ZStack {
-                        // Platform glow
-                        Ellipse()
-                            .fill(
-                                RadialGradient(
-                                    colors: [avatarGlowColor(avatar).opacity(0.3), .clear],
-                                    center: .center,
-                                    startRadius: 10,
-                                    endRadius: 120
-                                )
-                            )
-                            .frame(width: 260, height: 80)
-                            .offset(y: 100)
-
-                        // Avatar image
-                        let assetName = avatar.assetName(stage: .rookie)
-                        if UIImage(named: assetName) != nil {
-                            Image(assetName)
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 220, height: 220)
-                                .shadow(color: avatarGlowColor(avatar).opacity(0.3), radius: 20)
-                        } else {
-                            ZStack {
-                                Circle()
-                                    .fill(Color.dsSurfaceContainerHigh)
-                                    .frame(width: 180, height: 180)
-                                Image(systemName: "figure.soccer")
-                                    .font(.system(size: 60))
-                                    .foregroundStyle(Color.dsSecondary)
-                            }
-                        }
-                    }
-                    .frame(height: 260)
-                }
-                .tag(index)
-            }
-        }
-        .tabViewStyle(.page(indexDisplayMode: .never))
-        .frame(height: 280)
-
-        // Page indicator
-    }
-
-    // MARK: - Evolution Stages Preview
-
-    private var evolutionStages: some View {
-        HStack(spacing: 0) {
-            ForEach(AvatarStage.allCases, id: \.rawValue) { stage in
-                if stage != .rookie {
-                    // Connecting line
-                    Rectangle()
-                        .fill(
-                            LinearGradient(
-                                colors: [Color.dsSecondary.opacity(0.3), Color.dsSecondary.opacity(0.1)],
-                                startPoint: .leading,
-                                endPoint: .trailing
-                            )
-                        )
-                        .frame(height: 2)
-                        .frame(maxWidth: 40)
-                }
-
-                VStack(spacing: 6) {
-                    let assetName = selectedAvatar.assetName(stage: stage)
-                    ZStack {
-                        Circle()
-                            .fill(Color.dsSurfaceContainerHigh)
-                            .frame(width: 52, height: 52)
-
-                        if UIImage(named: assetName) != nil {
-                            Image(assetName)
-                                .resizable()
-                                .scaledToFill()
-                                .frame(width: 44, height: 44)
-                                .clipShape(Circle())
-                        } else {
-                            Image(systemName: "lock.fill")
-                                .font(.system(size: 16))
-                                .foregroundStyle(Color.dsOnSurfaceVariant.opacity(0.4))
-                        }
-                    }
-                    .overlay(
-                        Circle()
-                            .stroke(
-                                stage == .rookie ? Color.dsSecondary : Color.dsSurfaceContainerHighest,
-                                lineWidth: 2
-                            )
-                    )
-
-                    Text(stage.title.uppercased())
-                        .font(.system(size: 9, weight: .bold))
-                        .tracking(1)
-                        .foregroundStyle(stage == .rookie ? Color.dsSecondary : Color.dsOnSurfaceVariant)
+    private var avatarPreview: some View {
+        HStack(spacing: 14) {
+            let assetName = selectedAvatar.assetName(stage: .rookie)
+            ZStack {
+                Circle()
+                    .fill(Color.dsSurfaceContainerHigh)
+                    .frame(width: 56, height: 56)
+                if UIImage(named: assetName) != nil {
+                    Image(assetName)
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 48, height: 48)
+                        .clipShape(Circle())
+                } else {
+                    Image(systemName: "figure.soccer")
+                        .foregroundStyle(Color.dsSecondary)
                 }
             }
+            .overlay(Circle().stroke(Color.dsSecondary, lineWidth: 2).frame(width: 56, height: 56))
+
+            VStack(alignment: .leading, spacing: 2) {
+                Text("YOUR LEGEND")
+                    .font(.system(size: 9, weight: .bold))
+                    .tracking(2)
+                    .foregroundStyle(Color.dsOnSurfaceVariant)
+                Text(selectedAvatar.displayName)
+                    .font(.system(size: 18, weight: .heavy, design: .rounded))
+                    .foregroundStyle(Color.dsPrimaryPeach)
+            }
+
+            Spacer()
         }
+        .padding(Spacing.lg)
+        .background(Color.dsSurfaceContainer)
+        .clipShape(RoundedRectangle(cornerRadius: CornerRadius.lg))
+        .ghostBorder()
     }
 
     // MARK: - Form Fields
@@ -312,34 +202,6 @@ struct ChildProfileStepView: View {
                     }
                 }
             }
-        }
-    }
-
-    // MARK: - Helpers
-
-    private func avatarGlowColor(_ avatar: Avatar) -> Color {
-        switch avatar {
-        case .panther: return Color(hex: "#8B5CF6")
-        case .wolf: return Color.dsSecondary
-        case .lion: return Color.dsAccentOrange
-        case .eagle: return Color.dsSecondary
-        case .fox: return Color.dsAccentOrange
-        case .shark: return Color.dsSecondary
-        case .bear: return Color.dsTertiaryContainer
-        case .default: return Color.dsSecondary
-        }
-    }
-
-    private func avatarTagline(_ avatar: Avatar) -> String {
-        switch avatar {
-        case .wolf: return "The Striker. Fast. Fearless."
-        case .lion: return "The Captain. Bold. Relentless."
-        case .eagle: return "The Visionary. Sharp. Decisive."
-        case .fox: return "The Trickster. Quick. Creative."
-        case .shark: return "The Hunter. Fierce. Focused."
-        case .panther: return "The Shadow. Silent. Lethal."
-        case .bear: return "The Wall. Strong. Immovable."
-        case .default: return "The Rookie. Ready. Determined."
         }
     }
 }

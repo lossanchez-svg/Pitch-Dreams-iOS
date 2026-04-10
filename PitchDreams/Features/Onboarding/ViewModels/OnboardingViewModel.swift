@@ -64,7 +64,7 @@ final class OnboardingViewModel: ObservableObject {
     // MARK: - Navigation
 
     func nextStep() {
-        guard step < 3 else { return }
+        guard step < 4 else { return }
         step += 1
     }
 

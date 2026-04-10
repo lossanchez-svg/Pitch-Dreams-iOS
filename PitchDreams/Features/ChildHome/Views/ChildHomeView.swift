@@ -60,23 +60,41 @@ struct ChildHomeView: View {
                             .padding(.horizontal, Spacing.xl)
                     } else {
                         heroSection
-                        statsBand
+
+                        // Rank + XP badge bar
+                        rankBadgeBar
                             .padding(.horizontal, Spacing.xl)
-                            .padding(.top, -32)
+                            .padding(.top, -20)
                             .zIndex(1)
-                        quickActions
+
+                        // Weekly Goals
+                        weeklyGoalsCard
                             .padding(.horizontal, Spacing.xl)
-                            .padding(.top, Spacing.xxl)
+                            .padding(.top, Spacing.xl)
+
+                        // Bento stat cards
+                        bentoStats
+                            .padding(.horizontal, Spacing.xl)
+                            .padding(.top, Spacing.lg)
+
+                        // Next Evolution + Start Training
+                        nextEvolutionCard
+                            .padding(.horizontal, Spacing.xl)
+                            .padding(.top, Spacing.xl)
+
+                        // Missions
                         missionsCard
                             .padding(.horizontal, Spacing.xl)
-                            .padding(.top, Spacing.xxl)
+                            .padding(.top, Spacing.xl)
+
                         if let nudge = viewModel.nudge {
                             coachNudgeCard(nudge)
                                 .padding(.horizontal, Spacing.xl)
-                                .padding(.top, Spacing.xxl)
+                                .padding(.top, Spacing.xl)
                         }
+
                         exploreSection
-                            .padding(.top, 40)
+                            .padding(.top, Spacing.xxl)
                     }
                 }
                 .padding(.bottom, 140)
@@ -363,7 +381,237 @@ struct ChildHomeView: View {
         }
     }
 
-    // MARK: - Stats Band
+    // MARK: - Rank Badge Bar
+
+    private var rankBadgeBar: some View {
+        HStack {
+            VStack(alignment: .leading, spacing: 2) {
+                Text("CURRENT RANK")
+                    .font(.system(size: 9, weight: .bold))
+                    .tracking(2)
+                    .foregroundStyle(Color.dsOnSurfaceVariant)
+                Text("\(resolvedAvatar.displayName.uppercased()) \(currentStage.title.uppercased())")
+                    .font(.system(size: 18, weight: .heavy, design: .rounded))
+                    .italic()
+                    .foregroundStyle(Color.dsPrimaryPeach)
+            }
+            Spacer()
+            VStack(alignment: .trailing, spacing: 2) {
+                Text("XP LEVEL")
+                    .font(.system(size: 9, weight: .bold))
+                    .tracking(2)
+                    .foregroundStyle(Color.dsOnSurfaceVariant)
+                Text("LVL \(missionsVM.localMissionXP / 10 + 1)")
+                    .font(.system(size: 22, weight: .heavy, design: .rounded))
+                    .foregroundStyle(Color.dsOnSurface)
+            }
+        }
+        .padding(.horizontal, Spacing.xl)
+        .padding(.vertical, Spacing.lg)
+        .background(Color.dsSurfaceContainerLow.opacity(0.8))
+        .background(.ultraThinMaterial)
+        .clipShape(RoundedRectangle(cornerRadius: CornerRadius.lg))
+        .ghostBorder()
+    }
+
+    // MARK: - Weekly Goals Card
+
+    private var weeklyGoalsCard: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            HStack {
+                Text("Weekly Goals")
+                    .font(.system(size: 16, weight: .bold, design: .rounded))
+                    .foregroundStyle(Color.dsOnSurface)
+                Spacer()
+                Image(systemName: "arrow.up.right")
+                    .font(.system(size: 12))
+                    .foregroundStyle(Color.dsSecondary)
+            }
+
+            let completed = missionsVM.weeklyMissions.filter(\.isCompleted).count
+            let total = max(missionsVM.weeklyMissions.count, 3)
+
+            Text("\(completed) of \(total) sessions complete")
+                .font(.system(size: 13))
+                .foregroundStyle(Color.dsSecondary)
+
+            GeometryReader { geo in
+                ZStack(alignment: .leading) {
+                    Capsule()
+                        .fill(Color.dsSurfaceContainerHighest)
+                        .frame(height: 12)
+                    Capsule()
+                        .fill(
+                            LinearGradient(
+                                colors: [.dsSecondary, Color(hex: "#34D9EC")],
+                                startPoint: .leading,
+                                endPoint: .trailing
+                            )
+                        )
+                        .frame(width: max(0, geo.size.width * CGFloat(total > 0 ? completed : 0) / CGFloat(max(total, 1))), height: 12)
+                        .shadow(color: Color.dsSecondary.opacity(0.5), radius: 6)
+                }
+            }
+            .frame(height: 12)
+        }
+        .padding(Spacing.xl)
+        .background(Color.dsSurfaceContainer)
+        .clipShape(RoundedRectangle(cornerRadius: CornerRadius.lg))
+        .ghostBorder()
+    }
+
+    // MARK: - Bento Stats
+
+    private var bentoStats: some View {
+        HStack(spacing: 12) {
+            // Training Streak
+            VStack(alignment: .leading, spacing: 8) {
+                HStack {
+                    Image(systemName: "flame.fill")
+                        .font(.system(size: 14))
+                        .foregroundStyle(Color.dsAccentOrange)
+                    Spacer()
+                    Image(systemName: "chart.line.uptrend.xyaxis")
+                        .font(.system(size: 28))
+                        .foregroundStyle(Color.dsAccentOrange.opacity(0.1))
+                }
+
+                Text("TRAINING\nSTREAK")
+                    .font(.system(size: 10, weight: .bold))
+                    .tracking(1)
+                    .foregroundStyle(Color.dsOnSurfaceVariant)
+                    .lineSpacing(2)
+
+                HStack(alignment: .firstTextBaseline, spacing: 4) {
+                    Text("\(viewModel.streakCount)")
+                        .font(.system(size: 36, weight: .heavy, design: .rounded))
+                        .foregroundStyle(Color.dsOnSurface)
+                    Text("DAYS")
+                        .font(.system(size: 11, weight: .bold))
+                        .tracking(1)
+                        .foregroundStyle(Color.dsOnSurfaceVariant)
+                }
+            }
+            .padding(Spacing.lg)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(Color.dsSurfaceContainerLow)
+            .clipShape(RoundedRectangle(cornerRadius: CornerRadius.lg))
+            .ghostBorder()
+
+            // Skill Level
+            VStack(alignment: .leading, spacing: 8) {
+                HStack {
+                    Image(systemName: "chart.bar.fill")
+                        .font(.system(size: 14))
+                        .foregroundStyle(Color.dsSecondary)
+                    Spacer()
+                    Image(systemName: "medal.fill")
+                        .font(.system(size: 28))
+                        .foregroundStyle(Color.dsSecondary.opacity(0.1))
+                }
+
+                Text("SKILL\nLEVEL")
+                    .font(.system(size: 10, weight: .bold))
+                    .tracking(1)
+                    .foregroundStyle(Color.dsOnSurfaceVariant)
+                    .lineSpacing(2)
+
+                Text(skillGrade)
+                    .font(.system(size: 36, weight: .heavy, design: .rounded))
+                    .foregroundStyle(Color.dsOnSurface)
+            }
+            .padding(Spacing.lg)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(Color.dsSurfaceContainerLow)
+            .clipShape(RoundedRectangle(cornerRadius: CornerRadius.lg))
+            .ghostBorder()
+        }
+    }
+
+    private var skillGrade: String {
+        let streak = viewModel.streakCount
+        if streak >= 30 { return "A+" }
+        if streak >= 14 { return "A" }
+        if streak >= 7 { return "B+" }
+        if streak >= 3 { return "B" }
+        if streak >= 1 { return "C" }
+        return "C-"
+    }
+
+    // MARK: - Next Evolution Card
+
+    private var nextEvolutionCard: some View {
+        VStack(spacing: Spacing.lg) {
+            HStack(spacing: 10) {
+                Image(systemName: "sparkles")
+                    .foregroundStyle(Color.dsSecondary)
+                Text("NEXT EVOLUTION")
+                    .font(.system(size: 10, weight: .bold))
+                    .tracking(3)
+                    .foregroundStyle(Color.dsSecondary)
+                Spacer()
+            }
+
+            HStack(spacing: Spacing.lg) {
+                // Next avatar preview
+                let nextStage = currentStage == .rookie ? AvatarStage.pro : AvatarStage.legend
+                let nextAsset = resolvedAvatar.assetName(stage: nextStage)
+
+                ZStack {
+                    Circle()
+                        .fill(Color.dsSurfaceContainerLowest)
+                        .frame(width: 64, height: 64)
+                    if UIImage(named: nextAsset) != nil {
+                        Image(nextAsset)
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 52, height: 52)
+                            .grayscale(0.6)
+                            .opacity(0.6)
+                    } else {
+                        Image(systemName: "lock.fill")
+                            .foregroundStyle(Color.dsOnSurfaceVariant.opacity(0.4))
+                    }
+                }
+
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("\(currentStage == .legend ? "MAX STAGE" : "\(resolvedAvatar.displayName.uppercased()) \(currentStage == .rookie ? "PRO" : "LEGEND")")")
+                        .font(.system(size: 16, weight: .heavy, design: .rounded))
+                        .foregroundStyle(Color.dsOnSurface)
+                    Text(daysToNextEvolution.replacingOccurrences(of: "\n", with: " "))
+                        .font(.system(size: 12))
+                        .foregroundStyle(Color.dsOnSurfaceVariant)
+                }
+
+                Spacer()
+            }
+
+            // Start Training CTA
+            NavigationLink {
+                TrainingSessionView(childId: childId)
+            } label: {
+                HStack(spacing: 8) {
+                    Image(systemName: "play.fill")
+                        .font(.system(size: 14))
+                    Text("START TRAINING")
+                        .font(.system(size: 14, weight: .black, design: .rounded))
+                        .tracking(2)
+                }
+                .foregroundStyle(Color(hex: "#5B1B00"))
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 16)
+                .background(DSGradient.primaryCTA)
+                .clipShape(RoundedRectangle(cornerRadius: CornerRadius.lg))
+                .dsPrimaryShadow()
+            }
+        }
+        .padding(Spacing.xl)
+        .background(Color.dsSurfaceContainer)
+        .clipShape(RoundedRectangle(cornerRadius: CornerRadius.xxl))
+        .ghostBorder()
+    }
+
+    // MARK: - Stats Band (kept for backward compat, no longer shown in main layout)
 
     private var statsBand: some View {
         HStack(spacing: 0) {

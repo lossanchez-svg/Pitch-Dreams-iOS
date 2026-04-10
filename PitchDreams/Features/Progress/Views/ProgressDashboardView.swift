@@ -10,34 +10,48 @@ struct ProgressDashboardView: View {
     }
 
     var body: some View {
-        ScrollView {
-            VStack(spacing: 20) {
-                if viewModel.isLoading && viewModel.sessions.isEmpty {
-                    SkeletonStatGrid()
-                    SkeletonCard()
-                    SkeletonCard()
-                } else if viewModel.sessions.isEmpty && viewModel.streakData == nil {
-                    emptyState
-                } else {
-                    statsGrid
-                    streakSection
-                    recentSessionsSection
-                }
+        ZStack {
+            Color.dsBackground
+                .ignoresSafeArea()
 
-                if let error = viewModel.errorMessage {
-                    Label(error, systemImage: "exclamationmark.triangle.fill")
-                        .font(.subheadline)
-                        .foregroundStyle(.red)
-                        .padding()
-                        .frame(maxWidth: .infinity)
-                        .background(.red.opacity(0.1))
-                        .clipShape(RoundedRectangle(cornerRadius: 12))
+            ScrollView {
+                VStack(spacing: Spacing.xl) {
+                    if viewModel.isLoading && viewModel.sessions.isEmpty {
+                        SkeletonStatGrid()
+                        SkeletonCard()
+                        SkeletonCard()
+                    } else if viewModel.sessions.isEmpty && viewModel.streakData == nil {
+                        emptyState
+                    } else {
+                        statsGrid
+                        streakSection
+                        recentSessionsSection
+                    }
+
+                    if let error = viewModel.errorMessage {
+                        Label(error, systemImage: "exclamationmark.triangle.fill")
+                            .font(.subheadline)
+                            .foregroundStyle(Color.dsError)
+                            .padding()
+                            .frame(maxWidth: .infinity)
+                            .background(Color.dsError.opacity(0.1))
+                            .clipShape(RoundedRectangle(cornerRadius: CornerRadius.md))
+                    }
                 }
+                .padding(Spacing.xl)
+                .padding(.bottom, 100)
             }
-            .padding()
         }
-        .navigationTitle("Progress")
         .navigationBarTitleDisplayMode(.inline)
+        .toolbarBackground(Color.dsBackground, for: .navigationBar)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                Text("PROGRESS")
+                    .font(.system(size: 14, weight: .black, design: .rounded))
+                    .tracking(2)
+                    .foregroundStyle(Color.dsSecondary)
+            }
+        }
         .refreshable {
             await viewModel.loadData()
         }
@@ -50,114 +64,90 @@ struct ProgressDashboardView: View {
 
     private var statsGrid: some View {
         LazyVGrid(columns: [GridItem(.flexible(), spacing: 12), GridItem(.flexible(), spacing: 12)], spacing: 12) {
-            statCard(
-                title: "Current Streak",
-                value: "\(viewModel.currentStreak)",
-                unit: "days",
-                icon: "flame.fill",
-                color: .orange
-            )
-            statCard(
-                title: "Max Streak",
-                value: "\(viewModel.maxStreak)",
-                unit: "days",
-                icon: "trophy.fill",
-                color: .yellow
-            )
-            statCard(
-                title: "This Month",
-                value: "\(viewModel.thisMonthSessions)",
-                unit: "sessions",
-                icon: "calendar",
-                color: .cyan
-            )
-            statCard(
-                title: "Total Sessions",
-                value: "\(viewModel.totalSessions)",
-                unit: "sessions",
-                icon: "figure.run",
-                color: .blue
-            )
-            statCard(
-                title: "Training Time",
-                value: viewModel.formattedTotalTime,
-                unit: "",
-                icon: "clock.fill",
-                color: .green
-            )
-            statCard(
-                title: "Avg RPE",
-                value: viewModel.averageEffort > 0 ? String(format: "%.1f", viewModel.averageEffort) : "--",
-                unit: "/ 10",
-                icon: "bolt.fill",
-                color: .purple
-            )
+            statCard(title: "Current Streak", value: "\(viewModel.currentStreak)", unit: "days", icon: "flame.fill", color: .dsAccentOrange)
+            statCard(title: "Max Streak", value: "\(viewModel.maxStreak)", unit: "days", icon: "trophy.fill", color: .dsTertiaryContainer)
+            statCard(title: "This Month", value: "\(viewModel.thisMonthSessions)", unit: "sessions", icon: "calendar", color: .dsSecondary)
+            statCard(title: "Total Sessions", value: "\(viewModel.totalSessions)", unit: "sessions", icon: "figure.run", color: .dsSecondary)
+            statCard(title: "Training Time", value: viewModel.formattedTotalTime, unit: "", icon: "clock.fill", color: .dsSecondary)
+            statCard(title: "Avg RPE", value: viewModel.averageEffort > 0 ? String(format: "%.1f", viewModel.averageEffort) : "--", unit: "/ 10", icon: "bolt.fill", color: .dsAccentOrange)
         }
     }
 
     private func statCard(title: String, value: String, unit: String, icon: String, color: Color) -> some View {
-        VStack(spacing: 8) {
-            HStack {
-                Image(systemName: icon)
-                    .foregroundStyle(color)
-                Spacer()
-            }
+        VStack(alignment: .leading, spacing: 8) {
+            Image(systemName: icon)
+                .font(.system(size: 16))
+                .foregroundStyle(color)
+
             HStack(alignment: .firstTextBaseline, spacing: 4) {
                 Text(value)
-                    .font(.title2.bold())
+                    .font(.system(size: 24, weight: .bold, design: .rounded))
+                    .foregroundStyle(Color.dsOnSurface)
                 if !unit.isEmpty {
                     Text(unit)
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
+                        .font(.system(size: 11))
+                        .foregroundStyle(Color.dsOnSurfaceVariant)
                 }
-                Spacer()
             }
-            Text(title)
-                .font(.caption)
-                .foregroundStyle(.secondary)
-                .frame(maxWidth: .infinity, alignment: .leading)
+
+            Text(title.uppercased())
+                .font(.system(size: 10, weight: .bold))
+                .tracking(1)
+                .foregroundStyle(Color.dsOnSurfaceVariant)
         }
-        .cardStyle()
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(Spacing.lg)
+        .background(Color.dsSurfaceContainer)
+        .clipShape(RoundedRectangle(cornerRadius: CornerRadius.lg))
+        .ghostBorder()
     }
 
     // MARK: - Streak Section
 
     private var streakSection: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text("Streak Details")
-                .font(.headline)
+        VStack(alignment: .leading, spacing: Spacing.lg) {
+            Text("STREAK DETAILS")
+                .font(.system(size: 12, weight: .heavy, design: .rounded))
+                .tracking(3)
+                .foregroundStyle(Color.dsOnSurfaceVariant)
 
-            HStack(spacing: 16) {
-                VStack(spacing: 4) {
+            HStack(spacing: 0) {
+                VStack(spacing: 6) {
                     Image(systemName: "shield.fill")
-                        .font(.title2)
-                        .foregroundStyle(.cyan)
+                        .font(.system(size: 24))
+                        .foregroundStyle(Color.dsSecondary)
                     Text("\(viewModel.freezesAvailable)")
-                        .font(.title3.bold())
-                    Text("Freezes")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
+                        .font(.system(size: 22, weight: .bold, design: .rounded))
+                        .foregroundStyle(Color.dsOnSurface)
+                    Text("FREEZES")
+                        .font(.system(size: 9, weight: .bold))
+                        .tracking(1)
+                        .foregroundStyle(Color.dsOnSurfaceVariant)
                 }
                 .frame(maxWidth: .infinity)
 
-                Divider()
-                    .frame(height: 50)
+                Rectangle()
+                    .fill(Color.dsSurfaceContainerHighest)
+                    .frame(width: 1, height: 50)
 
-                VStack(spacing: 4) {
+                VStack(spacing: 6) {
                     Image(systemName: "trophy.fill")
-                        .font(.title2)
-                        .foregroundStyle(.yellow)
+                        .font(.system(size: 24))
+                        .foregroundStyle(Color.dsTertiaryContainer)
                     Text("\(viewModel.milestonesAchieved.count)")
-                        .font(.title3.bold())
-                    Text("Milestones")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
+                        .font(.system(size: 22, weight: .bold, design: .rounded))
+                        .foregroundStyle(Color.dsOnSurface)
+                    Text("MILESTONES")
+                        .font(.system(size: 9, weight: .bold))
+                        .tracking(1)
+                        .foregroundStyle(Color.dsOnSurfaceVariant)
                 }
                 .frame(maxWidth: .infinity)
             }
-            .padding()
-            .background(.regularMaterial)
-            .clipShape(RoundedRectangle(cornerRadius: 14))
+            .padding(Spacing.xl)
+            .background(Color.dsSurfaceContainer)
+            .clipShape(RoundedRectangle(cornerRadius: CornerRadius.lg))
+            .ghostBorder()
 
             if !viewModel.milestonesAchieved.isEmpty {
                 ScrollView(.horizontal, showsIndicators: false) {
@@ -165,14 +155,14 @@ struct ProgressDashboardView: View {
                         ForEach(viewModel.milestonesAchieved.sorted(), id: \.self) { milestone in
                             HStack(spacing: 4) {
                                 Image(systemName: "star.fill")
-                                    .font(.caption2)
+                                    .font(.system(size: 10))
                                 Text("\(milestone) days")
-                                    .font(.caption.weight(.medium))
+                                    .font(.system(size: 12, weight: .bold))
                             }
-                            .padding(.horizontal, 10)
+                            .padding(.horizontal, 12)
                             .padding(.vertical, 6)
-                            .background(.yellow.opacity(0.15))
-                            .foregroundStyle(.orange)
+                            .background(Color.dsTertiaryDim.opacity(0.15))
+                            .foregroundStyle(Color.dsTertiaryContainer)
                             .clipShape(Capsule())
                         }
                     }
@@ -184,14 +174,16 @@ struct ProgressDashboardView: View {
     // MARK: - Recent Sessions
 
     private var recentSessionsSection: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text("Recent Sessions")
-                .font(.headline)
+        VStack(alignment: .leading, spacing: Spacing.lg) {
+            Text("RECENT SESSIONS")
+                .font(.system(size: 12, weight: .heavy, design: .rounded))
+                .tracking(3)
+                .foregroundStyle(Color.dsOnSurfaceVariant)
 
             if viewModel.recentSessions.isEmpty {
                 Text("No sessions logged yet.")
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
+                    .font(.system(size: 14))
+                    .foregroundStyle(Color.dsOnSurfaceVariant)
                     .padding()
             } else {
                 ForEach(viewModel.recentSessions) { session in
@@ -204,17 +196,22 @@ struct ProgressDashboardView: View {
     private func sessionRow(_ session: SessionLog) -> some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
-                Image(systemName: sessionIcon(session.activityType))
-                    .font(.body)
-                    .foregroundStyle(.orange)
-                    .frame(width: 28)
+                ZStack {
+                    RoundedRectangle(cornerRadius: 8)
+                        .fill(Color.dsAccentOrange.opacity(0.12))
+                        .frame(width: 32, height: 32)
+                    Image(systemName: sessionIcon(session.activityType))
+                        .font(.system(size: 14))
+                        .foregroundStyle(Color.dsAccentOrange)
+                }
 
                 VStack(alignment: .leading, spacing: 2) {
                     Text(sessionTypeName(session.activityType))
-                        .font(.subheadline.weight(.medium))
+                        .font(.system(size: 14, weight: .bold))
+                        .foregroundStyle(Color.dsOnSurface)
                     Text(formattedDate(session.createdAt))
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
+                        .font(.system(size: 11))
+                        .foregroundStyle(Color.dsOnSurfaceVariant)
                 }
 
                 Spacer()
@@ -222,72 +219,72 @@ struct ProgressDashboardView: View {
                 VStack(alignment: .trailing, spacing: 2) {
                     if let duration = session.duration {
                         Text("\(duration) min")
-                            .font(.subheadline.weight(.semibold))
+                            .font(.system(size: 13, weight: .bold, design: .rounded))
+                            .foregroundStyle(Color.dsOnSurface)
                     }
-                    HStack(spacing: 8) {
+                    HStack(spacing: 6) {
                         if let effort = session.effortLevel {
                             rpeBadge(effort)
                         }
                         if let mood = session.mood {
-                            moodBadge(mood)
+                            Text(moodEmoji(mood))
+                                .font(.system(size: 14))
                         }
                     }
                 }
             }
 
-            // Highlight chips
             let highlights = viewModel.parseChips(session.win)
             if !highlights.isEmpty {
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 6) {
                         Image(systemName: "star.fill")
-                            .font(.caption2)
-                            .foregroundStyle(.yellow)
+                            .font(.system(size: 10))
+                            .foregroundStyle(Color.dsTertiaryContainer)
                         ForEach(highlights, id: \.self) { chip in
                             Text(chip)
-                                .font(.caption2)
-                                .padding(.horizontal, 6)
-                                .padding(.vertical, 2)
-                                .background(.yellow.opacity(0.12))
-                                .foregroundStyle(.orange)
+                                .font(.system(size: 11))
+                                .padding(.horizontal, 8)
+                                .padding(.vertical, 3)
+                                .background(Color.dsTertiaryDim.opacity(0.12))
+                                .foregroundStyle(Color.dsTertiaryContainer)
                                 .clipShape(Capsule())
                         }
                     }
                 }
             }
 
-            // Next focus chips
             let focuses = viewModel.parseChips(session.focus)
             if !focuses.isEmpty {
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 6) {
                         Image(systemName: "scope")
-                            .font(.caption2)
-                            .foregroundStyle(.cyan)
+                            .font(.system(size: 10))
+                            .foregroundStyle(Color.dsSecondary)
                         ForEach(focuses, id: \.self) { chip in
                             Text(chip)
-                                .font(.caption2)
-                                .padding(.horizontal, 6)
-                                .padding(.vertical, 2)
-                                .background(.cyan.opacity(0.12))
-                                .foregroundStyle(.cyan)
+                                .font(.system(size: 11))
+                                .padding(.horizontal, 8)
+                                .padding(.vertical, 3)
+                                .background(Color.dsSecondary.opacity(0.12))
+                                .foregroundStyle(Color.dsSecondary)
                                 .clipShape(Capsule())
                         }
                     }
                 }
             }
         }
-        .padding(12)
-        .background(.regularMaterial)
-        .clipShape(RoundedRectangle(cornerRadius: 10))
+        .padding(Spacing.lg)
+        .background(Color.dsSurfaceContainer)
+        .clipShape(RoundedRectangle(cornerRadius: CornerRadius.lg))
     }
 
     private func rpeBadge(_ effort: Int) -> some View {
         HStack(spacing: 2) {
             Image(systemName: "bolt.fill")
-                .font(.caption2)
+                .font(.system(size: 10))
             Text("\(effort)")
-                .font(.caption.weight(.semibold))
+                .font(.system(size: 12, weight: .bold))
         }
         .padding(.horizontal, 6)
         .padding(.vertical, 2)
@@ -296,25 +293,20 @@ struct ProgressDashboardView: View {
         .clipShape(Capsule())
     }
 
-    private func moodBadge(_ mood: String) -> some View {
-        Text(moodEmoji(mood))
-            .font(.caption)
-    }
-
     private func rpeColor(_ rpe: Int) -> Color {
-        if rpe <= 3 { return .green }
-        if rpe <= 6 { return .orange }
-        return .red
+        if rpe <= 3 { return Color.dsSecondary }
+        if rpe <= 6 { return Color.dsAccentOrange }
+        return Color.dsError
     }
 
     private func moodEmoji(_ mood: String) -> String {
         switch mood.uppercased() {
-        case "EXCITED": return "😊"
-        case "FOCUSED": return "🎯"
-        case "OKAY": return "😐"
-        case "TIRED": return "😴"
-        case "STRESSED": return "😤"
-        default: return "😐"
+        case "EXCITED": return "\u{1F60A}"
+        case "FOCUSED": return "\u{1F3AF}"
+        case "OKAY": return "\u{1F610}"
+        case "TIRED": return "\u{1F634}"
+        case "STRESSED": return "\u{1F624}"
+        default: return "\u{1F610}"
         }
     }
 
@@ -325,16 +317,17 @@ struct ProgressDashboardView: View {
             Spacer(minLength: 60)
             Image(systemName: "chart.line.uptrend.xyaxis")
                 .font(.system(size: 48))
-                .foregroundStyle(.secondary)
+                .foregroundStyle(Color.dsOnSurfaceVariant)
             Text("No Progress Yet")
-                .font(.title3.bold())
+                .font(.system(size: 22, weight: .bold, design: .rounded))
+                .foregroundStyle(Color.dsOnSurface)
             Text("Complete training sessions to start tracking your progress and see your stats here.")
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
+                .font(.system(size: 14))
+                .foregroundStyle(Color.dsOnSurfaceVariant)
                 .multilineTextAlignment(.center)
             Spacer(minLength: 60)
         }
-        .padding(.horizontal, 32)
+        .padding(.horizontal, Spacing.xxl)
     }
 
     // MARK: - Helpers

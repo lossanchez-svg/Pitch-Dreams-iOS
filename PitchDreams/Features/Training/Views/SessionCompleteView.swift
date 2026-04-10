@@ -5,64 +5,88 @@ struct SessionCompleteView: View {
     @Environment(\.dismiss) private var dismiss
 
     var body: some View {
-        VStack(spacing: 24) {
-            Spacer()
+        ZStack {
+            Color.dsBackground
+                .ignoresSafeArea()
 
-            Image(systemName: "checkmark.seal.fill")
-                .font(.system(size: 72))
-                .foregroundStyle(.green)
-                .scaleEffect(viewModel.sessionSaved ? 1.0 : 0.5)
-                .animation(.spring(response: 0.5, dampingFraction: 0.6), value: viewModel.sessionSaved)
+            VStack(spacing: Spacing.xxl) {
+                Spacer()
 
-            Text("Session Complete!")
-                .font(.largeTitle.bold())
+                ZStack {
+                    Circle()
+                        .fill(Color.dsSecondary.opacity(0.1))
+                        .frame(width: 120, height: 120)
+                    Image(systemName: "checkmark.seal.fill")
+                        .font(.system(size: 56))
+                        .foregroundStyle(Color.dsSecondary)
+                        .scaleEffect(viewModel.sessionSaved ? 1.0 : 0.5)
+                        .animation(.spring(response: 0.5, dampingFraction: 0.6), value: viewModel.sessionSaved)
+                }
+                .dsSecondaryShadow()
 
-            Text("Great work out there.")
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
+                VStack(spacing: 8) {
+                    Text("SESSION COMPLETE")
+                        .font(.system(size: 12, weight: .heavy, design: .rounded))
+                        .tracking(3)
+                        .foregroundStyle(Color.dsSecondary)
 
-            // Summary card
-            VStack(spacing: 12) {
-                summaryRow(icon: "clock.fill", label: "Duration", value: "\(viewModel.sessionDurationMinutes) min")
-                Divider()
-                summaryRow(icon: "figure.run", label: "Drills", value: "\(viewModel.totalDrills)")
-                Divider()
-                summaryRow(icon: "flame.fill", label: "Effort (RPE)", value: "\(viewModel.reflectionRPE) / 10")
-            }
-            .padding()
-            .background(.regularMaterial)
-            .clipShape(RoundedRectangle(cornerRadius: 16))
-            .padding(.horizontal)
+                    Text("Great work out there.")
+                        .font(.system(size: 16))
+                        .foregroundStyle(Color.dsOnSurfaceVariant)
+                }
 
-            Spacer()
+                // Summary card
+                VStack(spacing: 0) {
+                    summaryRow(icon: "clock.fill", label: "Duration", value: "\(viewModel.sessionDurationMinutes) min", color: .dsSecondary)
+                    Divider().background(Color.dsSurfaceContainerHighest)
+                    summaryRow(icon: "figure.run", label: "Drills", value: "\(viewModel.totalDrills)", color: .dsAccentOrange)
+                    Divider().background(Color.dsSurfaceContainerHighest)
+                    summaryRow(icon: "flame.fill", label: "Effort (RPE)", value: "\(viewModel.reflectionRPE) / 10", color: .dsTertiaryContainer)
+                }
+                .padding(Spacing.lg)
+                .background(Color.dsSurfaceContainer)
+                .clipShape(RoundedRectangle(cornerRadius: CornerRadius.lg))
+                .ghostBorder()
+                .padding(.horizontal, Spacing.xl)
 
-            Button {
-                dismiss()
-            } label: {
-                Label("Back to Home", systemImage: "house.fill")
-                    .font(.headline)
+                Spacer()
+
+                Button {
+                    dismiss()
+                } label: {
+                    HStack(spacing: 8) {
+                        Image(systemName: "house.fill")
+                        Text("BACK TO HOME")
+                            .font(.system(size: 14, weight: .black, design: .rounded))
+                            .tracking(2)
+                    }
+                    .foregroundStyle(Color(hex: "#5B1B00"))
                     .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(.orange.gradient)
-                    .foregroundStyle(.white)
-                    .clipShape(RoundedRectangle(cornerRadius: 14))
+                    .padding(.vertical, 18)
+                    .background(DSGradient.primaryCTA)
+                    .clipShape(RoundedRectangle(cornerRadius: CornerRadius.lg))
+                    .dsPrimaryShadow()
+                }
+                .padding(.horizontal, Spacing.xl)
+                .padding(.bottom, 32)
             }
-            .padding(.horizontal)
-            .padding(.bottom, 24)
         }
     }
 
-    private func summaryRow(icon: String, label: String, value: String) -> some View {
+    private func summaryRow(icon: String, label: String, value: String, color: Color) -> some View {
         HStack {
             Image(systemName: icon)
-                .foregroundStyle(.orange)
+                .foregroundStyle(color)
                 .frame(width: 24)
-            Text(label)
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
+            Text(label.uppercased())
+                .font(.system(size: 11, weight: .bold))
+                .tracking(1)
+                .foregroundStyle(Color.dsOnSurfaceVariant)
             Spacer()
             Text(value)
-                .font(.subheadline.weight(.semibold))
+                .font(.system(size: 15, weight: .bold, design: .rounded))
+                .foregroundStyle(Color.dsOnSurface)
         }
+        .padding(.vertical, 12)
     }
 }

@@ -10,57 +10,86 @@ struct ActivityLogView: View {
     }
 
     var body: some View {
-        List {
-            Section {
-                NavigationLink {
-                    NewActivityView(childId: childId, viewModel: viewModel)
-                } label: {
-                    Label("Log New Activity", systemImage: "plus.circle.fill")
-                        .font(.headline)
-                        .foregroundStyle(.orange)
-                }
-            }
+        ZStack {
+            Color.dsBackground
+                .ignoresSafeArea()
 
-            Section("Recent Activities") {
-                if viewModel.isLoading && viewModel.recentActivities.isEmpty {
-                    HStack {
-                        Spacer()
-                        ProgressView()
-                        Spacer()
+            ScrollView {
+                VStack(spacing: Spacing.lg) {
+                    // Log New Activity CTA
+                    NavigationLink {
+                        NewActivityView(childId: childId, viewModel: viewModel)
+                    } label: {
+                        HStack(spacing: 10) {
+                            Image(systemName: "plus.circle.fill")
+                                .font(.system(size: 20))
+                            Text("LOG NEW ACTIVITY")
+                                .font(.system(size: 14, weight: .black, design: .rounded))
+                                .tracking(2)
+                        }
+                        .foregroundStyle(Color(hex: "#5B1B00"))
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 18)
+                        .background(DSGradient.primaryCTA)
+                        .clipShape(RoundedRectangle(cornerRadius: CornerRadius.lg))
+                        .dsPrimaryShadow()
                     }
-                    .listRowBackground(Color.clear)
-                } else if viewModel.recentActivities.isEmpty {
-                    VStack(spacing: 12) {
-                        Image(systemName: "figure.run.circle")
-                            .font(.largeTitle)
-                            .foregroundStyle(.secondary)
-                        Text("No Activities Yet")
-                            .font(.headline)
-                        Text("Log your first training session to start tracking progress.")
+
+                    // Section header
+                    Text("RECENT ACTIVITIES")
+                        .font(.system(size: 12, weight: .heavy, design: .rounded))
+                        .tracking(3)
+                        .foregroundStyle(Color.dsOnSurfaceVariant)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.top, 8)
+
+                    if viewModel.isLoading && viewModel.recentActivities.isEmpty {
+                        VStack {
+                            ProgressView()
+                                .tint(Color.dsSecondary)
+                        }
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 40)
+                    } else if viewModel.recentActivities.isEmpty {
+                        VStack(spacing: 12) {
+                            Image(systemName: "figure.run.circle")
+                                .font(.system(size: 40))
+                                .foregroundStyle(Color.dsOnSurfaceVariant)
+                            Text("No Activities Yet")
+                                .font(.system(size: 18, weight: .bold, design: .rounded))
+                                .foregroundStyle(Color.dsOnSurface)
+                            Text("Log your first training session to start tracking progress.")
+                                .font(.system(size: 14))
+                                .foregroundStyle(Color.dsOnSurfaceVariant)
+                                .multilineTextAlignment(.center)
+                        }
+                        .padding(.vertical, 40)
+                    } else {
+                        ForEach(viewModel.recentActivities) { activity in
+                            activityRow(activity)
+                        }
+                    }
+
+                    if let error = viewModel.errorMessage {
+                        Label(error, systemImage: "exclamationmark.triangle.fill")
                             .font(.subheadline)
-                            .foregroundStyle(.secondary)
-                            .multilineTextAlignment(.center)
-                    }
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 24)
-                    .listRowBackground(Color.clear)
-                } else {
-                    ForEach(viewModel.recentActivities) { activity in
-                        activityRow(activity)
+                            .foregroundStyle(Color.dsError)
                     }
                 }
-            }
-
-            if let error = viewModel.errorMessage {
-                Section {
-                    Label(error, systemImage: "exclamationmark.triangle.fill")
-                        .foregroundStyle(.red)
-                        .font(.subheadline)
-                }
+                .padding(Spacing.xl)
+                .padding(.bottom, 100)
             }
         }
-        .navigationTitle("Activity Log")
         .navigationBarTitleDisplayMode(.inline)
+        .toolbarBackground(Color.dsBackground, for: .navigationBar)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                Text("ACTIVITY LOG")
+                    .font(.system(size: 14, weight: .black, design: .rounded))
+                    .tracking(2)
+                    .foregroundStyle(Color.dsSecondary)
+            }
+        }
         .refreshable {
             await viewModel.loadRecent()
         }
@@ -69,36 +98,42 @@ struct ActivityLogView: View {
         }
     }
 
-    // MARK: - Activity Row
-
     private func activityRow(_ activity: ActivityItem) -> some View {
-        HStack {
-            Image(systemName: activityIcon(activity.activityType))
-                .font(.title3)
-                .foregroundStyle(.orange)
-                .frame(width: 32)
+        HStack(spacing: 14) {
+            ZStack {
+                RoundedRectangle(cornerRadius: 10)
+                    .fill(Color.dsAccentOrange.opacity(0.12))
+                    .frame(width: 40, height: 40)
+                Image(systemName: activityIcon(activity.activityType))
+                    .font(.system(size: 16))
+                    .foregroundStyle(Color.dsAccentOrange)
+            }
 
-            VStack(alignment: .leading, spacing: 2) {
+            VStack(alignment: .leading, spacing: 3) {
                 Text(activityDisplayName(activity.activityType))
-                    .font(.subheadline.weight(.medium))
+                    .font(.system(size: 15, weight: .bold))
+                    .foregroundStyle(Color.dsOnSurface)
                 Text(formattedDate(activity.createdAt))
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
+                    .font(.system(size: 12))
+                    .foregroundStyle(Color.dsOnSurfaceVariant)
             }
 
             Spacer()
 
-            VStack(alignment: .trailing, spacing: 2) {
+            VStack(alignment: .trailing, spacing: 3) {
                 Text("\(activity.durationMinutes) min")
-                    .font(.subheadline.weight(.semibold))
+                    .font(.system(size: 14, weight: .bold, design: .rounded))
+                    .foregroundStyle(Color.dsOnSurface)
                 if let impact = activity.gameIQImpact {
                     Text(impact.capitalized)
-                        .font(.caption2)
-                        .foregroundStyle(.secondary)
+                        .font(.system(size: 11))
+                        .foregroundStyle(Color.dsOnSurfaceVariant)
                 }
             }
         }
-        .padding(.vertical, 2)
+        .padding(Spacing.lg)
+        .background(Color.dsSurfaceContainer)
+        .clipShape(RoundedRectangle(cornerRadius: CornerRadius.lg))
     }
 
     // MARK: - Helpers

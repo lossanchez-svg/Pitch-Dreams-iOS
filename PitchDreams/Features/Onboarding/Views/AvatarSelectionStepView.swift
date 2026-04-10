@@ -150,6 +150,10 @@ struct AvatarSelectionStepView: View {
                 selectedIndex = idx
             }
         }
+        .onChange(of: selectedIndex) { _ in
+            // Keep viewModel in sync so swiping past this step still persists the choice
+            viewModel.avatarId = selectedAvatar.rawValue
+        }
     }
 
     // MARK: - Hero Avatar

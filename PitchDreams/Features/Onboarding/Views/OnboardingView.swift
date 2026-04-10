@@ -40,21 +40,19 @@ struct OnboardingView: View {
                         .padding(.horizontal, 24)
                 }
 
-                // Content
-                TabView(selection: $viewModel.step) {
-                    SignupStepView(viewModel: viewModel)
-                        .tag(0)
-                    AvatarSelectionStepView(viewModel: viewModel)
-                        .tag(1)
-                    ChildProfileStepView(viewModel: viewModel)
-                        .tag(2)
-                    PermissionsStepView(viewModel: viewModel)
-                        .tag(3)
-                    PinSetupStepView(viewModel: viewModel)
-                        .tag(4)
+                // Content — no swipe, step changes only via CTA buttons
+                Group {
+                    switch viewModel.step {
+                    case 0: SignupStepView(viewModel: viewModel)
+                    case 1: AvatarSelectionStepView(viewModel: viewModel)
+                    case 2: ChildProfileStepView(viewModel: viewModel)
+                    case 3: PermissionsStepView(viewModel: viewModel)
+                    case 4: PinSetupStepView(viewModel: viewModel)
+                    default: EmptyView()
+                    }
                 }
-                .tabViewStyle(.page(indexDisplayMode: .never))
                 .animation(.easeInOut, value: viewModel.step)
+                .transition(.slide)
 
                 if let error = viewModel.errorMessage {
                     Text(error)

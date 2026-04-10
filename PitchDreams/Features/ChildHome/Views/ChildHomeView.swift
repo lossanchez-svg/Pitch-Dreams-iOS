@@ -19,6 +19,7 @@ struct ChildHomeView: View {
     @ObservedObject private var missionsVM = MissionsViewModel.shared
     @State private var completedMission: Mission?
     @AppStorage("hasCompletedFirstSession") private var hasCompletedFirstSession = false
+    @State private var showAvatarPicker = false
 
     init(childId: String) {
         self.childId = childId
@@ -187,6 +188,12 @@ struct ChildHomeView: View {
                 }
             }
         }
+        .sheet(isPresented: $showAvatarPicker) {
+            AvatarChangeSheet(childId: childId) {
+                showAvatarPicker = false
+                Task { await viewModel.loadData() }
+            }
+        }
         .onChange(of: speechRecognizer.transcript) { newTranscript in
             guard !newTranscript.isEmpty else { return }
             processVoiceCommand(newTranscript)
@@ -239,10 +246,11 @@ struct ChildHomeView: View {
                     .tracking(0.5)
                     .padding(.bottom, 4)
 
-                // Large avatar
+                // Large avatar — tappable to change
                 ZStack(alignment: .bottomTrailing) {
                     heroAvatarImage
                         .frame(width: 260, height: 260)
+                        .onTapGesture { showAvatarPicker = true }
 
                     // PRO badge
                     if currentStage.rawValue >= AvatarStage.pro.rawValue {

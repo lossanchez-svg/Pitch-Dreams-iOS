@@ -105,6 +105,7 @@
 		A735B68328ED46A377A3BAA7 /* AnimatedTacticalTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3327BA7EE2CB012553043FC9 /* AnimatedTacticalTypes.swift */; };
 		A77167E58911ACDC476F9BD5 /* MockCoachVoice.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42894954332436074FDB959 /* MockCoachVoice.swift */; };
 		A86E2E55DA4A4363F89ACE8E /* AuthenticatedUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 528D338C57FDF31E1DF0206D /* AuthenticatedUser.swift */; };
+		A9A114F7FAF76B8B5F96FA9E /* AvatarChangeSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7568D4C38E7C33CB073A06E0 /* AvatarChangeSheet.swift */; };
 		AA760FD8B1E943DE24648240 /* AnimatedArrowShapeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9753D0C85DC6ED42D23937F6 /* AnimatedArrowShapeTests.swift */; };
 		AC1292FFAE7783075F6B5369 /* TrainingSessionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 238032F237E996BE29A2DFB9 /* TrainingSessionView.swift */; };
 		AC30FA1D64327942009E3E35 /* MissionsDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE76DAD8FA76670ED1626907 /* MissionsDetailView.swift */; };
@@ -244,6 +245,7 @@
 		6C81745521AE0440B38EEC10 /* SpeedLinesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeedLinesView.swift; sourceTree = "<group>"; };
 		70D02BCD1734281F9F306858 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		740BE872603869C7480F30EC /* BallPhysics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BallPhysics.swift; sourceTree = "<group>"; };
+		7568D4C38E7C33CB073A06E0 /* AvatarChangeSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvatarChangeSheet.swift; sourceTree = "<group>"; };
 		75D58C010CD51311C08A15A2 /* FirstTouchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstTouchView.swift; sourceTree = "<group>"; };
 		7600A9C6496EE991340EE21C /* ForgotPasswordViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForgotPasswordViewModel.swift; sourceTree = "<group>"; };
 		777246FAE75DA053681911F5 /* ModelDecodingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelDecodingTests.swift; sourceTree = "<group>"; };
@@ -779,6 +781,7 @@
 		BA14F8A988AAF4FA9ED34BC4 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				7568D4C38E7C33CB073A06E0 /* AvatarChangeSheet.swift */,
 				C42D9F277122E2D017C9DC3A /* ChildHomeView.swift */,
 				4BE8FF1164FABA36C38B9E90 /* ConsistencyRingView.swift */,
 				CAC7C92AA08B3A12182F54AF /* EvolutionModal.swift */,
@@ -1133,6 +1136,7 @@
 				29D934035A6AE394F91A6779 /* AuthManager.swift in Sources */,
 				A86E2E55DA4A4363F89ACE8E /* AuthenticatedUser.swift in Sources */,
 				32EB8C56311ADEB0D955A178 /* Avatar.swift in Sources */,
+				A9A114F7FAF76B8B5F96FA9E /* AvatarChangeSheet.swift in Sources */,
 				1381A385EA61BBB663EC4AB2 /* AvatarSelectionStepView.swift in Sources */,
 				2E3E957DA57FC46B58A99CC5 /* BallPhysics.swift in Sources */,
 				4EE9EB135A78083B0E619AF3 /* CelebrationModifier.swift in Sources */,

@@ -26,6 +26,7 @@ enum APIRouter: APIEndpoint {
 
     // MARK: - Child Profile
     case getProfile(childId: String)
+    case updateAvatar(childId: String, avatarId: String)
 
     // MARK: - Sessions
     case listSessions(childId: String, limit: Int = 20)
@@ -109,6 +110,7 @@ enum APIRouter: APIEndpoint {
         case .exportChildData(let id): return "/parent/children/\(id)/export"
         case .deleteChild(let id): return "/parent/children/\(id)"
         case .getProfile(let id): return "/children/\(id)/profile"
+        case .updateAvatar(let id, _): return "/children/\(id)/profile"
         case .listSessions(let id, _): return "/children/\(id)/sessions"
         case .createSession(let id, _): return "/children/\(id)/sessions"
         case .createQuickSession(let id, _): return "/children/\(id)/sessions/quick"
@@ -157,7 +159,7 @@ enum APIRouter: APIEndpoint {
              .createFacility, .createCoach, .createProgram,
              .signup, .forgotPassword, .resetPassword, .createChild, .resetChildProgress:
             return .post
-        case .updateChildPermissions, .updateCheckIn, .updateArcState:
+        case .updateChildPermissions, .updateCheckIn, .updateArcState, .updateAvatar:
             return .patch
         case .setChildPin:
             return .put
@@ -210,6 +212,7 @@ enum APIRouter: APIEndpoint {
         case .createFacility(let body): return body
         case .createCoach(let body): return body
         case .createProgram(let body): return body
+        case .updateAvatar(_, let avatarId): return ["avatarId": avatarId] as [String: String]
         default: return nil
         }
     }

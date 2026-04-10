@@ -16,6 +16,8 @@ struct ChildHomeView: View {
     @State private var showFirstSessionGuide = false
     @State private var showEvolutionModal = false
     @State private var evolvedTo: AvatarStage?
+    @ObservedObject private var missionsVM = MissionsViewModel.shared
+    @State private var completedMission: Mission?
     @AppStorage("hasCompletedFirstSession") private var hasCompletedFirstSession = false
 
     init(childId: String) {
@@ -23,36 +25,61 @@ struct ChildHomeView: View {
         _viewModel = StateObject(wrappedValue: ChildHomeViewModel(childId: childId))
     }
 
+    // MARK: - Derived State
+
+    private var avatarAssetName: String {
+        Avatar.assetName(
+            for: viewModel.profile?.avatarId,
+            milestones: viewModel.streakData?.milestones ?? [],
+            localMissionXP: missionsVM.localMissionXP
+        )
+    }
+
+    private var currentStage: AvatarStage {
+        AvatarStage.current(
+            forMilestones: viewModel.streakData?.milestones ?? [],
+            localMissionXP: missionsVM.localMissionXP
+        )
+    }
+
+    private var resolvedAvatar: Avatar {
+        Avatar.resolve(viewModel.profile?.avatarId)
+    }
+
+    // MARK: - Body
+
     var body: some View {
         ZStack {
-            Color(.systemBackground)
+            Color.dsBackground
                 .ignoresSafeArea()
 
-            ScrollView(.vertical, showsIndicators: true) {
-                VStack(alignment: .leading, spacing: 16) {
+            ScrollView(.vertical, showsIndicators: false) {
+                VStack(spacing: 0) {
                     if viewModel.isLoading && viewModel.profile == nil {
                         skeletonContent
+                            .padding(.horizontal, Spacing.xl)
                     } else {
-                        welcomeSection
-                        ConsistencyRingView(
-                            streak: viewModel.streakCount,
-                            maxStreak: 30,
-                            freezes: viewModel.freezeCount
-                        )
+                        heroSection
+                        statsBand
+                            .padding(.horizontal, Spacing.xl)
+                            .padding(.top, -32)
+                            .zIndex(1)
                         quickActions
-                        checkInStatus
-
+                            .padding(.horizontal, Spacing.xl)
+                            .padding(.top, Spacing.xxl)
+                        missionsCard
+                            .padding(.horizontal, Spacing.xl)
+                            .padding(.top, Spacing.xxl)
                         if let nudge = viewModel.nudge {
                             coachNudgeCard(nudge)
+                                .padding(.horizontal, Spacing.xl)
+                                .padding(.top, Spacing.xxl)
                         }
-
                         exploreSection
+                            .padding(.top, 40)
                     }
                 }
-                .padding(.horizontal, 16)
-                .padding(.top, 8)
-                .padding(.bottom, 32)
-                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.bottom, 120)
             }
         }
         .safeAreaInset(edge: .bottom) {
@@ -60,39 +87,61 @@ struct ChildHomeView: View {
                 VoiceCommandBar(speechRecognizer: speechRecognizer, lastCommand: $lastVoiceCommand)
             }
         }
-        .navigationTitle(viewModel.profile?.nickname ?? "Home")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
-                Button {
-                    Task { await speechRecognizer.toggleListening() }
-                } label: {
-                    Image(systemName: speechRecognizer.isListening ? "mic.fill" : "mic")
-                        .foregroundStyle(speechRecognizer.isListening ? .red : .cyan)
+                HStack(spacing: 10) {
+                    avatarThumbnail
+                        .frame(width: 34, height: 34)
+                        .clipShape(Circle())
+                        .overlay(Circle().stroke(Color.dsSecondary, lineWidth: 2))
+
+                    Text("PITCH DREAMS")
+                        .font(.system(size: 16, weight: .black, design: .rounded))
+                        .italic()
+                        .foregroundStyle(
+                            LinearGradient(
+                                colors: [.white, .gray],
+                                startPoint: .leading,
+                                endPoint: .trailing
+                            )
+                        )
                 }
             }
             ToolbarItem(placement: .navigationBarTrailing) {
-                Menu {
-                    Button(role: .destructive) {
-                        authManager.logout()
-                    } label: {
-                        Label("Log Out", systemImage: "rectangle.portrait.and.arrow.right")
-                    }
+                Button {
+                    Task { await speechRecognizer.toggleListening() }
                 } label: {
-                    Image(systemName: "person.circle")
-                        .font(.title3)
+                    Image(systemName: speechRecognizer.isListening ? "mic.fill" : "bolt.fill")
+                        .foregroundStyle(speechRecognizer.isListening ? .red : Color.dsSecondary)
+                        .frame(width: 34, height: 34)
+                        .background(Color.dsSurfaceContainerHighest.opacity(0.4))
+                        .clipShape(Circle())
                 }
             }
         }
+        .toolbarBackground(Color.dsBackground.opacity(0.6), for: .navigationBar)
+        .toolbarBackground(.visible, for: .navigationBar)
         .refreshable {
             await viewModel.loadData()
         }
         .task {
             await viewModel.loadData()
             voiceEnabled = viewModel.profile?.voiceEnabled ?? false
+            missionsVM.load(childId: childId)
             checkForMilestones()
             checkFirstSession()
             checkForAvatarEvolution()
+        }
+        .onReceive(missionsVM.$lastCompleted) { mission in
+            guard let mission else { return }
+            completedMission = mission
+            missionsVM.lastCompleted = nil
+        }
+        .sheet(item: $completedMission) { mission in
+            MissionCompleteModal(mission: mission) {
+                completedMission = nil
+            }
         }
         .fullScreenCover(isPresented: $showFirstSessionGuide) {
             FirstSessionGuideView(childId: childId) {
@@ -135,6 +184,506 @@ struct ChildHomeView: View {
         }
     }
 
+    // MARK: - Hero Section
+
+    private var heroSection: some View {
+        ZStack {
+            // Radial glow backdrop
+            RadialGradient(
+                colors: [
+                    avatarGlowColor.opacity(0.15),
+                    Color.clear
+                ],
+                center: .center,
+                startRadius: 20,
+                endRadius: 250
+            )
+            .frame(height: 420)
+
+            VStack(spacing: 12) {
+                // Greeting
+                Text("\(viewModel.greeting), \(viewModel.profile?.nickname ?? "player")")
+                    .font(.system(size: 14, weight: .medium))
+                    .foregroundStyle(Color.dsOnSurfaceVariant)
+                    .tracking(0.5)
+
+                // Large avatar
+                ZStack(alignment: .bottomTrailing) {
+                    heroAvatarImage
+                        .frame(width: 240, height: 240)
+
+                    // PRO badge
+                    if currentStage.rawValue >= AvatarStage.pro.rawValue {
+                        VStack(spacing: 4) {
+                            Text(currentStage.title.uppercased())
+                                .font(.system(size: 10, weight: .black, design: .rounded))
+                                .tracking(3)
+                                .foregroundStyle(Color.dsSecondary)
+
+                            HStack(spacing: 4) {
+                                ForEach(AvatarStage.allCases, id: \.rawValue) { stage in
+                                    Circle()
+                                        .fill(stage <= currentStage ? Color.dsSecondary : Color.dsSurfaceContainerHighest)
+                                        .frame(width: 6, height: 6)
+                                        .shadow(color: stage <= currentStage ? Color.dsSecondary.opacity(0.8) : .clear, radius: 4)
+                                }
+                            }
+                        }
+                        .padding(.horizontal, 14)
+                        .padding(.vertical, 8)
+                        .background(Color.dsSurfaceContainerHighest.opacity(0.9))
+                        .background(.ultraThinMaterial)
+                        .clipShape(RoundedRectangle(cornerRadius: 12))
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 12)
+                                .stroke(Color.dsSecondary.opacity(0.2), lineWidth: 1)
+                        )
+                    }
+                }
+
+                // Next evolution preview (right side overlay)
+            }
+            .padding(.top, 24)
+
+            // Next evolution silhouette
+            if currentStage != .legend {
+                nextEvolutionPreview
+            }
+        }
+        .frame(maxWidth: .infinity)
+    }
+
+    @ViewBuilder
+    private var heroAvatarImage: some View {
+        if UIImage(named: avatarAssetName) != nil {
+            Image(avatarAssetName)
+                .resizable()
+                .scaledToFit()
+                .shadow(color: avatarGlowColor.opacity(0.2), radius: 30)
+        } else {
+            Image(systemName: "figure.soccer")
+                .font(.system(size: 80))
+                .foregroundStyle(Color.dsSecondary)
+                .frame(width: 240, height: 240)
+                .background(Color.dsSecondary.opacity(0.08))
+                .clipShape(Circle())
+        }
+    }
+
+    private var nextEvolutionPreview: some View {
+        VStack(spacing: 8) {
+            let nextStage = currentStage == .rookie ? AvatarStage.pro : AvatarStage.legend
+            let nextAsset = resolvedAvatar.assetName(stage: nextStage)
+
+            if UIImage(named: nextAsset) != nil {
+                Image(nextAsset)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 48, height: 48)
+                    .grayscale(1)
+                    .opacity(0.4)
+            } else {
+                Circle()
+                    .fill(Color.dsSurfaceContainerHighest)
+                    .frame(width: 48, height: 48)
+                    .overlay(
+                        Image(systemName: "lock.fill")
+                            .foregroundStyle(Color.dsOnSurfaceVariant.opacity(0.4))
+                    )
+            }
+
+            Text(daysToNextEvolution)
+                .font(.system(size: 8, weight: .bold))
+                .textCase(.uppercase)
+                .tracking(0.5)
+                .foregroundStyle(Color.dsOnSurfaceVariant)
+                .multilineTextAlignment(.center)
+                .frame(width: 60)
+        }
+        .padding(12)
+        .background(Color.dsSurfaceContainer.opacity(0.6))
+        .background(.ultraThinMaterial)
+        .clipShape(RoundedRectangle(cornerRadius: 16))
+        .overlay(
+            RoundedRectangle(cornerRadius: 16)
+                .stroke(Color.white.opacity(0.05), lineWidth: 1)
+        )
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .trailing)
+        .padding(.trailing, 16)
+    }
+
+    private var daysToNextEvolution: String {
+        let nextMilestone = currentStage == .rookie ? AvatarStage.pro.unlockMilestone : AvatarStage.legend.unlockMilestone
+        let current = viewModel.streakData?.milestones.max() ?? 0
+        let remaining = max(0, nextMilestone - current)
+        return "\(remaining) more\ndays to\nunlock"
+    }
+
+    private var avatarGlowColor: Color {
+        switch resolvedAvatar {
+        case .panther: return Color(hex: "#8B5CF6") // violet
+        case .wolf: return Color.dsSecondary
+        case .lion: return Color.dsAccentOrange
+        case .eagle: return Color.dsSecondary
+        case .fox: return Color.dsAccentOrange
+        case .shark: return Color.dsSecondary
+        case .bear: return Color.dsTertiaryContainer
+        case .default: return Color.dsSecondary
+        }
+    }
+
+    // MARK: - Avatar Thumbnail (toolbar)
+
+    @ViewBuilder
+    private var avatarThumbnail: some View {
+        if UIImage(named: avatarAssetName) != nil {
+            Image(avatarAssetName)
+                .resizable()
+                .scaledToFill()
+        } else {
+            Image(systemName: "figure.soccer")
+                .font(.caption)
+                .foregroundStyle(Color.dsSecondary)
+                .frame(width: 34, height: 34)
+                .background(Color.dsSecondary.opacity(0.12))
+        }
+    }
+
+    // MARK: - Stats Band
+
+    private var statsBand: some View {
+        HStack(spacing: 0) {
+            // Consistency ring (left)
+            ZStack {
+                Circle()
+                    .stroke(Color.dsSurfaceContainerHighest, lineWidth: 4)
+                Circle()
+                    .trim(from: 0, to: ringProgress)
+                    .stroke(
+                        Color.dsSecondary,
+                        style: StrokeStyle(lineWidth: 4, lineCap: .round)
+                    )
+                    .rotationEffect(.degrees(-90))
+                    .animation(.easeInOut(duration: 0.8), value: ringProgress)
+
+                VStack(spacing: 2) {
+                    Text("\(viewModel.streakCount)")
+                        .font(.system(size: 24, weight: .black, design: .rounded))
+                        .foregroundStyle(Color.dsOnSurface)
+                    Image(systemName: "flame.fill")
+                        .font(.system(size: 12))
+                        .foregroundStyle(Color.dsAccentOrange)
+                }
+            }
+            .frame(width: 64, height: 64)
+
+            // Stat chips (right)
+            HStack(spacing: 0) {
+                Spacer()
+                statChip(icon: "bolt", color: .dsSecondary, label: "Target: \(30)")
+                Spacer()
+                statChip(icon: "chart.bar.fill", color: .dsTertiaryContainer, label: "\(progressPercent)%")
+                Spacer()
+                statChip(icon: "shield.fill", color: .dsError, label: "Freezes: \(viewModel.freezeCount)")
+                Spacer()
+            }
+            .frame(maxWidth: .infinity)
+        }
+        .padding(Spacing.xl)
+        .background(Color.dsSurfaceContainerLow.opacity(0.8))
+        .background(.ultraThinMaterial)
+        .clipShape(RoundedRectangle(cornerRadius: CornerRadius.lg))
+        .overlay(
+            RoundedRectangle(cornerRadius: CornerRadius.lg)
+                .stroke(Color.white.opacity(0.05), lineWidth: 1)
+        )
+        .shadow(color: Color.black.opacity(0.3), radius: 20, y: 10)
+    }
+
+    private func statChip(icon: String, color: Color, label: String) -> some View {
+        VStack(spacing: 4) {
+            Image(systemName: icon)
+                .font(.system(size: 14))
+                .foregroundStyle(color)
+            Text(label)
+                .font(.system(size: 10, weight: .bold))
+                .textCase(.uppercase)
+                .tracking(0.5)
+                .foregroundStyle(Color.dsOnSurfaceVariant)
+        }
+    }
+
+    private var ringProgress: Double {
+        guard 30 > 0 else { return 0 }
+        return min(1.0, Double(viewModel.streakCount) / 30.0)
+    }
+
+    private var progressPercent: Int {
+        Int(ringProgress * 100)
+    }
+
+    // MARK: - Quick Actions
+
+    private var quickActions: some View {
+        HStack(spacing: Spacing.lg) {
+            NavigationLink {
+                TrainingSessionView(childId: childId)
+            } label: {
+                VStack(spacing: 12) {
+                    ZStack {
+                        Circle()
+                            .fill(Color.white.opacity(0.2))
+                            .frame(width: 48, height: 48)
+                        Image(systemName: "figure.run")
+                            .font(.system(size: 24))
+                            .foregroundStyle(Color(hex: "#5B1B00"))
+                    }
+                    Text("START TRAINING")
+                        .font(.system(size: 12, weight: .black, design: .rounded))
+                        .tracking(1.5)
+                        .foregroundStyle(Color(hex: "#5B1B00"))
+                }
+                .frame(maxWidth: .infinity)
+                .frame(height: 140)
+                .background(DSGradient.primaryCTA)
+                .clipShape(RoundedRectangle(cornerRadius: CornerRadius.lg))
+                .dsPrimaryShadow()
+            }
+            .buttonStyle(.plain)
+
+            NavigationLink {
+                QuickLogView(childId: childId)
+            } label: {
+                VStack(spacing: 12) {
+                    ZStack {
+                        Circle()
+                            .fill(Color.black.opacity(0.1))
+                            .frame(width: 48, height: 48)
+                        Image(systemName: "plus")
+                            .font(.system(size: 24))
+                            .foregroundStyle(Color(hex: "#00363C"))
+                    }
+                    Text("LOG SESSION")
+                        .font(.system(size: 12, weight: .black, design: .rounded))
+                        .tracking(1.5)
+                        .foregroundStyle(Color(hex: "#00363C"))
+                }
+                .frame(maxWidth: .infinity)
+                .frame(height: 140)
+                .background(DSGradient.secondaryCTA)
+                .clipShape(RoundedRectangle(cornerRadius: CornerRadius.lg))
+                .dsSecondaryShadow()
+            }
+            .buttonStyle(.plain)
+        }
+    }
+
+    // MARK: - Missions Card
+
+    private var missionsCard: some View {
+        VStack(alignment: .leading, spacing: Spacing.lg) {
+            HStack {
+                Text("MISSIONS")
+                    .font(.system(size: 12, weight: .heavy, design: .rounded))
+                    .tracking(3)
+                    .foregroundStyle(Color.dsOnSurface)
+                Spacer()
+                NavigationLink {
+                    MissionsDetailView(childId: childId)
+                } label: {
+                    Text("ACTIVE")
+                        .font(.system(size: 10, weight: .bold))
+                        .tracking(1)
+                        .foregroundStyle(Color.dsSecondary)
+                        .padding(.horizontal, 8)
+                        .padding(.vertical, 3)
+                        .background(Color.dsSecondary.opacity(0.1))
+                        .clipShape(Capsule())
+                }
+            }
+
+            let completed = missionsVM.weeklyMissions.filter(\.isCompleted).count
+            let total = max(missionsVM.weeklyMissions.count, 3)
+
+            VStack(alignment: .leading, spacing: 8) {
+                HStack {
+                    Text("\(completed) of \(total) missions complete")
+                        .font(.system(size: 15, weight: .bold))
+                        .foregroundStyle(Color.dsOnSurface)
+                    Spacer()
+                    Text("\(total > 0 ? completed * 100 / total : 0)%")
+                        .font(.system(size: 14, weight: .black))
+                        .foregroundStyle(Color.dsSecondary)
+                }
+
+                GeometryReader { geo in
+                    ZStack(alignment: .leading) {
+                        Capsule()
+                            .fill(Color.dsSurfaceContainerHighest)
+                            .frame(height: 16)
+
+                        Capsule()
+                            .fill(
+                                LinearGradient(
+                                    colors: [.dsSecondary, Color(hex: "#34D9EC")],
+                                    startPoint: .leading,
+                                    endPoint: .trailing
+                                )
+                            )
+                            .frame(width: geo.size.width * CGFloat(total > 0 ? completed : 0) / CGFloat(total), height: 16)
+                            .shadow(color: Color.dsSecondary.opacity(0.5), radius: 10)
+                    }
+                }
+                .frame(height: 16)
+            }
+        }
+        .padding(Spacing.xl)
+        .background(Color.dsSurfaceContainer)
+        .clipShape(RoundedRectangle(cornerRadius: CornerRadius.lg))
+        .ghostBorder()
+    }
+
+    // MARK: - Coach Nudge
+
+    private func coachNudgeCard(_ nudge: CoachNudge) -> some View {
+        HStack(alignment: .bottom, spacing: Spacing.lg) {
+            // Coach portrait
+            coachPortrait
+                .frame(width: 72, height: 72)
+                .clipShape(RoundedRectangle(cornerRadius: 16))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 16)
+                        .stroke(Color.dsTertiaryContainer, lineWidth: 3)
+                        .padding(.top, 56) // bottom edge only
+                )
+
+            // Speech bubble
+            VStack(alignment: .leading, spacing: 8) {
+                Text("\"\(nudge.message)\"")
+                    .font(.system(size: 14, weight: .regular))
+                    .italic()
+                    .foregroundStyle(Color.dsOnSurface)
+                    .lineSpacing(6)
+
+                Text("-- COACH KAI")
+                    .font(.system(size: 10, weight: .black, design: .rounded))
+                    .tracking(3)
+                    .foregroundStyle(Color.dsTertiaryContainer)
+            }
+            .padding(Spacing.lg)
+            .background(Color.dsSurfaceContainerHigh)
+            .clipShape(
+                RoundedRectangle(cornerRadius: 16)
+            )
+        }
+    }
+
+    @ViewBuilder
+    private var coachPortrait: some View {
+        // Placeholder for coach art — use SF Symbol
+        ZStack {
+            Color.dsSurfaceContainerHighest
+            Image(systemName: "person.fill.viewfinder")
+                .font(.system(size: 28))
+                .foregroundStyle(Color.dsTertiaryContainer)
+        }
+    }
+
+    // MARK: - Explore
+
+    private var exploreSection: some View {
+        VStack(alignment: .leading, spacing: Spacing.lg) {
+            HStack {
+                Text("EXPLORE SKILLS")
+                    .font(.system(size: 12, weight: .heavy, design: .rounded))
+                    .tracking(3)
+                    .foregroundStyle(Color.dsOnSurface)
+                Spacer()
+                Image(systemName: "chevron.right")
+                    .font(.caption)
+                    .foregroundStyle(Color.dsOnSurfaceVariant)
+            }
+            .padding(.horizontal, Spacing.xl)
+
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: Spacing.lg) {
+                    NavigationLink {
+                        FirstTouchView(childId: childId)
+                    } label: {
+                        exploreSkillCard(title: "First Touch", color: .dsAccentOrange)
+                    }
+                    .buttonStyle(.plain)
+
+                    NavigationLink {
+                        SkillTrackView(childId: childId)
+                    } label: {
+                        exploreSkillCard(title: "Skills", color: .dsSecondary)
+                    }
+                    .buttonStyle(.plain)
+
+                    NavigationLink {
+                        LearnView(childId: childId)
+                    } label: {
+                        exploreSkillCard(title: "Learn", color: Color(hex: "#8B5CF6"))
+                    }
+                    .buttonStyle(.plain)
+                }
+                .padding(.horizontal, Spacing.xl)
+            }
+        }
+    }
+
+    private func exploreSkillCard(title: String, color: Color) -> some View {
+        ZStack(alignment: .bottomLeading) {
+            // Background with gradient overlay
+            RoundedRectangle(cornerRadius: CornerRadius.lg)
+                .fill(Color.dsSurfaceContainer)
+                .overlay(
+                    LinearGradient(
+                        colors: [Color.dsBackground, .clear],
+                        startPoint: .bottom,
+                        endPoint: .top
+                    )
+                )
+            // Content
+            VStack(alignment: .leading) {
+                Spacer()
+                Text(title.uppercased())
+                    .font(.system(size: 12, weight: .black, design: .rounded))
+                    .tracking(1)
+                    .foregroundStyle(Color.dsOnSurface)
+            }
+            .padding(12)
+        }
+        .frame(width: 140, height: 190)
+        .clipShape(RoundedRectangle(cornerRadius: CornerRadius.lg))
+    }
+
+    // MARK: - Skeleton
+
+    private var skeletonContent: some View {
+        VStack(spacing: 20) {
+            VStack(alignment: .leading, spacing: 4) {
+                SkeletonView(width: 200, height: 22)
+                SkeletonView(width: 140, height: 14)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+
+            SkeletonStreakRing()
+            SkeletonQuickActions()
+            SkeletonCard()
+
+            VStack(alignment: .leading, spacing: 12) {
+                SkeletonView(width: 80, height: 18)
+                SkeletonCard()
+                HStack(spacing: 12) {
+                    SkeletonCard()
+                    SkeletonCard()
+                }
+            }
+        }
+    }
+
     // MARK: - Voice
 
     private func processVoiceCommand(_ transcript: String) {
@@ -155,262 +704,18 @@ struct ChildHomeView: View {
         }
     }
 
-    // MARK: - Welcome
-
-    private var welcomeSection: some View {
-        HStack(spacing: 14) {
-            avatarImage
-                .frame(width: 52, height: 52)
-                .clipShape(Circle())
-
-            VStack(alignment: .leading, spacing: 4) {
-                Text("\(viewModel.greeting), \(viewModel.profile?.nickname ?? "player")!")
-                    .font(.title2.bold())
-                Text("Every session counts.")
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
-            }
-            Spacer()
-        }
-    }
-
-    @ViewBuilder
-    private var avatarImage: some View {
-        let assetName = Avatar.assetName(
-            for: viewModel.profile?.avatarId,
-            milestones: viewModel.streakData?.milestones ?? []
-        )
-        if UIImage(named: assetName) != nil {
-            Image(assetName)
-                .resizable()
-                .scaledToFill()
-        } else {
-            Image(systemName: "figure.soccer")
-                .font(.title)
-                .foregroundStyle(.cyan)
-                .frame(width: 52, height: 52)
-                .background(.cyan.opacity(0.12))
-        }
-    }
-
-    // MARK: - Streak
-
-    private var streakCard: some View {
-        ConsistencyRingView(
-            streak: viewModel.streakCount,
-            maxStreak: 30,
-            freezes: viewModel.freezeCount
-        )
-    }
-
-    // MARK: - Quick Actions
-
-    private var quickActions: some View {
-        HStack(spacing: 12) {
-            NavigationLink {
-                TrainingSessionView(childId: childId)
-            } label: {
-                Label("Start Training", systemImage: "figure.run")
-                    .font(.headline)
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(.orange.gradient)
-                    .foregroundStyle(.white)
-                    .clipShape(RoundedRectangle(cornerRadius: 12))
-            }
-
-            NavigationLink {
-                QuickLogView(childId: childId)
-            } label: {
-                Label("Log Session", systemImage: "plus.circle.fill")
-                    .font(.headline)
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(.purple.gradient)
-                    .foregroundStyle(.white)
-                    .clipShape(RoundedRectangle(cornerRadius: 12))
-            }
-        }
-    }
-
-    // MARK: - Check-in Status
-
-    private var checkInStatus: some View {
-        Group {
-            if viewModel.hasCheckedInToday {
-                HStack {
-                    Image(systemName: "checkmark.circle.fill")
-                        .foregroundStyle(.green)
-                    Text("Checked in today")
-                        .font(.subheadline.weight(.medium))
-                    Spacer()
-                    if let mode = viewModel.todayCheckIn?.mode {
-                        Text(modeLabel(mode))
-                            .font(.caption.weight(.semibold))
-                            .padding(.horizontal, 10)
-                            .padding(.vertical, 4)
-                            .background(modeColor(mode).opacity(0.15))
-                            .foregroundStyle(modeColor(mode))
-                            .clipShape(Capsule())
-                    }
-                }
-                .padding()
-                .background(.regularMaterial)
-                .clipShape(RoundedRectangle(cornerRadius: 12))
-            } else {
-                NavigationLink {
-                    TrainingSessionView(childId: childId)
-                } label: {
-                    HStack {
-                        Image(systemName: "heart.text.clipboard")
-                            .foregroundStyle(.cyan)
-                        Text("Check in before training")
-                            .font(.subheadline)
-                        Spacer()
-                        Image(systemName: "chevron.right")
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                    }
-                    .padding()
-                    .background(.regularMaterial)
-                    .clipShape(RoundedRectangle(cornerRadius: 12))
-                }
-                .buttonStyle(.plain)
-            }
-        }
-    }
-
-    // MARK: - Coach Nudge
-
-    private func coachNudgeCard(_ nudge: CoachNudge) -> some View {
-        HStack(alignment: .top, spacing: 12) {
-            coachPortrait
-                .frame(width: 44, height: 44)
-                .clipShape(Circle())
-
-            VStack(alignment: .leading, spacing: 8) {
-                HStack {
-                    Image(systemName: "message.fill")
-                        .foregroundStyle(.cyan)
-                    Text(nudge.title)
-                        .font(.headline)
-                }
-                Text(nudge.message)
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
-
-                Button(nudge.actionLabel) {
-                    navigateToLearn = true
-                }
-                .font(.subheadline.weight(.semibold))
-                .foregroundStyle(.cyan)
-            }
-        }
-        .padding()
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .background(.cyan.opacity(0.08))
-        .clipShape(RoundedRectangle(cornerRadius: 12))
-    }
-
-    @ViewBuilder
-    private var coachPortrait: some View {
-        if UIImage(named: "Coach") != nil {
-            Image("Coach")
-                .resizable()
-                .scaledToFill()
-        } else {
-            Image(systemName: "person.crop.circle.fill")
-                .font(.title)
-                .foregroundStyle(.cyan)
-                .frame(width: 44, height: 44)
-                .background(.cyan.opacity(0.12))
-        }
-    }
-
-    // MARK: - Explore
-
-    private var exploreSection: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text("Explore")
-                .font(.headline)
-
-            NavigationLink {
-                FirstTouchView(childId: childId)
-            } label: {
-                exploreCard(title: "First Touch", icon: "soccerball", color: .orange, subtitle: "Juggling & wall ball drills")
-            }
-
-            HStack(spacing: 12) {
-                NavigationLink {
-                    SkillTrackView(childId: childId)
-                } label: {
-                    exploreCard(title: "Scanning", icon: "eye.fill", color: .cyan, subtitle: "See the field early")
-                }
-
-                NavigationLink {
-                    SkillTrackView(childId: childId)
-                } label: {
-                    exploreCard(title: "Planning", icon: "brain.fill", color: .purple, subtitle: "Think ahead")
-                }
-            }
-        }
-    }
-
-    private func exploreCard(title: String, icon: String, color: Color, subtitle: String) -> some View {
-        VStack(alignment: .leading, spacing: 6) {
-            Image(systemName: icon)
-                .font(.title2)
-                .foregroundStyle(color)
-            Text(title)
-                .font(.subheadline.weight(.semibold))
-            Text(subtitle)
-                .font(.caption)
-                .foregroundStyle(.secondary)
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .cardStyle()
-    }
-
-    // MARK: - Skeleton
-
-    private var skeletonContent: some View {
-        VStack(spacing: 20) {
-            // Welcome skeleton
-            VStack(alignment: .leading, spacing: 4) {
-                SkeletonView(width: 200, height: 22)
-                SkeletonView(width: 140, height: 14)
-            }
-            .frame(maxWidth: .infinity, alignment: .leading)
-
-            SkeletonStreakRing()
-            SkeletonQuickActions()
-            SkeletonCard()
-
-            // Explore skeleton
-            VStack(alignment: .leading, spacing: 12) {
-                SkeletonView(width: 80, height: 18)
-                SkeletonCard()
-                HStack(spacing: 12) {
-                    SkeletonCard()
-                    SkeletonCard()
-                }
-            }
-        }
-    }
-
     // MARK: - Milestone Logic
 
-    /// Detects when the child's avatar has crossed into a new evolution stage
-    /// since the last time we showed them the celebration. Last-seen stage is
-    /// stored locally per child in UserDefaults — server doesn't track this.
     private func checkForAvatarEvolution() {
         guard viewModel.profile?.avatarId != nil else { return }
         let milestones = viewModel.streakData?.milestones ?? []
-        let currentStage = AvatarStage.current(forMilestones: milestones)
+        let currentStage = AvatarStage.current(
+            forMilestones: milestones,
+            localMissionXP: missionsVM.localMissionXP
+        )
 
         let storageKey = "lastSeenAvatarStage_\(childId)"
         let lastSeenRaw = UserDefaults.standard.integer(forKey: storageKey)
-        // First load (no stored value): seed without celebrating.
         if lastSeenRaw == 0 {
             UserDefaults.standard.set(currentStage.rawValue, forKey: storageKey)
             return
@@ -441,23 +746,16 @@ struct ChildHomeView: View {
     }
 
     private func checkFirstSession() {
-        // Only show for truly new users who have never completed the guide
-        // AND have no streak data at all (no sessions ever logged)
         guard !hasCompletedFirstSession else { return }
         guard viewModel.profile != nil else { return }
 
-        // If there's any streak data (even 0 freezes), the account has been used
-        // Only show guide if streakData hasn't loaded yet OR shows completely fresh account
         let hasAnyActivity = viewModel.streakCount > 0
             || viewModel.todayCheckIn != nil
             || (viewModel.streakData?.freezesUsed ?? 0) > 0
 
         if !hasAnyActivity {
-            // Still might have sessions — check directly
-            // For now, skip the guide for any account that has data loading
-            // The guide is opt-in via the home screen, not forced
+            // Don't auto-show — too aggressive. Let users tap "Start Training" instead.
         }
-        // Don't auto-show — too aggressive. Let users tap "Start Training" instead.
     }
 
     private func recordMilestone(_ milestone: Int) {
@@ -467,28 +765,6 @@ struct ChildHomeView: View {
             let _: MilestoneResult? = try? await apiClient.request(
                 APIRouter.recordMilestone(childId: childId, body: body)
             )
-        }
-    }
-
-    // MARK: - Helpers
-
-    private func modeLabel(_ mode: String) -> String {
-        switch mode {
-        case "PEAK": return "Peak Day"
-        case "NORMAL": return "Normal"
-        case "LOW_BATTERY": return "Low Battery"
-        case "RECOVERY": return "Recovery"
-        default: return mode
-        }
-    }
-
-    private func modeColor(_ mode: String) -> Color {
-        switch mode {
-        case "PEAK": return .green
-        case "NORMAL": return .blue
-        case "LOW_BATTERY": return .yellow
-        case "RECOVERY": return .purple
-        default: return .gray
         }
     }
 }

@@ -13,75 +13,92 @@ struct SpaceSelectionView: View {
     ]
 
     var body: some View {
-        ScrollView {
-            VStack(spacing: 16) {
-                Text("Where are you training?")
-                    .font(.title2.bold())
-                    .padding(.top, 8)
+        ZStack {
+            Color.dsBackground
+                .ignoresSafeArea()
 
-                Text("We'll pick the best drills for your space.")
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
+            ScrollView {
+                VStack(spacing: Spacing.xl) {
+                    VStack(spacing: 8) {
+                        Text("SELECT SPACE")
+                            .font(.system(size: 10, weight: .bold))
+                            .tracking(3)
+                            .foregroundStyle(Color.dsSecondary)
 
-                ForEach(spaces, id: \.id) { space in
-                    let drills = DrillRegistry.drills(for: space.id)
-                    NavigationLink {
-                        ActiveDrillView(
-                            childId: childId,
-                            drills: drills,
-                            spaceType: space.id
-                        )
-                    } label: {
-                        HStack(spacing: 16) {
-                            Image(systemName: space.icon)
-                                .font(.title)
-                                .foregroundStyle(.orange)
-                                .frame(width: 48, height: 48)
-                                .background(.orange.opacity(0.12))
-                                .clipShape(RoundedRectangle(cornerRadius: 12))
+                        Text("Where are you\ntraining?")
+                            .font(.system(size: 28, weight: .heavy, design: .rounded))
+                            .multilineTextAlignment(.center)
+                            .foregroundStyle(Color.dsOnSurface)
 
-                            VStack(alignment: .leading, spacing: 4) {
-                                Text(space.title)
-                                    .font(.headline)
-                                    .foregroundStyle(.primary)
-                                Text(space.subtitle)
-                                    .font(.subheadline)
-                                    .foregroundStyle(.secondary)
-                                Text("\(drills.count) drills available")
-                                    .font(.caption)
-                                    .foregroundStyle(.tertiary)
-                            }
-
-                            Spacer()
-
-                            Image(systemName: "chevron.right")
-                                .foregroundStyle(.secondary)
-                        }
-                        .padding()
-                        .background(.regularMaterial)
-                        .clipShape(RoundedRectangle(cornerRadius: 16))
+                        Text("We'll pick the best drills for your space.")
+                            .font(.system(size: 14))
+                            .foregroundStyle(Color.dsOnSurfaceVariant)
                     }
-                    .buttonStyle(.plain)
-                    .disabled(drills.isEmpty)
-                    .opacity(drills.isEmpty ? 0.5 : 1)
+                    .padding(.top, 16)
+
+                    ForEach(spaces, id: \.id) { space in
+                        let drills = DrillRegistry.drills(for: space.id)
+                        NavigationLink {
+                            ActiveDrillView(
+                                childId: childId,
+                                drills: drills,
+                                spaceType: space.id
+                            )
+                        } label: {
+                            HStack(spacing: 16) {
+                                ZStack {
+                                    RoundedRectangle(cornerRadius: 12)
+                                        .fill(Color.dsAccentOrange.opacity(0.12))
+                                        .frame(width: 48, height: 48)
+                                    Image(systemName: space.icon)
+                                        .font(.system(size: 20))
+                                        .foregroundStyle(Color.dsAccentOrange)
+                                }
+
+                                VStack(alignment: .leading, spacing: 4) {
+                                    Text(space.title)
+                                        .font(.system(size: 16, weight: .bold))
+                                        .foregroundStyle(Color.dsOnSurface)
+                                    Text(space.subtitle)
+                                        .font(.system(size: 13))
+                                        .foregroundStyle(Color.dsOnSurfaceVariant)
+                                    Text("\(drills.count) drills available")
+                                        .font(.system(size: 11, weight: .medium))
+                                        .foregroundStyle(Color.dsSecondary)
+                                }
+
+                                Spacer()
+
+                                Image(systemName: "chevron.right")
+                                    .foregroundStyle(Color.dsOnSurfaceVariant)
+                            }
+                            .padding(Spacing.lg)
+                            .background(Color.dsSurfaceContainer)
+                            .clipShape(RoundedRectangle(cornerRadius: CornerRadius.lg))
+                            .ghostBorder()
+                        }
+                        .buttonStyle(.plain)
+                        .disabled(drills.isEmpty)
+                        .opacity(drills.isEmpty ? 0.4 : 1)
+                    }
                 }
+                .padding(Spacing.xl)
             }
-            .padding()
         }
         .safeAreaInset(edge: .bottom) {
             if speechRecognizer.isListening {
                 VoiceCommandBar(speechRecognizer: speechRecognizer, lastCommand: $lastVoiceCommand)
             }
         }
-        .navigationTitle("Pick a Space")
         .navigationBarTitleDisplayMode(.inline)
+        .toolbarBackground(Color.dsBackground, for: .navigationBar)
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button {
                     Task { await speechRecognizer.toggleListening() }
                 } label: {
                     Image(systemName: speechRecognizer.isListening ? "mic.fill" : "mic")
-                        .foregroundStyle(speechRecognizer.isListening ? .red : .cyan)
+                        .foregroundStyle(speechRecognizer.isListening ? .red : Color.dsSecondary)
                 }
             }
         }
@@ -94,7 +111,6 @@ struct SpaceSelectionView: View {
     private func processVoiceCommand(_ transcript: String) {
         let lower = transcript.lowercased()
 
-        // Space selection by voice
         if lower.contains("small") || lower.contains("bedroom") || lower.contains("hallway") {
             lastVoiceCommand = "Small Indoor"
             navigateToSpace = "small_indoor"

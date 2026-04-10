@@ -15,52 +15,70 @@ struct TrainingSessionView: View {
     }
 
     var body: some View {
-        ScrollView {
-            VStack(spacing: 24) {
-                if viewModel.checkInState != nil {
-                    sessionModeCard
-                    actionButtons
-                } else {
-                    moodPickerSection
-                }
+        ZStack {
+            Color.dsBackground
+                .ignoresSafeArea()
 
-                if let error = viewModel.errorMessage {
-                    Label(error, systemImage: "exclamationmark.triangle.fill")
-                        .font(.subheadline)
-                        .foregroundStyle(.red)
-                        .padding()
-                        .frame(maxWidth: .infinity)
-                        .background(.red.opacity(0.1))
-                        .clipShape(RoundedRectangle(cornerRadius: 12))
+            ScrollView {
+                VStack(spacing: Spacing.xl) {
+                    if viewModel.checkInState != nil {
+                        sessionModeCard
+                        actionButtons
+                    } else {
+                        moodPickerSection
+                    }
+
+                    if let error = viewModel.errorMessage {
+                        Label(error, systemImage: "exclamationmark.triangle.fill")
+                            .font(.subheadline)
+                            .foregroundStyle(Color.dsError)
+                            .padding()
+                            .frame(maxWidth: .infinity)
+                            .background(Color.dsError.opacity(0.1))
+                            .clipShape(RoundedRectangle(cornerRadius: CornerRadius.md))
+                    }
                 }
+                .padding(Spacing.xl)
+                .padding(.bottom, 100)
             }
-            .padding()
         }
         .safeAreaInset(edge: .bottom) {
             if speechRecognizer.isListening {
                 VoiceCommandBar(speechRecognizer: speechRecognizer, lastCommand: $lastVoiceCommand)
             }
         }
-        .navigationTitle("Training")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                Text("TRAINING")
+                    .font(.system(size: 14, weight: .black, design: .rounded))
+                    .tracking(2)
+                    .foregroundStyle(Color.dsSecondary)
+            }
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button {
                     Task { await speechRecognizer.toggleListening() }
                 } label: {
                     Image(systemName: speechRecognizer.isListening ? "mic.fill" : "mic")
-                        .foregroundStyle(speechRecognizer.isListening ? .red : .cyan)
+                        .foregroundStyle(speechRecognizer.isListening ? .red : Color.dsSecondary)
                 }
             }
         }
+        .toolbarBackground(Color.dsBackground, for: .navigationBar)
         .overlay {
             if viewModel.isCheckingIn {
                 ZStack {
-                    Color.black.opacity(0.2).ignoresSafeArea()
-                    ProgressView("Checking in...")
-                        .padding(24)
-                        .background(.regularMaterial)
-                        .clipShape(RoundedRectangle(cornerRadius: 16))
+                    Color.black.opacity(0.4).ignoresSafeArea()
+                    VStack(spacing: 12) {
+                        ProgressView()
+                            .tint(Color.dsSecondary)
+                        Text("Checking in...")
+                            .font(.system(size: 14, weight: .medium))
+                            .foregroundStyle(Color.dsOnSurfaceVariant)
+                    }
+                    .padding(32)
+                    .background(Color.dsSurfaceContainer)
+                    .clipShape(RoundedRectangle(cornerRadius: CornerRadius.lg))
                 }
             }
         }
@@ -128,16 +146,17 @@ struct TrainingSessionView: View {
     // MARK: - Mood Picker
 
     private var moodPickerSection: some View {
-        VStack(spacing: 20) {
+        VStack(spacing: Spacing.xl) {
             VStack(spacing: 8) {
                 Image(systemName: "heart.text.clipboard")
                     .font(.system(size: 40))
-                    .foregroundStyle(.orange)
+                    .foregroundStyle(Color.dsAccentOrange)
                 Text("How are you feeling?")
-                    .font(.title2.bold())
+                    .font(.system(size: 24, weight: .bold, design: .rounded))
+                    .foregroundStyle(Color.dsOnSurface)
                 Text("Tap a mood or say it out loud with the mic.")
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
+                    .font(.system(size: 14))
+                    .foregroundStyle(Color.dsOnSurfaceVariant)
                     .multilineTextAlignment(.center)
             }
             .padding(.top, 8)
@@ -155,13 +174,16 @@ struct TrainingSessionView: View {
                         VStack(spacing: 8) {
                             Text(mood.emoji)
                                 .font(.system(size: 36))
-                            Text(mood.label)
-                                .font(.caption.weight(.medium))
+                            Text(mood.label.uppercased())
+                                .font(.system(size: 10, weight: .bold))
+                                .tracking(1)
+                                .foregroundStyle(Color.dsOnSurface)
                         }
                         .frame(maxWidth: .infinity)
-                        .padding(.vertical, 16)
-                        .background(.regularMaterial)
-                        .clipShape(RoundedRectangle(cornerRadius: 14))
+                        .padding(.vertical, 18)
+                        .background(Color.dsSurfaceContainer)
+                        .clipShape(RoundedRectangle(cornerRadius: CornerRadius.lg))
+                        .ghostBorder()
                     }
                     .buttonStyle(.plain)
                     .disabled(viewModel.isCheckingIn)
@@ -171,12 +193,19 @@ struct TrainingSessionView: View {
             Button {
                 showFullCheckIn = true
             } label: {
-                Label("Full Check-In", systemImage: "slider.horizontal.3")
-                    .font(.subheadline.weight(.semibold))
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(.regularMaterial)
-                    .clipShape(RoundedRectangle(cornerRadius: 12))
+                HStack(spacing: 8) {
+                    Image(systemName: "slider.horizontal.3")
+                        .foregroundStyle(Color.dsSecondary)
+                    Text("FULL CHECK-IN")
+                        .font(.system(size: 12, weight: .bold))
+                        .tracking(2)
+                        .foregroundStyle(Color.dsOnSurface)
+                }
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 16)
+                .background(Color.dsSurfaceContainerHigh)
+                .clipShape(RoundedRectangle(cornerRadius: CornerRadius.lg))
+                .ghostBorder()
             }
             .buttonStyle(.plain)
         }
@@ -185,23 +214,32 @@ struct TrainingSessionView: View {
     // MARK: - Session Mode Card
 
     private var sessionModeCard: some View {
-        VStack(spacing: 16) {
+        VStack(spacing: Spacing.lg) {
             HStack {
-                Image(systemName: modeIcon)
-                    .font(.title2)
-                    .foregroundStyle(modeSwiftColor)
+                ZStack {
+                    RoundedRectangle(cornerRadius: 10)
+                        .fill(modeSwiftColor.opacity(0.15))
+                        .frame(width: 40, height: 40)
+                    Image(systemName: modeIcon)
+                        .font(.system(size: 18))
+                        .foregroundStyle(modeSwiftColor)
+                }
+
                 VStack(alignment: .leading, spacing: 2) {
-                    Text("Today's Mode")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
+                    Text("TODAY'S MODE")
+                        .font(.system(size: 10, weight: .bold))
+                        .tracking(2)
+                        .foregroundStyle(Color.dsOnSurfaceVariant)
                     Text(viewModel.modeDisplayName)
-                        .font(.title3.bold())
+                        .font(.system(size: 18, weight: .bold, design: .rounded))
+                        .foregroundStyle(Color.dsOnSurface)
                 }
                 Spacer()
-                Text(viewModel.modeDisplayName)
-                    .font(.caption.weight(.semibold))
+                Text(viewModel.modeDisplayName.uppercased())
+                    .font(.system(size: 10, weight: .bold))
+                    .tracking(1)
                     .padding(.horizontal, 10)
-                    .padding(.vertical, 4)
+                    .padding(.vertical, 5)
                     .background(modeSwiftColor.opacity(0.15))
                     .foregroundStyle(modeSwiftColor)
                     .clipShape(Capsule())
@@ -209,41 +247,56 @@ struct TrainingSessionView: View {
 
             if let explanation = viewModel.modeExplanation {
                 Text(explanation)
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
+                    .font(.system(size: 14))
+                    .foregroundStyle(Color.dsOnSurfaceVariant)
+                    .lineSpacing(4)
                     .frame(maxWidth: .infinity, alignment: .leading)
             }
         }
-        .padding()
-        .background(.regularMaterial)
-        .clipShape(RoundedRectangle(cornerRadius: 16))
+        .padding(Spacing.xl)
+        .background(Color.dsSurfaceContainer)
+        .clipShape(RoundedRectangle(cornerRadius: CornerRadius.lg))
+        .ghostBorder()
     }
 
     // MARK: - Action Buttons
 
     private var actionButtons: some View {
-        VStack(spacing: 12) {
+        VStack(spacing: Spacing.md) {
             NavigationLink {
                 SpaceSelectionView(childId: childId)
             } label: {
-                Label("Start Training", systemImage: "figure.run")
-                    .font(.headline)
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(.orange.gradient)
-                    .foregroundStyle(.white)
-                    .clipShape(RoundedRectangle(cornerRadius: 14))
+                HStack {
+                    Image(systemName: "figure.run")
+                        .font(.system(size: 18))
+                    Text("START TRAINING")
+                        .font(.system(size: 14, weight: .black, design: .rounded))
+                        .tracking(2)
+                }
+                .foregroundStyle(Color(hex: "#5B1B00"))
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 18)
+                .background(DSGradient.primaryCTA)
+                .clipShape(RoundedRectangle(cornerRadius: CornerRadius.lg))
+                .dsPrimaryShadow()
             }
 
             NavigationLink {
                 ActivityLogView(childId: childId)
             } label: {
-                Label("Log Session", systemImage: "doc.text.fill")
-                    .font(.headline)
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(.regularMaterial)
-                    .clipShape(RoundedRectangle(cornerRadius: 14))
+                HStack {
+                    Image(systemName: "doc.text.fill")
+                        .font(.system(size: 18))
+                    Text("LOG SESSION")
+                        .font(.system(size: 14, weight: .bold))
+                        .tracking(2)
+                }
+                .foregroundStyle(Color.dsOnSurface)
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 18)
+                .background(Color.dsSurfaceContainerHigh)
+                .clipShape(RoundedRectangle(cornerRadius: CornerRadius.lg))
+                .ghostBorder()
             }
             .buttonStyle(.plain)
         }
@@ -263,21 +316,21 @@ struct TrainingSessionView: View {
 
     private var modeSwiftColor: Color {
         switch viewModel.sessionMode {
-        case "PEAK": return .green
-        case "NORMAL": return .blue
-        case "LOW_BATTERY": return .yellow
-        case "RECOVERY": return .purple
-        default: return .gray
+        case "PEAK": return Color.dsSecondary
+        case "NORMAL": return Color.dsSecondary
+        case "LOW_BATTERY": return Color.dsTertiaryContainer
+        case "RECOVERY": return Color(hex: "#8B5CF6")
+        default: return Color.dsOnSurfaceVariant
         }
     }
 
     private var moods: [(name: String, emoji: String, label: String)] {
         [
-            ("EXCITED", "😄", "Excited"),
-            ("FOCUSED", "🎯", "Focused"),
-            ("OKAY", "😊", "Okay"),
-            ("TIRED", "😴", "Tired"),
-            ("STRESSED", "😰", "Stressed"),
+            ("EXCITED", "\u{1F604}", "Excited"),
+            ("FOCUSED", "\u{1F3AF}", "Focused"),
+            ("OKAY", "\u{1F60A}", "Okay"),
+            ("TIRED", "\u{1F634}", "Tired"),
+            ("STRESSED", "\u{1F630}", "Stressed"),
         ]
     }
 }

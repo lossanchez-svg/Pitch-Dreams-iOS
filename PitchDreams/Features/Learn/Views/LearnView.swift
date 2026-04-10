@@ -15,46 +15,35 @@ struct LearnView: View {
                 .ignoresSafeArea()
 
             ScrollView {
-                VStack(spacing: Spacing.lg) {
+                VStack(spacing: Spacing.xl) {
                     if viewModel.isLoading && viewModel.lessonProgress.isEmpty {
                         ForEach(0..<4, id: \.self) { _ in
-                            HStack(spacing: 12) {
-                                SkeletonView(width: 28, height: 28)
-                                VStack(alignment: .leading, spacing: 6) {
-                                    SkeletonView(width: 160, height: 14)
-                                    SkeletonView(width: 100, height: 10)
-                                }
-                                Spacer()
-                            }
-                            .padding(Spacing.lg)
-                            .background(Color.dsSurfaceContainer)
-                            .clipShape(RoundedRectangle(cornerRadius: CornerRadius.lg))
+                            SkeletonView(height: 70)
+                                .clipShape(RoundedRectangle(cornerRadius: CornerRadius.lg))
                         }
                     } else {
-                        // Progress summary
-                        HStack(spacing: 10) {
-                            Image(systemName: "book.fill")
-                                .foregroundStyle(Color.dsSecondary)
-                            Text("\(viewModel.completedCount) of \(viewModel.totalCount) lessons completed")
-                                .font(.system(size: 14, weight: .bold))
-                                .foregroundStyle(Color.dsOnSurface)
-                            Spacer()
-                        }
-                        .padding(Spacing.lg)
-                        .background(Color.dsSurfaceContainer)
-                        .clipShape(RoundedRectangle(cornerRadius: CornerRadius.lg))
-                        .ghostBorder()
+                        // Hero progress card
+                        progressSummary
 
                         // Lessons by track
                         ForEach(viewModel.lessonsByTrack, id: \.track) { group in
                             VStack(alignment: .leading, spacing: Spacing.md) {
-                                HStack(spacing: 6) {
+                                // Track header
+                                HStack(spacing: 8) {
+                                    RoundedRectangle(cornerRadius: 4)
+                                        .fill(trackColor(group.track))
+                                        .frame(width: 4, height: 20)
                                     Image(systemName: TacticalLessonRegistry.trackIcon(group.track))
                                         .foregroundStyle(trackColor(group.track))
                                     Text(TacticalLessonRegistry.trackDisplayName(group.track).uppercased())
-                                        .font(.system(size: 11, weight: .heavy))
+                                        .font(.system(size: 12, weight: .heavy, design: .rounded))
                                         .tracking(2)
                                         .foregroundStyle(trackColor(group.track))
+                                    Spacer()
+                                    let trackCompleted = group.lessons.filter(\.isCompleted).count
+                                    Text("\(trackCompleted)/\(group.lessons.count)")
+                                        .font(.system(size: 12, weight: .bold, design: .rounded))
+                                        .foregroundStyle(Color.dsOnSurfaceVariant)
                                 }
                                 .padding(.top, 8)
 
@@ -71,7 +60,7 @@ struct LearnView: View {
                                             }
                                         )
                                     } label: {
-                                        lessonCard(enriched)
+                                        lessonCard(enriched, trackColor: trackColor(group.track))
                                     }
                                     .buttonStyle(.plain)
                                 }
@@ -107,16 +96,83 @@ struct LearnView: View {
         }
     }
 
-    private func lessonCard(_ enriched: EnrichedLesson) -> some View {
+    // MARK: - Progress Summary
+
+    private var progressSummary: some View {
+        VStack(spacing: Spacing.lg) {
+            HStack(spacing: Spacing.lg) {
+                // Completion ring
+                ZStack {
+                    Circle()
+                        .stroke(Color.dsSurfaceContainerHighest, lineWidth: 6)
+                    Circle()
+                        .trim(from: 0, to: completionProgress)
+                        .stroke(
+                            Color.dsSecondary,
+                            style: StrokeStyle(lineWidth: 6, lineCap: .round)
+                        )
+                        .rotationEffect(.degrees(-90))
+
+                    VStack(spacing: 0) {
+                        Text("\(viewModel.completedCount)")
+                            .font(.system(size: 22, weight: .heavy, design: .rounded))
+                            .foregroundStyle(Color.dsOnSurface)
+                        Text("/\(viewModel.totalCount)")
+                            .font(.system(size: 12))
+                            .foregroundStyle(Color.dsOnSurfaceVariant)
+                    }
+                }
+                .frame(width: 72, height: 72)
+
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("LESSON PROGRESS")
+                        .font(.system(size: 10, weight: .bold))
+                        .tracking(2)
+                        .foregroundStyle(Color.dsOnSurfaceVariant)
+                    Text("\(viewModel.completedCount) of \(viewModel.totalCount) complete")
+                        .font(.system(size: 15, weight: .bold))
+                        .foregroundStyle(Color.dsOnSurface)
+
+                    if viewModel.totalCount > 0 {
+                        Text("\(Int(completionProgress * 100))% mastery")
+                            .font(.system(size: 13, weight: .medium))
+                            .foregroundStyle(Color.dsSecondary)
+                    }
+                }
+
+                Spacer()
+            }
+        }
+        .padding(Spacing.xl)
+        .background(Color.dsSurfaceContainer)
+        .clipShape(RoundedRectangle(cornerRadius: CornerRadius.lg))
+        .ghostBorder()
+    }
+
+    private var completionProgress: Double {
+        guard viewModel.totalCount > 0 else { return 0 }
+        return Double(viewModel.completedCount) / Double(viewModel.totalCount)
+    }
+
+    // MARK: - Lesson Card
+
+    private func lessonCard(_ enriched: EnrichedLesson, trackColor: Color) -> some View {
         HStack(spacing: 14) {
-            Image(systemName: enriched.isCompleted ? "checkmark.circle.fill" : "circle")
-                .font(.system(size: 22))
-                .foregroundStyle(enriched.isCompleted ? Color.dsSecondary : Color.dsSurfaceContainerHighest)
+            // Completion indicator
+            ZStack {
+                Circle()
+                    .fill(enriched.isCompleted ? trackColor.opacity(0.15) : Color.dsSurfaceContainerHighest)
+                    .frame(width: 40, height: 40)
+                Image(systemName: enriched.isCompleted ? "checkmark" : "play.fill")
+                    .font(.system(size: 14, weight: .bold))
+                    .foregroundStyle(enriched.isCompleted ? trackColor : Color.dsOnSurfaceVariant)
+            }
 
             VStack(alignment: .leading, spacing: 4) {
                 Text(enriched.tacticalLesson.title)
                     .font(.system(size: 15, weight: .bold))
                     .foregroundStyle(Color.dsOnSurface)
+                    .lineLimit(1)
 
                 HStack(spacing: 8) {
                     Text(enriched.tacticalLesson.difficulty.capitalized)

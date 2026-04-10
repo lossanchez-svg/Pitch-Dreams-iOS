@@ -8,58 +8,91 @@ struct ParentLoginView: View {
 
     var body: some View {
         ZStack {
-            Color(.systemBackground).ignoresSafeArea()
+            Color.dsBackground.ignoresSafeArea()
 
             ScrollView {
-                VStack(spacing: 24) {
-                    Text("Parent Login")
-                        .font(.title.bold())
-                        .padding(.top, 32)
+                VStack(spacing: Spacing.xl) {
+                    VStack(spacing: 4) {
+                        Text("PARENT LOGIN")
+                            .font(.system(size: 12, weight: .heavy, design: .rounded))
+                            .tracking(3)
+                            .foregroundStyle(Color.dsPrimaryPeachDim)
+                        Text("Welcome back")
+                            .font(.system(size: 24, weight: .bold, design: .rounded))
+                            .foregroundStyle(Color.dsOnSurface)
+                    }
+                    .padding(.top, 32)
 
-                    VStack(spacing: 16) {
-                        TextField("Email", text: $viewModel.email)
-                            .textContentType(.emailAddress)
-                            .keyboardType(.emailAddress)
-                            .autocorrectionDisabled()
-                            .textInputAutocapitalization(.never)
-                            .focused($focusedField, equals: .email)
-                            .padding()
-                            .background(Color(.secondarySystemBackground))
-                            .cornerRadius(10)
+                    VStack(spacing: Spacing.lg) {
+                        HStack(spacing: 12) {
+                            Image(systemName: "envelope.fill")
+                                .font(.system(size: 16))
+                                .foregroundStyle(Color.dsOnSurfaceVariant)
+                                .frame(width: 20)
+                            TextField("Email", text: $viewModel.email)
+                                .textContentType(.emailAddress)
+                                .keyboardType(.emailAddress)
+                                .autocorrectionDisabled()
+                                .textInputAutocapitalization(.never)
+                                .focused($focusedField, equals: .email)
+                                .submitLabel(.next)
+                                .onSubmit { focusedField = .password }
+                                .foregroundStyle(Color.dsOnSurface)
+                        }
+                        .padding(Spacing.lg)
+                        .background(Color.dsSurfaceContainerHighest)
+                        .clipShape(RoundedRectangle(cornerRadius: CornerRadius.md))
 
-                        SecureField("Password", text: $viewModel.password)
-                            .textContentType(.password)
-                            .focused($focusedField, equals: .password)
-                            .padding()
-                            .background(Color(.secondarySystemBackground))
-                            .cornerRadius(10)
+                        HStack(spacing: 12) {
+                            Image(systemName: "lock.fill")
+                                .font(.system(size: 16))
+                                .foregroundStyle(Color.dsOnSurfaceVariant)
+                                .frame(width: 20)
+                            SecureField("Password", text: $viewModel.password)
+                                .textContentType(.password)
+                                .focused($focusedField, equals: .password)
+                                .foregroundStyle(Color.dsOnSurface)
+                        }
+                        .padding(Spacing.lg)
+                        .background(Color.dsSurfaceContainerHighest)
+                        .clipShape(RoundedRectangle(cornerRadius: CornerRadius.md))
                     }
 
                     if let error = viewModel.errorMessage {
                         Text(error)
-                            .foregroundColor(.red)
-                            .font(.callout)
+                            .foregroundStyle(Color.dsError)
+                            .font(.system(size: 13))
                             .multilineTextAlignment(.center)
                     }
 
                     Button {
                         Task { await viewModel.login() }
                     } label: {
-                        Text("Log In")
-                            .frame(maxWidth: .infinity)
-                            .padding()
-                            .background(viewModel.isValid ? Color.accentColor : Color.gray.opacity(0.3))
-                            .foregroundColor(.white)
-                            .font(.headline)
-                            .cornerRadius(12)
+                        HStack {
+                            if viewModel.isLoading {
+                                ProgressView().tint(Color(hex: "#5B1B00"))
+                            } else {
+                                Text("LOG IN")
+                                    .font(.system(size: 14, weight: .black, design: .rounded))
+                                    .tracking(2)
+                            }
+                        }
+                        .foregroundStyle(Color(hex: "#5B1B00"))
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 18)
+                        .background(viewModel.isValid ? DSGradient.primaryCTA : LinearGradient(colors: [Color.dsSurfaceContainerHighest, Color.dsSurfaceContainerHighest], startPoint: .leading, endPoint: .trailing))
+                        .clipShape(RoundedRectangle(cornerRadius: CornerRadius.lg))
+                        .dsPrimaryShadow()
                     }
                     .disabled(!viewModel.isValid || viewModel.isLoading)
+                    .opacity(viewModel.isValid ? 1 : 0.5)
 
                     NavigationLink {
                         ForgotPasswordView()
                     } label: {
                         Text("Forgot password?")
-                            .font(.callout)
+                            .font(.system(size: 14))
+                            .foregroundStyle(Color.dsSecondary)
                     }
                 }
                 .padding(.horizontal, 24)
@@ -67,5 +100,6 @@ struct ParentLoginView: View {
         }
         .loadingOverlay(viewModel.isLoading)
         .navigationBarTitleDisplayMode(.inline)
+        .toolbarBackground(Color.dsBackground, for: .navigationBar)
     }
 }

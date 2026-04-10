@@ -6,14 +6,20 @@ struct ForgotPasswordView: View {
 
     var body: some View {
         ZStack {
-            Color(.systemBackground).ignoresSafeArea()
+            Color.dsBackground.ignoresSafeArea()
 
             ScrollView {
-                VStack(spacing: 24) {
-                    Image(systemName: "envelope.badge.fill")
-                        .font(.system(size: 48))
-                        .foregroundStyle(Color.accentColor)
-                        .padding(.top, 32)
+                VStack(spacing: Spacing.xl) {
+                    ZStack {
+                        Circle()
+                            .fill(Color.dsSecondary.opacity(0.1))
+                            .frame(width: 100, height: 100)
+                        Image(systemName: "envelope.badge.fill")
+                            .font(.system(size: 42))
+                            .foregroundStyle(Color.dsSecondary)
+                    }
+                    .dsSecondaryShadow()
+                    .padding(.top, 32)
 
                     if viewModel.emailSent {
                         successContent
@@ -26,34 +32,45 @@ struct ForgotPasswordView: View {
         }
         .navigationTitle("Reset Password")
         .navigationBarTitleDisplayMode(.inline)
+        .toolbarBackground(Color.dsBackground, for: .navigationBar)
     }
 
     // MARK: - Form
 
     private var formContent: some View {
-        VStack(spacing: 20) {
-            Text("Forgot your password?")
-                .font(.title2.bold())
+        VStack(spacing: Spacing.xl) {
+            VStack(spacing: 8) {
+                Text("Forgot your password?")
+                    .font(.system(size: 22, weight: .bold, design: .rounded))
+                    .foregroundStyle(Color.dsOnSurface)
 
-            Text("Enter your email and we'll send you a link to reset your password.")
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
-                .multilineTextAlignment(.center)
+                Text("Enter your email and we'll send you a link to reset your password.")
+                    .font(.system(size: 14))
+                    .foregroundStyle(Color.dsOnSurfaceVariant)
+                    .multilineTextAlignment(.center)
+            }
 
-            TextField("Email", text: $viewModel.email)
-                .textContentType(.emailAddress)
-                .keyboardType(.emailAddress)
-                .autocorrectionDisabled()
-                .textInputAutocapitalization(.never)
-                .focused($emailFocused)
-                .padding()
-                .background(Color(.secondarySystemBackground))
-                .cornerRadius(10)
+            HStack(spacing: 12) {
+                Image(systemName: "envelope.fill")
+                    .font(.system(size: 16))
+                    .foregroundStyle(Color.dsOnSurfaceVariant)
+                    .frame(width: 20)
+                TextField("Email", text: $viewModel.email)
+                    .textContentType(.emailAddress)
+                    .keyboardType(.emailAddress)
+                    .autocorrectionDisabled()
+                    .textInputAutocapitalization(.never)
+                    .focused($emailFocused)
+                    .foregroundStyle(Color.dsOnSurface)
+            }
+            .padding(Spacing.lg)
+            .background(Color.dsSurfaceContainerHighest)
+            .clipShape(RoundedRectangle(cornerRadius: CornerRadius.md))
 
             if let error = viewModel.errorMessage {
                 Text(error)
-                    .foregroundColor(.red)
-                    .font(.callout)
+                    .foregroundStyle(Color.dsError)
+                    .font(.system(size: 13))
                     .multilineTextAlignment(.center)
             }
 
@@ -62,49 +79,62 @@ struct ForgotPasswordView: View {
             } label: {
                 HStack {
                     if viewModel.isLoading {
-                        ProgressView().tint(.white)
+                        ProgressView().tint(Color(hex: "#5B1B00"))
                     } else {
-                        Text("Send Reset Link")
+                        Text("SEND RESET LINK")
+                            .font(.system(size: 14, weight: .black, design: .rounded))
+                            .tracking(2)
                     }
                 }
+                .foregroundStyle(Color(hex: "#5B1B00"))
                 .frame(maxWidth: .infinity)
-                .padding()
-                .background(viewModel.isValid ? Color.accentColor : Color.gray.opacity(0.3))
-                .foregroundColor(.white)
-                .font(.headline)
-                .cornerRadius(12)
+                .padding(.vertical, 18)
+                .background(viewModel.isValid ? DSGradient.primaryCTA : LinearGradient(colors: [Color.dsSurfaceContainerHighest, Color.dsSurfaceContainerHighest], startPoint: .leading, endPoint: .trailing))
+                .clipShape(RoundedRectangle(cornerRadius: CornerRadius.lg))
+                .dsPrimaryShadow()
             }
             .disabled(!viewModel.isValid || viewModel.isLoading)
+            .opacity(viewModel.isValid ? 1 : 0.5)
         }
     }
 
     // MARK: - Success
 
     private var successContent: some View {
-        VStack(spacing: 20) {
-            Image(systemName: "checkmark.circle.fill")
-                .font(.system(size: 56))
-                .foregroundStyle(.green)
+        VStack(spacing: Spacing.xl) {
+            ZStack {
+                Circle()
+                    .fill(Color.dsSecondary.opacity(0.1))
+                    .frame(width: 100, height: 100)
+                Image(systemName: "checkmark.circle.fill")
+                    .font(.system(size: 48))
+                    .foregroundStyle(Color.dsSecondary)
+            }
+            .dsSecondaryShadow()
 
-            Text("Check Your Email")
-                .font(.title2.bold())
+            VStack(spacing: 8) {
+                Text("Check Your Email")
+                    .font(.system(size: 22, weight: .bold, design: .rounded))
+                    .foregroundStyle(Color.dsOnSurface)
 
-            Text("We sent a password reset link to \(viewModel.email). Check your inbox and follow the instructions.")
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
-                .multilineTextAlignment(.center)
+                Text("We sent a password reset link to \(viewModel.email). Check your inbox and follow the instructions.")
+                    .font(.system(size: 14))
+                    .foregroundStyle(Color.dsOnSurfaceVariant)
+                    .multilineTextAlignment(.center)
 
-            Text("Didn't get the email? Check your spam folder or try again.")
-                .font(.caption)
-                .foregroundStyle(.tertiary)
-                .multilineTextAlignment(.center)
-                .padding(.top, 8)
+                Text("Didn't get the email? Check your spam folder or try again.")
+                    .font(.system(size: 12))
+                    .foregroundStyle(Color.dsOnSurfaceVariant.opacity(0.6))
+                    .multilineTextAlignment(.center)
+                    .padding(.top, 8)
+            }
 
             Button {
                 viewModel.emailSent = false
             } label: {
                 Text("Try Again")
-                    .font(.callout)
+                    .font(.system(size: 14, weight: .bold))
+                    .foregroundStyle(Color.dsSecondary)
             }
         }
     }

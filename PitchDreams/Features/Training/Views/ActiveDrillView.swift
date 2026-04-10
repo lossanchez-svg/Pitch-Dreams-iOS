@@ -32,18 +32,31 @@ struct ActiveDrillView: View {
                 VoiceCommandBar(speechRecognizer: speechRecognizer, lastCommand: $lastVoiceCommand)
             }
         }
-        .navigationTitle("Training")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                HStack(spacing: 8) {
+                    Image(systemName: "figure.run")
+                        .foregroundStyle(Color.dsSecondary)
+                    Text("TRAINING SESSION")
+                        .font(.system(size: 14, weight: .black, design: .rounded))
+                        .tracking(2)
+                        .foregroundStyle(Color.dsSecondary)
+                }
+            }
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button {
-                    Task { await speechRecognizer.toggleListening() }
+                    dismiss()
                 } label: {
-                    Image(systemName: speechRecognizer.isListening ? "mic.fill" : "mic")
-                        .foregroundStyle(speechRecognizer.isListening ? .red : .cyan)
+                    Image(systemName: "xmark")
+                        .foregroundStyle(Color.dsOnSurfaceVariant)
+                        .frame(width: 40, height: 40)
+                        .background(Color.dsSurfaceContainer)
+                        .clipShape(Circle())
                 }
             }
         }
+        .toolbarBackground(Color.dsBackground, for: .navigationBar)
         .onChange(of: speechRecognizer.transcript) { newTranscript in
             guard !newTranscript.isEmpty else { return }
             processDrillVoiceCommand(newTranscript)
@@ -84,207 +97,359 @@ struct ActiveDrillView: View {
             return
         }
 
-        // Try number extraction for rep count
         if let number = VoiceCommandMatcher.extractNumber(from: transcript) {
             lastVoiceCommand = "\(number) reps"
             viewModel.repCount = number
         }
     }
 
-    // MARK: - Drill Phase
+    // MARK: - Drill Phase (Redesigned)
 
     private var drillContent: some View {
-        ScrollView {
-            VStack(spacing: 24) {
-                // Progress
-                HStack {
-                    Text("Drill \(viewModel.drillProgress)")
-                        .font(.caption.weight(.semibold))
-                        .foregroundStyle(.secondary)
-                    Spacer()
-                    Text(viewModel.currentDrill?.category ?? "")
-                        .font(.caption.weight(.semibold))
-                        .padding(.horizontal, 10)
-                        .padding(.vertical, 4)
-                        .background(.orange.opacity(0.12))
-                        .foregroundStyle(.orange)
-                        .clipShape(Capsule())
+        ZStack {
+            Color.dsBackground
+                .ignoresSafeArea()
+
+            VStack(spacing: 0) {
+                // Drill title section
+                VStack(spacing: 4) {
+                    Text("ACTIVE DRILL")
+                        .font(.system(size: 10, weight: .bold))
+                        .tracking(3)
+                        .foregroundStyle(Color.dsSecondary.opacity(0.7))
+
+                    Text(viewModel.currentDrill?.name.uppercased() ?? "DRILL")
+                        .font(.system(size: 32, weight: .heavy, design: .rounded))
+                        .tracking(-1)
+                        .foregroundStyle(Color.dsOnSurface)
+                }
+                .padding(.top, 8)
+
+                Spacer()
+
+                // Timer ring + avatar
+                ZStack {
+                    timerRing
+
+                    // Avatar breaking the right edge
+                    avatarPeek
+                        .offset(x: 80, y: 0)
                 }
 
-                if let drill = viewModel.currentDrill {
-                    // Drill info
-                    VStack(spacing: 8) {
-                        Text(drill.name)
-                            .font(.title.bold())
-                        Text(drill.description)
-                            .font(.subheadline)
-                            .foregroundStyle(.secondary)
-                            .multilineTextAlignment(.center)
-                    }
+                Spacer()
 
-                    // Timer
-                    ZStack {
-                        Circle()
-                            .stroke(Color(.systemGray5), lineWidth: 8)
-                            .frame(width: 180, height: 180)
-                        Circle()
-                            .trim(from: 0, to: timerProgress(drill))
-                            .stroke(.orange, style: StrokeStyle(lineWidth: 8, lineCap: .round))
-                            .frame(width: 180, height: 180)
-                            .rotationEffect(.degrees(-90))
-                            .animation(.linear(duration: 1), value: viewModel.timeRemaining)
+                // Action row
+                actionButtons
+                    .padding(.horizontal, Spacing.xxl)
 
-                        VStack(spacing: 4) {
-                            Text(formattedTime)
-                                .font(.system(size: 48, weight: .bold, design: .monospaced))
-                            Text("remaining")
-                                .font(.caption)
-                                .foregroundStyle(.secondary)
-                        }
-                    }
+                Spacer().frame(height: 24)
 
-                    // Rep counter
-                    HStack(spacing: 20) {
-                        VStack(spacing: 4) {
-                            Text("Reps")
-                                .font(.caption.weight(.medium))
-                                .foregroundStyle(.secondary)
-                            Text("\(viewModel.repCount)")
-                                .font(.title2.bold())
-                        }
-
-                        Button {
-                            viewModel.incrementReps()
-                        } label: {
-                            Image(systemName: "plus.circle.fill")
-                                .font(.system(size: 44))
-                                .foregroundStyle(.orange)
-                        }
-                    }
-                    .padding()
-                    .background(.regularMaterial)
-                    .clipShape(RoundedRectangle(cornerRadius: 14))
-
-                    // Coach tip
-                    HStack(alignment: .top, spacing: 10) {
-                        Image(systemName: "lightbulb.fill")
-                            .foregroundStyle(.yellow)
-                        Text(drill.coachTip)
-                            .font(.subheadline)
-                            .foregroundStyle(.secondary)
-                    }
-                    .padding()
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .background(Color(.secondarySystemBackground))
-                    .clipShape(RoundedRectangle(cornerRadius: 12))
-
-                    // Controls
-                    HStack(spacing: 16) {
-                        if viewModel.isTimerRunning {
-                            Button {
-                                viewModel.pauseTimer()
-                            } label: {
-                                Label("Pause", systemImage: "pause.fill")
-                                    .font(.headline)
-                                    .frame(maxWidth: .infinity)
-                                    .padding()
-                                    .background(.regularMaterial)
-                                    .clipShape(RoundedRectangle(cornerRadius: 14))
-                            }
-                            .buttonStyle(.plain)
-                        } else {
-                            Button {
-                                viewModel.startDrill()
-                            } label: {
-                                Label("Start", systemImage: "play.fill")
-                                    .font(.headline)
-                                    .frame(maxWidth: .infinity)
-                                    .padding()
-                                    .background(.orange.gradient)
-                                    .foregroundStyle(.white)
-                                    .clipShape(RoundedRectangle(cornerRadius: 14))
-                            }
-                        }
-
-                        Button {
-                            viewModel.completeDrill()
-                        } label: {
-                            Label("Done", systemImage: "checkmark")
-                                .font(.headline)
-                                .frame(maxWidth: .infinity)
-                                .padding()
-                                .background(.regularMaterial)
-                                .clipShape(RoundedRectangle(cornerRadius: 14))
-                        }
-                        .buttonStyle(.plain)
-                    }
-                }
-
-                if let error = viewModel.errorMessage {
-                    Label(error, systemImage: "exclamationmark.triangle.fill")
-                        .font(.subheadline)
-                        .foregroundStyle(.red)
-                }
+                // Voice footer
+                voiceFooter
             }
-            .padding()
         }
     }
 
-    // MARK: - Rep Confirm
+    // MARK: - Timer Ring
+
+    private var timerRing: some View {
+        let ringSize: CGFloat = 260
+
+        return ZStack {
+            // Background ring
+            Circle()
+                .stroke(Color.dsSurfaceContainerHigh, lineWidth: 12)
+                .frame(width: ringSize, height: ringSize)
+
+            // Progress ring (orange gradient)
+            Circle()
+                .trim(from: 0, to: currentTimerProgress)
+                .stroke(
+                    AngularGradient(
+                        colors: [Color.dsAccentOrange, Color.dsAccentOrange.opacity(0.6)],
+                        center: .center
+                    ),
+                    style: StrokeStyle(lineWidth: 12, lineCap: .round)
+                )
+                .frame(width: ringSize, height: ringSize)
+                .rotationEffect(.degrees(-90))
+                .animation(.linear(duration: 1), value: viewModel.timeRemaining)
+                .shadow(color: Color.dsAccentOrange.opacity(0.4), radius: 20)
+                .shadow(color: Color.dsAccentOrange.opacity(0.2), radius: 10)
+
+            // Inner glow bg
+            Circle()
+                .fill(Color.dsSurfaceContainerLowest.opacity(0.4))
+                .frame(width: ringSize - 24, height: ringSize - 24)
+
+            // Countdown text
+            VStack(spacing: 8) {
+                Text(formattedTime)
+                    .font(.system(size: 56, weight: .black, design: .rounded))
+                    .tracking(-2)
+                    .foregroundStyle(Color.dsOnSurface)
+                    .contentTransition(.numericText())
+
+                VStack(spacing: 4) {
+                    Text("CURRENT REPS")
+                        .font(.system(size: 10, weight: .bold))
+                        .tracking(3)
+                        .foregroundStyle(Color.dsAccentOrange.opacity(0.8))
+
+                    HStack(alignment: .firstTextBaseline, spacing: 4) {
+                        Text("\(viewModel.repCount)")
+                            .font(.system(size: 32, weight: .bold, design: .rounded))
+                            .foregroundStyle(Color.dsOnSurface)
+
+                        if let drill = viewModel.currentDrill, drill.reps > 0 {
+                            Text("/ \(drill.reps)")
+                                .font(.system(size: 16))
+                                .foregroundStyle(Color.dsSurfaceBright)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @ViewBuilder
+    private var avatarPeek: some View {
+        let assetName = Avatar.assetName(
+            for: nil, // We don't have profile in this view; use stored childId
+            milestones: [],
+            localMissionXP: 0
+        )
+        // Use a generic avatar hint — the exact asset depends on profile data
+        // which ActiveDrillView doesn't fetch. Use the default avatar.
+        let fallbackAsset = "panther_stage2"
+        if UIImage(named: fallbackAsset) != nil {
+            Image(fallbackAsset)
+                .resizable()
+                .scaledToFit()
+                .frame(width: 140, height: 140)
+                .shadow(color: Color.dsSecondary.opacity(0.3), radius: 12)
+        } else if UIImage(named: assetName) != nil {
+            Image(assetName)
+                .resizable()
+                .scaledToFit()
+                .frame(width: 140, height: 140)
+                .shadow(color: Color.dsSecondary.opacity(0.3), radius: 12)
+        } else {
+            // No avatar asset — skip the peek
+            EmptyView()
+        }
+    }
+
+    private var currentTimerProgress: Double {
+        guard let drill = viewModel.currentDrill, drill.duration > 0 else { return 0 }
+        return Double(viewModel.timeRemaining) / Double(drill.duration)
+    }
+
+    // MARK: - Action Buttons
+
+    private var actionButtons: some View {
+        HStack(spacing: Spacing.lg) {
+            // Pause / Resume
+            Button {
+                if viewModel.isTimerRunning {
+                    viewModel.pauseTimer()
+                } else {
+                    viewModel.startDrill()
+                }
+            } label: {
+                VStack(spacing: 8) {
+                    ZStack {
+                        Circle()
+                            .stroke(Color.dsSecondary.opacity(0.4), lineWidth: 2)
+                            .frame(width: 56, height: 56)
+                        Image(systemName: viewModel.isTimerRunning ? "pause" : "play.fill")
+                            .font(.system(size: 20))
+                            .foregroundStyle(Color.dsSecondary)
+                    }
+                    Text(viewModel.isTimerRunning ? "PAUSE" : "START")
+                        .font(.system(size: 10, weight: .bold))
+                        .tracking(3)
+                        .foregroundStyle(Color.dsOnSurfaceVariant)
+                }
+            }
+
+            // +1 REP (center, larger)
+            Button {
+                viewModel.incrementReps()
+            } label: {
+                VStack(spacing: 12) {
+                    ZStack {
+                        Circle()
+                            .fill(
+                                LinearGradient(
+                                    colors: [Color.dsAccentOrange, Color(hex: "#9D3500")],
+                                    startPoint: .top,
+                                    endPoint: .bottom
+                                )
+                            )
+                            .frame(width: 72, height: 72)
+                            .overlay(
+                                Circle()
+                                    .stroke(Color.white.opacity(0.2), lineWidth: 2)
+                            )
+                            .shadow(color: Color(hex: "#9D3500"), radius: 0, y: 6)
+                            .shadow(color: Color.dsAccentOrange.opacity(0.4), radius: 15, y: 8)
+
+                        Image(systemName: "plus")
+                            .font(.system(size: 28, weight: .bold))
+                            .foregroundStyle(.white)
+                    }
+                    Text("+1 REP")
+                        .font(.system(size: 11, weight: .black, design: .rounded))
+                        .tracking(2)
+                        .foregroundStyle(Color.dsOnSurface)
+                }
+            }
+
+            // Done
+            Button {
+                viewModel.completeDrill()
+            } label: {
+                VStack(spacing: 8) {
+                    ZStack {
+                        Circle()
+                            .stroke(Color.dsSurfaceBright, lineWidth: 2)
+                            .frame(width: 56, height: 56)
+                        Image(systemName: "checkmark")
+                            .font(.system(size: 20))
+                            .foregroundStyle(Color.dsOnSurfaceVariant)
+                    }
+                    Text("DONE")
+                        .font(.system(size: 10, weight: .bold))
+                        .tracking(3)
+                        .foregroundStyle(Color.dsOnSurfaceVariant)
+                }
+            }
+        }
+    }
+
+    // MARK: - Voice Footer
+
+    private var voiceFooter: some View {
+        VStack(spacing: 12) {
+            HStack(spacing: 12) {
+                ZStack {
+                    Circle()
+                        .fill(Color.dsSecondary.opacity(0.3))
+                        .frame(width: 28, height: 28)
+                        .blur(radius: 6)
+                    Image(systemName: "mic.fill")
+                        .font(.system(size: 16))
+                        .foregroundStyle(Color.dsSecondary)
+                }
+
+                HStack(spacing: 4) {
+                    Text("Say")
+                        .font(.system(size: 14, weight: .bold))
+                        .foregroundStyle(Color.dsOnSurfaceVariant)
+                    Text("\"Done\"")
+                        .font(.system(size: 14, weight: .bold))
+                        .foregroundStyle(Color.dsOnSurface)
+                    Text("to finish")
+                        .font(.system(size: 14, weight: .bold))
+                        .foregroundStyle(Color.dsOnSurfaceVariant)
+                }
+            }
+            .padding(.horizontal, 24)
+            .padding(.vertical, 12)
+            .background(Color.dsSurfaceContainerHigh.opacity(0.6))
+            .background(.ultraThinMaterial)
+            .clipShape(Capsule())
+            .overlay(
+                Capsule()
+                    .stroke(Color.dsOutlineVariant.opacity(0.1), lineWidth: 1)
+            )
+
+            // Visualizer dots
+            HStack(spacing: 3) {
+                ForEach([2, 4, 8, 4, 2], id: \.self) { width in
+                    RoundedRectangle(cornerRadius: 1)
+                        .fill(Color.dsSecondary.opacity(Double(width) / 10.0))
+                        .frame(width: CGFloat(width) * 2, height: 3)
+                }
+            }
+        }
+        .padding(.bottom, 32)
+    }
+
+    // MARK: - Rep Confirm (Redesigned)
 
     private var repConfirmContent: some View {
-        VStack(spacing: 24) {
-            Spacer()
+        ZStack {
+            Color.dsBackground
+                .ignoresSafeArea()
 
-            Image(systemName: "checkmark.circle.fill")
-                .font(.system(size: 64))
-                .foregroundStyle(.green)
+            VStack(spacing: 32) {
+                Spacer()
 
-            Text("Drill Complete!")
-                .font(.title2.bold())
+                ZStack {
+                    Circle()
+                        .fill(Color.dsSecondary.opacity(0.1))
+                        .frame(width: 120, height: 120)
+                    Image(systemName: "checkmark")
+                        .font(.system(size: 48, weight: .bold))
+                        .foregroundStyle(Color.dsSecondary)
+                }
+                .dsSecondaryShadow()
 
-            if let drill = viewModel.currentDrill {
-                Text(drill.name)
-                    .font(.headline)
-                    .foregroundStyle(.secondary)
+                VStack(spacing: 8) {
+                    Text("DRILL COMPLETE")
+                        .font(.system(size: 12, weight: .heavy, design: .rounded))
+                        .tracking(3)
+                        .foregroundStyle(Color.dsSecondary)
+
+                    if let drill = viewModel.currentDrill {
+                        Text(drill.name)
+                            .font(.system(size: 24, weight: .bold, design: .rounded))
+                            .foregroundStyle(Color.dsOnSurface)
+                    }
+                }
+
+                VStack(spacing: 4) {
+                    Text("REPS COMPLETED")
+                        .font(.system(size: 10, weight: .bold))
+                        .tracking(2)
+                        .foregroundStyle(Color.dsOnSurfaceVariant)
+                    Text("\(viewModel.repCount)")
+                        .font(.system(size: 48, weight: .heavy, design: .rounded))
+                        .foregroundStyle(Color.dsOnSurface)
+                }
+                .padding(Spacing.xl)
+                .background(Color.dsSurfaceContainer)
+                .clipShape(RoundedRectangle(cornerRadius: CornerRadius.lg))
+
+                Spacer()
+
+                Button {
+                    viewModel.confirmReps()
+                } label: {
+                    Text(viewModel.isLastDrill ? "GO TO REFLECTION" : "NEXT DRILL")
+                        .font(.system(size: 14, weight: .black, design: .rounded))
+                        .tracking(2)
+                        .foregroundStyle(Color(hex: "#5B1B00"))
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 18)
+                        .background(DSGradient.primaryCTA)
+                        .clipShape(RoundedRectangle(cornerRadius: CornerRadius.lg))
+                        .dsPrimaryShadow()
+                }
+                .padding(.horizontal, Spacing.xxl)
+
+                Spacer().frame(height: 32)
             }
-
-            VStack(spacing: 8) {
-                Text("Reps completed: \(viewModel.repCount)")
-                    .font(.subheadline)
-            }
-            .padding()
-            .background(.regularMaterial)
-            .clipShape(RoundedRectangle(cornerRadius: 12))
-
-            Button {
-                viewModel.confirmReps()
-            } label: {
-                Text(viewModel.isLastDrill ? "Go to Reflection" : "Next Drill")
-                    .font(.headline)
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(.orange.gradient)
-                    .foregroundStyle(.white)
-                    .clipShape(RoundedRectangle(cornerRadius: 14))
-            }
-            .padding(.horizontal)
-
-            Spacer()
         }
-        .padding()
     }
 
     // MARK: - Helpers
 
-    private func timerProgress(_ drill: DrillDefinition) -> Double {
-        guard drill.duration > 0 else { return 0 }
-        return Double(viewModel.timeRemaining) / Double(drill.duration)
-    }
-
     private var formattedTime: String {
         let minutes = viewModel.timeRemaining / 60
         let seconds = viewModel.timeRemaining % 60
-        return String(format: "%d:%02d", minutes, seconds)
+        return String(format: "%02d:%02d", minutes, seconds)
     }
 }

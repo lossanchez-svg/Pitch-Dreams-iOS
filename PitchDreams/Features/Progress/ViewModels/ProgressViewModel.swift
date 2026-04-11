@@ -106,15 +106,25 @@ final class ProgressViewModel: ObservableObject {
         isLoading = true
         errorMessage = nil
 
-        streakData = try? await apiClient.request(
-            APIRouter.getStreaks(childId: childId)
-        ) as StreakData
-        sessions = (try? await apiClient.request(
-            APIRouter.listSessions(childId: childId, limit: 100)
-        ) as [SessionLog]) ?? []
-        trends = try? await apiClient.request(
-            APIRouter.getTrends(childId: childId, weeks: 4)
-        ) as [WeeklyTrend]
+        do {
+            streakData = try await apiClient.request(APIRouter.getStreaks(childId: childId))
+        } catch {
+            streakData = nil
+        }
+
+        do {
+            sessions = try await apiClient.request(APIRouter.listSessions(childId: childId, limit: 100))
+        } catch {
+            sessions = []
+            errorMessage = "Unable to load sessions"
+        }
+
+        do {
+            trends = try await apiClient.request(APIRouter.getTrends(childId: childId, weeks: 4))
+        } catch {
+            trends = nil
+        }
+
         isLoading = false
     }
 

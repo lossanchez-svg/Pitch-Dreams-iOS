@@ -94,12 +94,15 @@ final class ChildDetailViewModel: ObservableObject {
 
         do {
             streakData = try await apiClient.request(APIRouter.getStreaks(childId: childId))
-        } catch { /* non-critical */ }
+        } catch {
+            streakData = nil
+        }
 
         do {
             sessions = try await apiClient.request(APIRouter.listSessions(childId: childId, limit: 100))
         } catch {
             sessions = []
+            errorMessage = "Unable to load session data"
         }
 
         do {

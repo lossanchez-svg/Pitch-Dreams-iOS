@@ -31,6 +31,9 @@ final class ActiveTrainingViewModel: ObservableObject {
     private var hasSpokedMidDrill = false
     private var hasSpoken30s = false
 
+    // MARK: - Avatar
+    @Published var avatarAssetName: String = "default_stage1"
+
     // MARK: - Session Meta
     @Published var isLoading = false
     @Published var errorMessage: String?
@@ -40,6 +43,7 @@ final class ActiveTrainingViewModel: ObservableObject {
     let spaceType: String
     private let apiClient: APIClientProtocol
     private var timerCancellable: AnyCancellable?
+    private var reflectionTask: Task<Void, Never>?
     private var sessionStartTime: Date?
 
     var currentDrill: DrillDefinition? {
@@ -160,10 +164,32 @@ final class ActiveTrainingViewModel: ObservableObject {
         repCount += 1
     }
 
+    // MARK: - Profile / Avatar
+
+    func loadProfile() async {
+        do {
+            let profile: ChildProfileDetail = try await apiClient.request(
+                APIRouter.getProfile(childId: childId)
+            )
+            let streaks: StreakData? = try? await apiClient.request(
+                APIRouter.getStreaks(childId: childId)
+            )
+            let milestones = streaks?.milestones ?? []
+            avatarAssetName = Avatar.assetName(
+                for: profile.avatarId,
+                milestones: milestones,
+                localMissionXP: MissionsViewModel.shared.localMissionXP
+            )
+        } catch {
+            // Keep default avatar on failure — non-critical
+        }
+    }
+
     // MARK: - Reflection
 
     private func loadReflectionOptions() {
-        Task {
+        reflectionTask?.cancel()
+        reflectionTask = Task { @MainActor in
             do {
                 highlightOptions = try await apiClient.request(APIRouter.highlightTags)
             } catch {
@@ -175,6 +201,20 @@ final class ActiveTrainingViewModel: ObservableObject {
                 nextFocusOptions = []
             }
         }
+    }
+
+    /// Cancel timer and in-flight tasks. Call from view's onDisappear.
+    func cleanup() {
+        timerCancellable?.cancel()
+        timerCancellable = nil
+        reflectionTask?.cancel()
+        reflectionTask = nil
+        isTimerRunning = false
+    }
+
+    deinit {
+        timerCancellable?.cancel()
+        reflectionTask?.cancel()
     }
 
     // MARK: - Save
@@ -206,6 +246,7 @@ final class ActiveTrainingViewModel: ObservableObject {
                 )
             }
             sessionSaved = true
+            MissionsViewModel.shared.recordEvent(.sessionLogged, childId: childId)
             phase = .complete
             // Voice: session complete
             coachVoice.speak("Well done. Session complete.", personality: "manager")

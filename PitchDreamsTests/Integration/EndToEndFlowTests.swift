@@ -11,7 +11,7 @@ final class EndToEndFlowTests: XCTestCase {
     let api = APIClient()
     let keychain = KeychainService()
     let testEmail = "pitchdreams.soccer@gmail.com"
-    let testPassword = "loanDepot2010#"
+    let testPassword = "Skyway7six#"
     let testChildNickname = "Tester1"
     let testPin = "1111"
 

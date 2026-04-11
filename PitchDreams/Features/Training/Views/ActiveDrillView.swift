@@ -61,6 +61,12 @@ struct ActiveDrillView: View {
             guard !newTranscript.isEmpty else { return }
             processDrillVoiceCommand(newTranscript)
         }
+        .task {
+            await viewModel.loadProfile()
+        }
+        .onDisappear {
+            viewModel.cleanup()
+        }
     }
 
     // MARK: - Voice Commands
@@ -133,7 +139,7 @@ struct ActiveDrillView: View {
 
                     // Avatar breaking the right edge
                     avatarPeek
-                        .offset(x: 80, y: 0)
+                        .offset(x: 120, y: 30)
                 }
 
                 Spacer()
@@ -214,28 +220,15 @@ struct ActiveDrillView: View {
 
     @ViewBuilder
     private var avatarPeek: some View {
-        let assetName = Avatar.assetName(
-            for: nil, // We don't have profile in this view; use stored childId
-            milestones: [],
-            localMissionXP: 0
-        )
-        // Use a generic avatar hint — the exact asset depends on profile data
-        // which ActiveDrillView doesn't fetch. Use the default avatar.
-        let fallbackAsset = "panther_stage2"
-        if UIImage(named: fallbackAsset) != nil {
-            Image(fallbackAsset)
-                .resizable()
-                .scaledToFit()
-                .frame(width: 140, height: 140)
-                .shadow(color: Color.dsSecondary.opacity(0.3), radius: 12)
-        } else if UIImage(named: assetName) != nil {
+        let assetName = viewModel.avatarAssetName
+        if UIImage(named: assetName) != nil {
             Image(assetName)
                 .resizable()
                 .scaledToFit()
                 .frame(width: 140, height: 140)
                 .shadow(color: Color.dsSecondary.opacity(0.3), radius: 12)
         } else {
-            // No avatar asset — skip the peek
+            // No avatar asset found — skip the peek
             EmptyView()
         }
     }

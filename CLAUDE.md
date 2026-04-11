@@ -94,7 +94,7 @@ xcodebuild test -project PitchDreams.xcodeproj -scheme PitchDreams \
   -only-testing:PitchDreamsTests/EndToEndFlowTests
 ```
 
-Test account: `pitchdreams.soccer@gmail.com` / `loanDepot2010#` / Child: `Tester1` PIN `1111`
+Test account: `pitchdreams.soccer@gmail.com` / `Skyway7six#` / Child: `Tester1` PIN `1111`
 
 ## Project Generation
 

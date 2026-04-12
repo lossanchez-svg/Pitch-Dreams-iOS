@@ -123,7 +123,7 @@ struct TrainingSessionView: View {
                 Task {
                     await viewModel.quickCheckIn(mood: mood.name)
                     if let explanation = viewModel.modeExplanation {
-                        coachVoice.speak(explanation, personality: "manager")
+                        coachVoice.speak(explanation, personality: CoachPersonality.current.rawValue)
                     }
                 }
             }
@@ -167,7 +167,7 @@ struct TrainingSessionView: View {
                         Task {
                             await viewModel.quickCheckIn(mood: mood.name)
                             if let explanation = viewModel.modeExplanation {
-                                coachVoice.speak(explanation, personality: "manager")
+                                coachVoice.speak(explanation, personality: CoachPersonality.current.rawValue)
                             }
                         }
                     } label: {

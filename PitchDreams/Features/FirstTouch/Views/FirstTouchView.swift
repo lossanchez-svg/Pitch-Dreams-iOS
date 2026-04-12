@@ -292,7 +292,8 @@ struct FirstTouchView: View {
                         stopTimerChallenge()
                         // Announce PR if beaten
                         if voiceEnabled, let best = previousBest, viewModel.activeCount > best {
-                            coachVoice.speak("New personal record! \(viewModel.activeCount) reps!", personality: "hype")
+                            let persona = CoachPersonality.current
+                            coachVoice.speak(persona.personalRecordLine, personality: persona.rawValue)
                         }
                     }
                 } label: {

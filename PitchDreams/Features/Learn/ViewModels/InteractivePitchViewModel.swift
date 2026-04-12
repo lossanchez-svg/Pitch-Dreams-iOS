@@ -18,21 +18,21 @@ final class InteractivePitchViewModel: ObservableObject {
         selectedElementId = player.id
         popoverPosition = position
         popoverText = descriptionForPlayer(player)
-        voice?.speak(popoverText, personality: "manager")
+        voice?.speak(popoverText, personality: CoachPersonality.current.rawValue)
     }
 
     func tapArrow(_ arrow: TacticalArrow, at position: CGPoint) {
         selectedElementId = arrow.id
         popoverPosition = position
         popoverText = descriptionForArrow(arrow)
-        voice?.speak(popoverText, personality: "manager")
+        voice?.speak(popoverText, personality: CoachPersonality.current.rawValue)
     }
 
     func tapZone(_ zone: TacticalZone, at position: CGPoint) {
         selectedElementId = zone.id
         popoverPosition = position
         popoverText = descriptionForZone(zone)
-        voice?.speak(popoverText, personality: "manager")
+        voice?.speak(popoverText, personality: CoachPersonality.current.rawValue)
     }
 
     /// Dismiss the popover.

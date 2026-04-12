@@ -27,9 +27,15 @@ final class ActiveTrainingViewModel: ObservableObject {
     @Published var nextFocusOptions: [NextFocusChip] = []
 
     // MARK: - Voice Coaching
-    @Published var coachVoice = CoachVoice()
+    var coachVoice: CoachVoiceProtocol = CoachVoice()
     private var hasSpokedMidDrill = false
     private var hasSpoken30s = false
+
+    /// The coach personality used for all voice coaching in this session.
+    /// Reads from the parent-configured setting stored in UserDefaults.
+    var coachPersonality: String {
+        CoachPersonality.current.rawValue
+    }
 
     // MARK: - Avatar
     @Published var avatarAssetName: String = "default_stage1"
@@ -88,9 +94,10 @@ final class ActiveTrainingViewModel: ObservableObject {
         // Voice: announce drill start
         if let drill = currentDrill {
             let durationMinutes = max(1, drill.duration / 60)
+            let persona = CoachPersonality.current
             coachVoice.speak(
-                "\(drill.name). You've got \(durationMinutes) minutes. \(drill.coachTip)",
-                personality: "manager"
+                persona.drillStartLine(name: drill.name, minutes: durationMinutes, tip: drill.coachTip),
+                personality: coachPersonality
             )
         }
 
@@ -111,15 +118,16 @@ final class ActiveTrainingViewModel: ObservableObject {
     }
 
     private func checkVoiceMilestones() {
+        let persona = CoachPersonality.current
         // Mid-drill at 60s remaining
         if timeRemaining == 60 && !hasSpokedMidDrill {
             hasSpokedMidDrill = true
-            coachVoice.speak("Keep going. \(timeRemaining) seconds to go.", personality: "hype")
+            coachVoice.speak(persona.midDrillLine(secondsLeft: timeRemaining), personality: coachPersonality)
         }
         // 30s remaining
         if timeRemaining == 30 && !hasSpoken30s {
             hasSpoken30s = true
-            coachVoice.speak("Thirty seconds! Finish strong.", personality: "hype")
+            coachVoice.speak(persona.thirtySecondsLine, personality: coachPersonality)
         }
     }
 
@@ -132,7 +140,7 @@ final class ActiveTrainingViewModel: ObservableObject {
         pauseTimer()
         phase = .repConfirm
         // Voice: timer expired
-        coachVoice.speak("Time! How many reps did you get?", personality: "manager")
+        coachVoice.speak(CoachPersonality.current.drillCompleteLine, personality: coachPersonality)
     }
 
     func confirmReps() {
@@ -140,7 +148,7 @@ final class ActiveTrainingViewModel: ObservableObject {
             phase = .reflection
             loadReflectionOptions()
             // Voice: reflection start
-            coachVoice.speak("Quick reflection. How hard was that, 1 to 10?", personality: "zen")
+            coachVoice.speak(CoachPersonality.current.reflectionLine, personality: coachPersonality)
         } else {
             nextDrill()
         }
@@ -249,7 +257,7 @@ final class ActiveTrainingViewModel: ObservableObject {
             MissionsViewModel.shared.recordEvent(.sessionLogged, childId: childId)
             phase = .complete
             // Voice: session complete
-            coachVoice.speak("Well done. Session complete.", personality: "manager")
+            coachVoice.speak(CoachPersonality.current.sessionCompleteLine, personality: coachPersonality)
         } catch {
             Log.api.error("Session save failed: \(error)")
             errorMessage = "Failed to save session: \(error.localizedDescription)"

@@ -34,6 +34,105 @@ enum CoachPersonality: String, CaseIterable, Identifiable {
         case .drill: return "figure.strengthtraining.traditional"
         }
     }
+
+    /// Asset catalog image name for this coach personality.
+    var imageName: String {
+        "coach_\(rawValue)"
+    }
+
+    /// Coach character name shown alongside tips and nudges.
+    var coachName: String {
+        switch self {
+        case .manager: return "Coach Kai"
+        case .hype: return "Coach Blaze"
+        case .zen: return "Coach Sage"
+        case .drill: return "Coach Steel"
+        }
+    }
+
+    // MARK: - UserDefaults Persistence
+
+    private static let defaultsKey = "coachPersonality"
+
+    /// The currently selected coach personality, persisted in UserDefaults.
+    static var current: CoachPersonality {
+        guard let raw = UserDefaults.standard.string(forKey: defaultsKey),
+              let personality = CoachPersonality(rawValue: raw) else {
+            return .manager
+        }
+        return personality
+    }
+
+    /// Save this personality as the current selection.
+    func saveToCurrent() {
+        UserDefaults.standard.set(rawValue, forKey: Self.defaultsKey)
+    }
+
+    // MARK: - Personality-Specific Lines
+
+    /// Drill start announcement. `name`, `minutes`, and `tip` are interpolated.
+    func drillStartLine(name: String, minutes: Int, tip: String) -> String {
+        switch self {
+        case .manager: return "\(name). You've got \(minutes) minutes. \(tip)"
+        case .hype:    return "Let's go! \(name)! \(minutes) minutes on the clock. \(tip)"
+        case .zen:     return "\(name). Take a breath. You have \(minutes) minutes. \(tip)"
+        case .drill:   return "\(name). \(minutes) minutes. Execute. \(tip)"
+        }
+    }
+
+    func midDrillLine(secondsLeft: Int) -> String {
+        switch self {
+        case .manager: return "Keep going. \(secondsLeft) seconds to go."
+        case .hype:    return "You're crushing it! \(secondsLeft) seconds, keep that energy!"
+        case .zen:     return "Stay present. \(secondsLeft) seconds remain."
+        case .drill:   return "\(secondsLeft) seconds. Don't slow down."
+        }
+    }
+
+    var thirtySecondsLine: String {
+        switch self {
+        case .manager: return "Thirty seconds. Finish strong."
+        case .hype:    return "Thirty seconds! Let's go, bring it home!"
+        case .zen:     return "Thirty seconds. Stay focused and breathe."
+        case .drill:   return "Thirty seconds. Push through."
+        }
+    }
+
+    var drillCompleteLine: String {
+        switch self {
+        case .manager: return "Time. How many reps did you get?"
+        case .hype:    return "That's time! Great work! How many reps?"
+        case .zen:     return "And time. Take a moment. How many reps did you complete?"
+        case .drill:   return "Time. Report your reps."
+        }
+    }
+
+    var reflectionLine: String {
+        switch self {
+        case .manager: return "Quick reflection. How hard was that, 1 to 10?"
+        case .hype:    return "Awesome session! Rate that effort, 1 to 10."
+        case .zen:     return "Let's reflect. On a scale of 1 to 10, how did that feel?"
+        case .drill:   return "Rate your effort. 1 to 10."
+        }
+    }
+
+    var sessionCompleteLine: String {
+        switch self {
+        case .manager: return "Well done. Session complete."
+        case .hype:    return "Yes! Session complete! You're a legend!"
+        case .zen:     return "Session complete. Be proud of the work you put in today."
+        case .drill:   return "Session logged. Good work. Dismissed."
+        }
+    }
+
+    var personalRecordLine: String {
+        switch self {
+        case .manager: return "New personal record! Great progress."
+        case .hype:    return "New personal record! That's what I'm talking about!"
+        case .zen:     return "A new personal best. Wonderful."
+        case .drill:   return "New record. That's the standard now."
+        }
+    }
 }
 
 struct ParentControlsView: View {
@@ -146,10 +245,15 @@ struct ParentControlsView: View {
                     coachPersonality = personality
                 } label: {
                     HStack(spacing: 12) {
-                        Image(systemName: personality.icon)
-                            .font(.title3)
-                            .foregroundStyle(coachPersonality == personality ? .cyan : .secondary)
-                            .frame(width: 32)
+                        Image(personality.imageName)
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: 36, height: 36)
+                            .clipShape(Circle())
+                            .overlay(
+                                Circle()
+                                    .stroke(coachPersonality == personality ? Color.cyan : Color.clear, lineWidth: 2)
+                            )
 
                         VStack(alignment: .leading, spacing: 2) {
                             Text(personality.displayName)
@@ -321,6 +425,7 @@ struct ParentControlsView: View {
         )
         do {
             try await apiClient.requestVoid(APIRouter.updateChildPermissions(childId: childId, permissions: body))
+            coachPersonality.saveToCurrent()
             saveSuccess = true
         } catch {
             // Silently fail; user sees no "Saved!" confirmation

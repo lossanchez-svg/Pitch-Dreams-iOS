@@ -137,6 +137,6 @@ final class LessonPlayerViewModel: ObservableObject {
 
     private func speakCurrentStep() {
         guard voiceEnabled, let voice else { return }
-        voice.speak(currentStep.narration, personality: "manager")
+        voice.speak(currentStep.narration, personality: CoachPersonality.current.rawValue)
     }
 }

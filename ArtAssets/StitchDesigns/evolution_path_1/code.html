@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Evolution Preview - PITCH DREAMS</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&amp;family=Be+Vietnam+Pro:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "tertiary-fixed": "#f9cc61",
+                    "secondary-fixed-dim": "#39dcef",
+                    "on-error-container": "#ffa8a3",
+                    "background": "#070e1d",
+                    "on-tertiary": "#664c00",
+                    "surface-container": "#11192c",
+                    "surface-container-lowest": "#000000",
+                    "on-secondary": "#00535c",
+                    "inverse-primary": "#a93900",
+                    "secondary-dim": "#39dcef",
+                    "outline-variant": "#414859",
+                    "surface-container-low": "#0b1324",
+                    "tertiary-fixed-dim": "#eabe55",
+                    "on-background": "#dfe5fb",
+                    "on-error": "#490006",
+                    "surface-variant": "#1c253b",
+                    "primary-container": "#ff7943",
+                    "surface-tint": "#ff9066",
+                    "on-tertiary-fixed-variant": "#674d00",
+                    "tertiary-container": "#f9cc61",
+                    "on-surface-variant": "#a4abbf",
+                    "on-tertiary-container": "#5b4400",
+                    "secondary-container": "#006973",
+                    "on-surface": "#dfe5fb",
+                    "tertiary": "#ffdb8f",
+                    "on-secondary-container": "#e6fcff",
+                    "on-primary-container": "#441200",
+                    "surface": "#070e1d",
+                    "tertiary-dim": "#eabe55",
+                    "on-primary-fixed-variant": "#541800",
+                    "surface-container-high": "#161f33",
+                    "surface-dim": "#070e1d",
+                    "on-primary": "#571a00",
+                    "error-container": "#9f0519",
+                    "on-secondary-fixed-variant": "#005e67",
+                    "secondary-fixed": "#4febfe",
+                    "error": "#ff716c",
+                    "primary-fixed-dim": "#f76526",
+                    "inverse-on-surface": "#4e5567",
+                    "on-tertiary-fixed": "#443100",
+                    "primary": "#ff9066",
+                    "outline": "#6f7588",
+                    "surface-bright": "#212c43",
+                    "secondary": "#4febfe",
+                    "primary-fixed": "#ff7943",
+                    "primary-dim": "#ff743b",
+                    "inverse-surface": "#faf9ff",
+                    "error-dim": "#d7383b",
+                    "on-primary-fixed": "#000000",
+                    "surface-container-highest": "#1c253b",
+                    "on-secondary-fixed": "#003f45"
+            },
+            "borderRadius": {
+                    "DEFAULT": "1rem",
+                    "lg": "2rem",
+                    "xl": "3rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Plus Jakarta Sans"],
+                    "body": ["Be Vietnam Pro"],
+                    "label": ["Be Vietnam Pro"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glow-bloom {
+            box-shadow: 0 0 60px 10px rgba(255, 219, 143, 0.15);
+        }
+        .particle-bg {
+            background-image: radial-gradient(circle at 50% 50%, rgba(255, 144, 102, 0.05) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body selection:bg-primary selection:text-on-primary">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-[#070E1D] shadow-[0_0_30px_rgba(255,144,102,0.1)]">
+<div class="flex justify-between items-center px-6 py-4 w-full">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full overflow-hidden ring-2 ring-primary/30">
+<img alt="User Profile" data-alt="cel-shaded rookie soccer avatar with a focused expression and athletic headband in a vibrant anime style" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCRbEoOiGohcc_AgYF_TwK2333bVfxHOWE_V5tK-JBf312YPegb88i4I-TuMqcwk41WJmJ8j1x2-MnpHx42js7ymuH4dnCI45Bek8aPdyagvxj2XDzDqOAQ81cg6LdydFHWy9_SgZh1E3fK7FBzSATsA7ZdqG--hjPn00SD81dWOsI-PVA4dbH5uCquUnNn8ZiaIl7VJM7QXTNyb90fwWViE18O7Szpvl43bmsf4L7lV6gLMU2GPGqNauEfRvf_f7M3JFphIkp6m5o"/>
+</div>
+<h1 class="text-2xl font-black text-white italic tracking-tighter uppercase font-headline">PITCH DREAMS</h1>
+</div>
+<button class="text-[#FF9066] hover:opacity-80 transition-opacity scale-95 active:duration-150">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</button>
+</div>
+</header>
+<main class="pt-24 pb-32 min-h-screen relative overflow-hidden particle-bg">
+<!-- Floating particles deco -->
+<div class="absolute top-1/4 right-0 w-64 h-64 bg-primary/5 blur-[120px] rounded-full"></div>
+<div class="absolute bottom-1/4 left-0 w-80 h-80 bg-tertiary/5 blur-[150px] rounded-full"></div>
+<div class="px-6 relative z-10">
+<!-- Header Section -->
+<div class="mb-12">
+<p class="font-label text-secondary font-bold text-xs uppercase tracking-[0.2em] mb-2">Ascension Journey</p>
+<h2 class="font-headline font-extrabold text-4xl tracking-tight text-white leading-tight">YOUR EVOLUTION <span class="text-primary">PATH</span></h2>
+</div>
+<!-- Evolution Timeline -->
+<div class="flex flex-col gap-12 relative">
+<!-- Connecting Line -->
+<div class="absolute left-10 top-0 bottom-0 w-[2px] bg-gradient-to-b from-primary via-secondary to-tertiary opacity-20"></div>
+<!-- Stage 1: Rookie -->
+<div class="relative flex gap-8 items-start">
+<div class="z-20 flex-shrink-0 w-20 h-20 rounded-full bg-surface-container-high border-4 border-primary/20 flex items-center justify-center overflow-hidden shadow-[0_0_20px_rgba(255,144,102,0.2)]">
+<img alt="Rookie Stage" class="w-12 h-12" data-alt="cel-shaded rookie panther robot icon, small and scrappy with matte dark grey finish and bright orange glowing eyes" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD5CBCQXfZXVn2Iv_KDVrIAr-hHu2bCrGqzT78e3vkc6I5IhN5fjW90h_eFZVIVMpDoAzoN2y9bFeG66n45QT7igVE1kXbqRuUp7fxok-cGH0IFp0AHzvD4ED2sO0JKg7xVelpERS5HagXzKPPeA_HzBM9ZRDZrqs7Yx_lKNbno_V_bIU7-W5pgukY-P2gZ0IgFGvRhcOkk3IDsYH0IaRaWvghZClSVdPR6-TqJuxwKZ35qi-hR6y99veZ_-_ZhDAi2LMc3qOnJEOo"/>
+</div>
+<div class="flex-grow pt-2">
+<div class="flex items-center gap-2 mb-1">
+<span class="px-2 py-0.5 bg-primary/10 text-primary text-[10px] font-bold uppercase rounded-full ring-1 ring-primary/20">Active</span>
+<h3 class="font-headline font-bold text-xl text-white">Rookie</h3>
+</div>
+<p class="text-on-surface-variant text-sm mb-4">The journey begins. Focused on fundamental ball control and stamina.</p>
+<div class="p-4 rounded-lg bg-surface-container-low border border-outline-variant/10">
+<div class="flex justify-between items-center text-xs font-bold uppercase tracking-wider mb-2">
+<span class="text-on-surface-variant">Core Progress</span>
+<span class="text-primary">100%</span>
+</div>
+<div class="w-full bg-surface-container-highest h-2 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-full"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Stage 2: Pro -->
+<div class="relative flex gap-8 items-start">
+<div class="z-20 flex-shrink-0 w-20 h-20 rounded-full bg-surface-container-high border-4 border-secondary/20 flex items-center justify-center overflow-hidden shadow-[0_0_30px_rgba(79,235,254,0.15)]">
+<img alt="Pro Stage" class="w-14 h-14" data-alt="athletic lean panther robot, glowing cyan aura effects around joints, sleek aerodynamic chrome plating" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBDOAb00q6keeYZZtDb93XIPp9z5a1O1YrCuGuCEzvcT_bc367bTpHnfGZk2sAnZCG1nnArEzYSDPE0nnZHKR389KeoJK7m7XDaXl-DDTaUoBKuTPIWG1mN3_kd-HLubdCd0yzcBm-Job-ykDeeoDhsceME3MDEwbrwNoFAjucOzrzwlnfO9wpRBz-rwYNJB81CUgdyZCisUbTzDihIEJDA7db2a3rRHK4sxqbIgKdIcerfHlfzlj1i2fIFAUNUJ5xsHdwEmWs0A6U"/>
+</div>
+<div class="flex-grow pt-2">
+<div class="flex items-center gap-2 mb-1">
+<span class="px-2 py-0.5 bg-secondary/10 text-secondary text-[10px] font-bold uppercase rounded-full ring-1 ring-secondary/20 tracking-widest">Locked</span>
+<h3 class="font-headline font-bold text-xl text-white">Pro</h3>
+</div>
+<p class="text-on-surface-variant text-sm mb-4">Precision athlete. Unlocks advanced skill moves and visual aura.</p>
+<div class="space-y-3">
+<div class="flex items-center gap-3 text-sm">
+<span class="material-symbols-outlined text-secondary text-lg" data-icon="check_circle">check_circle</span>
+<span class="text-on-surface">Reach Level 15</span>
+</div>
+<div class="flex items-center gap-3 text-sm">
+<span class="material-symbols-outlined text-outline text-lg" data-icon="radio_button_unchecked">radio_button_unchecked</span>
+<span class="text-on-surface-variant">Master 5 "Legendary" Skill Drills</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Stage 3: Legend -->
+<div class="relative flex gap-8 items-start pb-12">
+<div class="z-20 flex-shrink-0 w-20 h-20 rounded-full bg-surface-container-highest border-4 border-tertiary/40 flex items-center justify-center overflow-hidden glow-bloom">
+<img alt="Legend Stage" class="w-16 h-16" data-alt="massive robotic panther with gold celestial armor, fire and gold elemental effects, intense glowing eyes, regal posture" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAYEpxm5cYx0KmzKLwiyYE10dwlzb_rsTrXMOolK5OuxhYnvCQl7lSybsVB6xiSGNvWfdyhoRZQWIMGCMeElm_93UEokxJNa7N4QplCls-trkNsOZMUz9AmerZQho93ZblElrohlXYNDE1IxPqiQ2fbvoGnzu_EMVY-5Suz_Swws8nTI_OVvPP16oS4uTzjHvl162rvc5FEJM2wPyzuFZex3EUrnASPEJSF-79V18XkvoYmBJllsGogda3RDbUjU1gwLsBHE0DpRP4"/>
+</div>
+<div class="flex-grow pt-2">
+<div class="flex items-center gap-2 mb-1">
+<span class="px-2 py-0.5 bg-tertiary/10 text-tertiary text-[10px] font-bold uppercase rounded-full ring-1 ring-tertiary/20 tracking-widest">Ultimate</span>
+<h3 class="font-headline font-bold text-xl text-tertiary">Legend</h3>
+</div>
+<p class="text-on-surface-variant text-sm mb-4">The Apex. Elemental gold armor with permanent massive bloom effects.</p>
+<!-- Requirement Card -->
+<div class="p-5 rounded-lg bg-gradient-to-br from-surface-container-high to-surface-container border border-tertiary/10 relative overflow-hidden group">
+<div class="absolute -right-4 -bottom-4 opacity-5 group-hover:opacity-10 transition-opacity">
+<span class="material-symbols-outlined text-7xl text-tertiary" data-icon="workspace_premium" data-weight="fill">workspace_premium</span>
+</div>
+<h4 class="font-label font-bold text-xs text-tertiary uppercase tracking-widest mb-3">Ascension Requirements</h4>
+<ul class="space-y-2">
+<li class="flex items-center justify-between text-xs">
+<span class="text-on-surface-variant">Training Days</span>
+<span class="text-on-surface font-bold">120 / 365</span>
+</li>
+<li class="flex items-center justify-between text-xs">
+<span class="text-on-surface-variant">Global Rank</span>
+<span class="text-on-surface font-bold">Top 1,000</span>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<!-- CTA Section -->
+<div class="mt-8">
+<button class="w-full py-4 rounded-xl bg-gradient-to-r from-primary to-primary-container text-on-primary-fixed font-headline font-bold text-lg shadow-[0_10px_40px_rgba(255,144,102,0.3)] hover:opacity-90 transition-all active:scale-[0.98]">
+                    BEGIN DAILY GRIND
+                </button>
+</div>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-8 pt-4 bg-[#070E1D]/80 backdrop-blur-xl border-t border-white/5 shadow-[0_-8px_40px_rgba(7,14,29,0.8)]">
+<button class="flex flex-col items-center justify-center text-white/40 px-5 py-2 hover:text-[#4FEBFE] transition-colors scale-95 active:duration-200">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="font-be-vietnam-pro font-bold text-[10px] uppercase tracking-widest mt-1">Home</span>
+</button>
+<button class="flex flex-col items-center justify-center text-white/40 px-5 py-2 hover:text-[#4FEBFE] transition-colors scale-95 active:duration-200">
+<span class="material-symbols-outlined" data-icon="sports_soccer">sports_soccer</span>
+<span class="font-be-vietnam-pro font-bold text-[10px] uppercase tracking-widest mt-1">Train</span>
+</button>
+<button class="flex flex-col items-center justify-center text-white/40 px-5 py-2 hover:text-[#4FEBFE] transition-colors scale-95 active:duration-200">
+<span class="material-symbols-outlined" data-icon="assignment">assignment</span>
+<span class="font-be-vietnam-pro font-bold text-[10px] uppercase tracking-widest mt-1">Log</span>
+</button>
+<button class="flex flex-col items-center justify-center text-[#FF9066] bg-[#FF9066]/10 rounded-full px-5 py-2 ring-1 ring-[#FF9066]/30 scale-95 active:duration-200">
+<span class="material-symbols-outlined" data-icon="insights">insights</span>
+<span class="font-be-vietnam-pro font-bold text-[10px] uppercase tracking-widest mt-1">Skills</span>
+</button>
+<button class="flex flex-col items-center justify-center text-white/40 px-5 py-2 hover:text-[#4FEBFE] transition-colors scale-95 active:duration-200">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-be-vietnam-pro font-bold text-[10px] uppercase tracking-widest mt-1">Profile</span>
+</button>
+</nav>
+</body></html>

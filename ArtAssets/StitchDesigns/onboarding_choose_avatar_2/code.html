@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Pitch Dreams - Choose Your Legend</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "primary-fixed": "#ffdbcf",
+                    "secondary": "#46e5f8",
+                    "surface-dim": "#0c1322",
+                    "on-primary-fixed-variant": "#802900",
+                    "tertiary-fixed": "#ffdf9b",
+                    "on-secondary-fixed-variant": "#004f57",
+                    "error-container": "#93000a",
+                    "on-tertiary-fixed": "#251a00",
+                    "on-background": "#dce2f8",
+                    "inverse-primary": "#a83900",
+                    "on-surface-variant": "#bbc9cb",
+                    "error": "#ffb4ab",
+                    "on-error-container": "#ffdad6",
+                    "on-surface": "#dce2f8",
+                    "tertiary-fixed-dim": "#edc157",
+                    "secondary-fixed": "#92f1ff",
+                    "surface-container": "#191f2f",
+                    "surface-bright": "#32394a",
+                    "surface-container-low": "#151b2b",
+                    "on-secondary-container": "#004f57",
+                    "on-tertiary": "#3f2e00",
+                    "on-primary-fixed": "#380d00",
+                    "outline-variant": "#3c494b",
+                    "on-tertiary-fixed-variant": "#5b4300",
+                    "background": "#0c1322",
+                    "tertiary": "#ffe9bd",
+                    "on-primary": "#5b1b00",
+                    "secondary-fixed-dim": "#34d9ec",
+                    "surface": "#0c1322",
+                    "surface-container-high": "#232a3a",
+                    "surface-tint": "#ffb59a",
+                    "outline": "#859395",
+                    "primary-fixed-dim": "#ffb59a",
+                    "on-secondary": "#00363c",
+                    "surface-container-highest": "#2e3545",
+                    "surface-container-lowest": "#070e1d",
+                    "inverse-surface": "#dce2f8",
+                    "on-secondary-fixed": "#001f23",
+                    "surface-variant": "#2e3545",
+                    "inverse-on-surface": "#2a3041",
+                    "secondary-container": "#00c9db",
+                    "tertiary-container": "#f6c95f",
+                    "on-tertiary-container": "#705400",
+                    "primary": "#ffe6de",
+                    "on-primary-container": "#9d3500",
+                    "primary-container": "#ffc1aa",
+                    "on-error": "#690005"
+            },
+            "borderRadius": {
+                    "DEFAULT": "1rem",
+                    "lg": "2rem",
+                    "xl": "3rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Plus Jakarta Sans"],
+                    "body": ["Plus Jakarta Sans"],
+                    "label": ["Plus Jakarta Sans"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #0c1322;
+        }
+        .kinetic-glow {
+            background: radial-gradient(circle at 50% 50%, rgba(66, 226, 245, 0.15) 0%, transparent 60%);
+        }
+        .avatar-card-active {
+            box-shadow: 0 0 30px rgba(66, 226, 245, 0.4);
+            border: 2px solid #46e5f8;
+        }
+        .character-breakout {
+            transform: translateY(-15%) scale(1.1);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface min-h-screen flex flex-col selection:bg-secondary selection:text-on-secondary overflow-x-hidden">
+<!-- Top AppBar Suppressed per Rules (Onboarding Flow) -->
+<!-- Main Content Canvas -->
+<main class="flex-grow flex flex-col items-center justify-center relative px-6 py-12 md:py-20">
+<!-- Background Kinetic Oasis Elements -->
+<div class="fixed inset-0 kinetic-glow pointer-events-none"></div>
+<div class="fixed top-[-10%] right-[-10%] w-[500px] h-[500px] bg-secondary/5 blur-[120px] rounded-full pointer-events-none"></div>
+<div class="fixed bottom-[-10%] left-[-10%] w-[400px] h-[400px] bg-primary/5 blur-[100px] rounded-full pointer-events-none"></div>
+<!-- Header Section -->
+<div class="z-10 text-center mb-12 max-w-2xl">
+<span class="inline-block px-4 py-1.5 rounded-full bg-surface-container-high text-secondary font-label text-[10px] tracking-[0.1em] uppercase font-extrabold mb-4 border border-outline-variant/15">
+                Rookie Season
+            </span>
+<h1 class="text-4xl md:text-6xl font-headline font-extrabold tracking-tight mb-4 text-transparent bg-clip-text bg-gradient-to-b from-white to-surface-variant">
+                Choose Your Legend
+            </h1>
+<p class="text-on-surface-variant text-lg font-body leading-relaxed max-w-md mx-auto">
+                Pick your starter evolution. Each legend brings unique tactical advantages to the pitch.
+            </p>
+</div>
+<!-- Avatar Selection Bento Grid -->
+<div class="z-10 grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4 w-full max-w-6xl mb-16 px-2">
+<!-- Wolf Card -->
+<div class="group relative flex flex-col items-center">
+<div class="w-full aspect-square bg-surface-container rounded-xl flex items-end justify-center overflow-visible transition-all duration-300 hover:bg-surface-container-high cursor-pointer group-active:scale-95">
+<img class="w-[120%] max-w-none mb-[-10%] transition-transform duration-500 group-hover:character-breakout" data-alt="cel-shaded anime wolf character in a futuristic blue soccer kit, athletic pose, vibrant cyan accents, studio lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD_N9bWe28EUspe0rcieEAXBDS0jSizrFuWjALfZrbDQVA3qipSga8csloUCno3hoyU4VDe5Q0mWnlbR0sCo2fm_C7JQXGGUCK52QRy6gBd4WZBPvBDyNICqVcShYuP85t5UGDO0sTlFGNbxk8PEm68Sz9k4SxeEzKhQqWthkcJLMDv2s3u3_WEVYc4K0dYhNv_uGrtoDhFJCXRVHKeu-j1nblUJ8D_TJ0WdKVSh3_SA6YX62zb_PKYsiyEqnd1jMDti-UU4nUoaw8"/>
+</div>
+<span class="mt-4 font-label text-[12px] font-extrabold tracking-widest text-on-surface-variant group-hover:text-secondary">WOLF</span>
+</div>
+<!-- Lion Card (Active Example) -->
+<div class="group relative flex flex-col items-center">
+<div class="w-full aspect-square bg-surface-container-highest rounded-xl avatar-card-active flex items-end justify-center overflow-visible cursor-pointer">
+<img class="w-[130%] max-w-none mb-[-15%] character-breakout" data-alt="majestic anime lion in rookie soccer gear, cel-shaded style, bold yellow and navy uniform, heroic stance, breaking the container frame" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDy2lTUOG3vLIQMurf6riy-i-XIiP-eozVqqDyH9T-c2FuD3IyDvIWtJosuLollLSbi_yKH-CXc09f0lKvW4v39-fbHZ1IZmpqUYzo90zVpdzLU-_uWOPsU5JJBtN8megUpe9ZmmicerVyA8zHbT2KwE0T-nvLfkUuFPXCVkZDy2gtv93mTVujiPakj4aqYWheuk8f1rpr10DHFHaZTSKMIKX38blKU2keM2EXMm4VdVIp6ZWhOKpluzTSCtcpqqEklAltEinuc_8I"/>
+</div>
+<span class="mt-4 font-label text-[12px] font-extrabold tracking-widest text-secondary">LION</span>
+</div>
+<!-- Eagle Card -->
+<div class="group relative flex flex-col items-center">
+<div class="w-full aspect-square bg-surface-container rounded-xl flex items-end justify-center overflow-visible transition-all duration-300 hover:bg-surface-container-high cursor-pointer group-active:scale-95">
+<img class="w-[120%] max-w-none mb-[-10%] transition-transform duration-500 group-hover:character-breakout" data-alt="stylized anime eagle character wearing soccer kit, sharp cel-shaded lines, wings slightly spread, intense gaze, futuristic sports equipment" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA9z3pukY8o9hx73ZzZal_Iaf7fLr7f_R7AvVsphWjsmLFuMgknck4ppBQyR7i4vTQxA7RaDKJz5ahC6oaoOciV_j0ti6YDJA3QdGPHK0Endd1jvMKNM_PsPWcKc_fq4sWp-cUppcSMbYxhwhGvXtK9tM4MQfnqP1SicRgRMexbsV37Dh-J49ODI7L_XGAURt9P6mFLFrviv7RoMdeMEP8pD9AdBNC15vwd9-OizGSZBL0zTderT3cUhKrpVLqPGYqwn_IoFCgjIo8"/>
+</div>
+<span class="mt-4 font-label text-[12px] font-extrabold tracking-widest text-on-surface-variant group-hover:text-secondary">EAGLE</span>
+</div>
+<!-- Fox Card -->
+<div class="group relative flex flex-col items-center">
+<div class="w-full aspect-square bg-surface-container rounded-xl flex items-end justify-center overflow-visible transition-all duration-300 hover:bg-surface-container-high cursor-pointer group-active:scale-95">
+<img class="w-[120%] max-w-none mb-[-10%] transition-transform duration-500 group-hover:character-breakout" data-alt="clever anime fox scout character in orange and black soccer jersey, cel-shaded, dynamic athletic pose, cinematic lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBantvm_3f4CsSuNDfRGixN2cuV0u0TfqDzjH3nkq-awt0VFutvYK25AQt6qnRU9WdoPpc8sk0lpSj93TioCNPAGs1d84dL9VZxBE1wrju_zPqoXQ9u-QULI1Uh5nfVYmu8Y3TjruHVSe6Y0RsV0bKaoWnANyW0Str08wuI6yGL40nFT61zMMYLp9IWVSiPkOkedQHjJVShrmtntmiavGr86H40NJ9XhpsBCU7aJ9sIggjlMObjq2D2ng4X7jzPZNu8f6cGTfM9iWI"/>
+</div>
+<span class="mt-4 font-label text-[12px] font-extrabold tracking-widest text-on-surface-variant group-hover:text-secondary">FOX</span>
+</div>
+<!-- Shark Card -->
+<div class="group relative flex flex-col items-center">
+<div class="w-full aspect-square bg-surface-container rounded-xl flex items-end justify-center overflow-visible transition-all duration-300 hover:bg-surface-container-high cursor-pointer group-active:scale-95">
+<img class="w-[120%] max-w-none mb-[-10%] transition-transform duration-500 group-hover:character-breakout" data-alt="powerful anime shark athlete in sleek aquatic soccer kit, cel-shaded style, intimidating posture, water splash effects" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCPA-owLdrglcyngbSTFXpSQ_kSCFhxxz7uPETZ85mG4sTYRmTgKzkcQBHbOTRBTH-YAIasR1EIuPBl_uDSZcRCthnUol5T0Pl7AX1Bs2rXBSwZDlT7_w8d3PX9uXg-b-65pTJGsY_-96t3QcobK5kDifYC8bnOfLuceIpZ62kU5XK0Qf1o5Dg0aRf9y8iy3YTwo3-jZfQ_u4VppA7WoC18Sxyb4ZftAFdVlqkDx_41Nk8fRRgw7Yzl1KwBV8wpx3vFowd5SN2ttF4"/>
+</div>
+<span class="mt-4 font-label text-[12px] font-extrabold tracking-widest text-on-surface-variant group-hover:text-secondary">SHARK</span>
+</div>
+<!-- Panther Card -->
+<div class="group relative flex flex-col items-center">
+<div class="w-full aspect-square bg-surface-container rounded-xl flex items-end justify-center overflow-visible transition-all duration-300 hover:bg-surface-container-high cursor-pointer group-active:scale-95">
+<img class="w-[120%] max-w-none mb-[-10%] transition-transform duration-500 group-hover:character-breakout" data-alt="sleek anime panther character in black and neon soccer kit, cel-shaded, crouched ready for action, glowing eyes" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAcFN3oJv5NxOcwkSOZ8-7E4JzOmIV9A1BPT431-en3oeCmgNyjZvi30dbwO5rihcF_VDeRjSTkJ2ybeI9BFjhGIAF5BcXZ6l8dI5u2683xuxw_J6xQmtXJeLpvzE4msxU7eUZGEpHj7nigaiDTa0DiqoHhYF35bZOW3ePawu2hKZccy7ve604bFwTgV0o9DcK08g0HYKty9ijhHKWmh_UouAe8lEN5K0epYVJFpGpHEDC2BZZei6fWp7rR-SN4TdxNaXvsPzOcX6c"/>
+</div>
+<span class="mt-4 font-label text-[12px] font-extrabold tracking-widest text-on-surface-variant group-hover:text-secondary">PANTHER</span>
+</div>
+<!-- Bear Card -->
+<div class="group relative flex flex-col items-center">
+<div class="w-full aspect-square bg-surface-container rounded-xl flex items-end justify-center overflow-visible transition-all duration-300 hover:bg-surface-container-high cursor-pointer group-active:scale-95">
+<img class="w-[120%] max-w-none mb-[-10%] transition-transform duration-500 group-hover:character-breakout" data-alt="burly bear anime character in heavy duty soccer uniform, cel-shaded, friendly but powerful expression, high-end sports illustration" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDucerktF0VFSBIw3WMNXu8bzIw0-DGGBaJulHb4hIHO1LC7CTMjvDf5dv7EEaLos9HzpzqfnqYVFLA63n53yMmnfF-wu8HJdX0alBgDfxW5X0uOeieTdjWhrdtBPTX2Gucy2dxorEEv3HgpmYcBoPTAF8u1-1eqw474RQ7zZFOfaBDvnlJ_aBccJSd_xXwJMu3Rl6530mjyHrMxefLtbCjRNPfZ-mI1WqZj1WeYS3b-ER939YjqBaOg4PQd0yYYKTt0qdFecM3dAQ"/>
+</div>
+<span class="mt-4 font-label text-[12px] font-extrabold tracking-widest text-on-surface-variant group-hover:text-secondary">BEAR</span>
+</div>
+</div>
+<!-- Role Selection Actions -->
+<div class="z-10 flex flex-col sm:flex-row gap-6 w-full max-w-xl">
+<button class="flex-1 group relative overflow-hidden bg-gradient-to-br from-primary to-primary-container p-[2px] rounded-xl transition-all duration-300 hover:scale-[1.02] active:scale-95 shadow-[0_10px_40px_rgba(255,181,154,0.2)]">
+<div class="w-full bg-surface-container-lowest rounded-[2.8rem] px-8 py-5 flex items-center justify-center gap-3 bg-gradient-to-br from-primary to-primary-container">
+<span class="material-symbols-outlined text-on-primary-container" style="font-variation-settings: 'FILL' 1;">sports_soccer</span>
+<span class="font-headline font-bold text-on-primary-container text-lg">I'm a Player</span>
+</div>
+</button>
+<button class="flex-1 group relative overflow-hidden bg-surface-variant/20 backdrop-blur-xl border border-outline-variant/30 px-8 py-5 rounded-xl flex items-center justify-center gap-3 transition-all duration-300 hover:bg-surface-variant/40 hover:border-secondary/50 active:scale-95">
+<span class="material-symbols-outlined text-secondary">family_restroom</span>
+<span class="font-headline font-bold text-on-surface text-lg">I'm a Parent</span>
+</button>
+</div>
+<!-- Footer Meta -->
+<div class="z-10 mt-12 flex items-center gap-2 text-on-surface-variant/60 font-body text-sm">
+<span class="material-symbols-outlined text-[18px]">verified_user</span>
+<span>Secure account setup powered by PitchDreams Core</span>
+</div>
+</main>
+<!-- Bottom Navigation Suppressed per Rules (Onboarding/Transactional Flow) -->
+</body></html>

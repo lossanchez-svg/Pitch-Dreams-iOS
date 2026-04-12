@@ -18,6 +18,7 @@ enum APIRouter: APIEndpoint {
 
     // MARK: - Parent (non-v1)
     case createChild(parentId: String, body: CreateChildBody)
+    case addChild(body: CreateChildBody) // Authenticated version for existing parents
     case setChildPin(childId: String, pin: String)
 
     // MARK: - Parent (v1)
@@ -88,7 +89,7 @@ enum APIRouter: APIEndpoint {
 
     var apiBasePath: String {
         switch self {
-        case .signup, .forgotPassword, .resetPassword, .createChild, .setChildPin:
+        case .signup, .forgotPassword, .resetPassword, .createChild, .addChild, .setChildPin:
             return "/api"
         default:
             return Constants.apiBasePath
@@ -103,6 +104,7 @@ enum APIRouter: APIEndpoint {
         case .resetPassword: return "/auth/reset-password"
         case .listChildren: return "/parent/children"
         case .createChild: return "/parent/children"
+        case .addChild: return "/parent/children"
         case .setChildPin(let id, _): return "/parent/children/\(id)/pin"
         case .resetChildProgress(let id): return "/parent/reset-progress/\(id)"
         case .deleteParentAccount: return "/parent/account"
@@ -157,7 +159,7 @@ enum APIRouter: APIEndpoint {
              .startArc, .updateArcProgress, .logDrill,
              .updateLessonProgress, .submitQuiz, .checkFreeze, .recordMilestone,
              .createFacility, .createCoach, .createProgram,
-             .signup, .forgotPassword, .resetPassword, .createChild, .resetChildProgress:
+             .signup, .forgotPassword, .resetPassword, .createChild, .addChild, .resetChildProgress:
             return .post
         case .updateChildPermissions, .updateCheckIn, .updateArcState, .updateAvatar:
             return .patch
@@ -194,6 +196,7 @@ enum APIRouter: APIEndpoint {
         case .resetPassword(let token, let password):
             return ResetPasswordBody(token: token, password: password)
         case .createChild(_, let body): return body
+        case .addChild(let body): return body
         case .setChildPin(_, let pin): return SetPinBody(pin: pin)
         case .createSession(_, let body): return body
         case .createQuickSession(_, let body): return body

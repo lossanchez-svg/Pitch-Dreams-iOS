@@ -43,9 +43,9 @@ struct CoachCharacterView: View {
                 }
 
                 // Character avatar
-                Image(systemName: "figure.soccer")
-                    .font(.system(size: size.points * 0.5))
-                    .foregroundStyle(.white)
+                Image(CoachPersonality.current.imageName)
+                    .resizable()
+                    .scaledToFill()
                     .frame(width: size.points, height: size.points)
                     .background(
                         Circle()

@@ -95,6 +95,16 @@ final class FirstTouchViewModel: ObservableObject {
                 APIRouter.createSession(childId: childId, body: body)
             )
             saveSuccess = true
+            // Record mission events — thresholded drills use `activeCount` as the incoming count
+            // so missions like "wall_30_twice" only tick when this drill actually hit the bar.
+            MissionsViewModel.shared.recordEvent(.firstTouchDrillCompleted, childId: childId)
+            MissionsViewModel.shared.recordEvent(.sessionLogged, childId: childId)
+            let isJuggling = Self.jugglingDrills.contains { $0.0 == drillKey }
+            if isJuggling {
+                MissionsViewModel.shared.recordEvent(.jugglingTaps(min: 0), count: activeCount, childId: childId)
+            } else {
+                MissionsViewModel.shared.recordEvent(.wallBallReps(min: 0), count: activeCount, childId: childId)
+            }
             activeDrillKey = nil
         } catch {
             errorMessage = error.localizedDescription

@@ -35,7 +35,8 @@ final class OnboardingViewModel: ObservableObject {
     @Published var errorMessage: String?
 
     // MARK: - Created IDs
-    private(set) var parentId: String?
+    /// Set externally for "add child" mode (parent already logged in)
+    var parentId: String?
     private(set) var childId: String?
 
     private let apiClient: APIClientProtocol
@@ -94,13 +95,28 @@ final class OnboardingViewModel: ObservableObject {
         isLoading = false
     }
 
+    /// Whether this flow is for adding a child to an existing parent (authenticated)
+    var isAddChildMode = false
+
     func createChild() async {
-        guard isChildProfileValid, let pid = parentId else {
+        guard isChildProfileValid else {
+            errorMessage = "Please complete the child profile."
+            return
+        }
+
+        // In add-child mode, use authenticated endpoint (parent already logged in)
+        if isAddChildMode {
+            await createChildAuthenticated()
+            return
+        }
+
+        guard let pid = parentId else {
             errorMessage = "Please complete the child profile."
             return
         }
         isLoading = true
         errorMessage = nil
+        Log.api.info("Creating child (onboarding) with avatarId: \(self.avatarId), parentId: \(pid)")
         do {
             let body = CreateChildBody(
                 nickname: nickname,
@@ -117,6 +133,35 @@ final class OnboardingViewModel: ObservableObject {
             _ = body // suppress unused warning
             let response: CreateChildResponse = try await apiClient.request(
                 APIRouter.createChild(parentId: pid, body: body)
+            )
+            childId = response.childId
+            nextStep()
+        } catch {
+            errorMessage = "Failed to create child profile: \(error.localizedDescription)"
+        }
+        isLoading = false
+    }
+
+    /// Authenticated child creation for existing parents (sends JWT token)
+    private func createChildAuthenticated() async {
+        isLoading = true
+        errorMessage = nil
+        Log.api.info("Creating child with avatarId: \(self.avatarId)")
+        do {
+            var body = CreateChildBody(
+                nickname: nickname,
+                age: age,
+                position: position == "Just playing for fun" ? nil : position,
+                goals: selectedGoals.isEmpty ? nil : Array(selectedGoals),
+                avatarId: avatarId,
+                avatarColor: avatarColor,
+                freeTextEnabled: freeTextEnabled,
+                trainingWindowStart: trainingWindowEnabled && !windowStart.isEmpty ? windowStart : nil,
+                trainingWindowEnd: trainingWindowEnabled && !windowEnd.isEmpty ? windowEnd : nil
+            )
+            body.parentId = nil // Server uses JWT session instead
+            let response: CreateChildResponse = try await apiClient.request(
+                APIRouter.addChild(body: body)
             )
             childId = response.childId
             nextStep()

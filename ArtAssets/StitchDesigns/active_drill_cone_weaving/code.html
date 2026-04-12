@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-secondary-fixed-variant": "#004f57",
+                    "surface-bright": "#32394a",
+                    "on-secondary-fixed": "#001f23",
+                    "tertiary-fixed-dim": "#edc157",
+                    "surface-container-low": "#151b2b",
+                    "secondary-container": "#00c9db",
+                    "on-primary-fixed": "#380d00",
+                    "on-error": "#690005",
+                    "primary": "#ffe6de",
+                    "surface-container-lowest": "#070e1d",
+                    "on-secondary": "#00363c",
+                    "on-background": "#dce2f8",
+                    "error-container": "#93000a",
+                    "error": "#ffb4ab",
+                    "on-tertiary-fixed-variant": "#5b4300",
+                    "on-primary-fixed-variant": "#802900",
+                    "surface-dim": "#0c1322",
+                    "outline-variant": "#3c494b",
+                    "background": "#0c1322",
+                    "primary-fixed": "#ffdbcf",
+                    "surface-tint": "#ffb59a",
+                    "tertiary": "#ffe9bd",
+                    "surface-container-high": "#232a3a",
+                    "tertiary-fixed": "#ffdf9b",
+                    "surface": "#0c1322",
+                    "surface-container": "#191f2f",
+                    "on-tertiary-fixed": "#251a00",
+                    "on-surface-variant": "#bbc9cb",
+                    "on-primary-container": "#9d3500",
+                    "inverse-primary": "#a83900",
+                    "surface-variant": "#2e3545",
+                    "secondary-fixed-dim": "#34d9ec",
+                    "on-tertiary-container": "#705400",
+                    "surface-container-highest": "#2e3545",
+                    "inverse-on-surface": "#2a3041",
+                    "outline": "#859395",
+                    "secondary-fixed": "#92f1ff",
+                    "on-error-container": "#ffdad6",
+                    "inverse-surface": "#dce2f8",
+                    "tertiary-container": "#f6c95f",
+                    "secondary": "#46e5f8",
+                    "primary-container": "#ffc1aa",
+                    "on-tertiary": "#3f2e00",
+                    "primary-fixed-dim": "#ffb59a",
+                    "on-surface": "#dce2f8",
+                    "on-secondary-container": "#004f57",
+                    "on-primary": "#5b1b00",
+                    "accent-orange": "#FF6B2C"
+            },
+            "borderRadius": {
+                    "DEFAULT": "1rem",
+                    "lg": "2rem",
+                    "xl": "3rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Plus Jakarta Sans"],
+                    "body": ["Plus Jakarta Sans"],
+                    "label": ["Plus Jakarta Sans"]
+            }
+          },
+        }
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .timer-glow {
+            box-shadow: 0 0 40px rgba(255, 107, 44, 0.4), inset 0 0 20px rgba(255, 107, 44, 0.2);
+        }
+        .cyan-glow {
+            filter: drop-shadow(0 0 12px rgba(66, 226, 245, 0.6));
+        }
+        .orange-button-depth {
+            box-shadow: 0 8px 0px #9d3500, 0 15px 30px rgba(255, 107, 44, 0.4);
+        }
+        .orange-button-depth:active {
+            transform: translateY(4px);
+            box-shadow: 0 4px 0px #9d3500, 0 10px 20px rgba(255, 107, 44, 0.3);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body min-h-screen flex flex-col overflow-hidden">
+<!-- Top Navigation Bar -->
+<header class="w-full top-0 sticky z-50 flex justify-between items-center px-6 py-8 md:py-10 bg-gradient-to-b from-[#191f2f] to-transparent">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-[#42E2F5] text-2xl font-bold">fitness_center</span>
+<h1 class="text-lg font-black uppercase tracking-widest text-[#42E2F5] font-['Plus_Jakarta_Sans']">TRAINING SESSION</h1>
+</div>
+<button class="w-12 h-12 flex items-center justify-center rounded-full bg-surface-container hover:opacity-80 transition-opacity active:scale-95 duration-200">
+<span class="material-symbols-outlined text-slate-400">close</span>
+</button>
+</header>
+<main class="flex-1 flex flex-col items-center justify-center px-6 pb-24 relative">
+<!-- Drill Title Section -->
+<div class="text-center mb-8">
+<span class="text-[10px] uppercase font-bold tracking-[0.2em] text-secondary opacity-70">ACTIVE DRILL</span>
+<h2 class="text-4xl font-extrabold tracking-tighter mt-1 text-on-surface">CONE WEAVING</h2>
+</div>
+<!-- Timer & Avatar Container -->
+<div class="relative w-full max-w-md flex flex-col items-center">
+<!-- Avatar Breaking the Box -->
+<div class="absolute -right-4 top-1/2 -translate-y-1/2 z-20 w-40 md:w-56 cyan-glow pointer-events-none">
+<img alt="Pro Panther Avatar" class="w-full h-auto object-contain" data-alt="anthropomorphic black panther athlete in cel-shaded anime style wearing neon blue techwear running dynamically with motion lines and cyan accents" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBgAFccN7eslon9AhAfWWpnNBcUJGbEclypf1lY0vkSGKsd0ajnFJcSFOZnN1zehybUb88cAEW_nfFthMeWd0WIn9Mn3mdLWvHefwQgI5HMfBUxt4KJo7tFPJy1xMs2Oamv0so_64VIOeicYiLiIx--FiFQwKe-tJd_UHjZML23mdhnMU7DT1dEiHryrtGltYYT1ERD-uoErOoPaTDHel-cYIbS9Y1y0KjvfmL4KQ41YMqBsOuNgbHZtL5x-pjKePlDZStuDdluqYo"/>
+</div>
+<!-- Central Timer Ring -->
+<div class="relative w-[75%] aspect-square rounded-full border-[12px] border-surface-container-high flex flex-col items-center justify-center timer-glow bg-surface-container-lowest/40 backdrop-blur-sm">
+<!-- Progress Ring (Simulated) -->
+<svg class="absolute inset-0 w-full h-full -rotate-90">
+<circle class="opacity-90" cx="50%" cy="50%" fill="none" r="46%" stroke="#FF6B2C" stroke-dasharray="100 100" stroke-linecap="round" stroke-width="12"></circle>
+</svg>
+<!-- Countdown Text -->
+<div class="text-center z-10">
+<span class="text-7xl font-black tracking-tighter text-on-surface font-headline block">00:23</span>
+<div class="mt-2 inline-flex flex-col items-center">
+<span class="text-[10px] uppercase font-bold tracking-widest text-accent-orange opacity-80">CURRENT REPS</span>
+<span class="text-4xl font-bold text-on-surface">7 <span class="text-lg text-slate-500">/ 10</span></span>
+</div>
+</div>
+<!-- Ambient Bloom Particles -->
+<div class="absolute inset-0 pointer-events-none overflow-hidden rounded-full">
+<div class="absolute top-1/4 left-1/4 w-2 h-2 bg-accent-orange rounded-full blur-sm opacity-50"></div>
+<div class="absolute bottom-1/3 right-1/4 w-3 h-3 bg-secondary rounded-full blur-md opacity-30"></div>
+</div>
+</div>
+</div>
+<!-- Action Row -->
+<div class="w-full max-w-sm mt-16 grid grid-cols-3 gap-4 items-center">
+<!-- Pause Button -->
+<button class="flex flex-col items-center justify-center gap-2 group">
+<div class="w-14 h-14 rounded-full border-2 border-secondary/40 flex items-center justify-center group-hover:bg-secondary/10 transition-colors">
+<span class="material-symbols-outlined text-secondary">pause</span>
+</div>
+<span class="text-[10px] uppercase font-bold tracking-widest text-slate-400">PAUSE</span>
+</button>
+<!-- Main +1 Rep Button -->
+<button class="relative group active:scale-95 duration-200">
+<div class="w-20 h-20 rounded-full bg-gradient-to-br from-accent-orange to-on-primary-container flex items-center justify-center orange-button-depth border-2 border-white/20">
+<span class="material-symbols-outlined text-white text-4xl" style="font-variation-settings: 'FILL' 1;">add</span>
+</div>
+<span class="absolute -bottom-8 left-1/2 -translate-x-1/2 text-[11px] uppercase font-black tracking-widest text-on-surface whitespace-nowrap">+1 REP</span>
+</button>
+<!-- Done Button -->
+<button class="flex flex-col items-center justify-center gap-2 group">
+<div class="w-14 h-14 rounded-full border-2 border-slate-700 flex items-center justify-center group-hover:bg-slate-700/30 transition-colors">
+<span class="material-symbols-outlined text-slate-400">check</span>
+</div>
+<span class="text-[10px] uppercase font-bold tracking-widest text-slate-400">DONE</span>
+</button>
+</div>
+</main>
+<!-- Voice Control Footer -->
+<footer class="fixed bottom-0 w-full z-50 rounded-t-xl bg-gradient-to-t from-surface-container-lowest to-transparent pb-8 pt-4 flex flex-col items-center gap-3">
+<div class="flex items-center gap-3 bg-surface-container-high/60 backdrop-blur-xl px-6 py-3 rounded-full border border-outline-variant/10">
+<div class="relative flex items-center justify-center">
+<div class="absolute inset-0 bg-secondary/30 rounded-full blur-md"></div>
+<span class="material-symbols-outlined text-secondary relative z-10" style="font-variation-settings: 'FILL' 1;">mic</span>
+</div>
+<p class="text-sm font-bold tracking-wide text-on-surface-variant">Say <span class="text-on-surface">"Done"</span> to finish</p>
+</div>
+<!-- Visualizer Line (Static) -->
+<div class="flex gap-1 h-1 items-center">
+<div class="w-2 h-1 bg-secondary/20 rounded-full"></div>
+<div class="w-4 h-1 bg-secondary/40 rounded-full"></div>
+<div class="w-8 h-1 bg-secondary rounded-full"></div>
+<div class="w-4 h-1 bg-secondary/40 rounded-full"></div>
+<div class="w-2 h-1 bg-secondary/20 rounded-full"></div>
+</div>
+</footer>
+<!-- Bottom Navigation Shell (Suppressed for transactional Drill Screen as per logic) -->
+</body></html>

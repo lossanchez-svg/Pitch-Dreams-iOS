@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>PitchDreams - Training Session</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700;800&amp;family=Be+Vietnam+Pro:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary-fixed": "#f9cc61",
+                        "secondary-fixed-dim": "#39dcef",
+                        "on-error-container": "#ffa8a3",
+                        "background": "#070e1d",
+                        "on-tertiary": "#664c00",
+                        "surface-container": "#11192c",
+                        "surface-container-lowest": "#000000",
+                        "on-secondary": "#00535c",
+                        "inverse-primary": "#a93900",
+                        "secondary-dim": "#39dcef",
+                        "outline-variant": "#414859",
+                        "surface-container-low": "#0b1324",
+                        "tertiary-fixed-dim": "#eabe55",
+                        "on-background": "#dfe5fb",
+                        "on-error": "#490006",
+                        "surface-variant": "#1c253b",
+                        "primary-container": "#ff7943",
+                        "surface-tint": "#ff9066",
+                        "on-tertiary-fixed-variant": "#674d00",
+                        "tertiary-container": "#f9cc61",
+                        "on-surface-variant": "#a4abbf",
+                        "on-tertiary-container": "#5b4400",
+                        "secondary-container": "#006973",
+                        "on-surface": "#dfe5fb",
+                        "tertiary": "#ffdb8f",
+                        "on-secondary-container": "#e6fcff",
+                        "on-primary-container": "#441200",
+                        "surface": "#070e1d",
+                        "tertiary-dim": "#eabe55",
+                        "on-primary-fixed-variant": "#541800",
+                        "surface-container-high": "#161f33",
+                        "surface-dim": "#070e1d",
+                        "on-primary": "#571a00",
+                        "error-container": "#9f0519",
+                        "on-secondary-fixed-variant": "#005e67",
+                        "secondary-fixed": "#4febfe",
+                        "error": "#ff716c",
+                        "primary-fixed-dim": "#f76526",
+                        "inverse-on-surface": "#4e5567",
+                        "on-tertiary-fixed": "#443100",
+                        "primary": "#ff9066",
+                        "outline": "#6f7588",
+                        "surface-bright": "#212c43",
+                        "secondary": "#4febfe",
+                        "primary-fixed": "#ff7943",
+                        "primary-dim": "#ff743b",
+                        "inverse-surface": "#faf9ff",
+                        "error-dim": "#d7383b",
+                        "on-primary-fixed": "#000000",
+                        "surface-container-highest": "#1c253b",
+                        "on-secondary-fixed": "#003f45"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Plus Jakarta Sans"],
+                        "body": ["Be Vietnam Pro"],
+                        "label": ["Be Vietnam Pro"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .bg-stadium-glow {
+            background: radial-gradient(circle at -10% -10%, rgba(79, 235, 254, 0.08) 0%, transparent 40%),
+                        radial-gradient(circle at 110% -10%, rgba(255, 144, 102, 0.08) 0%, transparent 40%);
+        }
+        .bloom-shadow-primary {
+            box-shadow: 0 0 48px 0 rgba(255, 144, 102, 0.12);
+        }
+        .bloom-shadow-secondary {
+            box-shadow: 0 0 48px 0 rgba(79, 235, 254, 0.12);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body min-h-screen overflow-hidden selection:bg-primary/30">
+<!-- Top App Bar (Task-Focused: Suppressed standard nav, back action present) -->
+<header class="w-full top-0 z-50 flex justify-between items-center px-6 py-4 bg-gradient-to-b from-[#070E1D] to-transparent">
+<div class="flex items-center gap-4">
+<button class="w-12 h-12 flex items-center justify-center rounded-full bg-surface-container-high text-white hover:opacity-80 transition-opacity active:scale-95">
+<span class="material-symbols-outlined" data-icon="arrow_back">arrow_back</span>
+</button>
+<h1 class="font-headline font-bold tracking-tight text-xl uppercase italic text-white">Precision Passing</h1>
+</div>
+<div class="flex items-center gap-3">
+<div class="bg-surface-container-highest/60 backdrop-blur-xl px-4 py-2 rounded-full border border-outline-variant/10">
+<span class="font-label font-bold text-[10px] uppercase tracking-widest text-secondary">LIVE SESSION</span>
+</div>
+</div>
+</header>
+<main class="relative h-[calc(100vh-80px)] flex flex-col px-6 pb-12 bg-stadium-glow">
+<!-- Hero HUD: Timer & Progress -->
+<section class="flex flex-col items-center justify-center pt-8 mb-12">
+<div class="relative w-72 h-72 flex items-center justify-center">
+<!-- Circular Progress Gauge -->
+<svg class="absolute inset-0 w-full h-full -rotate-90">
+<circle class="text-surface-container-high" cx="144" cy="144" fill="transparent" r="130" stroke="currentColor" stroke-width="12"></circle>
+<circle class="text-secondary bloom-shadow-secondary rounded-full" cx="144" cy="144" fill="transparent" r="130" stroke="currentColor" stroke-dasharray="816" stroke-dashoffset="204" stroke-width="12"></circle>
+</svg>
+<!-- Inner Timer Content -->
+<div class="text-center flex flex-col items-center">
+<span class="font-label font-bold text-[12px] uppercase tracking-[0.2em] text-on-surface-variant">Time Remaining</span>
+<div class="font-headline font-extrabold text-7xl tracking-tighter text-white leading-none my-2">01:42</div>
+<div class="flex items-center gap-2 text-secondary">
+<span class="material-symbols-outlined text-sm" data-icon="timer">timer</span>
+<span class="font-label font-bold text-xs uppercase tracking-widest">DRILL IN PROGRESS</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Stats Bento Grid -->
+<div class="grid grid-cols-2 gap-4 mt-auto">
+<!-- Score Card -->
+<div class="bg-surface-container-low p-6 rounded-lg relative overflow-hidden group">
+<div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+<span class="material-symbols-outlined text-6xl" data-icon="sports_soccer">sports_soccer</span>
+</div>
+<p class="font-label font-bold text-[10px] uppercase tracking-widest text-on-surface-variant mb-2">Total Score</p>
+<div class="flex items-baseline gap-1">
+<h2 class="font-headline font-bold text-5xl text-primary">2,450</h2>
+<span class="text-xs font-bold text-primary-container">PTS</span>
+</div>
+<div class="mt-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-sm text-tertiary" data-icon="trending_up">trending_up</span>
+<span class="text-[10px] font-bold text-on-surface-variant uppercase">+12% vs last</span>
+</div>
+</div>
+<!-- Reps Card -->
+<div class="bg-surface-container-low p-6 rounded-lg relative overflow-hidden group">
+<div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+<span class="material-symbols-outlined text-6xl" data-icon="rebase_edit">rebase_edit</span>
+</div>
+<p class="font-label font-bold text-[10px] uppercase tracking-widest text-on-surface-variant mb-2">Successful Reps</p>
+<div class="flex items-baseline gap-1">
+<h2 class="font-headline font-bold text-5xl text-white">18<span class="text-on-surface-variant text-3xl">/25</span></h2>
+</div>
+<div class="w-full h-1 bg-surface-container-high rounded-full mt-6 overflow-hidden">
+<div class="h-full bg-secondary w-[72%]"></div>
+</div>
+</div>
+</div>
+<!-- Guidance Avatar Section (Asymmetric Floating) -->
+<div class="mt-8 flex items-center gap-6 bg-secondary-container/20 backdrop-blur-md p-6 rounded-xl border border-secondary/10 relative">
+<!-- Character Avatar -->
+<div class="relative -mt-16 -ml-2 shrink-0">
+<div class="w-24 h-24 rounded-full bg-surface-container-highest bloom-shadow-secondary overflow-hidden border-2 border-secondary/30">
+<img class="w-full h-full object-cover" data-alt="cel-shaded high-tech rookie soccer avatar with glowing cyan highlights and focused expression" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAgCny5Z4csRhz5x4VIHbmwj_078frZoqCUTixNMi0wmY1djRHfBG1TFrX3-VmMC0Oe2M78Y__fXZu6Xz2i2zOluC-ldLH81FUu5ow3KXA6a6X0LQG5qxAHKW_aok8pIvZOt9mNHgmCkK-G9slEZlFJu-EzSab74M77kVXmAnhYAS7O_6tWzUcRX1mEE6RMrsClkLgWjLcIIM8nwJ642gT_5RKT_Llw8QVSh8aYH4xQ08PNaKqhq9_pOQh10nIG8y7c2eS2_XyAQZg"/>
+</div>
+<div class="absolute -bottom-1 -right-1 bg-secondary text-on-secondary p-1 rounded-full border-2 border-background">
+<span class="material-symbols-outlined text-xs" data-icon="auto_awesome">auto_awesome</span>
+</div>
+</div>
+<!-- Message Bubble -->
+<div>
+<span class="font-label font-bold text-[10px] uppercase tracking-[0.15em] text-secondary mb-1 block">Coach Tip</span>
+<p class="text-sm font-medium text-on-surface leading-snug">
+                    "Keep your weight on your toes! Your passing accuracy increases by <span class="text-secondary font-bold">15%</span> when you pivot faster."
+                </p>
+</div>
+</div>
+<!-- Controls Area -->
+<div class="mt-8 grid grid-cols-2 gap-4">
+<button class="flex items-center justify-center gap-2 h-14 rounded-xl bg-surface-variant text-white font-label font-bold uppercase tracking-widest hover:bg-surface-bright transition-colors active:scale-95">
+<span class="material-symbols-outlined" data-icon="pause">pause</span>
+                Pause
+            </button>
+<button class="flex items-center justify-center gap-2 h-14 rounded-xl bg-gradient-to-br from-primary to-primary-container text-on-primary-fixed font-headline font-extrabold uppercase tracking-widest bloom-shadow-primary active:scale-95">
+<span class="material-symbols-outlined" data-icon="flag">flag</span>
+                Finish
+            </button>
+</div>
+</main>
+<!-- Visual Polish: Flooding light effects in corners -->
+<div class="fixed top-0 left-0 w-64 h-64 bg-secondary/5 blur-[100px] pointer-events-none"></div>
+<div class="fixed top-0 right-0 w-64 h-64 bg-primary/5 blur-[100px] pointer-events-none"></div>
+</body></html>

@@ -187,18 +187,24 @@ struct AvatarChangeSheet: View {
     private func saveAvatar() async {
         isSaving = true
         errorMessage = nil
+
+        // Always save locally first so the change is instant
+        UserDefaults.standard.set(selectedAvatar.rawValue, forKey: "avatarOverride_\(childId)")
+
+        // Attempt server-side save (may 405 if endpoint not deployed yet)
         do {
             let _: ChildProfileDetail = try await apiClient.request(
                 APIRouter.updateAvatar(childId: childId, avatarId: selectedAvatar.rawValue)
             )
-            onDismiss()
+            // Server accepted — clear local override since server is now canonical
+            UserDefaults.standard.removeObject(forKey: "avatarOverride_\(childId)")
         } catch {
-            // If the API doesn't support this endpoint yet, just dismiss — the avatar
-            // will update next time the profile is loaded after server-side support is added.
-            Log.api.error("Avatar update failed: \(error)")
-            errorMessage = "Couldn't save right now. Try again later."
+            // Local save already persists the choice — log but don't block the user
+            Log.api.error("Avatar update API failed (using local override): \(error)")
         }
+
         isSaving = false
+        onDismiss()
     }
 
     private var avatarGlowColor: Color {

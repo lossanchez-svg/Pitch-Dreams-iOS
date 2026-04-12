@@ -2,6 +2,7 @@ import SwiftUI
 
 struct ChildTabNavigation: View {
     let childId: String
+    @EnvironmentObject var authManager: AuthManager
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @State private var selectedTab: ChildTab = .home
 
@@ -159,6 +160,14 @@ struct ChildTabNavigation: View {
                 selectedTab = .learn
             } label: {
                 Label("Learn", systemImage: "book.fill")
+            }
+
+            Divider()
+
+            Button(role: .destructive) {
+                authManager.logout()
+            } label: {
+                Label("Log Out", systemImage: "rectangle.portrait.and.arrow.right")
             }
         } label: {
             VStack(spacing: 4) {

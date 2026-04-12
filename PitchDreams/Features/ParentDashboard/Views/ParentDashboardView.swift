@@ -5,6 +5,7 @@ struct ParentDashboardView: View {
     @State private var children: [ChildSummary] = []
     @State private var isLoading = true
     @State private var errorText: String?
+    @State private var showAddChild = false
 
     private let apiClient: APIClientProtocol = APIClient()
 
@@ -71,11 +72,16 @@ struct ParentDashboardView: View {
 
                     // Actions
                     HStack(spacing: 16) {
-                        actionButton(
-                            icon: "plus.circle.fill",
-                            label: "Add Child",
-                            color: .parentGold
-                        )
+                        Button {
+                            showAddChild = true
+                        } label: {
+                            actionButton(
+                                icon: "plus.circle.fill",
+                                label: "Add Child",
+                                color: .parentGold
+                            )
+                        }
+                        .buttonStyle(.plain)
 
                         NavigationLink {
                             ParentControlsView(
@@ -113,6 +119,11 @@ struct ParentDashboardView: View {
             }
         }
         .toolbarBackground(Color.dsBackground, for: .navigationBar)
+        .sheet(isPresented: $showAddChild) {
+            AddChildView(authManager: authManager) {
+                Task { await loadChildren() }
+            }
+        }
         .refreshable {
             await loadChildren()
         }

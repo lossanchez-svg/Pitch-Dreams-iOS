@@ -28,9 +28,14 @@ struct ChildHomeView: View {
 
     // MARK: - Derived State
 
+    /// Local override takes precedence (set by AvatarChangeSheet when API isn't available yet)
+    private var effectiveAvatarId: String? {
+        UserDefaults.standard.string(forKey: "avatarOverride_\(childId)") ?? viewModel.profile?.avatarId
+    }
+
     private var avatarAssetName: String {
         Avatar.assetName(
-            for: viewModel.profile?.avatarId,
+            for: effectiveAvatarId,
             milestones: viewModel.streakData?.milestones ?? [],
             localMissionXP: missionsVM.localMissionXP
         )
@@ -44,7 +49,7 @@ struct ChildHomeView: View {
     }
 
     private var resolvedAvatar: Avatar {
-        Avatar.resolve(viewModel.profile?.avatarId)
+        Avatar.resolve(effectiveAvatarId)
     }
 
     // MARK: - Body
@@ -182,7 +187,7 @@ struct ChildHomeView: View {
         }
         .sheet(isPresented: $showEvolutionModal) {
             if let stage = evolvedTo {
-                let avatar = Avatar.resolve(viewModel.profile?.avatarId)
+                let avatar = Avatar.resolve(effectiveAvatarId)
                 EvolutionModal(avatar: avatar, newStage: stage) {
                     showEvolutionModal = false
                 }
@@ -835,7 +840,7 @@ struct ChildHomeView: View {
                     .foregroundStyle(Color.dsOnSurface)
                     .lineSpacing(6)
 
-                Text("-- COACH KAI")
+                Text("-- \(CoachPersonality.current.coachName.uppercased())")
                     .font(.system(size: 10, weight: .black, design: .rounded))
                     .tracking(3)
                     .foregroundStyle(Color.dsTertiaryContainer)
@@ -850,13 +855,9 @@ struct ChildHomeView: View {
 
     @ViewBuilder
     private var coachPortrait: some View {
-        // Placeholder for coach art — use SF Symbol
-        ZStack {
-            Color.dsSurfaceContainerHighest
-            Image(systemName: "person.fill.viewfinder")
-                .font(.system(size: 28))
-                .foregroundStyle(Color.dsTertiaryContainer)
-        }
+        Image(CoachPersonality.current.imageName)
+            .resizable()
+            .scaledToFill()
     }
 
     // MARK: - Explore
@@ -995,7 +996,7 @@ struct ChildHomeView: View {
     // MARK: - Milestone Logic
 
     private func checkForAvatarEvolution() {
-        guard viewModel.profile?.avatarId != nil else { return }
+        guard effectiveAvatarId != nil else { return }
         let milestones = viewModel.streakData?.milestones ?? []
         let currentStage = AvatarStage.current(
             forMilestones: milestones,

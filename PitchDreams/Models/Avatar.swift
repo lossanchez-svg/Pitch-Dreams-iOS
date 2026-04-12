@@ -56,13 +56,22 @@ enum AvatarStage: Int, CaseIterable, Comparable {
         }
     }
 
-    /// Derive the highest unlocked stage from the streak milestones the child has reached.
+    /// Derive the highest unlocked stage from the streak milestones the child has reached,
+    /// optionally boosted by locally-earned mission XP. Missions provide a parallel path
+    /// to evolution: 50 XP → Pro, 200 XP → Legend. The returned stage is the max of the
+    /// streak-based stage and the XP-based stage.
     /// Streak milestones are server-tracked day counts (e.g. 7, 14, 30).
-    static func current(forMilestones milestones: [Int]) -> AvatarStage {
+    static func current(forMilestones milestones: [Int], localMissionXP: Int = 0) -> AvatarStage {
         let best = milestones.max() ?? 0
-        if best >= AvatarStage.legend.unlockMilestone { return .legend }
-        if best >= AvatarStage.pro.unlockMilestone { return .pro }
-        return .rookie
+        var stage: AvatarStage = .rookie
+        if best >= AvatarStage.legend.unlockMilestone { stage = .legend }
+        else if best >= AvatarStage.pro.unlockMilestone { stage = .pro }
+
+        var xpStage: AvatarStage = .rookie
+        if localMissionXP >= 200 { xpStage = .legend }
+        else if localMissionXP >= 50 { xpStage = .pro }
+
+        return max(stage, xpStage)
     }
 
     static func < (lhs: AvatarStage, rhs: AvatarStage) -> Bool {
@@ -92,9 +101,9 @@ extension Avatar {
     }
 
     /// Resolve the right asset name from a stored avatarId string + the child's milestones.
-    static func assetName(for avatarId: String?, milestones: [Int]) -> String {
+    static func assetName(for avatarId: String?, milestones: [Int], localMissionXP: Int = 0) -> String {
         let avatar = resolve(avatarId)
-        let stage = AvatarStage.current(forMilestones: milestones)
+        let stage = AvatarStage.current(forMilestones: milestones, localMissionXP: localMissionXP)
         return avatar.assetName(stage: stage)
     }
 }

@@ -180,6 +180,7 @@ struct LessonDetailView: View {
                 isMarking = true
                 Task {
                     await onMarkComplete()
+                    MissionsViewModel.shared.recordEvent(.lessonRead, childId: childId)
                     isMarking = false
                 }
             } label: {

@@ -5,6 +5,9 @@ struct ChildDetailView: View {
     @StateObject private var viewModel: ChildDetailViewModel
     @State private var showExportAlert = false
     @State private var showDeleteAlert = false
+    @State private var showAvatarPicker = false
+    @State private var showPinSetup = false
+    @State private var selectedAvatarId: String?
 
     private let apiClient: APIClientProtocol = APIClient()
 
@@ -32,6 +35,16 @@ struct ChildDetailView: View {
                                 .font(.subheadline)
                                 .foregroundStyle(.secondary)
                         }
+                    }
+
+                    Spacer()
+
+                    Button {
+                        showAvatarPicker = true
+                    } label: {
+                        Text("Change")
+                            .font(.caption.weight(.semibold))
+                            .foregroundStyle(Color.dsSecondary)
                     }
                 }
                 .padding(.vertical, 8)
@@ -103,6 +116,15 @@ struct ChildDetailView: View {
                 }
             }
 
+            // Login & Security
+            Section("Login & Security") {
+                Button {
+                    showPinSetup = true
+                } label: {
+                    Label("Set / Reset PIN", systemImage: "lock.shield")
+                }
+            }
+
             // Actions section
             Section("Actions") {
                 NavigationLink {
@@ -142,6 +164,14 @@ struct ChildDetailView: View {
             Button("Cancel", role: .cancel) {}
         } message: {
             Text("Download \(child.nickname)'s training data as JSON?")
+        }
+        .sheet(isPresented: $showAvatarPicker) {
+            AvatarChangeSheet(childId: child.id) {
+                showAvatarPicker = false
+            }
+        }
+        .sheet(isPresented: $showPinSetup) {
+            PinSetupSheet(childId: child.id, childName: child.nickname)
         }
         .alert("Delete Account", isPresented: $showDeleteAlert) {
             Button("Delete", role: .destructive) { Task { await deleteAccount() } }

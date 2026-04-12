@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Pitch Dreams - Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,700;0,800;1,800&amp;family=Be+Vietnam+Pro:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "tertiary-fixed": "#f9cc61",
+                    "secondary-fixed-dim": "#39dcef",
+                    "on-error-container": "#ffa8a3",
+                    "background": "#070e1d",
+                    "on-tertiary": "#664c00",
+                    "surface-container": "#11192c",
+                    "surface-container-lowest": "#000000",
+                    "on-secondary": "#00535c",
+                    "inverse-primary": "#a93900",
+                    "secondary-dim": "#39dcef",
+                    "outline-variant": "#414859",
+                    "surface-container-low": "#0b1324",
+                    "tertiary-fixed-dim": "#eabe55",
+                    "on-background": "#dfe5fb",
+                    "on-error": "#490006",
+                    "surface-variant": "#1c253b",
+                    "primary-container": "#ff7943",
+                    "surface-tint": "#ff9066",
+                    "on-tertiary-fixed-variant": "#674d00",
+                    "tertiary-container": "#f9cc61",
+                    "on-surface-variant": "#a4abbf",
+                    "on-tertiary-container": "#5b4400",
+                    "secondary-container": "#006973",
+                    "on-surface": "#dfe5fb",
+                    "tertiary": "#ffdb8f",
+                    "on-secondary-container": "#e6fcff",
+                    "on-primary-container": "#441200",
+                    "surface": "#070e1d",
+                    "tertiary-dim": "#eabe55",
+                    "on-primary-fixed-variant": "#541800",
+                    "surface-container-high": "#161f33",
+                    "surface-dim": "#070e1d",
+                    "on-primary": "#571a00",
+                    "error-container": "#9f0519",
+                    "on-secondary-fixed-variant": "#005e67",
+                    "secondary-fixed": "#4febfe",
+                    "error": "#ff716c",
+                    "primary-fixed-dim": "#f76526",
+                    "inverse-on-surface": "#4e5567",
+                    "on-tertiary-fixed": "#443100",
+                    "primary": "#ff9066",
+                    "outline": "#6f7588",
+                    "surface-bright": "#212c43",
+                    "secondary": "#4febfe",
+                    "primary-fixed": "#ff7943",
+                    "primary-dim": "#ff743b",
+                    "inverse-surface": "#faf9ff",
+                    "error-dim": "#d7383b",
+                    "on-primary-fixed": "#000000",
+                    "surface-container-highest": "#1c253b",
+                    "on-secondary-fixed": "#003f45"
+            },
+            "borderRadius": {
+                    "DEFAULT": "1rem",
+                    "lg": "2rem",
+                    "xl": "3rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Plus Jakarta Sans"],
+                    "body": ["Be Vietnam Pro"],
+                    "label": ["Be Vietnam Pro"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            background-color: #070e1d;
+            font-family: 'Be Vietnam Pro', sans-serif;
+            color: #dfe5fb;
+            overflow-x: hidden;
+        }
+        .hero-bloom {
+            background: radial-gradient(circle at 50% 50%, rgba(255, 144, 102, 0.15) 0%, transparent 70%);
+        }
+        .glass-panel {
+            background: rgba(28, 37, 59, 0.6);
+            backdrop-filter: blur(20px);
+        }
+        .pro-glow {
+            box-shadow: 0 0 30px rgba(255, 219, 143, 0.2);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="min-h-screen pb-32">
+<!-- TopAppBar -->
+<header class="w-full top-0 z-50 flex justify-between items-center px-6 py-4 w-full bg-gradient-to-b from-[#070E1D] to-transparent shadow-[0_0_30px_rgba(255,144,102,0.1)] sticky">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full border-2 border-[#FF9066] overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Close up of a stylized cel-shaded panther rookie soccer avatar with intense glowing orange eyes and athletic gear" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC6ueMRQcHUf9-ahQB9lSJBnH2BcfKQiqic0uHczEPsVTpvhA8whgpoKbk_uM5DWBYKZrdbT3-yf5-25HKYTPiihM8UBo4hmqmk6uubz97i9P96uyF3YXuUawxHRtGzOcMiSSYpcFjR4yGdMtvGpCzSLAOt6clr9v_6rn1NNwu3yx0NnK7dSqpPEvFd_XN-4QV-SRO9bmzmwFg9WO9xmb1yGPM3DxU2qof8ltXl_o2bAOxzWcFlHksXGXPkxyzkiUdkay3GaOdCrcU"/>
+</div>
+<h1 class="text-2xl font-black text-white italic tracking-tighter uppercase font-plus-jakarta-sans font-bold tracking-tight">PITCH DREAMS</h1>
+</div>
+<button class="text-white/70 hover:opacity-80 transition-opacity scale-95 active:duration-150">
+<span class="material-symbols-outlined">settings</span>
+</button>
+</header>
+<main class="px-6 pt-4 space-y-8">
+<!-- Hero Section: Panther Rookie Avatar -->
+<section class="relative h-[400px] flex items-center justify-center -mt-8">
+<div class="absolute inset-0 hero-bloom -z-10"></div>
+<div class="relative w-full h-full flex flex-col items-center justify-end">
+<div class="absolute top-10 left-1/2 -translate-x-1/2 w-80 h-80 bg-primary/10 rounded-full blur-3xl"></div>
+<img class="h-full z-10 drop-shadow-[0_0_40px_rgba(255,144,102,0.3)]" data-alt="Full body shot of a cool cel-shaded anime panther soccer player in a vibrant orange and black kit, mid-action pose with energy effects" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCJJ5E33-tGcwWMeUKCUPsrnobE-IoDe8Z8aC8mfLtrupu28o6ueh3AnibwJ6DDu8FIK_W1fj3rX0ss9jGtDQ3xaxRRdCFZeMMHtfDt6aSQ9F8DrWPYBmFkpZQ24GywZdO6Yj-_L9eHlLnQINzR_Xiff5ZfUCH_PTf1hp86F8WuabncoR-e9IQ9_2e0zKPM-vicqmz8M7xpEKAYBXzN5k-iwngGbxtJTnXfj40690ue1b2Yc6xFTChHCMbJHO7i8ppFeoVTIdMQmZg"/>
+<div class="absolute bottom-4 left-0 right-0 glass-panel border border-outline-variant/20 rounded-lg p-4 flex justify-between items-center z-20">
+<div>
+<p class="font-label text-[10px] uppercase tracking-widest text-on-surface-variant font-bold">Current Rank</p>
+<h2 class="font-headline text-xl text-primary italic">PANTHER ROOKIE</h2>
+</div>
+<div class="text-right">
+<p class="font-label text-[10px] uppercase tracking-widest text-on-surface-variant font-bold">XP Level</p>
+<h2 class="font-headline text-xl text-white">LVL 12</h2>
+</div>
+</div>
+</div>
+</section>
+<!-- Stats Grid (Bento Style) -->
+<section class="grid grid-cols-2 gap-4">
+<div class="col-span-2 bg-surface-container-low rounded-lg p-5 border border-outline-variant/10">
+<div class="flex justify-between items-start mb-4">
+<div>
+<h3 class="font-headline text-on-surface font-semibold text-lg">Weekly Goals</h3>
+<p class="text-secondary text-sm font-medium">4 of 5 sessions complete</p>
+</div>
+<span class="material-symbols-outlined text-secondary">trending_up</span>
+</div>
+<div class="h-3 w-full bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-gradient-to-r from-secondary to-secondary-fixed-dim w-[80%] rounded-full shadow-[0_0_10px_rgba(79,235,254,0.5)]"></div>
+</div>
+</div>
+<div class="bg-surface-container-low rounded-lg p-5 border border-outline-variant/10 flex flex-col justify-between h-40 relative overflow-hidden">
+<div class="absolute -right-4 -bottom-4 opacity-10">
+<span class="material-symbols-outlined text-[100px]" style="font-variation-settings: 'FILL' 1;">bolt</span>
+</div>
+<div>
+<span class="material-symbols-outlined text-primary mb-2">local_fire_department</span>
+<h3 class="text-on-surface-variant font-label text-xs uppercase font-bold tracking-widest">Training Streak</h3>
+</div>
+<p class="text-4xl font-headline text-white font-extrabold italic">8 <span class="text-sm font-normal not-italic text-on-surface-variant">DAYS</span></p>
+</div>
+<div class="bg-surface-container-low rounded-lg p-5 border border-outline-variant/10 flex flex-col justify-between h-40 relative overflow-hidden">
+<div class="absolute -right-4 -bottom-4 opacity-10">
+<span class="material-symbols-outlined text-[100px]">insights</span>
+</div>
+<div>
+<span class="material-symbols-outlined text-secondary mb-2">monitoring</span>
+<h3 class="text-on-surface-variant font-label text-xs uppercase font-bold tracking-widest">Skill Level</h3>
+</div>
+<p class="text-4xl font-headline text-white font-extrabold italic">A<span class="text-sm font-normal not-italic text-on-surface-variant">+</span></p>
+</div>
+</section>
+<!-- Next Evolution Preview -->
+<section class="bg-surface-container-highest rounded-lg p-6 border border-tertiary/20 pro-glow overflow-hidden relative">
+<div class="absolute top-0 right-0 w-32 h-32 bg-tertiary/5 blur-3xl -z-10"></div>
+<div class="flex items-center gap-6">
+<div class="relative">
+<div class="w-20 h-20 bg-surface-container rounded-full flex items-center justify-center border border-tertiary/30">
+<span class="material-symbols-outlined text-tertiary text-3xl">lock</span>
+</div>
+<img class="absolute inset-0 w-full h-full object-contain opacity-40 grayscale" data-alt="Dark silhouette of a muscular panther soccer player with glowing golden accents and aura, representing a high-level evolution" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDUPbojKhlL6fgnXvWdgise2falSTMBmLc8wnVrGGshiFHqqAourUDxCJDY3jrZeQ41rZ-CRPgMryBmEjiMJCddCzEYem34eCHO48F-AFTUMwVeQ0Wmv4WNQF7jbQYOgCIbUp-hw0EP0A-UDyJXUCyEuwqiamh74Oy_1QUAxH5c4C3Un_JAcfPsnmx7hqQlxjl88SuhHCDdm3Z3tV4z2gTG_WkL3nuLq2Uu6EqQfiVClyLLQjrMRa1CUMb00iky6OjQvBOyejlsy0c"/>
+</div>
+<div class="flex-1">
+<div class="flex items-center gap-2 mb-1">
+<span class="material-symbols-outlined text-tertiary text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<h3 class="font-headline text-tertiary font-bold tracking-tight text-sm uppercase">Next Evolution</h3>
+</div>
+<h4 class="text-white font-headline text-xl italic font-black uppercase tracking-tighter">PRO PANTHER</h4>
+<p class="text-on-surface-variant text-xs mt-1">Earn 2,500 more XP to unlock the legend tier.</p>
+</div>
+</div>
+</section>
+</main>
+<!-- Start Training FAB -->
+<button class="fixed bottom-28 left-1/2 -translate-x-1/2 z-40 bg-gradient-to-br from-primary to-primary-container h-16 px-8 rounded-xl shadow-[0_0_30px_rgba(255,144,102,0.4)] flex items-center gap-3 scale-95 active:scale-90 transition-transform">
+<span class="material-symbols-outlined text-on-primary-container font-bold" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+<span class="text-on-primary-container font-headline font-extrabold italic uppercase tracking-wider">Start Training</span>
+</button>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-8 pt-4 bg-[#070E1D]/80 backdrop-blur-xl border-t border-white/5 shadow-[0_-8px_40px_rgba(7,14,29,0.8)] rounded-t-[2.5rem]">
+<!-- Home (Active) -->
+<a class="flex flex-col items-center justify-center text-[#FF9066] bg-[#FF9066]/10 rounded-full px-5 py-2 ring-1 ring-[#FF9066]/30 transition-colors" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">home</span>
+<span class="font-be-vietnam-pro font-bold text-[10px] uppercase tracking-widest mt-1">Home</span>
+</a>
+<!-- Train -->
+<a class="flex flex-col items-center justify-center text-white/40 px-5 py-2 hover:text-[#4FEBFE] transition-colors group" href="#">
+<span class="material-symbols-outlined group-active:scale-95 transition-transform">sports_soccer</span>
+<span class="font-be-vietnam-pro font-bold text-[10px] uppercase tracking-widest mt-1">Train</span>
+</a>
+<!-- Log -->
+<a class="flex flex-col items-center justify-center text-white/40 px-5 py-2 hover:text-[#4FEBFE] transition-colors group" href="#">
+<span class="material-symbols-outlined group-active:scale-95 transition-transform">assignment</span>
+<span class="font-be-vietnam-pro font-bold text-[10px] uppercase tracking-widest mt-1">Log</span>
+</a>
+<!-- Skills -->
+<a class="flex flex-col items-center justify-center text-white/40 px-5 py-2 hover:text-[#4FEBFE] transition-colors group" href="#">
+<span class="material-symbols-outlined group-active:scale-95 transition-transform">insights</span>
+<span class="font-be-vietnam-pro font-bold text-[10px] uppercase tracking-widest mt-1">Skills</span>
+</a>
+<!-- Profile -->
+<a class="flex flex-col items-center justify-center text-white/40 px-5 py-2 hover:text-[#4FEBFE] transition-colors group" href="#">
+<span class="material-symbols-outlined group-active:scale-95 transition-transform">person</span>
+<span class="font-be-vietnam-pro font-bold text-[10px] uppercase tracking-widest mt-1">Profile</span>
+</a>
+</nav>
+</body></html>

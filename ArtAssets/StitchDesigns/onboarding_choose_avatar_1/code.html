@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Pitch Dreams - Avatar Selection</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700;800&amp;family=Be+Vietnam+Pro:wght@400;500;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary-fixed": "#f9cc61",
+                        "secondary-fixed-dim": "#39dcef",
+                        "on-error-container": "#ffa8a3",
+                        "background": "#070e1d",
+                        "on-tertiary": "#664c00",
+                        "surface-container": "#11192c",
+                        "surface-container-lowest": "#000000",
+                        "on-secondary": "#00535c",
+                        "inverse-primary": "#a93900",
+                        "secondary-dim": "#39dcef",
+                        "outline-variant": "#414859",
+                        "surface-container-low": "#0b1324",
+                        "tertiary-fixed-dim": "#eabe55",
+                        "on-background": "#dfe5fb",
+                        "on-error": "#490006",
+                        "surface-variant": "#1c253b",
+                        "primary-container": "#ff7943",
+                        "surface-tint": "#ff9066",
+                        "on-tertiary-fixed-variant": "#674d00",
+                        "tertiary-container": "#f9cc61",
+                        "on-surface-variant": "#a4abbf",
+                        "on-tertiary-container": "#5b4400",
+                        "secondary-container": "#006973",
+                        "on-surface": "#dfe5fb",
+                        "tertiary": "#ffdb8f",
+                        "on-secondary-container": "#e6fcff",
+                        "on-primary-container": "#441200",
+                        "surface": "#070e1d",
+                        "tertiary-dim": "#eabe55",
+                        "on-primary-fixed-variant": "#541800",
+                        "surface-container-high": "#161f33",
+                        "surface-dim": "#070e1d",
+                        "on-primary": "#571a00",
+                        "error-container": "#9f0519",
+                        "on-secondary-fixed-variant": "#005e67",
+                        "secondary-fixed": "#4febfe",
+                        "error": "#ff716c",
+                        "primary-fixed-dim": "#f76526",
+                        "inverse-on-surface": "#4e5567",
+                        "on-tertiary-fixed": "#443100",
+                        "primary": "#ff9066",
+                        "outline": "#6f7588",
+                        "surface-bright": "#212c43",
+                        "secondary": "#4febfe",
+                        "primary-fixed": "#ff7943",
+                        "primary-dim": "#ff743b",
+                        "inverse-surface": "#faf9ff",
+                        "error-dim": "#d7383b",
+                        "on-primary-fixed": "#000000",
+                        "surface-container-highest": "#1c253b",
+                        "on-secondary-fixed": "#003f45"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Plus Jakarta Sans"],
+                        "body": ["Be Vietnam Pro"],
+                        "label": ["Be Vietnam Pro"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .bloom-glow {
+            box-shadow: 0 0 40px rgba(255, 144, 102, 0.25);
+        }
+        .stadium-streak {
+            background: linear-gradient(105deg, transparent 40%, rgba(79, 235, 254, 0.05) 45%, transparent 50%);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body min-h-screen flex flex-col overflow-hidden selection:bg-primary selection:text-on-primary">
+<!-- iOS Status Bar Simulation -->
+<div class="w-full px-8 pt-4 pb-2 flex justify-between items-center text-on-surface z-50">
+<span class="text-sm font-bold">9:41</span>
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[18px]">signal_cellular_alt</span>
+<span class="material-symbols-outlined text-[18px]">wifi</span>
+<span class="material-symbols-outlined text-[20px]">battery_full</span>
+</div>
+</div>
+<!-- Main Content Canvas -->
+<main class="flex-1 flex flex-col relative px-6 pt-4 pb-12 overflow-y-auto">
+<!-- Subtle Ambient Streaks -->
+<div class="absolute inset-0 stadium-streak pointer-events-none"></div>
+<div class="absolute top-1/4 -left-20 w-64 h-64 bg-secondary/5 rounded-full blur-[100px] pointer-events-none"></div>
+<div class="absolute bottom-1/4 -right-20 w-80 h-80 bg-primary/5 rounded-full blur-[120px] pointer-events-none"></div>
+<!-- Header -->
+<header class="mb-10 text-center relative">
+<p class="font-label text-secondary text-[10px] uppercase tracking-[0.3em] font-black mb-2">Phase 01: Identification</p>
+<h1 class="font-headline text-4xl font-extrabold tracking-tighter italic text-white uppercase drop-shadow-sm">
+                CHOOSE YOUR ROOKIE
+            </h1>
+</header>
+<!-- Featured Avatar Display -->
+<div class="relative w-full flex justify-center mb-10 group">
+<!-- Backlight Bloom -->
+<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 bg-primary/20 rounded-full blur-[60px] opacity-100"></div>
+<div class="relative z-10 w-64 h-64 flex items-center justify-center">
+<img class="w-full h-full object-contain drop-shadow-[0_20px_50px_rgba(255,144,102,0.4)] scale-110" data-alt="dynamic cel-shaded anime illustration of a cool anthropomorphic wolf soccer player in a neon orange jersey, intense expression, cinematic lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDNOQfhcFOHz8rxIWTBnMXrNKdUX0hSJYX2g_1WK5yfn6tQwaxxaMNbeeFQ1-1bPVw7zGOMyH93nZ7SZBYoehD4UUIIdmkOKcdNIMSvybeavywmCE_9uG8Tc-jRaCq90iQSGQiinlQIDwY2SA5i_YLMKSgz07JRibLsPpf02txsJSUuAfVB5E1zYappY1-JG_3sXs6DmjKWjBotB_AHJyHv2uwHQsMTj1-mCVQURgdqBDPgAGov0jd-8CFuMtv1cZpDx3kml1b1gdE"/>
+<!-- Level Indicator -->
+<div class="absolute -bottom-2 right-4 bg-surface-container-highest border border-outline-variant/30 px-4 py-1.5 rounded-full flex items-center gap-2 bloom-glow">
+<span class="w-2 h-2 rounded-full bg-secondary animate-pulse"></span>
+<span class="font-label text-xs font-bold text-white tracking-wider uppercase">Lvl. 01 WOLF</span>
+</div>
+</div>
+</div>
+<!-- Grid of Options -->
+<div class="grid grid-cols-4 gap-4 mb-12">
+<!-- Active Selection (Wolf) -->
+<button class="relative aspect-square rounded-lg bg-surface-container-highest ring-2 ring-primary flex items-center justify-center transition-transform active:scale-95">
+<img class="w-12 h-12 grayscale-0" data-alt="stylized cel-shaded wolf avatar icon" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB_ULWDiNdqKN1vb9qI-HlF8rhDsSVSeYyw8HPVHKiGBs_SW5XBBefDWACrcGNcwQl-wnu8FExThGBgDPzSPonlfwn-8rR1vCsyfR1xzOnRsIHY9La2g_DdPLIMdWmHxfIeQwc8JwJJRhcMxdlhvQg2H5et6U-hXB7hcONRUtLulxtKNBexv69ZbongZ6mi_tESKryub5LQBb4W96bXOPYfgW1zvw3kobnko-uhjdx-L1z7TCBteMXIO4Or4jDUWGZSj8NcmRGfhgI"/>
+</button>
+<!-- Lion -->
+<button class="relative aspect-square rounded-lg bg-surface-container-low flex items-center justify-center transition-all hover:bg-surface-container-highest active:scale-95 group">
+<img class="w-10 h-10 grayscale opacity-40 group-hover:grayscale-0 group-hover:opacity-100 transition-all" data-alt="stylized cel-shaded lion avatar icon" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDli8lALs00INmYvbPw0fJVL4RQyvwXPgLKXcf8JtlYY-o9VVRW9J8_2dZBeosSVwj3WzH1cXdsKicWGfSuKaKibWRNqPSk2nrb-vQX6CRTM8NRti7yYvbw8xxzQHNqHbEGDR8uudcimkEaCr7AviEs_S_KgMYvarTAUeC0UTWTza1pMp45Xptx1PLP_h50ChE0Vd1BBBV2n0GBy-GL4aG5e5_CLMr0jJk_S2DV4zGkZjzhW7F8jQ5iDCdPWg7luPz1q3rN2B6D-uk"/>
+</button>
+<!-- Eagle -->
+<button class="relative aspect-square rounded-lg bg-surface-container-low flex items-center justify-center transition-all hover:bg-surface-container-highest active:scale-95 group">
+<img class="w-10 h-10 grayscale opacity-40 group-hover:grayscale-0 group-hover:opacity-100 transition-all" data-alt="stylized cel-shaded eagle avatar icon" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAXWiuJAUSEGS_UKCfTphsmfs5gRUUOJSeXkvD-h44RoU3_jvpqPB-ucypb0qyLJlaZW9FUAxgtJ_zdWLOf-iwhdqz-NF5JKaK93Ool-gf7LIYy3zWjMgYVAgLa3HdlJDjLDuhQmbZZcd2iv31xc4_IIdF8atJdfBLCkQvSEQHWro9mbj299Bn1epEg7xUDi_RWW-npQWVBiyfavNlY9PKagEVYVJMD3zuurw4SeRHrcRtCqSn9dVw_D0T9xGO5k5mmgmVbXdpFDy0"/>
+</button>
+<!-- Fox -->
+<button class="relative aspect-square rounded-lg bg-surface-container-low flex items-center justify-center transition-all hover:bg-surface-container-highest active:scale-95 group">
+<img class="w-10 h-10 grayscale opacity-40 group-hover:grayscale-0 group-hover:opacity-100 transition-all" data-alt="stylized cel-shaded fox avatar icon" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAx5Hm7XlK3j-veaTn_Af-FsOj8vcMtsfbDQZp_XgnDChv7mwgUf3WPDwv89CNX-boKLZ9-imJlrU00lounkB-z4d-7d7nFVqMyUY_6C-fa2cBrgzmB3XXKWuuLdN2RLReQPpITe5_H400taxmSvrSTl5o-E3A3XO6Tj6hVcMYqx0aL2STA_lvI-PhTQcUpb7QGe0yb5Gk8KSB7BpWnGybtdqD7NgYoQb4B3il-A0qKT67XA61Rc8oqjDIOUd3xob6QYL6kYSSJhYw"/>
+</button>
+<!-- Shark -->
+<button class="relative aspect-square rounded-lg bg-surface-container-low flex items-center justify-center transition-all hover:bg-surface-container-highest active:scale-95 group">
+<img class="w-10 h-10 grayscale opacity-40 group-hover:grayscale-0 group-hover:opacity-100 transition-all" data-alt="stylized cel-shaded shark avatar icon" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDJfwvJ9T66oZdLHmZjvTI7MqcwyTyHZdy6n2vzmBsVB5bGiJD_j8C7qQ6WqtcdE2vg5N9s4-fWLmSa7yJnD3eKovFcPu3eviSbdT4MWOaKvMknRfs-2wcX8DfzW8_kqQK7MXmjMRuQKg4CWN98QXxk7dpfW1pt9Cp8NimvcfEXlZxbQgLVcjdW0f9zQbdI6w6DJnz2QRZPjke_BG_OYIyQnS4cze9PhcKL7zJv3lkdav-iG5o30Tm6yc93or_6uiDU_Xx-qw-UadI"/>
+</button>
+<!-- Panther -->
+<button class="relative aspect-square rounded-lg bg-surface-container-low flex items-center justify-center transition-all hover:bg-surface-container-highest active:scale-95 group">
+<img class="w-10 h-10 grayscale opacity-40 group-hover:grayscale-0 group-hover:opacity-100 transition-all" data-alt="stylized cel-shaded panther avatar icon" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAvff1X1dLo5yWRd4Qn_hSCxkNEatUNnieVZsk_-MYXDfsxlWJEKSl0tBlNX5kxE8aXUTqkn_UyyAlqe94W9TUgQDIxM8-p84pBn1WEYgKO-MzTjjYDuUXDdsSN1ijZI3qwpkcLMpTP5aBRQMHeYC-yBM9ZfXxrBoRRxi_U1Z4AaPsnHxNo6DhnOuYT4iC80AcEjIrTbof4hycMmzYyHN3VcvcCFUX816b1l90MgE4-FhC6sHx4s5gWB2-EMpw10T2JoJTVqhd373w"/>
+</button>
+<!-- Bear -->
+<button class="relative aspect-square rounded-lg bg-surface-container-low flex items-center justify-center transition-all hover:bg-surface-container-highest active:scale-95 group">
+<img class="w-10 h-10 grayscale opacity-40 group-hover:grayscale-0 group-hover:opacity-100 transition-all" data-alt="stylized cel-shaded bear avatar icon" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBTB1xS1_VJQWlcrQ_c6JtOsUY2D2Bs7Ov2NGc9oyGIzTxoTBfkqi3VK2cfqp3T9D5nAHkeHGchqknkvxifXsC-aTHFNG55UzWlenXc4TabF_qVGIh06IijCwpV0E3KJt-qYrx04lmbObrioRQyAgBzVVC32stIbZoH6prhvIOjmsdKMFwG6Cqd72zBrjL9iKw5D5Km7rLiQncmGdHmO0JH_dlgmVqG5Sf6q6dExJ6cGAi-c3HaUnTUEzXYOtFvQW0XHdDVTTWBnqM"/>
+</button>
+<!-- Human -->
+<button class="relative aspect-square rounded-lg bg-surface-container-low flex items-center justify-center transition-all hover:bg-surface-container-highest active:scale-95 group">
+<img class="w-10 h-10 grayscale opacity-40 group-hover:grayscale-0 group-hover:opacity-100 transition-all" data-alt="stylized cel-shaded human soccer rookie avatar icon" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBuLtuEt0khoX1efAydsFrNsdezo_WQyxUW3Vg4f9BTOZEhd_nxgmkE4viW1DDJIry9HdkB0jTz7mg-UzJj7PTcOf1cHhP1LyqXQhn4oUo4mpCBPEAAbhFNdRALZL_ZlurVE9JBoeQLtJCu0aZmmDhh3SZ4kVxt_eEPtY3pY5yyriY_TFbQ3piQd4gHQixNBcKaCxdJNq8eWe_OfNk1QJWkGjTy71XCaAXZXb81NHGXqJXNYvuZaSWUsnSxxmQbK-rcR1sGb9ACTeo"/>
+</button>
+</div>
+<!-- Trait Summary (Bento-like detail) -->
+<div class="bg-surface-container-low rounded-lg p-6 mb-12 border border-outline-variant/10">
+<div class="flex justify-between items-center mb-4">
+<h3 class="font-headline text-lg font-bold text-white uppercase italic tracking-tight">WOLF STATS</h3>
+<div class="flex gap-1">
+<div class="w-1.5 h-1.5 rounded-full bg-primary"></div>
+<div class="w-1.5 h-1.5 rounded-full bg-primary/30"></div>
+<div class="w-1.5 h-1.5 rounded-full bg-primary/30"></div>
+</div>
+</div>
+<div class="space-y-4">
+<div class="flex justify-between items-center">
+<span class="font-label text-[10px] text-on-surface-variant uppercase tracking-widest">SPEED</span>
+<div class="flex-1 mx-4 h-1 bg-surface-container rounded-full overflow-hidden">
+<div class="w-[85%] h-full bg-secondary bloom-glow"></div>
+</div>
+<span class="font-label text-[10px] text-secondary font-black">85</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="font-label text-[10px] text-on-surface-variant uppercase tracking-widest">AGILITY</span>
+<div class="flex-1 mx-4 h-1 bg-surface-container rounded-full overflow-hidden">
+<div class="w-[92%] h-full bg-secondary bloom-glow"></div>
+</div>
+<span class="font-label text-[10px] text-secondary font-black">92</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="font-label text-[10px] text-on-surface-variant uppercase tracking-widest">STAMINA</span>
+<div class="flex-1 mx-4 h-1 bg-surface-container rounded-full overflow-hidden">
+<div class="w-[60%] h-full bg-secondary bloom-glow"></div>
+</div>
+<span class="font-label text-[10px] text-secondary font-black">60</span>
+</div>
+</div>
+</div>
+<!-- Action Button -->
+<div class="mt-auto">
+<button class="w-full h-16 bg-gradient-to-br from-primary to-primary-container rounded-xl flex items-center justify-center gap-3 active:scale-[0.96] transition-all bloom-glow">
+<span class="font-headline text-on-primary-fixed font-extrabold uppercase italic tracking-wider text-lg">START JOURNEY</span>
+<span class="material-symbols-outlined text-on-primary-fixed font-bold">arrow_forward</span>
+</button>
+<p class="text-center mt-4 font-body text-[10px] text-on-surface-variant/60 uppercase tracking-[0.2em]">
+                Character selection is final for this season
+            </p>
+</div>
+</main>
+<!-- Implicit Navigation Shell (Suppressed based on Transactional Flow) -->
+</body></html>

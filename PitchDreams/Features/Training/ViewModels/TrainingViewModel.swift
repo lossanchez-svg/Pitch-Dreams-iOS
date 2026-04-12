@@ -57,6 +57,7 @@ final class TrainingViewModel: ObservableObject {
                 APIRouter.createQuickCheckIn(childId: childId, body: body)
             )
             checkInState = response
+            MissionsViewModel.shared.recordEvent(.checkInCompleted, childId: childId)
         } catch {
             errorMessage = "Check-in failed. Please try again."
         }
@@ -86,6 +87,7 @@ final class TrainingViewModel: ObservableObject {
                 APIRouter.createCheckIn(childId: childId, body: body)
             )
             checkInState = response
+            MissionsViewModel.shared.recordEvent(.checkInCompleted, childId: childId)
         } catch {
             errorMessage = "Check-in failed. Please try again."
         }

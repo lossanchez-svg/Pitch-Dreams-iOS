@@ -54,6 +54,7 @@ final class QuickLogViewModel: ObservableObject {
                 APIRouter.createQuickSession(childId: childId, body: body)
             )
             saveSuccess = true
+            MissionsViewModel.shared.recordEvent(.sessionLogged, childId: childId)
             resetForm()
         } catch {
             errorMessage = "Failed to log session: \(error.localizedDescription)"

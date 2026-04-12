@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>PitchDreams Design System Reference</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Be+Vietnam+Pro:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary-fixed-variant": "#5b4300",
+                        "primary-container": "#ff6b2c",
+                        "outline": "#a98a7f",
+                        "primary-fixed": "#ffdbcf",
+                        "surface-bright": "#32394a",
+                        "surface-variant": "#2e3545",
+                        "surface-container": "#191f2f",
+                        "inverse-surface": "#dce2f8",
+                        "secondary-container": "#00c9db",
+                        "on-tertiary-fixed": "#251a00",
+                        "on-primary": "#5b1b00",
+                        "tertiary": "#edc157",
+                        "outline-variant": "#594139",
+                        "error": "#ffb4ab",
+                        "tertiary-fixed": "#ffdf9b",
+                        "on-surface": "#dce2f8",
+                        "inverse-on-surface": "#2a3041",
+                        "primary": "#ffb59a",
+                        "on-secondary": "#00363c",
+                        "on-primary-fixed": "#380d00",
+                        "error-container": "#93000a",
+                        "tertiary-container": "#bc942f",
+                        "surface-dim": "#0c1322",
+                        "on-surface-variant": "#e2bfb3",
+                        "on-error-container": "#ffdad6",
+                        "primary-fixed-dim": "#ffb59a",
+                        "surface": "#0c1322",
+                        "surface-tint": "#ffb59a",
+                        "surface-container-highest": "#2e3545",
+                        "on-secondary-fixed": "#001f23",
+                        "on-secondary-fixed-variant": "#004f57",
+                        "on-error": "#690005",
+                        "on-primary-container": "#5c1c00",
+                        "on-secondary-container": "#004f57",
+                        "inverse-primary": "#a83900",
+                        "surface-container-high": "#232a3a",
+                        "secondary": "#46e5f8",
+                        "surface-container-low": "#151b2b",
+                        "on-tertiary": "#3f2e00",
+                        "secondary-fixed-dim": "#34d9ec",
+                        "tertiary-fixed-dim": "#edc157",
+                        "background": "#0c1322",
+                        "surface-container-lowest": "#070e1d",
+                        "on-primary-fixed-variant": "#802900",
+                        "on-background": "#dce2f8",
+                        "on-tertiary-container": "#412f00",
+                        "secondary-fixed": "#92f1ff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Plus Jakarta Sans"],
+                        "body": ["Be Vietnam Pro"],
+                        "label": ["Plus Jakarta Sans"]
+                    }
+                },
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            line-height: 1;
+            vertical-align: middle;
+        }
+        .tonal-transition-bg {
+            background: linear-gradient(180deg, rgba(7, 14, 29, 0.8) 0%, rgba(12, 19, 34, 0.8) 100%);
+        }
+        .kinetic-bloom {
+            background: linear-gradient(135deg, #ffb59a 0%, #ff6b2c 100%);
+        }
+        .glass-card {
+            background: rgba(46, 53, 69, 0.4);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(169, 138, 127, 0.1);
+        }
+        .text-glow {
+            text-shadow: 0 0 20px rgba(255, 181, 154, 0.3);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-surface text-on-surface font-body selection:bg-primary/30">
+<!-- Top Navigation Anchor -->
+<nav class="bg-[#070e1d]/80 backdrop-blur-xl fixed top-0 w-full z-50 flex items-center justify-between px-6 h-16 w-full max-w-none">
+<div class="flex items-center gap-3">
+<span class="text-2xl font-black tracking-tighter italic text-[#ff6b2c] font-['Plus_Jakarta_Sans']">PITCHDREAMS</span>
+</div>
+<div class="flex items-center gap-6">
+<div class="hidden md:flex items-center gap-8 text-[#ffb59a] font-bold">
+<span class="hover:opacity-80 transition-transform scale-95 cursor-pointer">Design System</span>
+<span class="text-[#191f2f] hover:opacity-80 transition-transform scale-95 cursor-pointer">Documentation</span>
+</div>
+<div class="w-10 h-10 rounded-full overflow-hidden border-2 border-primary">
+<img class="w-full h-full object-cover" data-alt="Anime style athlete profile portrait with vibrant orange and navy lighting, athletic build, sharp facial features" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA9uL8Ij0SokqXSMjX8N0Yk58XtsgJhQGvyry7eaeyMAHEIq63EnO0NvDE1D87weImEUv3yEdXxqs5ITsYG2irW6Ynr_rUOk0q3u0sd07AZJhbIYpC00pz8VFxx3Ol0AzAo6VNZFLcU6hhcJmIpKfm961NyK2saYslZ36msi8CIWr4J5vDutuT2YsRSzNF5fbbupiMBle-3sTgqb9bW8U_PhxFatcZ8hNnYzLidWooW-ag787QzvQIq-PwnHTSxehKCQ0e6L7CHD0k"/>
+</div>
+</div>
+</nav>
+<main class="pt-24 pb-32 px-6 max-w-7xl mx-auto space-y-24">
+<!-- Header Section -->
+<header class="relative space-y-4">
+<div class="absolute -top-24 -left-24 w-96 h-96 bg-primary/10 rounded-full blur-[120px]"></div>
+<div class="absolute -top-12 right-0 w-64 h-64 bg-secondary/5 rounded-full blur-[100px]"></div>
+<p class="text-secondary font-bold tracking-[0.2em] uppercase text-xs">Version 1.0 • The Kinetic Sanctuary</p>
+<h1 class="text-6xl md:text-8xl font-headline font-extrabold tracking-tighter text-glow italic">Reference Sheet</h1>
+<p class="max-w-2xl text-on-surface-variant text-lg leading-relaxed">
+                Bridging high-octane performance with focused mental clarity. A premium editorial experience for the next generation of elite athletes.
+            </p>
+</header>
+<!-- 1. COLORS -->
+<section class="space-y-8">
+<div class="flex items-baseline gap-4">
+<h2 class="text-4xl font-headline font-bold italic tracking-tight">01. COLORS</h2>
+<div class="h-[2px] flex-grow bg-gradient-to-r from-outline-variant/30 to-transparent"></div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+<!-- Swatch Card -->
+<div class="bg-surface-container rounded-xl p-6 space-y-4 border border-outline-variant/10">
+<div class="h-32 w-full bg-surface-container-lowest rounded-lg"></div>
+<div class="flex justify-between items-center">
+<div>
+<p class="font-bold">Primary Navy</p>
+<p class="text-xs text-on-surface-variant font-mono">#070E1D</p>
+</div>
+<span class="text-[10px] bg-surface-variant px-2 py-1 rounded-full uppercase tracking-widest font-bold">Deepest</span>
+</div>
+</div>
+<div class="bg-surface-container rounded-xl p-6 space-y-4 border border-outline-variant/10">
+<div class="h-32 w-full bg-surface rounded-lg"></div>
+<div>
+<p class="font-bold">Surface Canvas</p>
+<p class="text-xs text-on-surface-variant font-mono">#0C1322</p>
+</div>
+</div>
+<div class="bg-surface-container rounded-xl p-6 space-y-4 border border-outline-variant/10">
+<div class="h-32 w-full kinetic-bloom rounded-lg shadow-[0_0_30px_rgba(255,107,44,0.3)]"></div>
+<div>
+<p class="font-bold">Electric Orange</p>
+<p class="text-xs text-on-surface-variant font-mono">#FF6B2C</p>
+</div>
+</div>
+<div class="bg-surface-container rounded-xl p-6 space-y-4 border border-outline-variant/10">
+<div class="h-32 w-full bg-secondary rounded-lg"></div>
+<div>
+<p class="font-bold">Kinetic Cyan</p>
+<p class="text-xs text-on-surface-variant font-mono">#46E5F8</p>
+</div>
+</div>
+<div class="bg-surface-container rounded-xl p-6 space-y-4 border border-outline-variant/10">
+<div class="h-32 w-full bg-tertiary rounded-lg"></div>
+<div>
+<p class="font-bold">Gold Achievement</p>
+<p class="text-xs text-on-surface-variant font-mono">#EDC157</p>
+</div>
+</div>
+<div class="bg-surface-container rounded-xl p-6 space-y-4 border border-outline-variant/10">
+<div class="h-32 w-full bg-on-surface rounded-lg"></div>
+<div>
+<p class="font-bold">Soft White</p>
+<p class="text-xs text-on-surface-variant font-mono">#DCE2F8</p>
+</div>
+</div>
+</div>
+</section>
+<!-- 2. TYPOGRAPHY -->
+<section class="space-y-8">
+<div class="flex items-baseline gap-4">
+<h2 class="text-4xl font-headline font-bold italic tracking-tight">02. TYPOGRAPHY</h2>
+<div class="h-[2px] flex-grow bg-gradient-to-r from-outline-variant/30 to-transparent"></div>
+</div>
+<div class="bg-surface-container-low rounded-xl p-8 space-y-12">
+<div class="space-y-2">
+<p class="text-[10px] text-secondary font-bold uppercase tracking-[0.3em]">Display Large</p>
+<h3 class="text-7xl font-headline font-extrabold tracking-tighter italic">98% FOCUS</h3>
+</div>
+<div class="space-y-2">
+<p class="text-[10px] text-secondary font-bold uppercase tracking-[0.3em]">Title 1</p>
+<h3 class="text-4xl font-headline font-bold">Elite Training Block</h3>
+</div>
+<div class="space-y-2">
+<p class="text-[10px] text-secondary font-bold uppercase tracking-[0.3em]">Headline</p>
+<h3 class="text-2xl font-headline font-semibold">Morning Session Intensity</h3>
+</div>
+<div class="space-y-2">
+<p class="text-[10px] text-secondary font-bold uppercase tracking-[0.3em]">Body</p>
+<p class="text-lg text-on-surface-variant leading-relaxed max-w-xl font-body">The athlete's mental state must mirror their physical readiness. Every rep, every breath, every movement is a step toward evolution.</p>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+<div class="space-y-2">
+<p class="text-[10px] text-secondary font-bold uppercase tracking-[0.3em]">Label</p>
+<p class="text-xs font-label font-bold uppercase tracking-widest">Active Streak</p>
+</div>
+<div class="space-y-2">
+<p class="text-[10px] text-secondary font-bold uppercase tracking-[0.3em]">Footnote</p>
+<p class="text-xs text-on-surface-variant">Last synced 2m ago</p>
+</div>
+</div>
+</div>
+</section>
+<!-- 3. COMPONENTS GRID -->
+<section class="space-y-8">
+<div class="flex items-baseline gap-4">
+<h2 class="text-4xl font-headline font-bold italic tracking-tight">03. COMPONENTS</h2>
+<div class="h-[2px] flex-grow bg-gradient-to-r from-outline-variant/30 to-transparent"></div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+<!-- Buttons & Chips (Col 1-4) -->
+<div class="md:col-span-4 space-y-6">
+<div class="bg-surface-container rounded-xl p-6 space-y-6">
+<p class="text-[10px] text-on-surface-variant font-bold uppercase tracking-widest mb-4">Actions &amp; Chips</p>
+<button class="w-full h-14 kinetic-bloom rounded-full font-bold text-on-primary-container shadow-[0_12px_24px_rgba(255,107,44,0.3)] hover:scale-105 active:scale-95 transition-all">PRIMARY ACTION</button>
+<button class="w-full h-14 border border-outline/20 rounded-full font-bold text-on-surface hover:bg-surface-variant transition-colors">SECONDARY GHOST</button>
+<div class="flex flex-wrap gap-3 pt-4">
+<div class="bg-surface-container-highest px-4 py-2 rounded-full flex items-center gap-2 border border-outline-variant/10">
+<span class="material-symbols-outlined text-primary text-sm">local_fire_department</span>
+<span class="font-bold text-sm">12 DAY STREAK</span>
+</div>
+<div class="bg-surface-container-highest px-4 py-2 rounded-full flex items-center gap-2 border border-outline-variant/10">
+<span class="material-symbols-outlined text-secondary text-sm">bolt</span>
+<span class="font-bold text-sm">2,450 XP</span>
+</div>
+</div>
+</div>
+<div class="bg-surface-container rounded-xl p-6">
+<p class="text-[10px] text-on-surface-variant font-bold uppercase tracking-widest mb-4">Evolution Stage</p>
+<div class="flex gap-2">
+<div class="h-2 w-12 bg-primary rounded-full"></div>
+<div class="h-2 w-4 bg-surface-container-highest rounded-full"></div>
+<div class="h-2 w-4 bg-surface-container-highest rounded-full"></div>
+</div>
+<p class="mt-4 text-xs font-bold text-on-surface-variant">STAGE 01: THE AWAKENING</p>
+</div>
+</div>
+<!-- Action Cards & Hero (Col 5-12) -->
+<div class="md:col-span-8 space-y-6">
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+<!-- Hero Frame -->
+<div class="relative aspect-square rounded-xl overflow-hidden group">
+<div class="w-full h-full border-2 border-dashed border-outline/30 flex items-center justify-center bg-surface-container-high">
+<span class="text-on-surface-variant font-bold uppercase tracking-widest text-sm">Avatar Asset</span>
+</div>
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container-lowest to-transparent"></div>
+<div class="absolute bottom-6 left-6">
+<div class="w-12 h-12 bg-tertiary rounded-full flex items-center justify-center shadow-[0_0_20px_rgba(237,193,87,0.4)] mb-3">
+<span class="material-symbols-outlined text-on-tertiary" style="font-variation-settings: 'FILL' 1;">workspace_premium</span>
+</div>
+<h4 class="text-2xl font-bold font-headline italic">Level 42 Elite</h4>
+</div>
+<!-- Cyan/Violet Bloom -->
+<div class="absolute -top-10 -right-10 w-32 h-32 bg-secondary/20 blur-3xl rounded-full"></div>
+<div class="absolute -bottom-10 -left-10 w-32 h-32 bg-primary/20 blur-3xl rounded-full"></div>
+</div>
+<!-- Large Action Card -->
+<div class="bg-surface-container-low rounded-xl p-8 border border-outline-variant/10 flex flex-col justify-between hover:bg-surface-container transition-colors cursor-pointer">
+<div>
+<div class="w-14 h-14 bg-primary/10 rounded-2xl flex items-center justify-center mb-6">
+<span class="material-symbols-outlined text-primary text-3xl">fitness_center</span>
+</div>
+<h3 class="text-3xl font-headline font-bold mb-2">Morning Routine</h3>
+<p class="text-on-surface-variant">Focusing on rotational velocity and core stability.</p>
+</div>
+<div class="mt-8 flex items-center justify-between">
+<span class="text-secondary font-bold text-sm uppercase tracking-widest">45 MIN SESSION</span>
+<span class="material-symbols-outlined text-on-surface-variant">arrow_forward</span>
+</div>
+</div>
+</div>
+<!-- Coach Nudge Card -->
+<div class="glass-card rounded-xl p-6 flex items-center gap-6">
+<div class="relative shrink-0">
+<div class="w-16 h-16 rounded-full overflow-hidden border-2 border-secondary">
+<img class="w-full h-full object-cover" data-alt="Grizzled veteran anime coach character with silver hair and intense eyes, futuristic tactical sports visor" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCi7Vi78nL2lJU2K9c_ZAETddgbTQTHepm8E0tU7f_5DTAj_61x2bBCQNmRZzE0ETm-8yeuM6DadRCjvWo-zm30ZBk2_ZxS_NddLQaEJbEkDlpK_MfZ4YhmK245B6Mwx6o0dKbz4Emm8OOWwdvp4jVrA4WgmydOUaAhYuY4fahNfkUQhvhE3LDRgND0EnP9eRjeI-5JeFDhtCiXIv4fx7_Lk8EXxZGQNuxMAI2BaB6lL6GgTOWM9_MNyHFj6gh9rjuj96O-iG8Jdqo"/>
+</div>
+<div class="absolute -bottom-1 -right-1 w-5 h-5 bg-green-500 border-2 border-surface rounded-full"></div>
+</div>
+<div class="flex-grow">
+<p class="text-secondary text-[10px] font-bold uppercase tracking-widest mb-1">Coach Kaito</p>
+<h4 class="font-bold text-lg">"Your exit velocity is up 4%. Keep pushing the lower half."</h4>
+</div>
+<button class="bg-surface-container-highest p-3 rounded-full hover:bg-primary/20 transition-colors">
+<span class="material-symbols-outlined">chat_bubble</span>
+</button>
+</div>
+</div>
+</div>
+</section>
+<!-- 4. SPACING -->
+<section class="space-y-8">
+<div class="flex items-baseline gap-4">
+<h2 class="text-4xl font-headline font-bold italic tracking-tight">04. SPACING</h2>
+<div class="h-[2px] flex-grow bg-gradient-to-r from-outline-variant/30 to-transparent"></div>
+</div>
+<div class="bg-surface-container rounded-xl p-8 grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-8">
+<div class="space-y-3">
+<div class="h-1 w-1 bg-primary"></div>
+<p class="text-[10px] font-mono opacity-50">4pt</p>
+</div>
+<div class="space-y-3">
+<div class="h-2 w-2 bg-primary"></div>
+<p class="text-[10px] font-mono opacity-50">8pt</p>
+</div>
+<div class="space-y-3">
+<div class="h-3 w-3 bg-primary"></div>
+<p class="text-[10px] font-mono opacity-50">12pt</p>
+</div>
+<div class="space-y-3">
+<div class="h-4 w-4 bg-primary"></div>
+<p class="text-[10px] font-mono opacity-50">16pt</p>
+</div>
+<div class="space-y-3">
+<div class="h-5 w-5 bg-primary"></div>
+<p class="text-[10px] font-mono opacity-50">20pt</p>
+</div>
+<div class="space-y-3">
+<div class="h-6 w-6 bg-primary"></div>
+<p class="text-[10px] font-mono opacity-50">24pt</p>
+</div>
+<div class="space-y-3">
+<div class="h-8 w-8 bg-primary"></div>
+<p class="text-[10px] font-mono opacity-50">32pt</p>
+</div>
+<div class="space-y-3">
+<div class="h-12 w-12 bg-primary"></div>
+<p class="text-[10px] font-mono opacity-50">48pt</p>
+</div>
+</div>
+</section>
+</main>
+<!-- Bottom Navigation Component (Mobile) -->
+<nav class="md:hidden bg-[#151b2b]/80 backdrop-blur-2xl fixed bottom-0 w-full z-50 rounded-t-[3rem] shadow-[0_-8px_30px_rgb(0,0,0,0.5)] flex justify-around items-center w-full px-4 pb-6 pt-2">
+<div class="flex flex-col items-center justify-center text-[#ffb59a] bg-gradient-to-br from-[#ffb59a]/20 to-[#ff6b2c]/20 rounded-full p-3 shadow-[0_0_20px_rgba(255,107,44,0.3)] active:scale-90 transition-all duration-300">
+<span class="material-symbols-outlined">home</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[10px] font-bold uppercase tracking-widest">Home</span>
+</div>
+<div class="flex flex-col items-center justify-center text-[#2e3545] p-3 hover:text-[#46e5f8] transition-colors active:scale-90 transition-all duration-300">
+<span class="material-symbols-outlined">fitness_center</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[10px] font-bold uppercase tracking-widest">Train</span>
+</div>
+<div class="flex flex-col items-center justify-center text-[#2e3545] p-3 hover:text-[#46e5f8] transition-colors active:scale-90 transition-all duration-300">
+<span class="material-symbols-outlined">edit_note</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[10px] font-bold uppercase tracking-widest">Log</span>
+</div>
+<div class="flex flex-col items-center justify-center text-[#2e3545] p-3 hover:text-[#46e5f8] transition-colors active:scale-90 transition-all duration-300">
+<span class="material-symbols-outlined">workspace_premium</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[10px] font-bold uppercase tracking-widest">Skills</span>
+</div>
+<div class="flex flex-col items-center justify-center text-[#2e3545] p-3 hover:text-[#46e5f8] transition-colors active:scale-90 transition-all duration-300">
+<span class="material-symbols-outlined">more_horiz</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[10px] font-bold uppercase tracking-widest">More</span>
+</div>
+</nav>
+</body></html>

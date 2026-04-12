@@ -53,13 +53,15 @@ enum TestFixtures {
         nickname: String = "TestKid",
         avatarId: String = "avatar-soccer",
         skipAnimations: Bool = false,
-        voiceEnabled: Bool = true
+        voiceEnabled: Bool = true,
+        coachPersonality: String? = nil
     ) -> ChildProfileDetail {
         ChildProfileDetail(
             nickname: nickname,
             avatarId: avatarId,
             skipAnimations: skipAnimations,
-            voiceEnabled: voiceEnabled
+            voiceEnabled: voiceEnabled,
+            coachPersonality: coachPersonality
         )
     }
 

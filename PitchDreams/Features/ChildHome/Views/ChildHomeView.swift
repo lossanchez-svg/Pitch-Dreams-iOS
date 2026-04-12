@@ -610,7 +610,7 @@ struct ChildHomeView: View {
                         .font(.system(size: 14, weight: .black, design: .rounded))
                         .tracking(2)
                 }
-                .foregroundStyle(Color(hex: "#5B1B00"))
+                .foregroundStyle(Color.dsCTALabel)
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 16)
                 .background(DSGradient.primaryCTA)
@@ -711,12 +711,12 @@ struct ChildHomeView: View {
                             .frame(width: 48, height: 48)
                         Image(systemName: "figure.run")
                             .font(.system(size: 24))
-                            .foregroundStyle(Color(hex: "#5B1B00"))
+                            .foregroundStyle(Color.dsCTALabel)
                     }
                     Text("START TRAINING")
                         .font(.system(size: 12, weight: .black, design: .rounded))
                         .tracking(1.5)
-                        .foregroundStyle(Color(hex: "#5B1B00"))
+                        .foregroundStyle(Color.dsCTALabel)
                 }
                 .frame(maxWidth: .infinity)
                 .frame(height: 140)

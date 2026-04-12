@@ -3,11 +3,25 @@ import SwiftUI
 struct SessionCompleteView: View {
     @ObservedObject var viewModel: ActiveTrainingViewModel
     @Environment(\.dismiss) private var dismiss
+    @State private var showConfetti = false
 
     var body: some View {
         ZStack {
             Color.dsBackground
                 .ignoresSafeArea()
+
+            // Atmospheric glow
+            RadialGradient(
+                colors: [
+                    Color.dsSecondary.opacity(0.18),
+                    Color.dsSecondary.opacity(0.05),
+                    Color.clear
+                ],
+                center: .center,
+                startRadius: 10,
+                endRadius: 300
+            )
+            .ignoresSafeArea()
 
             VStack(spacing: Spacing.xxl) {
                 Spacer()
@@ -30,7 +44,7 @@ struct SessionCompleteView: View {
                         .tracking(3)
                         .foregroundStyle(Color.dsSecondary)
 
-                    Text("Great work out there.")
+                    Text("Great work out there!")
                         .font(.system(size: 16))
                         .foregroundStyle(Color.dsOnSurfaceVariant)
                 }
@@ -60,7 +74,7 @@ struct SessionCompleteView: View {
                             .font(.system(size: 14, weight: .black, design: .rounded))
                             .tracking(2)
                     }
-                    .foregroundStyle(Color(hex: "#5B1B00"))
+                    .foregroundStyle(Color.dsCTALabel)
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 18)
                     .background(DSGradient.primaryCTA)
@@ -69,6 +83,21 @@ struct SessionCompleteView: View {
                 }
                 .padding(.horizontal, Spacing.xl)
                 .padding(.bottom, 32)
+            }
+        }
+        .celebration(isPresented: $showConfetti)
+        .onAppear {
+            if viewModel.sessionSaved {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    showConfetti = true
+                }
+            }
+        }
+        .onChange(of: viewModel.sessionSaved) { saved in
+            if saved {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    showConfetti = true
+                }
             }
         }
     }

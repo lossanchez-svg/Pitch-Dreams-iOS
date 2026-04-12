@@ -40,7 +40,7 @@ struct LessonPlayerView: View {
                 stepContent
             }
         }
-        .background(Color(.systemBackground))
+        .background(Color.dsBackground)
         .onAppear {
             let voice = injectedVoice ?? coachVoice
             viewModel.setVoice(voice)
@@ -239,8 +239,8 @@ struct LessonPlayerView: View {
 
     private static func color(for track: String) -> Color {
         switch track {
-        case "scanning": return .cyan
-        case "decision_chain": return .purple
+        case "scanning": return Color.dsSecondary
+        case "decision_chain": return Color.dsTertiary
         case "tempo": return .orange
         default: return .blue
         }

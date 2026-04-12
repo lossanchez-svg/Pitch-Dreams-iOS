@@ -36,7 +36,7 @@ struct CoachCharacterView: View {
                 // Listening ring
                 if viewModel.mood == .listening {
                     Circle()
-                        .stroke(Color.cyan.opacity(0.6), lineWidth: 2)
+                        .stroke(Color.dsSecondary.opacity(0.6), lineWidth: 2)
                         .frame(width: size.points + 16, height: size.points + 16)
                         .scaleEffect(glowScale)
                         .opacity(2.0 - Double(glowScale))
@@ -49,7 +49,7 @@ struct CoachCharacterView: View {
                     .frame(width: size.points, height: size.points)
                     .background(
                         Circle()
-                            .fill(Color.cyan.opacity(0.2))
+                            .fill(Color.dsSecondary.opacity(0.2))
                     )
                     .clipShape(Circle())
                     .overlay(
@@ -73,21 +73,21 @@ struct CoachCharacterView: View {
 
     private var glowColor: Color {
         switch viewModel.mood {
-        case .idle, .speaking, .listening: return .cyan
+        case .idle, .speaking, .listening: return Color.dsSecondary
         case .encouraging: return .green
         case .skeptical: return .orange
-        case .celebrating: return .purple
+        case .celebrating: return Color.dsTertiary
         }
     }
 
     private var borderColor: Color {
         switch viewModel.mood {
-        case .idle: return .cyan
-        case .speaking: return .cyan
+        case .idle: return Color.dsSecondary
+        case .speaking: return Color.dsSecondary
         case .encouraging: return .green
         case .skeptical: return .orange
-        case .celebrating: return .purple
-        case .listening: return .cyan
+        case .celebrating: return Color.dsTertiary
+        case .listening: return Color.dsSecondary
         }
     }
 

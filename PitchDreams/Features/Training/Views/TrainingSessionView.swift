@@ -79,6 +79,7 @@ struct TrainingSessionView: View {
                     .padding(32)
                     .background(Color.dsSurfaceContainer)
                     .clipShape(RoundedRectangle(cornerRadius: CornerRadius.lg))
+                    .ghostBorder()
                 }
             }
         }
@@ -273,7 +274,7 @@ struct TrainingSessionView: View {
                         .font(.system(size: 14, weight: .black, design: .rounded))
                         .tracking(2)
                 }
-                .foregroundStyle(Color(hex: "#5B1B00"))
+                .foregroundStyle(Color.dsCTALabel)
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 18)
                 .background(DSGradient.primaryCTA)

@@ -22,6 +22,20 @@ struct FullCheckInSheet: View {
 
                 ScrollView {
                     VStack(spacing: Spacing.xl) {
+                        // Atmospheric glow
+                        RadialGradient(
+                            colors: [
+                                Color.dsAccentOrange.opacity(0.15),
+                                Color.dsAccentOrange.opacity(0.04),
+                                Color.clear
+                            ],
+                            center: .top,
+                            startRadius: 10,
+                            endRadius: 250
+                        )
+                        .frame(height: 120)
+                        .frame(maxWidth: .infinity)
+
                         // Energy
                         sectionCard(title: "ENERGY LEVEL") {
                             VStack(spacing: 12) {
@@ -187,7 +201,7 @@ struct FullCheckInSheet: View {
                             HStack {
                                 if viewModel.isCheckingIn {
                                     ProgressView()
-                                        .tint(Color(hex: "#5B1B00"))
+                                        .tint(Color.dsCTALabel)
                                 } else {
                                     Image(systemName: "checkmark.circle.fill")
                                     Text("SUBMIT CHECK-IN")
@@ -195,7 +209,7 @@ struct FullCheckInSheet: View {
                                         .tracking(2)
                                 }
                             }
-                            .foregroundStyle(Color(hex: "#5B1B00"))
+                            .foregroundStyle(Color.dsCTALabel)
                             .frame(maxWidth: .infinity)
                             .padding(.vertical, 18)
                             .background(DSGradient.primaryCTA)
@@ -241,6 +255,7 @@ struct FullCheckInSheet: View {
         .padding(Spacing.lg)
         .background(Color.dsSurfaceContainer)
         .clipShape(RoundedRectangle(cornerRadius: CornerRadius.lg))
+        .ghostBorder()
     }
 
     private func levelBar(value: Int, max: Int, color: Color) -> some View {

@@ -65,7 +65,7 @@ struct TacticalPitchView: View {
             GeometryReader { geo in
                 ForEach(elements.filter { $0.highlight && $0.type == .player }) { element in
                     Circle()
-                        .stroke(Color.cyan.opacity(0.5), lineWidth: 2)
+                        .stroke(Color.dsSecondary.opacity(0.5), lineWidth: 2)
                         .frame(width: 30 * pulseScale, height: 30 * pulseScale)
                         .position(
                             x: element.x / 100 * geo.size.width,
@@ -234,7 +234,7 @@ struct TacticalPitchView: View {
 
         let (color, radius): (Color, CGFloat) = {
             switch element.type {
-            case .player: return (.cyan, 12)
+            case .player: return (Color.dsSecondary, 12)
             case .teammate: return (.blue, 10)
             case .opponent: return (.red, 10)
             case .ball: return (.orange, 8)
@@ -304,7 +304,7 @@ struct TacticalPitchView: View {
             case "pass":
                 return (.white.opacity(0.8), StrokeStyle(lineWidth: 2, dash: [6, 4]))
             case "run":
-                return (.cyan, StrokeStyle(lineWidth: 2))
+                return (Color.dsSecondary, StrokeStyle(lineWidth: 2))
             case "scan":
                 return (.yellow, StrokeStyle(lineWidth: 1.5, dash: [3, 3]))
             default:
@@ -348,7 +348,7 @@ struct TacticalPitchView: View {
             height: abs(y2 - y1)
         )
 
-        let color: Color = element.highlight ? .cyan : .yellow
+        let color: Color = element.highlight ? Color.dsSecondary : .yellow
         var zonePath = Path()
         zonePath.addRoundedRect(in: rect, cornerSize: CGSize(width: 4, height: 4))
         context.fill(zonePath, with: .color(color.opacity(0.15)))

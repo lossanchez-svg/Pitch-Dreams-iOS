@@ -52,20 +52,40 @@ enum CoachPersonality: String, CaseIterable, Identifiable {
 
     // MARK: - UserDefaults Persistence
 
-    private static let defaultsKey = "coachPersonality"
+    private static let defaultsKeyPrefix = "coachPersonality_"
 
-    /// The currently selected coach personality, persisted in UserDefaults.
+    /// The currently selected coach personality for the active child, persisted in UserDefaults.
+    /// Falls back to a global key if no child-specific key is set.
     static var current: CoachPersonality {
-        guard let raw = UserDefaults.standard.string(forKey: defaultsKey),
+        // Try active child's key first
+        if let childId = UserDefaults.standard.string(forKey: "activeChildId"),
+           let raw = UserDefaults.standard.string(forKey: defaultsKeyPrefix + childId),
+           let personality = CoachPersonality(rawValue: raw) {
+            return personality
+        }
+        // Fall back to global key (legacy)
+        if let raw = UserDefaults.standard.string(forKey: "coachPersonality"),
+           let personality = CoachPersonality(rawValue: raw) {
+            return personality
+        }
+        return .manager
+    }
+
+    /// Save this personality for a specific child.
+    func save(forChildId childId: String) {
+        UserDefaults.standard.set(rawValue, forKey: Self.defaultsKeyPrefix + childId)
+        UserDefaults.standard.set(childId, forKey: "activeChildId")
+        // Also write global key for views that don't have a childId
+        UserDefaults.standard.set(rawValue, forKey: "coachPersonality")
+    }
+
+    /// Load the saved personality for a specific child.
+    static func saved(forChildId childId: String) -> CoachPersonality {
+        guard let raw = UserDefaults.standard.string(forKey: defaultsKeyPrefix + childId),
               let personality = CoachPersonality(rawValue: raw) else {
             return .manager
         }
         return personality
-    }
-
-    /// Save this personality as the current selection.
-    func saveToCurrent() {
-        UserDefaults.standard.set(rawValue, forKey: Self.defaultsKey)
     }
 
     // MARK: - Personality-Specific Lines
@@ -252,7 +272,7 @@ struct ParentControlsView: View {
                             .clipShape(Circle())
                             .overlay(
                                 Circle()
-                                    .stroke(coachPersonality == personality ? Color.cyan : Color.clear, lineWidth: 2)
+                                    .stroke(coachPersonality == personality ? Color.dsSecondary : Color.clear, lineWidth: 2)
                             )
 
                         VStack(alignment: .leading, spacing: 2) {
@@ -268,7 +288,7 @@ struct ParentControlsView: View {
 
                         if coachPersonality == personality {
                             Image(systemName: "checkmark.circle.fill")
-                                .foregroundStyle(.cyan)
+                                .foregroundStyle(Color.dsSecondary)
                         }
                     }
                 }
@@ -407,8 +427,17 @@ struct ParentControlsView: View {
         do {
             let profile: ChildProfileDetail = try await apiClient.request(APIRouter.getProfile(childId: childId))
             voiceEnabled = profile.voiceEnabled
+            // Restore coach personality: prefer API value, fall back to UserDefaults
+            if let apiPersonality = profile.coachPersonality,
+               let personality = CoachPersonality(rawValue: apiPersonality) {
+                coachPersonality = personality
+                personality.save(forChildId: childId)
+            } else {
+                coachPersonality = CoachPersonality.saved(forChildId: childId)
+            }
         } catch {
-            // Non-critical: settings will use defaults
+            // Non-critical: restore from UserDefaults
+            coachPersonality = CoachPersonality.saved(forChildId: childId)
         }
         isLoadingSettings = false
     }
@@ -425,7 +454,7 @@ struct ParentControlsView: View {
         )
         do {
             try await apiClient.requestVoid(APIRouter.updateChildPermissions(childId: childId, permissions: body))
-            coachPersonality.saveToCurrent()
+            coachPersonality.save(forChildId: childId)
             saveSuccess = true
         } catch {
             // Silently fail; user sees no "Saved!" confirmation
@@ -498,7 +527,7 @@ private struct ExportDataView: View {
 
             Image(systemName: "doc.zipper")
                 .font(.system(size: 48))
-                .foregroundStyle(Color.accentColor)
+                .foregroundStyle(Color.dsSecondary)
 
             Text("Export \(childName)'s Data")
                 .font(.title3.bold())
@@ -528,7 +557,7 @@ private struct ExportDataView: View {
                 .font(.headline)
                 .frame(maxWidth: .infinity)
                 .padding()
-                .background(Color.accentColor)
+                .background(Color.dsSecondary)
                 .foregroundStyle(.white)
                 .clipShape(RoundedRectangle(cornerRadius: 12))
             }

@@ -16,7 +16,7 @@ struct ChipPickerView: View {
             if maxSelection < items.count {
                 Text("\(selectedIds.count) of \(maxSelection) selected")
                     .font(.caption)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(Color.dsOnSurfaceVariant)
             }
 
             FlowLayout(spacing: 8) {
@@ -29,7 +29,7 @@ struct ChipPickerView: View {
                             .font(.subheadline)
                             .padding(.horizontal, 14)
                             .padding(.vertical, 8)
-                            .background(isSelected ? accentColor.opacity(0.15) : Color(.secondarySystemBackground))
+                            .background(isSelected ? accentColor.opacity(0.15) : Color.dsSurfaceContainerHighest)
                             .foregroundColor(isSelected ? accentColor : .primary)
                             .clipShape(Capsule())
                             .overlay(

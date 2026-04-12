@@ -31,7 +31,7 @@ struct StreakMilestoneModal: View {
             // Big number
             Text("\(milestone)")
                 .font(.system(size: 72, weight: .bold, design: .rounded))
-                .foregroundStyle(.orange)
+                .foregroundStyle(Color.dsAccentOrange)
 
             Text("Day Streak!")
                 .font(.title.bold())
@@ -39,12 +39,12 @@ struct StreakMilestoneModal: View {
             if freezeAwarded {
                 HStack(spacing: 8) {
                     Image(systemName: "shield.fill")
-                        .foregroundStyle(.cyan)
+                        .foregroundStyle(Color.dsSecondary)
                     Text("You earned a streak freeze!")
                         .font(.subheadline.weight(.medium))
                 }
                 .padding()
-                .background(.cyan.opacity(0.1))
+                .background(Color.dsSecondary.opacity(0.1))
                 .clipShape(RoundedRectangle(cornerRadius: 12))
             }
 
@@ -57,7 +57,7 @@ struct StreakMilestoneModal: View {
                     .font(.title3.weight(.semibold))
                     .frame(maxWidth: .infinity)
                     .padding()
-                    .background(.orange.gradient)
+                    .background(DSGradient.orangeAccent)
                     .foregroundStyle(.white)
                     .clipShape(RoundedRectangle(cornerRadius: 16))
             }

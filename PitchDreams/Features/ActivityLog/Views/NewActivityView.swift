@@ -11,12 +11,26 @@ struct NewActivityView: View {
             HStack(spacing: 6) {
                 ForEach(0..<4, id: \.self) { index in
                     Capsule()
-                        .fill(index <= viewModel.currentStep ? Color.orange : Color(.systemGray4))
+                        .fill(index <= viewModel.currentStep ? Color.dsAccentOrange : Color.dsSurfaceContainerHighest)
                         .frame(height: 3)
                 }
             }
             .padding(.horizontal, 24)
             .padding(.top, 8)
+
+            // Atmospheric glow
+            RadialGradient(
+                colors: [
+                    Color.dsAccentOrange.opacity(0.15),
+                    Color.dsAccentOrange.opacity(0.04),
+                    Color.clear
+                ],
+                center: .top,
+                startRadius: 10,
+                endRadius: 250
+            )
+            .frame(height: 120)
+            .frame(maxWidth: .infinity)
 
             // Content
             Group {
@@ -36,7 +50,7 @@ struct NewActivityView: View {
 
             if let error = viewModel.errorMessage {
                 Label(error, systemImage: "exclamationmark.triangle.fill")
-                    .foregroundStyle(.red)
+                    .foregroundStyle(Color.dsError)
                     .font(.subheadline)
                     .padding(.horizontal)
             }
@@ -65,7 +79,7 @@ struct NewActivityView: View {
                         HStack(spacing: 14) {
                             Image(systemName: activityIcon(type.rawValue))
                                 .font(.title2)
-                                .foregroundStyle(.orange)
+                                .foregroundStyle(Color.dsAccentOrange)
                                 .frame(width: 40)
 
                             VStack(alignment: .leading, spacing: 2) {
@@ -78,7 +92,7 @@ struct NewActivityView: View {
 
                             if viewModel.activityType == type.rawValue {
                                 Image(systemName: "checkmark.circle.fill")
-                                    .foregroundStyle(.orange)
+                                    .foregroundStyle(Color.dsAccentOrange)
                             }
 
                             Image(systemName: "chevron.right")
@@ -154,7 +168,7 @@ struct NewActivityView: View {
                         in: 1...10,
                         step: 1
                     )
-                    .tint(.orange)
+                    .tint(Color.dsAccentOrange)
                     HStack {
                         Text("Easy").font(.caption2).foregroundStyle(.secondary)
                         Spacer()
@@ -293,7 +307,7 @@ struct NewActivityView: View {
                     .font(.headline)
                     .foregroundStyle(.white)
                     .padding()
-                    .background(.orange.gradient)
+                    .background(DSGradient.orangeAccent)
                     .clipShape(RoundedRectangle(cornerRadius: 12))
                 }
                 .buttonStyle(.plain)
@@ -329,7 +343,7 @@ struct NewActivityView: View {
             }
             .frame(maxWidth: .infinity)
             .padding()
-            .background(.orange.gradient)
+            .background(DSGradient.orangeAccent)
             .foregroundStyle(.white)
             .font(.headline)
             .clipShape(RoundedRectangle(cornerRadius: 12))

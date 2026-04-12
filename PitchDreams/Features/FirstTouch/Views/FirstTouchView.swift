@@ -41,7 +41,7 @@ struct FirstTouchView: View {
                         Task { await speechRecognizer.toggleListening() }
                     } label: {
                         Image(systemName: speechRecognizer.isListening ? "mic.fill" : "mic")
-                            .foregroundStyle(speechRecognizer.isListening ? .red : .cyan)
+                            .foregroundStyle(speechRecognizer.isListening ? .red : Color.dsSecondary)
                     }
                 }
             }
@@ -126,6 +126,24 @@ struct FirstTouchView: View {
 
     private var drillSelectionView: some View {
         List {
+            // Atmospheric glow
+            Section {
+                RadialGradient(
+                    colors: [
+                        Color.dsAccentOrange.opacity(0.15),
+                        Color.dsAccentOrange.opacity(0.04),
+                        Color.clear
+                    ],
+                    center: .top,
+                    startRadius: 10,
+                    endRadius: 250
+                )
+                .frame(height: 120)
+                .frame(maxWidth: .infinity)
+                .listRowInsets(EdgeInsets())
+                .listRowBackground(Color.clear)
+            }
+
             // Personal bests
             if viewModel.jugglingBest > 0 || viewModel.wallBallBest > 0 {
                 Section("Personal Bests") {
@@ -133,14 +151,14 @@ struct FirstTouchView: View {
                         LabeledContent("Juggling Best") {
                             Text("\(viewModel.jugglingBest) reps")
                                 .fontWeight(.bold)
-                                .foregroundStyle(.orange)
+                                .foregroundStyle(Color.dsAccentOrange)
                         }
                     }
                     if viewModel.wallBallBest > 0 {
                         LabeledContent("Wall Ball Best") {
                             Text("\(viewModel.wallBallBest) reps")
                                 .fontWeight(.bold)
-                                .foregroundStyle(.cyan)
+                                .foregroundStyle(Color.dsSecondary)
                         }
                     }
                 }
@@ -149,14 +167,14 @@ struct FirstTouchView: View {
             // Juggling drills
             Section("Juggling") {
                 ForEach(FirstTouchViewModel.jugglingDrills, id: \.0) { key, name in
-                    drillButton(key: key, name: name, icon: "soccerball", color: .orange)
+                    drillButton(key: key, name: name, icon: "soccerball", color: Color.dsAccentOrange)
                 }
             }
 
             // Wall ball drills
             Section("Wall Ball") {
                 ForEach(FirstTouchViewModel.wallBallDrills, id: \.0) { key, name in
-                    drillButton(key: key, name: name, icon: "rectangle.portrait.and.arrow.right", color: .cyan)
+                    drillButton(key: key, name: name, icon: "rectangle.portrait.and.arrow.right", color: Color.dsSecondary)
                 }
             }
 
@@ -229,14 +247,14 @@ struct FirstTouchView: View {
             if timerActive {
                 Text("\(timerRemaining)s")
                     .font(.system(size: 28, weight: .bold, design: .rounded))
-                    .foregroundStyle(timerRemaining <= 5 ? .red : .cyan)
+                    .foregroundStyle(timerRemaining <= 5 ? Color.dsError : Color.dsSecondary)
                     .contentTransition(.numericText())
             }
 
             // Big counter
             Text("\(viewModel.activeCount)")
                 .font(.system(size: 96, weight: .bold, design: .rounded))
-                .foregroundStyle(.orange)
+                .foregroundStyle(Color.dsAccentOrange)
                 .contentTransition(.numericText())
 
             // Tap button
@@ -248,7 +266,7 @@ struct FirstTouchView: View {
                 Text("TAP")
                     .font(.title.bold())
                     .frame(width: 160, height: 160)
-                    .background(.orange.gradient)
+                    .background(DSGradient.orangeAccent)
                     .foregroundStyle(.white)
                     .clipShape(Circle())
             }
@@ -263,8 +281,8 @@ struct FirstTouchView: View {
                         .font(.subheadline.weight(.semibold))
                         .padding(.horizontal, 20)
                         .padding(.vertical, 10)
-                        .background(.cyan.opacity(0.15))
-                        .foregroundStyle(.cyan)
+                        .background(Color.dsSecondary.opacity(0.15))
+                        .foregroundStyle(Color.dsSecondary)
                         .clipShape(Capsule())
                 }
                 .buttonStyle(.plain)
@@ -301,7 +319,7 @@ struct FirstTouchView: View {
                         .fontWeight(.semibold)
                         .frame(maxWidth: .infinity)
                         .padding()
-                        .background(.orange)
+                        .background(Color.dsAccentOrange)
                         .foregroundStyle(.white)
                         .clipShape(RoundedRectangle(cornerRadius: 12))
                 }

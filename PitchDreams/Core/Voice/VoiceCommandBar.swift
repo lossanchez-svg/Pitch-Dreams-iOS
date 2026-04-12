@@ -16,7 +16,7 @@ struct VoiceCommandBar: View {
                     .font(.title3)
                     .foregroundStyle(speechRecognizer.isListening ? .red : .primary)
                     .frame(width: 44, height: 44)
-                    .background(speechRecognizer.isListening ? Color.red.opacity(0.15) : Color(.systemGray5))
+                    .background(speechRecognizer.isListening ? Color.red.opacity(0.15) : Color.dsSurfaceContainerHighest)
                     .clipShape(Circle())
                     .scaleEffect(speechRecognizer.isListening ? 1.1 : 1.0)
                     .animation(

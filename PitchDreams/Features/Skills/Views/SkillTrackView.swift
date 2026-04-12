@@ -24,6 +24,9 @@ struct SkillTrackView: View {
                     } else if viewModel.drillStats.isEmpty {
                         emptyState
                     } else {
+                        // Atmospheric hero glow
+                        heroGlow
+
                         // Hero summary card
                         skillsSummary
 
@@ -75,6 +78,35 @@ struct SkillTrackView: View {
         .task {
             await viewModel.loadStats()
         }
+    }
+
+    // MARK: - Hero Glow
+
+    private var heroGlow: some View {
+        VStack(spacing: 8) {
+            Text("YOUR TOOLKIT")
+                .font(.system(size: 12, weight: .heavy, design: .rounded))
+                .tracking(3)
+                .foregroundStyle(Color.dsOnSurfaceVariant)
+
+            Text("Master each drill to level up")
+                .font(.system(size: 13, weight: .medium))
+                .foregroundStyle(Color.dsOnSurfaceVariant.opacity(0.7))
+        }
+        .frame(maxWidth: .infinity)
+        .padding(.vertical, Spacing.xl)
+        .background(
+            RadialGradient(
+                colors: [
+                    Color.dsAccentOrange.opacity(0.15),
+                    Color.dsAccentOrange.opacity(0.04),
+                    Color.clear
+                ],
+                center: .top,
+                startRadius: 10,
+                endRadius: 250
+            )
+        )
     }
 
     // MARK: - Skills Summary
@@ -132,7 +164,7 @@ struct SkillTrackView: View {
                     RoundedRectangle(cornerRadius: 12)
                         .fill(Color.dsAccentOrange.opacity(0.12))
                         .frame(width: 48, height: 48)
-                    Image(systemName: "target")
+                    Image(systemName: drillIcon(for: drill?.category))
                         .font(.system(size: 20))
                         .foregroundStyle(Color.dsAccentOrange)
                 }
@@ -256,9 +288,21 @@ struct SkillTrackView: View {
     // MARK: - Helpers
 
     private func formatDrillKey(_ key: String) -> String {
-        key.replacingOccurrences(of: "_", with: " ")
-            .replacingOccurrences(of: "-", with: " ")
-            .capitalized
+        if let drill = DrillRegistry.all.first(where: { $0.id == key }) {
+            return drill.name
+        }
+        return formatAPIString(key)
+    }
+
+    private func drillIcon(for category: String?) -> String {
+        switch category {
+        case "Ball Mastery": return "figure.soccer"
+        case "Passing": return "arrow.triangle.swap"
+        case "Shooting": return "scope"
+        case "Dribbling": return "figure.walk"
+        case "First Touch": return "hand.point.up.fill"
+        default: return "target"
+        }
     }
 
     private func formattedDate(_ isoString: String) -> String {

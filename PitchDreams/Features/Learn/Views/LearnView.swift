@@ -215,6 +215,7 @@ struct LearnView: View {
         .padding(Spacing.lg)
         .background(Color.dsSurfaceContainer)
         .clipShape(RoundedRectangle(cornerRadius: CornerRadius.lg))
+        .ghostBorder()
     }
 
     // MARK: - Helpers

@@ -74,14 +74,14 @@ struct ReflectionView: View {
                             Group {
                                 if viewModel.isLoading {
                                     ProgressView()
-                                        .tint(Color(hex: "#5B1B00"))
+                                        .tint(Color.dsCTALabel)
                                 } else {
                                     Text(reflectionStep < 3 ? "NEXT" : "SAVE SESSION")
                                         .font(.system(size: 13, weight: .black, design: .rounded))
                                         .tracking(2)
                                 }
                             }
-                            .foregroundStyle(Color(hex: "#5B1B00"))
+                            .foregroundStyle(Color.dsCTALabel)
                             .frame(maxWidth: .infinity)
                             .padding(.vertical, 16)
                             .background(DSGradient.primaryCTA)
@@ -194,6 +194,7 @@ struct ReflectionView: View {
         .padding(Spacing.xl)
         .background(Color.dsSurfaceContainer)
         .clipShape(RoundedRectangle(cornerRadius: CornerRadius.lg))
+        .ghostBorder()
     }
 
     private var highlightStep: some View {

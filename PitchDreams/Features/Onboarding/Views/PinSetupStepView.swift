@@ -11,7 +11,7 @@ struct PinSetupStepView: View {
             VStack(spacing: 24) {
                 Image(systemName: "lock.shield.fill")
                     .font(.system(size: 48))
-                    .foregroundStyle(Color.accentColor)
+                    .foregroundStyle(Color.dsSecondary)
 
                 Text("Set a PIN for \(viewModel.nickname.isEmpty ? "your player" : viewModel.nickname)")
                     .font(.headline)
@@ -19,7 +19,7 @@ struct PinSetupStepView: View {
 
                 Text("Your child will use this PIN to log in on their own.")
                     .font(.subheadline)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(Color.dsOnSurfaceVariant)
                     .multilineTextAlignment(.center)
 
                 VStack(spacing: 14) {
@@ -28,7 +28,7 @@ struct PinSetupStepView: View {
                         .textContentType(.oneTimeCode)
                         .focused($focusedField, equals: .pin)
                         .padding()
-                        .background(Color(.secondarySystemBackground))
+                        .background(Color.dsSurfaceContainerHighest)
                         .cornerRadius(10)
 
                     SecureField("Confirm PIN", text: $viewModel.confirmPin)
@@ -36,7 +36,7 @@ struct PinSetupStepView: View {
                         .textContentType(.oneTimeCode)
                         .focused($focusedField, equals: .confirmPin)
                         .padding()
-                        .background(Color(.secondarySystemBackground))
+                        .background(Color.dsSurfaceContainerHighest)
                         .cornerRadius(10)
 
                     if !viewModel.confirmPin.isEmpty && viewModel.pin != viewModel.confirmPin {
@@ -58,7 +58,7 @@ struct PinSetupStepView: View {
                     Text("Set PIN & Continue")
                         .frame(maxWidth: .infinity)
                         .padding()
-                        .background(viewModel.isPinValid && !viewModel.skipPin ? Color.accentColor : Color.gray.opacity(0.3))
+                        .background(viewModel.isPinValid && !viewModel.skipPin ? Color.dsSecondary : Color.gray.opacity(0.3))
                         .foregroundColor(.white)
                         .font(.headline)
                         .cornerRadius(12)
@@ -71,7 +71,7 @@ struct PinSetupStepView: View {
                 } label: {
                     Text("Skip for now")
                         .font(.callout)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(Color.dsOnSurfaceVariant)
                 }
 
                 Spacer(minLength: 40)

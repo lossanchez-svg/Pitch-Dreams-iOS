@@ -48,7 +48,7 @@ struct LessonDetailView: View {
         if isCompleted {
             Label("Completed", systemImage: "checkmark.seal.fill")
                 .font(.subheadline.weight(.semibold))
-                .foregroundStyle(.green)
+                .foregroundStyle(Color.dsSecondary)
         }
 
         Text(lesson.description)
@@ -195,7 +195,7 @@ struct LessonDetailView: View {
                 }
                 .frame(maxWidth: .infinity)
                 .padding()
-                .background(.green.gradient)
+                .background(DSGradient.secondaryCTA)
                 .clipShape(RoundedRectangle(cornerRadius: 14))
             }
             .disabled(isMarking)
@@ -230,8 +230,8 @@ struct LessonDetailView: View {
 
     private var trackSwiftUIColor: Color {
         switch lesson.track {
-        case "scanning": return .cyan
-        case "decision_chain": return .purple
+        case "scanning": return Color.dsSecondary
+        case "decision_chain": return Color.dsTertiary
         case "tempo": return .orange
         default: return .blue
         }

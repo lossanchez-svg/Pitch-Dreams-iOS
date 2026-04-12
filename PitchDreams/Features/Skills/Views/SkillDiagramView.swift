@@ -91,15 +91,15 @@ struct SkillDiagramView: View {
 
     private var accentColorForCategory: Color {
         switch category {
-        case "Scanning": return .cyan
-        case "Decision Chain": return .purple
+        case "Scanning": return Color.dsSecondary
+        case "Decision Chain": return Color.dsTertiary
         case "Tempo": return .orange
         case "Ball Mastery", "Dribbling": return .green
         case "Passing": return .blue
         case "Shooting": return .red
         case "First Touch": return .teal
         case "Defending": return .yellow
-        default: return .cyan
+        default: return Color.dsSecondary
         }
     }
 
@@ -114,7 +114,7 @@ struct SkillDiagramView: View {
         let cy = size.height * 0.55
 
         // Player circle
-        drawPlayer(context: context, at: CGPoint(x: cx, y: cy), color: .cyan, radius: 14)
+        drawPlayer(context: context, at: CGPoint(x: cx, y: cy), color: Color.dsSecondary, radius: 14)
 
         // Scan arrows in 3 directions
         let targets: [(CGFloat, CGFloat, String)] = [
@@ -139,7 +139,7 @@ struct SkillDiagramView: View {
         let nodes: [(CGFloat, String, Color)] = [
             (spacing, "Receive", .green),
             (spacing * 2, "Decide", .orange),
-            (spacing * 3, "Execute", .cyan),
+            (spacing * 3, "Execute", Color.dsSecondary),
         ]
 
         for i in 0..<nodes.count {
@@ -163,7 +163,7 @@ struct SkillDiagramView: View {
         let bottomY: CGFloat = size.height - 40
 
         // Decision node
-        drawNode(context: context, at: CGPoint(x: cx, y: topY), label: "Read", color: .purple)
+        drawNode(context: context, at: CGPoint(x: cx, y: topY), label: "Read", color: Color.dsTertiary)
 
         // Two branches
         drawSolidArrow(context: context, from: CGPoint(x: cx - 20, y: topY + 20), to: CGPoint(x: cx - 60, y: midY - 20), color: .white.opacity(0.5))
@@ -198,13 +198,13 @@ struct SkillDiagramView: View {
         drawPlayer(context: context, at: posB, color: .blue, radius: 12)
         drawLabel(context: context, text: "B", at: CGPoint(x: posB.x, y: posB.y + 18), color: .white, size: 11)
 
-        drawPlayer(context: context, at: posC, color: .cyan, radius: 14)
-        drawLabel(context: context, text: "C (You)", at: CGPoint(x: posC.x, y: posC.y + 18), color: .cyan, size: 11)
+        drawPlayer(context: context, at: posC, color: Color.dsSecondary, radius: 14)
+        drawLabel(context: context, text: "C (You)", at: CGPoint(x: posC.x, y: posC.y + 18), color: Color.dsSecondary, size: 11)
 
         // A to B pass
         drawDashedArrow(context: context, from: posA, to: posB, color: .white.opacity(0.7))
         // C run
-        drawSolidArrow(context: context, from: posC, to: target, color: .cyan)
+        drawSolidArrow(context: context, from: posC, to: target, color: Color.dsSecondary)
         // B to C through-pass
         drawDashedArrow(context: context, from: posB, to: target, color: .white.opacity(0.7))
 
@@ -231,7 +231,7 @@ struct SkillDiagramView: View {
             var dash = Path()
             dash.move(to: from)
             dash.addLine(to: to)
-            context.stroke(dash, with: .color(.cyan.opacity(0.5)), style: StrokeStyle(lineWidth: 1.5, dash: [4, 3]))
+            context.stroke(dash, with: .color(Color.dsSecondary.opacity(0.5)), style: StrokeStyle(lineWidth: 1.5, dash: [4, 3]))
         }
 
         // Feet indicators
@@ -247,13 +247,13 @@ struct SkillDiagramView: View {
         let leftPt = CGPoint(x: size.width * 0.25, y: size.height / 2)
         let rightPt = CGPoint(x: size.width * 0.75, y: size.height / 2)
 
-        drawPlayer(context: context, at: leftPt, color: .cyan, radius: 14)
+        drawPlayer(context: context, at: leftPt, color: Color.dsSecondary, radius: 14)
         drawPlayer(context: context, at: rightPt, color: .blue, radius: 12)
         drawBall(context: context, at: CGPoint(x: size.width / 2, y: size.height / 2), radius: 8)
 
         drawDashedArrow(context: context, from: leftPt, to: rightPt, color: .white.opacity(0.6))
 
-        drawLabel(context: context, text: "You", at: CGPoint(x: leftPt.x, y: leftPt.y + 22), color: .cyan, size: 11)
+        drawLabel(context: context, text: "You", at: CGPoint(x: leftPt.x, y: leftPt.y + 22), color: Color.dsSecondary, size: 11)
         drawLabel(context: context, text: "Target", at: CGPoint(x: rightPt.x, y: rightPt.y + 22), color: .blue, size: 11)
         drawLabel(context: context, text: "Passing", at: CGPoint(x: size.width / 2, y: 16), color: .white, size: 13)
     }
@@ -275,7 +275,7 @@ struct SkillDiagramView: View {
         goal.closeSubpath()
         context.stroke(goal, with: .color(.white.opacity(0.5)), lineWidth: 2)
 
-        drawPlayer(context: context, at: playerPt, color: .cyan, radius: 14)
+        drawPlayer(context: context, at: playerPt, color: Color.dsSecondary, radius: 14)
         drawBall(context: context, at: CGPoint(x: cx - 5, y: size.height - 65), radius: 8)
 
         // Shot trajectory
@@ -308,9 +308,9 @@ struct SkillDiagramView: View {
                 control: CGPoint(x: x, y: cy + yOffset)
             )
         }
-        context.stroke(weave, with: .color(.cyan.opacity(0.7)), style: StrokeStyle(lineWidth: 2, dash: [6, 4]))
+        context.stroke(weave, with: .color(Color.dsSecondary.opacity(0.7)), style: StrokeStyle(lineWidth: 2, dash: [6, 4]))
 
-        drawPlayer(context: context, at: CGPoint(x: startX - 20, y: cy + 25), color: .cyan, radius: 10)
+        drawPlayer(context: context, at: CGPoint(x: startX - 20, y: cy + 25), color: Color.dsSecondary, radius: 10)
         drawLabel(context: context, text: "Dribbling", at: CGPoint(x: size.width / 2, y: 16), color: .white, size: 13)
     }
 

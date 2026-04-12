@@ -21,14 +21,14 @@ struct QuickLogView: View {
                         HStack {
                             Image(systemName: type.icon)
                                 .font(.title3)
-                                .foregroundStyle(.orange)
+                                .foregroundStyle(Color.dsAccentOrange)
                                 .frame(width: 28)
                             Text(type.label)
                                 .foregroundStyle(.primary)
                             Spacer()
                             if viewModel.selectedType == type.key {
                                 Image(systemName: "checkmark.circle.fill")
-                                    .foregroundStyle(.orange)
+                                    .foregroundStyle(Color.dsAccentOrange)
                             }
                         }
                     }
@@ -59,7 +59,7 @@ struct QuickLogView: View {
                             Spacer()
                             if viewModel.effort == item.value {
                                 Image(systemName: "checkmark.circle.fill")
-                                    .foregroundStyle(.orange)
+                                    .foregroundStyle(Color.dsAccentOrange)
                             }
                         }
                     }
@@ -92,7 +92,7 @@ struct QuickLogView: View {
                     .font(.headline)
                     .foregroundStyle(.white)
                     .padding()
-                    .background(viewModel.saveSuccess ? Color.green.gradient : Color.orange.gradient)
+                    .background(viewModel.saveSuccess ? DSGradient.secondaryCTA : DSGradient.orangeAccent)
                     .clipShape(RoundedRectangle(cornerRadius: 12))
                     .animation(.easeInOut, value: viewModel.saveSuccess)
                 }
@@ -128,7 +128,7 @@ struct QuickLogView: View {
             if let error = viewModel.errorMessage {
                 Section {
                     Label(error, systemImage: "exclamationmark.triangle.fill")
-                        .foregroundStyle(.red)
+                        .foregroundStyle(Color.dsError)
                         .font(.subheadline)
                 }
             }

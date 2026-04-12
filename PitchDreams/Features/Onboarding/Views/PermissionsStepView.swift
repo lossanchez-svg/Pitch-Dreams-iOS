@@ -14,7 +14,7 @@ struct PermissionsStepView: View {
                                 .font(.subheadline.weight(.medium))
                             Text("Let your player type notes during sessions. Recommended for ages 14+.")
                                 .font(.caption)
-                                .foregroundStyle(.secondary)
+                                .foregroundStyle(Color.dsOnSurfaceVariant)
                         }
                     }
 
@@ -25,7 +25,7 @@ struct PermissionsStepView: View {
                     }
                 }
                 .padding()
-                .background(Color(.secondarySystemBackground))
+                .background(Color.dsSurfaceContainerHighest)
                 .cornerRadius(12)
 
                 // Training window
@@ -36,7 +36,7 @@ struct PermissionsStepView: View {
                                 .font(.subheadline.weight(.medium))
                             Text("Limit when training sessions can be started.")
                                 .font(.caption)
-                                .foregroundStyle(.secondary)
+                                .foregroundStyle(Color.dsOnSurfaceVariant)
                         }
                     }
 
@@ -64,7 +64,7 @@ struct PermissionsStepView: View {
                     }
                 }
                 .padding()
-                .background(Color(.secondarySystemBackground))
+                .background(Color.dsSurfaceContainerHighest)
                 .cornerRadius(12)
 
                 // Next button
@@ -74,7 +74,7 @@ struct PermissionsStepView: View {
                     Text("Next")
                         .frame(maxWidth: .infinity)
                         .padding()
-                        .background(Color.accentColor)
+                        .background(Color.dsSecondary)
                         .foregroundColor(.white)
                         .font(.headline)
                         .cornerRadius(12)

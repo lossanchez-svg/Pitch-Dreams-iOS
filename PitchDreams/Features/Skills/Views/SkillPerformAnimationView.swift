@@ -6,7 +6,7 @@ struct SkillPerformAnimationView: View {
     let animationKey: SkillAnimationKey
     let isPlaying: Bool
     var onComplete: (() -> Void)?
-    var accentColor: Color = .cyan
+    var accentColor: Color = Color.dsSecondary
 
     @State private var startDate: Date?
     @State private var phase: AnimationPhase = .idle

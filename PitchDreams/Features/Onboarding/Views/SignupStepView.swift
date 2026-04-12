@@ -17,21 +17,21 @@ struct SignupStepView: View {
                         .textInputAutocapitalization(.never)
                         .focused($focusedField, equals: .email)
                         .padding()
-                        .background(Color(.secondarySystemBackground))
+                        .background(Color.dsSurfaceContainerHighest)
                         .cornerRadius(10)
 
                     SecureField("Password (8+ characters)", text: $viewModel.password)
                         .textContentType(.newPassword)
                         .focused($focusedField, equals: .password)
                         .padding()
-                        .background(Color(.secondarySystemBackground))
+                        .background(Color.dsSurfaceContainerHighest)
                         .cornerRadius(10)
 
                     SecureField("Confirm Password", text: $viewModel.confirmPassword)
                         .textContentType(.newPassword)
                         .focused($focusedField, equals: .confirmPassword)
                         .padding()
-                        .background(Color(.secondarySystemBackground))
+                        .background(Color.dsSurfaceContainerHighest)
                         .cornerRadius(10)
 
                     if !viewModel.confirmPassword.isEmpty && viewModel.password != viewModel.confirmPassword {
@@ -53,7 +53,7 @@ struct SignupStepView: View {
                     Text("Create Account")
                         .frame(maxWidth: .infinity)
                         .padding()
-                        .background(viewModel.isSignupValid ? Color.accentColor : Color.gray.opacity(0.3))
+                        .background(viewModel.isSignupValid ? Color.dsSecondary : Color.gray.opacity(0.3))
                         .foregroundColor(.white)
                         .font(.headline)
                         .cornerRadius(12)
@@ -77,7 +77,7 @@ private struct CheckboxToggleStyle: ToggleStyle {
         } label: {
             HStack(alignment: .top, spacing: 10) {
                 Image(systemName: configuration.isOn ? "checkmark.square.fill" : "square")
-                    .foregroundStyle(configuration.isOn ? Color.accentColor : Color.secondary)
+                    .foregroundStyle(configuration.isOn ? Color.dsSecondary : Color.secondary)
                     .imageScale(.large)
                 configuration.label
             }

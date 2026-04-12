@@ -125,7 +125,7 @@ struct AvatarSelectionStepView: View {
                             Image(systemName: "arrow.right")
                                 .font(.system(size: 14, weight: .bold))
                         }
-                        .foregroundStyle(Color(hex: "#5B1B00"))
+                        .foregroundStyle(Color.dsCTALabel)
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 18)
                         .background(DSGradient.primaryCTA)

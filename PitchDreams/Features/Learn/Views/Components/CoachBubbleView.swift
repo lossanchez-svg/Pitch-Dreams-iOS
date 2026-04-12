@@ -15,12 +15,12 @@ struct CoachBubbleView: View {
                 .padding(.vertical, 8)
                 .background(
                     RoundedRectangle(cornerRadius: 12)
-                        .fill(Color(.systemGray5).opacity(0.95))
+                        .fill(Color.dsSurfaceContainerHighest.opacity(0.95))
                 )
 
             // Tail triangle pointing down
             Triangle()
-                .fill(Color(.systemGray5).opacity(0.95))
+                .fill(Color.dsSurfaceContainerHighest.opacity(0.95))
                 .frame(width: 12, height: 6)
         }
         .frame(maxWidth: 220)

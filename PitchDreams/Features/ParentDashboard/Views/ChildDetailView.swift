@@ -196,9 +196,9 @@ struct ChildDetailView: View {
         } else {
             Image(systemName: "figure.soccer")
                 .font(.largeTitle)
-                .foregroundStyle(.cyan)
+                .foregroundStyle(Color.dsSecondary)
                 .frame(width: 60, height: 60)
-                .background(.cyan.opacity(0.12))
+                .background(Color.dsSecondary.opacity(0.12))
         }
     }
 

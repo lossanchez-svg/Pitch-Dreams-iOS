@@ -30,4 +30,5 @@ struct ChildProfileDetail: Codable {
     let avatarId: String
     let skipAnimations: Bool
     let voiceEnabled: Bool
+    let coachPersonality: String?
 }

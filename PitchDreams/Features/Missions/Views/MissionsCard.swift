@@ -16,7 +16,7 @@ struct MissionsCard: View {
                 } label: {
                     Text("See all")
                         .font(.caption.weight(.semibold))
-                        .foregroundStyle(.cyan)
+                        .foregroundStyle(Color.dsSecondary)
                 }
             }
 

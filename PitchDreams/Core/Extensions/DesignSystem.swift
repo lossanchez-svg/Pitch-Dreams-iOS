@@ -60,6 +60,9 @@ extension Color {
     // Utility
     static let dsOutlineVariant = Color(hex: "#3C494B")
     static let dsError = Color(hex: "#FFB4AB")
+
+    // CTA Label (text on peach/orange gradient buttons)
+    static let dsCTALabel = Color(hex: "#5B1B00")
 }
 
 // MARK: - Legacy Palette (Parent Dashboard)
@@ -244,6 +247,20 @@ extension View {
     func ghostBorder(opacity: Double = 0.1) -> some View {
         modifier(GhostBorder(opacity: opacity))
     }
+}
+
+// MARK: - API String Formatting
+
+/// Converts raw API strings (e.g. "SELF_TRAINING", "small_indoor") to title case ("Self Training", "Small Indoor").
+func formatAPIString(_ raw: String) -> String {
+    raw.replacingOccurrences(of: "_", with: " ")
+       .replacingOccurrences(of: "-", with: " ")
+       .split(separator: " ")
+       .map { word in
+           let lower = word.lowercased()
+           return lower.prefix(1).uppercased() + lower.dropFirst()
+       }
+       .joined(separator: " ")
 }
 
 // MARK: - Glass Background Modifier

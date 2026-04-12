@@ -67,7 +67,7 @@ struct LoginChoiceView: View {
                                     .font(.system(size: 14, weight: .black, design: .rounded))
                                     .tracking(2)
                             }
-                            .foregroundStyle(Color(hex: "#5B1B00"))
+                            .foregroundStyle(Color.dsCTALabel)
                             .frame(maxWidth: .infinity)
                             .padding(.vertical, 18)
                             .background(DSGradient.primaryCTA)

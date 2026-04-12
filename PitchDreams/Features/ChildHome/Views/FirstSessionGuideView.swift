@@ -15,7 +15,7 @@ struct FirstSessionGuideView: View {
 
     var body: some View {
         ZStack {
-            Color(.systemBackground)
+            Color.dsSurfaceContainerHighest
                 .ignoresSafeArea()
 
             // Skip button always visible
@@ -72,7 +72,7 @@ struct FirstSessionGuideView: View {
 
             Image(systemName: "soccerball")
                 .font(.system(size: 80))
-                .foregroundStyle(.orange)
+                .foregroundStyle(Color.dsAccentOrange)
                 .scaleEffect(1.0)
 
             VStack(spacing: 12) {
@@ -96,7 +96,7 @@ struct FirstSessionGuideView: View {
                     .font(.title3.weight(.semibold))
                     .frame(maxWidth: .infinity)
                     .padding()
-                    .background(.orange.gradient)
+                    .background(DSGradient.orangeAccent)
                     .foregroundStyle(.white)
                     .clipShape(RoundedRectangle(cornerRadius: 16))
             }
@@ -123,12 +123,12 @@ struct FirstSessionGuideView: View {
             // Counter
             ZStack {
                 Circle()
-                    .stroke(.orange.opacity(0.2), lineWidth: 8)
+                    .stroke(Color.dsAccentOrange.opacity(0.2), lineWidth: 8)
                     .frame(width: 160, height: 160)
 
                 Circle()
                     .trim(from: 0, to: min(1.0, CGFloat(tapCount) / CGFloat(tapTarget)))
-                    .stroke(.orange, style: StrokeStyle(lineWidth: 8, lineCap: .round))
+                    .stroke(Color.dsAccentOrange, style: StrokeStyle(lineWidth: 8, lineCap: .round))
                     .frame(width: 160, height: 160)
                     .rotationEffect(.degrees(-90))
                     .animation(.easeInOut(duration: 0.2), value: tapCount)
@@ -169,10 +169,10 @@ struct FirstSessionGuideView: View {
                 Text("TAP")
                     .font(.system(size: 32, weight: .heavy, design: .rounded))
                     .frame(width: 140, height: 140)
-                    .background(.orange.gradient)
+                    .background(DSGradient.orangeAccent)
                     .foregroundStyle(.white)
                     .clipShape(Circle())
-                    .shadow(color: .orange.opacity(0.4), radius: 12, y: 6)
+                    .shadow(color: Color.dsAccentOrange.opacity(0.4), radius: 12, y: 6)
             }
             .scaleEffect(buttonScale)
 
@@ -204,7 +204,7 @@ struct FirstSessionGuideView: View {
 
                 Text("\(tapCount) ball taps!")
                     .font(.title2)
-                    .foregroundStyle(.orange)
+                    .foregroundStyle(Color.dsAccentOrange)
             }
 
             Spacer()
@@ -219,7 +219,7 @@ struct FirstSessionGuideView: View {
                 .font(.title3.weight(.semibold))
                 .frame(maxWidth: .infinity)
                 .padding()
-                .background(.orange.gradient)
+                .background(DSGradient.orangeAccent)
                 .foregroundStyle(.white)
                 .clipShape(RoundedRectangle(cornerRadius: 16))
             }

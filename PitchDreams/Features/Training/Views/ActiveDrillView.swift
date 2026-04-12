@@ -415,6 +415,7 @@ struct ActiveDrillView: View {
                 .padding(Spacing.xl)
                 .background(Color.dsSurfaceContainer)
                 .clipShape(RoundedRectangle(cornerRadius: CornerRadius.lg))
+                .ghostBorder()
 
                 Spacer()
 
@@ -424,7 +425,7 @@ struct ActiveDrillView: View {
                     Text(viewModel.isLastDrill ? "GO TO REFLECTION" : "NEXT DRILL")
                         .font(.system(size: 14, weight: .black, design: .rounded))
                         .tracking(2)
-                        .foregroundStyle(Color(hex: "#5B1B00"))
+                        .foregroundStyle(Color.dsCTALabel)
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 18)
                         .background(DSGradient.primaryCTA)

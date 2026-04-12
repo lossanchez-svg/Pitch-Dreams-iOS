@@ -15,17 +15,17 @@ struct MissionCompleteModal: View {
 
             Text("Mission Complete!")
                 .font(.title.weight(.heavy))
-                .foregroundStyle(.orange)
+                .foregroundStyle(Color.dsAccentOrange)
                 .textCase(.uppercase)
 
             Image(systemName: mission.iconSystemName)
                 .font(.system(size: 120, weight: .bold))
-                .foregroundStyle(.orange)
+                .foregroundStyle(Color.dsAccentOrange)
                 .frame(width: 200, height: 200)
-                .background(.orange.opacity(0.12))
+                .background(Color.dsAccentOrange.opacity(0.12))
                 .clipShape(Circle())
                 .scaleEffect(iconScale)
-                .shadow(color: .orange.opacity(0.4), radius: 24)
+                .shadow(color: Color.dsAccentOrange.opacity(0.4), radius: 24)
                 .onAppear {
                     withAnimation(.spring(response: 0.6, dampingFraction: 0.5)) {
                         iconScale = 1.1
@@ -44,7 +44,7 @@ struct MissionCompleteModal: View {
                     .multilineTextAlignment(.center)
                 Text("+\(mission.xpReward) XP")
                     .font(.title3.weight(.semibold))
-                    .foregroundStyle(.orange)
+                    .foregroundStyle(Color.dsAccentOrange)
             }
             .padding(.horizontal, 32)
 
@@ -57,7 +57,7 @@ struct MissionCompleteModal: View {
                     .font(.title3.weight(.semibold))
                     .frame(maxWidth: .infinity)
                     .padding()
-                    .background(.orange.gradient)
+                    .background(DSGradient.orangeAccent)
                     .foregroundStyle(.white)
                     .clipShape(RoundedRectangle(cornerRadius: 16))
             }

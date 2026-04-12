@@ -23,6 +23,7 @@ struct ProgressDashboardView: View {
                     } else if viewModel.sessions.isEmpty && viewModel.streakData == nil {
                         emptyState
                     } else {
+                        heroGlow
                         statsGrid
                         streakSection
                         recentSessionsSection
@@ -60,6 +61,35 @@ struct ProgressDashboardView: View {
         }
     }
 
+    // MARK: - Hero Glow
+
+    private var heroGlow: some View {
+        VStack(spacing: 8) {
+            Text("YOUR JOURNEY")
+                .font(.system(size: 12, weight: .heavy, design: .rounded))
+                .tracking(3)
+                .foregroundStyle(Color.dsOnSurfaceVariant)
+
+            Text("Keep the momentum going")
+                .font(.system(size: 13, weight: .medium))
+                .foregroundStyle(Color.dsOnSurfaceVariant.opacity(0.7))
+        }
+        .frame(maxWidth: .infinity)
+        .padding(.vertical, Spacing.xl)
+        .background(
+            RadialGradient(
+                colors: [
+                    Color.dsSecondary.opacity(0.12),
+                    Color.dsSecondary.opacity(0.03),
+                    Color.clear
+                ],
+                center: .top,
+                startRadius: 10,
+                endRadius: 250
+            )
+        )
+    }
+
     // MARK: - Stats Grid
 
     private var statsGrid: some View {
@@ -81,7 +111,7 @@ struct ProgressDashboardView: View {
 
             HStack(alignment: .firstTextBaseline, spacing: 4) {
                 Text(value)
-                    .font(.system(size: 24, weight: .bold, design: .rounded))
+                    .font(.system(size: 24, weight: .heavy, design: .rounded))
                     .foregroundStyle(Color.dsOnSurface)
                 if !unit.isEmpty {
                     Text(unit)
@@ -181,7 +211,7 @@ struct ProgressDashboardView: View {
                 .foregroundStyle(Color.dsOnSurfaceVariant)
 
             if viewModel.recentSessions.isEmpty {
-                Text("No sessions logged yet.")
+                Text("No sessions logged yet")
                     .font(.system(size: 14))
                     .foregroundStyle(Color.dsOnSurfaceVariant)
                     .padding()
@@ -242,7 +272,7 @@ struct ProgressDashboardView: View {
                             .font(.system(size: 10))
                             .foregroundStyle(Color.dsTertiaryContainer)
                         ForEach(highlights, id: \.self) { chip in
-                            Text(chip)
+                            Text(formatAPIString(chip))
                                 .font(.system(size: 11))
                                 .padding(.horizontal, 8)
                                 .padding(.vertical, 3)
@@ -262,7 +292,7 @@ struct ProgressDashboardView: View {
                             .font(.system(size: 10))
                             .foregroundStyle(Color.dsSecondary)
                         ForEach(focuses, id: \.self) { chip in
-                            Text(chip)
+                            Text(formatAPIString(chip))
                                 .font(.system(size: 11))
                                 .padding(.horizontal, 8)
                                 .padding(.vertical, 3)
@@ -277,6 +307,7 @@ struct ProgressDashboardView: View {
         .padding(Spacing.lg)
         .background(Color.dsSurfaceContainer)
         .clipShape(RoundedRectangle(cornerRadius: CornerRadius.lg))
+        .ghostBorder()
     }
 
     private func rpeBadge(_ effort: Int) -> some View {
@@ -348,7 +379,7 @@ struct ProgressDashboardView: View {
 
     private func sessionTypeName(_ type: String?) -> String {
         guard let type else { return "Session" }
-        return ActivityType(rawValue: type)?.displayName ?? type.capitalized
+        return ActivityType(rawValue: type)?.displayName ?? formatAPIString(type)
     }
 
     private func formattedDate(_ isoString: String) -> String {

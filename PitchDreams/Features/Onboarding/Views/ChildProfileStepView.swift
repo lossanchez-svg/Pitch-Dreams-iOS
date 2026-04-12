@@ -35,7 +35,7 @@ struct ChildProfileStepView: View {
                     } label: {
                         HStack(spacing: 8) {
                             if viewModel.isLoading {
-                                ProgressView().tint(Color(hex: "#5B1B00"))
+                                ProgressView().tint(Color.dsCTALabel)
                             } else {
                                 Text("CREATE PLAYER")
                                     .font(.system(size: 14, weight: .black, design: .rounded))
@@ -44,7 +44,7 @@ struct ChildProfileStepView: View {
                                     .font(.system(size: 14, weight: .bold))
                             }
                         }
-                        .foregroundStyle(Color(hex: "#5B1B00"))
+                        .foregroundStyle(Color.dsCTALabel)
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 18)
                         .background(viewModel.isChildProfileValid ? DSGradient.primaryCTA : LinearGradient(colors: [Color.dsSurfaceContainerHighest, Color.dsSurfaceContainerHighest], startPoint: .leading, endPoint: .trailing))

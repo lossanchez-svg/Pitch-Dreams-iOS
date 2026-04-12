@@ -5,103 +5,129 @@ struct DrillDetailView: View {
     let childId: String
 
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 20) {
-                // Skill Diagram
-                SkillDiagramView(drillId: drill.id, category: drill.category)
+        ZStack {
+            Color.dsBackground
+                .ignoresSafeArea()
 
-                // Header
-                VStack(alignment: .leading, spacing: 8) {
-                    HStack {
-                        Text(drill.category)
-                            .font(.caption.weight(.semibold))
-                            .padding(.horizontal, 10)
-                            .padding(.vertical, 4)
-                            .background(categoryColor.opacity(0.15))
-                            .foregroundStyle(categoryColor)
-                            .clipShape(Capsule())
+            ScrollView {
+                VStack(alignment: .leading, spacing: 20) {
+                    // Category-colored atmospheric glow
+                    RadialGradient(
+                        colors: [
+                            categoryColor.opacity(0.12),
+                            categoryColor.opacity(0.03),
+                            Color.clear
+                        ],
+                        center: .top,
+                        startRadius: 10,
+                        endRadius: 250
+                    )
+                    .frame(height: 120)
+                    .frame(maxWidth: .infinity)
 
-                        Text(drill.difficulty.capitalized)
-                            .font(.caption.weight(.semibold))
-                            .padding(.horizontal, 10)
-                            .padding(.vertical, 4)
-                            .background(difficultyColor.opacity(0.15))
-                            .foregroundStyle(difficultyColor)
-                            .clipShape(Capsule())
+                    // Skill Diagram
+                    SkillDiagramView(drillId: drill.id, category: drill.category)
+
+                    // Header
+                    VStack(alignment: .leading, spacing: 8) {
+                        HStack {
+                            Text(drill.category)
+                                .font(.caption.weight(.semibold))
+                                .padding(.horizontal, 10)
+                                .padding(.vertical, 4)
+                                .background(categoryColor.opacity(0.15))
+                                .foregroundStyle(categoryColor)
+                                .clipShape(Capsule())
+
+                            Text(drill.difficulty.capitalized)
+                                .font(.caption.weight(.semibold))
+                                .padding(.horizontal, 10)
+                                .padding(.vertical, 4)
+                                .background(difficultyColor.opacity(0.15))
+                                .foregroundStyle(difficultyColor)
+                                .clipShape(Capsule())
+                        }
+
+                        Text(drill.name)
+                            .font(.title.bold())
+                            .foregroundStyle(Color.dsOnSurface)
+
+                        Text(drill.description)
+                            .font(.body)
+                            .foregroundStyle(Color.dsOnSurfaceVariant)
                     }
 
-                    Text(drill.name)
-                        .font(.title.bold())
+                    // Coach Tip
+                    VStack(alignment: .leading, spacing: 8) {
+                        Label("Coach Tip", systemImage: "lightbulb.fill")
+                            .font(.headline)
+                            .foregroundStyle(Color.dsAccentOrange)
 
-                    Text(drill.description)
-                        .font(.body)
-                        .foregroundStyle(.secondary)
-                }
+                        Text(drill.coachTip)
+                            .font(.subheadline)
+                            .foregroundStyle(Color.dsOnSurface)
+                            .padding()
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .background(Color.dsAccentOrange.opacity(0.08))
+                            .clipShape(RoundedRectangle(cornerRadius: CornerRadius.md))
+                    }
 
-                // Coach Tip
-                VStack(alignment: .leading, spacing: 8) {
-                    Label("Coach Tip", systemImage: "lightbulb.fill")
-                        .font(.headline)
-                        .foregroundStyle(.orange)
+                    // Why It Matters
+                    VStack(alignment: .leading, spacing: 8) {
+                        Label("Why It Matters", systemImage: "brain.fill")
+                            .font(.headline)
+                            .foregroundStyle(Color.dsSecondary)
 
-                    Text(drill.coachTip)
-                        .font(.subheadline)
-                        .padding()
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .background(.orange.opacity(0.08))
-                        .clipShape(RoundedRectangle(cornerRadius: 12))
-                }
+                        Text(whyItMatters)
+                            .font(.subheadline)
+                            .foregroundStyle(Color.dsOnSurfaceVariant)
+                    }
 
-                // Why It Matters
-                VStack(alignment: .leading, spacing: 8) {
-                    Label("Why It Matters", systemImage: "brain.fill")
-                        .font(.headline)
-                        .foregroundStyle(.purple)
+                    // Details
+                    VStack(alignment: .leading, spacing: 12) {
+                        Label("Details", systemImage: "info.circle.fill")
+                            .font(.headline)
+                            .foregroundStyle(Color.dsOnSurface)
 
-                    Text(whyItMatters)
-                        .font(.subheadline)
-                        .foregroundStyle(.secondary)
-                }
+                        HStack(spacing: 16) {
+                            detailItem(icon: "clock.fill", label: "Duration", value: formatDuration(drill.duration))
+                            detailItem(icon: "repeat", label: "Reps", value: "\(drill.reps)")
+                            detailItem(icon: "location.fill", label: "Space", value: formatAPIString(drill.spaceType))
+                        }
+                    }
 
-                // Details
-                VStack(alignment: .leading, spacing: 12) {
-                    Label("Details", systemImage: "info.circle.fill")
-                        .font(.headline)
+                    // Recommended Frequency
+                    VStack(alignment: .leading, spacing: 8) {
+                        Label("Recommended Frequency", systemImage: "calendar")
+                            .font(.headline)
+                            .foregroundStyle(Color.dsOnSurface)
 
-                    HStack(spacing: 16) {
-                        detailItem(icon: "clock.fill", label: "Duration", value: formatDuration(drill.duration))
-                        detailItem(icon: "repeat", label: "Reps", value: "\(drill.reps)")
-                        detailItem(icon: "location.fill", label: "Space", value: spaceLabel)
+                        Text(recommendedFrequency)
+                            .font(.subheadline)
+                            .foregroundStyle(Color.dsOnSurfaceVariant)
+                    }
+
+                    // Start Drill
+                    NavigationLink {
+                        TrainingSessionView(childId: childId)
+                    } label: {
+                        Label("Start Drill", systemImage: "play.fill")
+                            .font(.headline)
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                            .background(DSGradient.orangeAccent)
+                            .foregroundStyle(.white)
+                            .clipShape(RoundedRectangle(cornerRadius: CornerRadius.lg))
+                            .dsPrimaryShadow()
                     }
                 }
-
-                // Recommended Frequency
-                VStack(alignment: .leading, spacing: 8) {
-                    Label("Recommended Frequency", systemImage: "calendar")
-                        .font(.headline)
-
-                    Text(recommendedFrequency)
-                        .font(.subheadline)
-                        .foregroundStyle(.secondary)
-                }
-
-                // Start Drill
-                NavigationLink {
-                    TrainingSessionView(childId: childId)
-                } label: {
-                    Label("Start Drill", systemImage: "play.fill")
-                        .font(.headline)
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        .background(.orange.gradient)
-                        .foregroundStyle(.white)
-                        .clipShape(RoundedRectangle(cornerRadius: 14))
-                }
+                .padding()
+                .padding(.bottom, 100)
             }
-            .padding()
         }
         .navigationTitle(drill.name)
         .navigationBarTitleDisplayMode(.inline)
+        .toolbarBackground(Color.dsBackground, for: .navigationBar)
     }
 
     // MARK: - Helpers
@@ -111,8 +137,8 @@ struct DrillDetailView: View {
         case "Ball Mastery": return .cyan
         case "Passing": return .green
         case "Shooting": return .red
-        case "Dribbling": return .purple
-        case "First Touch": return .orange
+        case "Dribbling": return Color.dsSecondary
+        case "First Touch": return Color.dsAccentOrange
         default: return .blue
         }
     }
@@ -120,18 +146,9 @@ struct DrillDetailView: View {
     private var difficultyColor: Color {
         switch drill.difficulty {
         case "beginner": return .green
-        case "intermediate": return .orange
+        case "intermediate": return Color.dsAccentOrange
         case "advanced": return .red
-        default: return .secondary
-        }
-    }
-
-    private var spaceLabel: String {
-        switch drill.spaceType {
-        case "small_indoor": return "Small Indoor"
-        case "large_indoor": return "Large Indoor"
-        case "outdoor": return "Outdoor"
-        default: return drill.spaceType
+        default: return Color.dsOnSurfaceVariant
         }
     }
 
@@ -172,17 +189,19 @@ struct DrillDetailView: View {
         VStack(spacing: 6) {
             Image(systemName: icon)
                 .font(.title3)
-                .foregroundStyle(.orange)
+                .foregroundStyle(Color.dsAccentOrange)
             Text(value)
                 .font(.subheadline.bold())
+                .foregroundStyle(Color.dsOnSurface)
             Text(label)
                 .font(.caption2)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(Color.dsOnSurfaceVariant)
         }
         .frame(maxWidth: .infinity)
         .padding(.vertical, 12)
-        .background(.regularMaterial)
-        .clipShape(RoundedRectangle(cornerRadius: 10))
+        .background(Color.dsSurfaceContainer)
+        .clipShape(RoundedRectangle(cornerRadius: CornerRadius.md))
+        .ghostBorder()
     }
 }
 

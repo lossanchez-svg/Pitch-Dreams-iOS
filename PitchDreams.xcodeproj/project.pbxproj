@@ -170,6 +170,7 @@
 		F853A3ABE46F09027F521EA5 /* Date+Formatting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CFEF3E36C44AB88A95016A9 /* Date+Formatting.swift */; };
 		F8790E2F831DCB033D90A126 /* Lesson.swift in Sources */ = {isa = PBXBuildFile; fileRef = B086256CDF32335B42AC2710 /* Lesson.swift */; };
 		FB1944BADD9A6F2856FB00A9 /* AuthManagerEdgeCaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 267053D4A1FA0FE1A7B04A19 /* AuthManagerEdgeCaseTests.swift */; };
+		FF1618210A691A98A0FAE829 /* VisualPolishRegressionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8294A4325D398E940E473C99 /* VisualPolishRegressionTests.swift */; };
 		FF7D36B342566DB0AF76663E /* TokenInterceptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74C074FC714EA10A149172D /* TokenInterceptor.swift */; };
 /* End PBXBuildFile section */
 
@@ -271,6 +272,7 @@
 		81ADFFE04859A29B644F3318 /* SkillAnimationTypeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkillAnimationTypeTests.swift; sourceTree = "<group>"; };
 		81F94B0909899DBCCB797B05 /* InteractivePitchViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InteractivePitchViewModelTests.swift; sourceTree = "<group>"; };
 		821752D3582FE5932505CAD1 /* LessonPlayerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LessonPlayerViewModel.swift; sourceTree = "<group>"; };
+		8294A4325D398E940E473C99 /* VisualPolishRegressionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisualPolishRegressionTests.swift; sourceTree = "<group>"; };
 		844FB83D8C4E132523399E1E /* PitchDreamsTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = PitchDreamsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		86C3695CA381061ADB3ADFA4 /* AvatarSelectionStepView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvatarSelectionStepView.swift; sourceTree = "<group>"; };
 		88E3A33D944C87844CDD2149 /* ModelDecodingRobustnessTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelDecodingRobustnessTests.swift; sourceTree = "<group>"; };
@@ -1001,6 +1003,7 @@
 			isa = PBXGroup;
 			children = (
 				557992D84C25925279680A48 /* RegressionTests.swift */,
+				8294A4325D398E940E473C99 /* VisualPolishRegressionTests.swift */,
 			);
 			path = Regression;
 			sourceTree = "<group>";
@@ -1144,6 +1147,7 @@
 				665B7D266B7468A39C9FD4AF /* TacticalLessonRegistryTests.swift in Sources */,
 				B0173F7C3466C6AF284D744B /* TestFixtures.swift in Sources */,
 				E2D38149965DBD708021548A /* TrainingViewModelTests.swift in Sources */,
+				FF1618210A691A98A0FAE829 /* VisualPolishRegressionTests.swift in Sources */,
 				03086D0F2CD340D531C81814 /* VoiceCommandMatcherTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

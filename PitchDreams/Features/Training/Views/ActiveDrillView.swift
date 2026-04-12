@@ -5,6 +5,7 @@ struct ActiveDrillView: View {
     @StateObject private var viewModel: ActiveTrainingViewModel
     @StateObject private var speechRecognizer = SpeechRecognizer()
     @State private var lastVoiceCommand: String?
+    @State private var repBounce = false
     @Environment(\.dismiss) private var dismiss
 
     init(childId: String, drills: [DrillDefinition], spaceType: String) {
@@ -106,6 +107,7 @@ struct ActiveDrillView: View {
         if let number = VoiceCommandMatcher.extractNumber(from: transcript) {
             lastVoiceCommand = "\(number) reps"
             viewModel.repCount = number
+            repBounce.toggle()
         }
     }
 
@@ -206,6 +208,8 @@ struct ActiveDrillView: View {
                         Text("\(viewModel.repCount)")
                             .font(.system(size: 32, weight: .bold, design: .rounded))
                             .foregroundStyle(Color.dsOnSurface)
+                            .scaleEffect(repBounce ? 1.15 : 1.0)
+                            .animation(.spring(response: 0.2, dampingFraction: 0.5), value: repBounce)
 
                         if let drill = viewModel.currentDrill, drill.reps > 0 {
                             Text("/ \(drill.reps)")
@@ -269,6 +273,7 @@ struct ActiveDrillView: View {
             // +1 REP (center, larger)
             Button {
                 viewModel.incrementReps()
+                repBounce.toggle()
             } label: {
                 VStack(spacing: 12) {
                     ZStack {

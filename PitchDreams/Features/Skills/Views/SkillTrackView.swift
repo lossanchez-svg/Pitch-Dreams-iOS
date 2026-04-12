@@ -31,11 +31,7 @@ struct SkillTrackView: View {
                         skillsSummary
 
                         // Section header
-                        Text("YOUR DRILLS")
-                            .font(.system(size: 12, weight: .heavy, design: .rounded))
-                            .tracking(3)
-                            .foregroundStyle(Color.dsOnSurfaceVariant)
-                            .frame(maxWidth: .infinity, alignment: .leading)
+                        SectionHeaderView("YOUR DRILLS")
 
                         // Drill cards
                         ForEach(viewModel.drillStats) { stat in
@@ -56,6 +52,10 @@ struct SkillTrackView: View {
                         Label(error, systemImage: "exclamationmark.triangle.fill")
                             .font(.subheadline)
                             .foregroundStyle(Color.dsError)
+                            .padding()
+                            .frame(maxWidth: .infinity)
+                            .background(Color.dsError.opacity(0.1))
+                            .clipShape(RoundedRectangle(cornerRadius: CornerRadius.lg))
                     }
                 }
                 .padding(Spacing.xl)
@@ -95,18 +95,7 @@ struct SkillTrackView: View {
         }
         .frame(maxWidth: .infinity)
         .padding(.vertical, Spacing.xl)
-        .background(
-            RadialGradient(
-                colors: [
-                    Color.dsAccentOrange.opacity(0.15),
-                    Color.dsAccentOrange.opacity(0.04),
-                    Color.clear
-                ],
-                center: .top,
-                startRadius: 10,
-                endRadius: 250
-            )
-        )
+        .background(HeroGlowView())
     }
 
     // MARK: - Skills Summary
@@ -261,28 +250,7 @@ struct SkillTrackView: View {
     // MARK: - Empty State
 
     private var emptyState: some View {
-        VStack(spacing: 16) {
-            Spacer(minLength: 40)
-
-            ZStack {
-                Circle()
-                    .fill(Color.dsSurfaceContainer)
-                    .frame(width: 100, height: 100)
-                Image(systemName: "star.circle")
-                    .font(.system(size: 40))
-                    .foregroundStyle(Color.dsOnSurfaceVariant)
-            }
-
-            Text("No Drill Stats")
-                .font(.system(size: 20, weight: .bold, design: .rounded))
-                .foregroundStyle(Color.dsOnSurface)
-            Text("Complete drills during training to see your stats here.")
-                .font(.system(size: 14))
-                .foregroundStyle(Color.dsOnSurfaceVariant)
-                .multilineTextAlignment(.center)
-
-            Spacer(minLength: 40)
-        }
+        EmptyStateView(icon: "star.circle", title: "No Drill Stats", subtitle: "Complete drills during training to see your stats here.")
     }
 
     // MARK: - Helpers

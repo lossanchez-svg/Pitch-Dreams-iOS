@@ -23,18 +23,7 @@ struct FullCheckInSheet: View {
                 ScrollView {
                     VStack(spacing: Spacing.xl) {
                         // Atmospheric glow
-                        RadialGradient(
-                            colors: [
-                                Color.dsAccentOrange.opacity(0.15),
-                                Color.dsAccentOrange.opacity(0.04),
-                                Color.clear
-                            ],
-                            center: .top,
-                            startRadius: 10,
-                            endRadius: 250
-                        )
-                        .frame(height: 120)
-                        .frame(maxWidth: .infinity)
+                        HeroGlowView()
 
                         // Energy
                         sectionCard(title: "ENERGY LEVEL") {

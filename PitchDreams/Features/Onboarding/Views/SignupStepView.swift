@@ -37,7 +37,7 @@ struct SignupStepView: View {
                     if !viewModel.confirmPassword.isEmpty && viewModel.password != viewModel.confirmPassword {
                         Label("Passwords do not match", systemImage: "exclamationmark.circle")
                             .font(.caption)
-                            .foregroundColor(.red)
+                            .foregroundStyle(Color.dsError)
                     }
                 }
 

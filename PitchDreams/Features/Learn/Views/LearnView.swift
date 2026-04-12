@@ -72,6 +72,10 @@ struct LearnView: View {
                         Label(error, systemImage: "exclamationmark.triangle.fill")
                             .font(.subheadline)
                             .foregroundStyle(Color.dsError)
+                            .padding()
+                            .frame(maxWidth: .infinity)
+                            .background(Color.dsError.opacity(0.1))
+                            .clipShape(RoundedRectangle(cornerRadius: CornerRadius.lg))
                     }
                 }
                 .padding(Spacing.xl)

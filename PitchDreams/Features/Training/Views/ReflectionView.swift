@@ -34,19 +34,28 @@ struct ReflectionView: View {
                         .font(.system(size: 22, weight: .bold, design: .rounded))
                         .foregroundStyle(Color.dsOnSurface)
 
-                    switch reflectionStep {
-                    case 0: rpeStep
-                    case 1: highlightStep
-                    case 2: nextFocusStep
-                    case 3: moodStep
-                    default: EmptyView()
+                    Group {
+                        switch reflectionStep {
+                        case 0: rpeStep
+                        case 1: highlightStep
+                        case 2: nextFocusStep
+                        case 3: moodStep
+                        default: EmptyView()
+                        }
                     }
+                    .id(reflectionStep)
+                    .transition(.asymmetric(
+                        insertion: .move(edge: .trailing).combined(with: .opacity),
+                        removal: .move(edge: .leading).combined(with: .opacity)
+                    ))
 
                     // Navigation
                     HStack(spacing: Spacing.lg) {
                         if reflectionStep > 0 {
                             Button {
-                                reflectionStep -= 1
+                                withAnimation(.easeInOut(duration: 0.3)) {
+                                    reflectionStep -= 1
+                                }
                             } label: {
                                 HStack(spacing: 6) {
                                     Image(systemName: "chevron.left")
@@ -66,7 +75,9 @@ struct ReflectionView: View {
 
                         Button {
                             if reflectionStep < 3 {
-                                reflectionStep += 1
+                                withAnimation(.easeInOut(duration: 0.3)) {
+                                    reflectionStep += 1
+                                }
                             } else {
                                 Task { await viewModel.saveSession() }
                             }

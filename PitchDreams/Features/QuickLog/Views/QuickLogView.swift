@@ -71,6 +71,7 @@ struct QuickLogView: View {
                     Task {
                         await viewModel.save()
                         if viewModel.saveSuccess {
+                            UIImpactFeedbackGenerator(style: .medium).impactOccurred()
                             withAnimation(.spring(response: 0.4, dampingFraction: 0.6)) {
                                 showSuccessCheckmark = true
                             }
@@ -83,7 +84,7 @@ struct QuickLogView: View {
                             ProgressView()
                                 .tint(.white)
                         } else if viewModel.saveSuccess {
-                            Label("Logged!", systemImage: "checkmark.circle.fill")
+                            Label("Nice one!", systemImage: "checkmark.circle.fill")
                         } else {
                             Label("Log It", systemImage: "plus.circle.fill")
                         }
@@ -118,7 +119,7 @@ struct QuickLogView: View {
                     HStack {
                         Image(systemName: "checkmark.circle.fill")
                             .foregroundStyle(.green)
-                        Text("Session logged successfully!")
+                        Text("Session saved")
                             .font(.subheadline.weight(.medium))
                             .foregroundStyle(.green)
                     }

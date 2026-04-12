@@ -76,70 +76,27 @@ struct ProgressDashboardView: View {
         }
         .frame(maxWidth: .infinity)
         .padding(.vertical, Spacing.xl)
-        .background(
-            RadialGradient(
-                colors: [
-                    Color.dsSecondary.opacity(0.12),
-                    Color.dsSecondary.opacity(0.03),
-                    Color.clear
-                ],
-                center: .top,
-                startRadius: 10,
-                endRadius: 250
-            )
-        )
+        .background(HeroGlowView(color: .dsSecondary))
     }
 
     // MARK: - Stats Grid
 
     private var statsGrid: some View {
         LazyVGrid(columns: [GridItem(.flexible(), spacing: 12), GridItem(.flexible(), spacing: 12)], spacing: 12) {
-            statCard(title: "Current Streak", value: "\(viewModel.currentStreak)", unit: "days", icon: "flame.fill", color: .dsAccentOrange)
-            statCard(title: "Max Streak", value: "\(viewModel.maxStreak)", unit: "days", icon: "trophy.fill", color: .dsTertiaryContainer)
-            statCard(title: "This Month", value: "\(viewModel.thisMonthSessions)", unit: "sessions", icon: "calendar", color: .dsSecondary)
-            statCard(title: "Total Sessions", value: "\(viewModel.totalSessions)", unit: "sessions", icon: "figure.run", color: .dsSecondary)
-            statCard(title: "Training Time", value: viewModel.formattedTotalTime, unit: "", icon: "clock.fill", color: .dsSecondary)
-            statCard(title: "Avg RPE", value: viewModel.averageEffort > 0 ? String(format: "%.1f", viewModel.averageEffort) : "--", unit: "/ 10", icon: "bolt.fill", color: .dsAccentOrange)
+            StatCardView(title: "Current Streak", value: "\(viewModel.currentStreak)", unit: "days", icon: "flame.fill", color: .dsAccentOrange)
+            StatCardView(title: "Max Streak", value: "\(viewModel.maxStreak)", unit: "days", icon: "trophy.fill", color: .dsTertiaryContainer)
+            StatCardView(title: "This Month", value: "\(viewModel.thisMonthSessions)", unit: "sessions", icon: "calendar", color: .dsSecondary)
+            StatCardView(title: "Total Sessions", value: "\(viewModel.totalSessions)", unit: "sessions", icon: "figure.run", color: .dsSecondary)
+            StatCardView(title: "Training Time", value: viewModel.formattedTotalTime, icon: "clock.fill", color: .dsSecondary)
+            StatCardView(title: "Avg RPE", value: viewModel.averageEffort > 0 ? String(format: "%.1f", viewModel.averageEffort) : "--", unit: "/ 10", icon: "bolt.fill", color: .dsAccentOrange)
         }
-    }
-
-    private func statCard(title: String, value: String, unit: String, icon: String, color: Color) -> some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Image(systemName: icon)
-                .font(.system(size: 16))
-                .foregroundStyle(color)
-
-            HStack(alignment: .firstTextBaseline, spacing: 4) {
-                Text(value)
-                    .font(.system(size: 24, weight: .heavy, design: .rounded))
-                    .foregroundStyle(Color.dsOnSurface)
-                if !unit.isEmpty {
-                    Text(unit)
-                        .font(.system(size: 11))
-                        .foregroundStyle(Color.dsOnSurfaceVariant)
-                }
-            }
-
-            Text(title.uppercased())
-                .font(.system(size: 10, weight: .bold))
-                .tracking(1)
-                .foregroundStyle(Color.dsOnSurfaceVariant)
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(Spacing.lg)
-        .background(Color.dsSurfaceContainer)
-        .clipShape(RoundedRectangle(cornerRadius: CornerRadius.lg))
-        .ghostBorder()
     }
 
     // MARK: - Streak Section
 
     private var streakSection: some View {
         VStack(alignment: .leading, spacing: Spacing.lg) {
-            Text("STREAK DETAILS")
-                .font(.system(size: 12, weight: .heavy, design: .rounded))
-                .tracking(3)
-                .foregroundStyle(Color.dsOnSurfaceVariant)
+            SectionHeaderView("STREAK DETAILS")
 
             HStack(spacing: 0) {
                 VStack(spacing: 6) {
@@ -205,10 +162,7 @@ struct ProgressDashboardView: View {
 
     private var recentSessionsSection: some View {
         VStack(alignment: .leading, spacing: Spacing.lg) {
-            Text("RECENT SESSIONS")
-                .font(.system(size: 12, weight: .heavy, design: .rounded))
-                .tracking(3)
-                .foregroundStyle(Color.dsOnSurfaceVariant)
+            SectionHeaderView("RECENT SESSIONS")
 
             if viewModel.recentSessions.isEmpty {
                 Text("No sessions logged yet")
@@ -344,21 +298,7 @@ struct ProgressDashboardView: View {
     // MARK: - Empty State
 
     private var emptyState: some View {
-        VStack(spacing: 16) {
-            Spacer(minLength: 60)
-            Image(systemName: "chart.line.uptrend.xyaxis")
-                .font(.system(size: 48))
-                .foregroundStyle(Color.dsOnSurfaceVariant)
-            Text("No Progress Yet")
-                .font(.system(size: 22, weight: .bold, design: .rounded))
-                .foregroundStyle(Color.dsOnSurface)
-            Text("Complete training sessions to start tracking your progress and see your stats here.")
-                .font(.system(size: 14))
-                .foregroundStyle(Color.dsOnSurfaceVariant)
-                .multilineTextAlignment(.center)
-            Spacer(minLength: 60)
-        }
-        .padding(.horizontal, Spacing.xxl)
+        EmptyStateView(icon: "chart.line.uptrend.xyaxis", title: "No Progress Yet", subtitle: "Complete training sessions to start tracking your progress and see your stats here.")
     }
 
     // MARK: - Helpers

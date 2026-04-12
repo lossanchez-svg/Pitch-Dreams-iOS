@@ -55,7 +55,7 @@ struct ActivityLogView: View {
                             Image(systemName: "figure.run.circle")
                                 .font(.system(size: 40))
                                 .foregroundStyle(Color.dsOnSurfaceVariant)
-                            Text("No Activities Yet")
+                            Text("No activities yet")
                                 .font(.system(size: 18, weight: .bold, design: .rounded))
                                 .foregroundStyle(Color.dsOnSurface)
                             Text("Log your first training session to start tracking progress.")

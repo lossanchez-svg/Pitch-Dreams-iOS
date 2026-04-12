@@ -10,6 +10,9 @@ struct FirstTouchView: View {
     @State private var voiceEnabled = false
 
     // Timer challenge state
+    @State private var showPRCelebration = false
+
+    // Timer challenge state
     @State private var timerActive = false
     @State private var timerRemaining: Int = 30
     @State private var timerCancellable: AnyCancellable?
@@ -27,6 +30,7 @@ struct FirstTouchView: View {
                 drillSelectionView
             }
         }
+        .celebration(isPresented: $showPRCelebration)
         .safeAreaInset(edge: .bottom) {
             if voiceEnabled && viewModel.activeDrillKey != nil {
                 VoiceCommandBar(speechRecognizer: speechRecognizer, lastCommand: $lastVoiceCommand)
@@ -308,6 +312,9 @@ struct FirstTouchView: View {
                         let previousBest = bestForActiveDrill()
                         await viewModel.saveDrill()
                         stopTimerChallenge()
+                        if viewModel.saveSuccess {
+                            showPRCelebration = true
+                        }
                         // Announce PR if beaten
                         if voiceEnabled, let best = previousBest, viewModel.activeCount > best {
                             let persona = CoachPersonality.current
@@ -327,6 +334,16 @@ struct FirstTouchView: View {
             }
             .padding(.horizontal)
             .padding(.bottom, 24)
+
+            if let error = viewModel.errorMessage {
+                Label(error, systemImage: "exclamationmark.triangle.fill")
+                    .font(.subheadline)
+                    .foregroundStyle(Color.dsError)
+                    .padding()
+                    .frame(maxWidth: .infinity)
+                    .background(Color.dsError.opacity(0.1))
+                    .clipShape(RoundedRectangle(cornerRadius: CornerRadius.md))
+            }
         }
     }
 

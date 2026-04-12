@@ -122,6 +122,7 @@ struct ChildTabNavigation: View {
             withAnimation(.easeInOut(duration: 0.2)) {
                 selectedTab = tab
             }
+            UIImpactFeedbackGenerator(style: .light).impactOccurred()
         } label: {
             VStack(spacing: 4) {
                 Image(systemName: icon)
@@ -153,11 +154,13 @@ struct ChildTabNavigation: View {
         Menu {
             Button {
                 selectedTab = .progress
+                UIImpactFeedbackGenerator(style: .light).impactOccurred()
             } label: {
                 Label("Progress", systemImage: "chart.line.uptrend.xyaxis")
             }
             Button {
                 selectedTab = .learn
+                UIImpactFeedbackGenerator(style: .light).impactOccurred()
             } label: {
                 Label("Learn", systemImage: "book.fill")
             }

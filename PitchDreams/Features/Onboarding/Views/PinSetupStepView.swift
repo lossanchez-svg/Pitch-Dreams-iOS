@@ -42,7 +42,7 @@ struct PinSetupStepView: View {
                     if !viewModel.confirmPin.isEmpty && viewModel.pin != viewModel.confirmPin {
                         Label("PINs do not match", systemImage: "exclamationmark.circle")
                             .font(.caption)
-                            .foregroundColor(.red)
+                            .foregroundStyle(Color.dsError)
                     }
 
                     if !viewModel.pin.isEmpty && (viewModel.pin.count < 4 || viewModel.pin.count > 6) {

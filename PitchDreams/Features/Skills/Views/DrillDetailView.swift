@@ -12,18 +12,7 @@ struct DrillDetailView: View {
             ScrollView {
                 VStack(alignment: .leading, spacing: 20) {
                     // Category-colored atmospheric glow
-                    RadialGradient(
-                        colors: [
-                            categoryColor.opacity(0.12),
-                            categoryColor.opacity(0.03),
-                            Color.clear
-                        ],
-                        center: .top,
-                        startRadius: 10,
-                        endRadius: 250
-                    )
-                    .frame(height: 120)
-                    .frame(maxWidth: .infinity)
+                    HeroGlowView(color: categoryColor)
 
                     // Skill Diagram
                     SkillDiagramView(drillId: drill.id, category: drill.category)

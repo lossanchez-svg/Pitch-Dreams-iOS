@@ -122,7 +122,7 @@ struct ChildProfileStepView: View {
                 if viewModel.nickname.count > 20 {
                     Text("Max 20 characters")
                         .font(.caption)
-                        .foregroundColor(.red)
+                        .foregroundStyle(Color.dsError)
                 }
             }
 

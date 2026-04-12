@@ -12,6 +12,7 @@ struct LessonDetailView: View {
     @State private var completedSteps: Set<Int> = []
     @State private var visibleSteps: Set<Int> = []
     @State private var showingLessonPlayer = false
+    @State private var showCompletionCelebration = false
 
     var body: some View {
         ScrollView {
@@ -25,6 +26,7 @@ struct LessonDetailView: View {
             }
             .padding()
         }
+        .celebration(isPresented: $showCompletionCelebration)
         .navigationTitle(lesson.title)
         .navigationBarTitleDisplayMode(.inline)
     }
@@ -182,6 +184,7 @@ struct LessonDetailView: View {
                     await onMarkComplete()
                     MissionsViewModel.shared.recordEvent(.lessonRead, childId: childId)
                     isMarking = false
+                    showCompletionCelebration = true
                 }
             } label: {
                 Group {

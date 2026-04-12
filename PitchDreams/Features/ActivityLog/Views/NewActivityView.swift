@@ -19,18 +19,7 @@ struct NewActivityView: View {
             .padding(.top, 8)
 
             // Atmospheric glow
-            RadialGradient(
-                colors: [
-                    Color.dsAccentOrange.opacity(0.15),
-                    Color.dsAccentOrange.opacity(0.04),
-                    Color.clear
-                ],
-                center: .top,
-                startRadius: 10,
-                endRadius: 250
-            )
-            .frame(height: 120)
-            .frame(maxWidth: .infinity)
+            HeroGlowView()
 
             // Content
             Group {

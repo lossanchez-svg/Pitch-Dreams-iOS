@@ -22,9 +22,11 @@ final class CoachPersonalityTests: XCTestCase {
 
     override func tearDown() {
         // Reset to default personality after each test
-        UserDefaults.standard.removeObject(forKey: "coachPersonality")
-        UserDefaults.standard.removeObject(forKey: "coachPersonality_test-child")
-        UserDefaults.standard.removeObject(forKey: "activeChildId")
+        for key in ["coachPersonality", "coachPersonality_test-child",
+                     "coachPersonality_child-A", "coachPersonality_child-B",
+                     "activeChildId", "someOtherKey"] {
+            UserDefaults.standard.removeObject(forKey: key)
+        }
         mockAPI = nil
         mockVoice = nil
         super.tearDown()
@@ -58,6 +60,76 @@ final class CoachPersonalityTests: XCTestCase {
     func testInvalidUserDefaultsFallsBackToManager() {
         UserDefaults.standard.set("nonexistent_personality", forKey: "coachPersonality")
         XCTAssertEqual(CoachPersonality.current, .manager)
+    }
+
+    // MARK: - Persistence survives across multiple reads
+
+    func testSavedPersonalityPersistsAcrossMultipleReads() {
+        CoachPersonality.drill.save(forChildId: "test-child")
+
+        // Read it multiple times — should never reset
+        XCTAssertEqual(CoachPersonality.current, .drill)
+        XCTAssertEqual(CoachPersonality.current, .drill)
+        XCTAssertEqual(CoachPersonality.saved(forChildId: "test-child"), .drill)
+
+        // Do unrelated UserDefaults work
+        UserDefaults.standard.set("unrelated", forKey: "someOtherKey")
+        UserDefaults.standard.synchronize()
+
+        // Still persisted
+        XCTAssertEqual(CoachPersonality.current, .drill)
+        XCTAssertEqual(CoachPersonality.saved(forChildId: "test-child"), .drill)
+    }
+
+    func testOverwritePersonalityReplacesOldValue() {
+        CoachPersonality.hype.save(forChildId: "test-child")
+        XCTAssertEqual(CoachPersonality.current, .hype)
+
+        CoachPersonality.zen.save(forChildId: "test-child")
+        XCTAssertEqual(CoachPersonality.current, .zen)
+
+        // Old value is gone
+        XCTAssertNotEqual(CoachPersonality.current, .hype)
+    }
+
+    func testPerChildPersonalityIsolation() {
+        // Save different personalities for two children
+        CoachPersonality.hype.save(forChildId: "child-A")
+        CoachPersonality.drill.save(forChildId: "child-B")
+
+        // Current reflects the last active child (child-B)
+        XCTAssertEqual(CoachPersonality.current, .drill)
+
+        // But each child's saved value is independent
+        XCTAssertEqual(CoachPersonality.saved(forChildId: "child-A"), .hype)
+        XCTAssertEqual(CoachPersonality.saved(forChildId: "child-B"), .drill)
+
+        // Switch active child back to A
+        CoachPersonality.hype.save(forChildId: "child-A")
+        XCTAssertEqual(CoachPersonality.current, .hype)
+
+        // child-B still has drill
+        XCTAssertEqual(CoachPersonality.saved(forChildId: "child-B"), .drill)
+    }
+
+    func testSavedForChildIdReturnsManagerForUnknownChild() {
+        XCTAssertEqual(CoachPersonality.saved(forChildId: "never-saved-child"), .manager)
+    }
+
+    func testSaveWritesBothChildSpecificAndGlobalKeys() {
+        CoachPersonality.zen.save(forChildId: "test-child")
+
+        // Child-specific key is set
+        let childKey = UserDefaults.standard.string(forKey: "coachPersonality_test-child")
+        XCTAssertEqual(childKey, "zen")
+
+        // Global fallback key is also set
+        let globalKey = UserDefaults.standard.string(forKey: "coachPersonality")
+        XCTAssertEqual(globalKey, "zen")
+
+        // Active child ID is tracked
+        let activeChild = UserDefaults.standard.string(forKey: "activeChildId")
+        XCTAssertEqual(activeChild, "test-child")
     }
 
     // MARK: - ActiveTrainingViewModel uses parent-configured personality

@@ -23,6 +23,8 @@ final class CoachPersonalityTests: XCTestCase {
     override func tearDown() {
         // Reset to default personality after each test
         UserDefaults.standard.removeObject(forKey: "coachPersonality")
+        UserDefaults.standard.removeObject(forKey: "coachPersonality_test-child")
+        UserDefaults.standard.removeObject(forKey: "activeChildId")
         mockAPI = nil
         mockVoice = nil
         super.tearDown()
@@ -32,22 +34,24 @@ final class CoachPersonalityTests: XCTestCase {
 
     func testDefaultPersonalityIsManager() {
         UserDefaults.standard.removeObject(forKey: "coachPersonality")
+        UserDefaults.standard.removeObject(forKey: "coachPersonality_test-child")
+        UserDefaults.standard.removeObject(forKey: "activeChildId")
         XCTAssertEqual(CoachPersonality.current, .manager)
         XCTAssertEqual(CoachPersonality.current.rawValue, "manager")
     }
 
     func testSaveAndReadHypePersonality() {
-        CoachPersonality.hype.saveToCurrent()
+        CoachPersonality.hype.save(forChildId: "test-child")
         XCTAssertEqual(CoachPersonality.current, .hype)
     }
 
     func testSaveAndReadZenPersonality() {
-        CoachPersonality.zen.saveToCurrent()
+        CoachPersonality.zen.save(forChildId: "test-child")
         XCTAssertEqual(CoachPersonality.current, .zen)
     }
 
     func testSaveAndReadDrillPersonality() {
-        CoachPersonality.drill.saveToCurrent()
+        CoachPersonality.drill.save(forChildId: "test-child")
         XCTAssertEqual(CoachPersonality.current, .drill)
     }
 
@@ -59,7 +63,7 @@ final class CoachPersonalityTests: XCTestCase {
     // MARK: - ActiveTrainingViewModel uses parent-configured personality
 
     func testStartDrillUsesConfiguredPersonality() {
-        CoachPersonality.drill.saveToCurrent()
+        CoachPersonality.drill.save(forChildId: "test-child")
 
         let vm = ActiveTrainingViewModel(childId: "c", drills: testDrills, spaceType: "small_indoor", apiClient: mockAPI)
         vm.coachVoice = mockVoice
@@ -70,7 +74,7 @@ final class CoachPersonalityTests: XCTestCase {
     }
 
     func testStartDrillUsesHypePersonality() {
-        CoachPersonality.hype.saveToCurrent()
+        CoachPersonality.hype.save(forChildId: "test-child")
 
         let vm = ActiveTrainingViewModel(childId: "c", drills: testDrills, spaceType: "small_indoor", apiClient: mockAPI)
         vm.coachVoice = mockVoice
@@ -81,7 +85,7 @@ final class CoachPersonalityTests: XCTestCase {
     }
 
     func testCompleteDrillUsesConfiguredPersonality() {
-        CoachPersonality.zen.saveToCurrent()
+        CoachPersonality.zen.save(forChildId: "test-child")
 
         let vm = ActiveTrainingViewModel(childId: "c", drills: testDrills, spaceType: "small_indoor", apiClient: mockAPI)
         vm.coachVoice = mockVoice
@@ -94,7 +98,7 @@ final class CoachPersonalityTests: XCTestCase {
     }
 
     func testReflectionUsesConfiguredPersonality() {
-        CoachPersonality.drill.saveToCurrent()
+        CoachPersonality.drill.save(forChildId: "test-child")
 
         // Enqueue reflection tag responses
         mockAPI.enqueue([HighlightChip(id: "h1", key: "passing", label: "Passing")])
@@ -111,7 +115,7 @@ final class CoachPersonalityTests: XCTestCase {
     }
 
     func testSessionCompleteUsesConfiguredPersonality() async {
-        CoachPersonality.hype.saveToCurrent()
+        CoachPersonality.hype.save(forChildId: "test-child")
 
         mockAPI.enqueue(SessionSaveResult(sessionId: "s-1"))
         mockAPI.enqueue(LogDrillResult(logId: "l-1"))
@@ -130,7 +134,7 @@ final class CoachPersonalityTests: XCTestCase {
     // MARK: - All speak calls in a session use the same personality
 
     func testAllVoiceCallsInDrillFlowUseConfiguredPersonality() {
-        CoachPersonality.zen.saveToCurrent()
+        CoachPersonality.zen.save(forChildId: "test-child")
 
         let vm = ActiveTrainingViewModel(childId: "c", drills: testDrills, spaceType: "small_indoor", apiClient: mockAPI)
         vm.coachVoice = mockVoice
@@ -157,7 +161,7 @@ final class CoachPersonalityTests: XCTestCase {
     // MARK: - Personality changes mid-session
 
     func testPersonalityChangeReflectedImmediately() {
-        CoachPersonality.manager.saveToCurrent()
+        CoachPersonality.manager.save(forChildId: "test-child")
 
         let vm = ActiveTrainingViewModel(childId: "c", drills: testDrills, spaceType: "small_indoor", apiClient: mockAPI)
         vm.coachVoice = mockVoice
@@ -166,7 +170,7 @@ final class CoachPersonalityTests: XCTestCase {
         XCTAssertEqual(mockVoice.lastPersonality, "manager")
 
         // Parent changes personality mid-session (unlikely but possible)
-        CoachPersonality.drill.saveToCurrent()
+        CoachPersonality.drill.save(forChildId: "test-child")
 
         vm.completeDrill()
         XCTAssertEqual(mockVoice.lastPersonality, "drill")
@@ -175,7 +179,7 @@ final class CoachPersonalityTests: XCTestCase {
     // MARK: - InteractivePitchViewModel uses configured personality
 
     func testInteractivePitchUsesConfiguredPersonality() {
-        CoachPersonality.hype.saveToCurrent()
+        CoachPersonality.hype.save(forChildId: "test-child")
 
         let vm = InteractivePitchViewModel(voice: mockVoice)
         let player = TacticalPlayer(
@@ -193,7 +197,7 @@ final class CoachPersonalityTests: XCTestCase {
     }
 
     func testInteractivePitchZenPersonality() {
-        CoachPersonality.zen.saveToCurrent()
+        CoachPersonality.zen.save(forChildId: "test-child")
 
         let vm = InteractivePitchViewModel(voice: mockVoice)
         let arrow = TacticalArrow(
@@ -215,28 +219,28 @@ final class CoachPersonalityTests: XCTestCase {
     func testDrillStartTextMatchesPersonality() {
         let drills = testDrills
 
-        CoachPersonality.manager.saveToCurrent()
+        CoachPersonality.manager.save(forChildId: "test-child")
         let vmManager = ActiveTrainingViewModel(childId: "c", drills: drills, spaceType: "small_indoor", apiClient: mockAPI)
         vmManager.coachVoice = mockVoice
         vmManager.startDrill()
         let managerText = mockVoice.spokenTexts.last!
         XCTAssertTrue(managerText.contains("You've got"), "Manager should say 'You've got'")
 
-        CoachPersonality.hype.saveToCurrent()
+        CoachPersonality.hype.save(forChildId: "test-child")
         let vmHype = ActiveTrainingViewModel(childId: "c", drills: drills, spaceType: "small_indoor", apiClient: mockAPI)
         vmHype.coachVoice = mockVoice
         vmHype.startDrill()
         let hypeText = mockVoice.spokenTexts.last!
         XCTAssertTrue(hypeText.contains("Let's go"), "Hype should say 'Let's go'")
 
-        CoachPersonality.zen.saveToCurrent()
+        CoachPersonality.zen.save(forChildId: "test-child")
         let vmZen = ActiveTrainingViewModel(childId: "c", drills: drills, spaceType: "small_indoor", apiClient: mockAPI)
         vmZen.coachVoice = mockVoice
         vmZen.startDrill()
         let zenText = mockVoice.spokenTexts.last!
         XCTAssertTrue(zenText.contains("Take a breath"), "Zen should say 'Take a breath'")
 
-        CoachPersonality.drill.saveToCurrent()
+        CoachPersonality.drill.save(forChildId: "test-child")
         let vmDrill = ActiveTrainingViewModel(childId: "c", drills: drills, spaceType: "small_indoor", apiClient: mockAPI)
         vmDrill.coachVoice = mockVoice
         vmDrill.startDrill()
@@ -245,7 +249,7 @@ final class CoachPersonalityTests: XCTestCase {
     }
 
     func testDrillCompleteTextMatchesPersonality() {
-        CoachPersonality.hype.saveToCurrent()
+        CoachPersonality.hype.save(forChildId: "test-child")
         let vm = ActiveTrainingViewModel(childId: "c", drills: testDrills, spaceType: "small_indoor", apiClient: mockAPI)
         vm.coachVoice = mockVoice
         vm.startDrill()
@@ -255,7 +259,7 @@ final class CoachPersonalityTests: XCTestCase {
     }
 
     func testReflectionTextMatchesPersonality() {
-        CoachPersonality.zen.saveToCurrent()
+        CoachPersonality.zen.save(forChildId: "test-child")
         mockAPI.enqueue([HighlightChip(id: "h1", key: "p", label: "Passing")])
         mockAPI.enqueue([NextFocusChip(id: "n1", key: "s", label: "Shooting")])
 
@@ -268,7 +272,7 @@ final class CoachPersonalityTests: XCTestCase {
     }
 
     func testSessionCompleteTextMatchesPersonality() async {
-        CoachPersonality.drill.saveToCurrent()
+        CoachPersonality.drill.save(forChildId: "test-child")
         mockAPI.enqueue(SessionSaveResult(sessionId: "s-1"))
         mockAPI.enqueue(LogDrillResult(logId: "l-1"))
         mockAPI.enqueue(LogDrillResult(logId: "l-2"))

@@ -9,7 +9,7 @@ enum APIError: LocalizedError {
     case network(URLError)
     case unauthorized
     case forbidden(String)
-    case notFound
+    case notFound(String)
     case validation(String)
     case conflict(String)
     case server(String)
@@ -21,7 +21,7 @@ enum APIError: LocalizedError {
         case .network(let error): return error.localizedDescription
         case .unauthorized: return "Please log in again"
         case .forbidden(let msg): return msg
-        case .notFound: return "Not found"
+        case .notFound(let msg): return msg
         case .validation(let msg): return msg
         case .conflict(let msg): return msg
         case .server(let msg): return msg

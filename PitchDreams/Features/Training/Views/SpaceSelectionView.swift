@@ -4,7 +4,7 @@ struct SpaceSelectionView: View {
     let childId: String
     @StateObject private var speechRecognizer = SpeechRecognizer()
     @State private var lastVoiceCommand: String?
-    @State private var navigateToSpace: String?
+    @State private var selectedSpaceId: String?
 
     private let spaces: [(id: String, title: String, subtitle: String, icon: String)] = [
         ("small_indoor", "Small Indoor", "Bedroom, hallway, or small room", "house.fill"),
@@ -106,23 +106,45 @@ struct SpaceSelectionView: View {
             guard !newTranscript.isEmpty else { return }
             processVoiceCommand(newTranscript)
         }
+        .navigationDestination(isPresented: Binding(
+            get: { selectedSpaceId != nil },
+            set: { if !$0 { selectedSpaceId = nil } }
+        )) {
+            if let spaceId = selectedSpaceId {
+                ActiveDrillView(
+                    childId: childId,
+                    drills: DrillRegistry.drills(for: spaceId),
+                    spaceType: spaceId
+                )
+            }
+        }
     }
 
     private func processVoiceCommand(_ transcript: String) {
-        let lower = transcript.lowercased()
+        let commands: [VoiceCommand] = [
+            VoiceCommand(label: "Small Indoor", phrases: ["small", "bedroom", "hallway"]) {
+                selectSpace("small_indoor")
+            },
+            VoiceCommand(label: "Large Indoor", phrases: ["large", "gym", "garage"]) {
+                selectSpace("large_indoor")
+            },
+            VoiceCommand(label: "Outdoor", phrases: ["outdoor", "field", "park", "outside"]) {
+                selectSpace("outdoor")
+            },
+            VoiceCommand(label: "Mic Off", phrases: ["mic off", "stop listening", "mute mic"]) {
+                speechRecognizer.stopListening()
+            },
+        ]
 
-        if lower.contains("small") || lower.contains("bedroom") || lower.contains("hallway") {
-            lastVoiceCommand = "Small Indoor"
-            navigateToSpace = "small_indoor"
-        } else if lower.contains("large") || lower.contains("gym") || lower.contains("garage") {
-            lastVoiceCommand = "Large Indoor"
-            navigateToSpace = "large_indoor"
-        } else if lower.contains("outdoor") || lower.contains("field") || lower.contains("park") || lower.contains("outside") {
-            lastVoiceCommand = "Outdoor"
-            navigateToSpace = "outdoor"
-        } else if lower.contains("mic off") || lower.contains("stop listening") {
-            speechRecognizer.stopListening()
-            lastVoiceCommand = "Mic Off"
+        if let matched = VoiceCommandMatcher.match(transcript: transcript, commands: commands) {
+            lastVoiceCommand = matched.label
+            matched.action()
         }
+    }
+
+    private func selectSpace(_ spaceId: String) {
+        let drills = DrillRegistry.drills(for: spaceId)
+        guard !drills.isEmpty else { return }
+        selectedSpaceId = spaceId
     }
 }

@@ -5,6 +5,8 @@ struct ReflectionView: View {
     @ObservedObject var speechRecognizer: SpeechRecognizer
     @State private var reflectionStep = 0
     @State private var lastVoiceCommand: String?
+    /// Transcripts arriving before this date are discarded (coach voice protection).
+    @State private var ignoreTranscriptsUntil: Date = .distantPast
 
     private let moodOptions: [(name: String, emoji: String, label: String)] = [
         ("GREAT", "\u{1F604}", "Great"),
@@ -113,6 +115,7 @@ struct ReflectionView: View {
         }
         .onChange(of: speechRecognizer.transcript) { newTranscript in
             guard !newTranscript.isEmpty else { return }
+            guard Date() > ignoreTranscriptsUntil else { return }
             processReflectionVoiceCommand(newTranscript)
         }
     }
@@ -120,51 +123,55 @@ struct ReflectionView: View {
     // MARK: - Voice Commands
 
     private func processReflectionVoiceCommand(_ transcript: String) {
-        let lower = transcript.lowercased()
+        var commands: [VoiceCommand] = [
+            VoiceCommand(label: "Next", phrases: ["next", "continue"]) {
+                if reflectionStep < 3 {
+                    withAnimation(.easeInOut(duration: 0.3)) {
+                        reflectionStep += 1
+                    }
+                }
+            },
+            VoiceCommand(label: "Back", phrases: ["back", "previous"]) {
+                if reflectionStep > 0 {
+                    withAnimation(.easeInOut(duration: 0.3)) {
+                        reflectionStep -= 1
+                    }
+                }
+            },
+            VoiceCommand(label: "Save", phrases: ["save", "done", "finish"]) {
+                if reflectionStep == 3 {
+                    Task { await viewModel.saveSession() }
+                } else {
+                    withAnimation(.easeInOut(duration: 0.3)) {
+                        reflectionStep = 3
+                    }
+                }
+            },
+            VoiceCommand(label: "Mic Off", phrases: ["mic off", "stop listening", "mute mic"]) {
+                speechRecognizer.stopListening()
+            },
+        ]
 
-        if lower.contains("next") || lower.contains("continue") {
-            if reflectionStep < 3 {
-                reflectionStep += 1
-                lastVoiceCommand = "Next"
-                return
+        // Step-specific mood commands
+        if reflectionStep == 3 {
+            for mood in moodOptions {
+                commands.append(VoiceCommand(label: mood.label, phrases: [mood.label.lowercased(), mood.name.lowercased()]) {
+                    viewModel.reflectionMood = mood.name.lowercased()
+                })
             }
         }
 
-        if lower.contains("back") || lower.contains("previous") {
-            if reflectionStep > 0 {
-                reflectionStep -= 1
-                lastVoiceCommand = "Back"
-                return
-            }
+        if let matched = VoiceCommandMatcher.match(transcript: transcript, commands: commands) {
+            lastVoiceCommand = matched.label
+            matched.action()
+            return
         }
 
-        if lower.contains("save") || lower.contains("done") || lower.contains("finish") {
-            if reflectionStep == 3 {
-                Task { await viewModel.saveSession() }
-                lastVoiceCommand = "Save"
-                return
-            } else {
-                reflectionStep = 3
-                lastVoiceCommand = "Skip to Save"
-                return
-            }
-        }
-
+        // Number extraction for RPE (step 0 only)
         if reflectionStep == 0 {
             if let number = VoiceCommandMatcher.extractNumber(from: transcript), number >= 1, number <= 10 {
                 viewModel.reflectionRPE = number
                 lastVoiceCommand = "RPE: \(number)"
-                return
-            }
-        }
-
-        if reflectionStep == 3 {
-            for mood in moodOptions {
-                if lower.contains(mood.label.lowercased()) || lower.contains(mood.name.lowercased()) {
-                    viewModel.reflectionMood = mood.name.lowercased()
-                    lastVoiceCommand = mood.label
-                    return
-                }
             }
         }
     }

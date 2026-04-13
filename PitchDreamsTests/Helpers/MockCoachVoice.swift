@@ -3,7 +3,10 @@ import Foundation
 
 @MainActor
 final class MockCoachVoice: CoachVoiceProtocol {
-    private(set) var isSpeaking: Bool = false
+    var isSpeaking: Bool = false
+    var lastSpokeAt: Date?
+    var onWillSpeak: (() -> Void)?
+    var onDidFinishSpeaking: (() -> Void)?
     private(set) var spokenTexts: [String] = []
     private(set) var speakCallCount: Int = 0
     private(set) var stopCallCount: Int = 0
@@ -14,6 +17,7 @@ final class MockCoachVoice: CoachVoiceProtocol {
     var simulateSpeaking: Bool = false
 
     func speak(_ text: String, personality: String) {
+        onWillSpeak?()
         speakCallCount += 1
         spokenTexts.append(text)
         lastPersonality = personality
@@ -27,8 +31,16 @@ final class MockCoachVoice: CoachVoiceProtocol {
         isSpeaking = false
     }
 
+    func isSpeakingOrCoolingDown(cooldown: TimeInterval = 2.0) -> Bool {
+        if isSpeaking { return true }
+        guard let lastSpokeAt else { return false }
+        return Date().timeIntervalSince(lastSpokeAt) < cooldown
+    }
+
     /// Simulate speech finishing (for auto-advance tests).
     func finishSpeaking() {
         isSpeaking = false
+        lastSpokeAt = Date()
+        onDidFinishSpeaking?()
     }
 }

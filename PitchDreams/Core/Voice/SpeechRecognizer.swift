@@ -54,12 +54,12 @@ final class SpeechRecognizer: ObservableObject {
             return
         }
 
-        cleanup()
+        cleanup(isRestarting: true)
         wantsListening = true
 
         do {
             let audioSession = AVAudioSession.sharedInstance()
-            try audioSession.setCategory(.playAndRecord, mode: .default, options: [.defaultToSpeaker, .duckOthers, .allowBluetooth])
+            try audioSession.setCategory(.playAndRecord, mode: .default, options: [.defaultToSpeaker, .duckOthers, .allowBluetooth, .allowBluetoothA2DP])
             try audioSession.setActive(true, options: .notifyOthersOnDeactivation)
 
             request = SFSpeechAudioBufferRecognitionRequest()
@@ -94,7 +94,7 @@ final class SpeechRecognizer: ObservableObject {
                         // Silence timeout (1110) or end-of-speech (1101) — debounce restart
                         if nsError.domain == "kAFAssistantErrorDomain" &&
                            (nsError.code == 1110 || nsError.code == 1101) {
-                            self.cleanup()
+                            self.cleanup(isRestarting: true)
                             if self.wantsListening {
                                 try? await Task.sleep(nanoseconds: 600_000_000)
                                 if self.wantsListening {
@@ -108,7 +108,7 @@ final class SpeechRecognizer: ObservableObject {
                            (nsError.code == 201 || nsError.code == 203) {
                             Log.ui.info("On-device speech model unavailable, falling back to server")
                             self.useOnDevice = false
-                            self.cleanup()
+                            self.cleanup(isRestarting: true)
                             self.startListening()
                             return
                         }
@@ -118,7 +118,7 @@ final class SpeechRecognizer: ObservableObject {
                     }
 
                     if result?.isFinal == true {
-                        self.cleanup()
+                        self.cleanup(isRestarting: true)
                         if self.wantsListening {
                             try? await Task.sleep(nanoseconds: 600_000_000)
                             if self.wantsListening {
@@ -136,11 +136,13 @@ final class SpeechRecognizer: ObservableObject {
 
     func stopListening() {
         wantsListening = false
-        cleanup()
-        isListening = false
+        cleanup(isRestarting: false)
     }
 
-    private func cleanup() {
+    /// Tear down audio engine and recognition task.
+    /// - Parameter isRestarting: When true (auto-restart cycle), keeps `isListening = true`
+    ///   so the mic icon doesn't flicker. When false (user stopped), sets `isListening = false`.
+    private func cleanup(isRestarting: Bool) {
         if audioEngine.isRunning {
             audioEngine.stop()
         }
@@ -149,7 +151,9 @@ final class SpeechRecognizer: ObservableObject {
         recognitionTask = nil
         request?.endAudio()
         request = nil
-        isListening = false
+        if !isRestarting {
+            isListening = false
+        }
     }
 
     func toggleListening() async {

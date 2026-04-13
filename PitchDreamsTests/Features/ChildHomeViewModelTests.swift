@@ -41,8 +41,8 @@ final class ChildHomeViewModelTests: XCTestCase {
     func testNullCheckInHandled() async {
         mockAPI.enqueue(TestFixtures.makeChildProfileDetail())
         mockAPI.enqueue(TestFixtures.makeStreakData())
-        mockAPI.enqueueError(APIError.notFound) // null checkIn
-        mockAPI.enqueueError(APIError.notFound) // null nudge
+        mockAPI.enqueueError(APIError.notFound("Not found")) // null checkIn
+        mockAPI.enqueueError(APIError.notFound("Not found")) // null nudge
         mockAPI.enqueue(TestFixtures.makeFreezeCheckResult())
 
         await viewModel.loadData()
@@ -57,8 +57,8 @@ final class ChildHomeViewModelTests: XCTestCase {
     func testStreakCount() async {
         mockAPI.enqueue(TestFixtures.makeChildProfileDetail())
         mockAPI.enqueue(TestFixtures.makeStreakData(milestones: [3, 7, 14]))
-        mockAPI.enqueueError(APIError.notFound) // null checkIn
-        mockAPI.enqueueError(APIError.notFound) // null nudge
+        mockAPI.enqueueError(APIError.notFound("Not found")) // null checkIn
+        mockAPI.enqueueError(APIError.notFound("Not found")) // null nudge
         mockAPI.enqueue(TestFixtures.makeFreezeCheckResult())
 
         await viewModel.loadData()

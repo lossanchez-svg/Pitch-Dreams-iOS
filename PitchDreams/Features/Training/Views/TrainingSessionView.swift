@@ -97,6 +97,9 @@ struct TrainingSessionView: View {
         .navigationDestination(isPresented: $navigateToSpaceSelection) {
             SpaceSelectionView(childId: childId)
         }
+        .navigationDestination(isPresented: $navigateToActivityLog) {
+            ActivityLogView(childId: childId)
+        }
     }
 
     // MARK: - Voice
@@ -109,6 +112,7 @@ struct TrainingSessionView: View {
     }
 
     @State private var navigateToSpaceSelection = false
+    @State private var navigateToActivityLog = false
 
     private func processVoiceCommand(_ transcript: String) {
         let allCommands = buildMoodCommands() + buildNavigationCommands()
@@ -136,6 +140,11 @@ struct TrainingSessionView: View {
             VoiceCommand(label: "Start Training", phrases: ["start training", "start", "let's go", "begin"]) {
                 if viewModel.checkInState != nil {
                     navigateToSpaceSelection = true
+                }
+            },
+            VoiceCommand(label: "Log Session", phrases: ["log session", "log it", "quick log", "log"]) {
+                if viewModel.checkInState != nil {
+                    navigateToActivityLog = true
                 }
             },
             VoiceCommand(label: "Mic Off", phrases: ["mic off", "stop listening", "mute mic"]) {

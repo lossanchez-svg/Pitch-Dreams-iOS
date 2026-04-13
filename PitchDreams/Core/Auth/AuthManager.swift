@@ -45,6 +45,12 @@ final class AuthManager: ObservableObject {
         }
 
         state = .authenticated(user)
+
+        // Keep activeChildId current so CoachPersonality.current works on app relaunch
+        if user.isChild, let childId = user.effectiveChildId {
+            UserDefaults.standard.set(childId, forKey: "activeChildId")
+        }
+
         Log.auth.info("Session restored for \(user.role.rawValue) \(user.id)")
     }
 
@@ -72,6 +78,12 @@ final class AuthManager: ObservableObject {
         )
         try persistSession(token: response.token, user: response.user)
         state = .authenticated(response.user)
+
+        // Set activeChildId so CoachPersonality.current reads the right per-child setting
+        if let childId = response.user.effectiveChildId {
+            UserDefaults.standard.set(childId, forKey: "activeChildId")
+        }
+
         Log.auth.info("Child logged in: \(response.user.id)")
     }
 

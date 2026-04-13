@@ -32,9 +32,14 @@ final class ActiveTrainingViewModel: ObservableObject {
     private var hasSpoken30s = false
 
     /// The coach personality used for all voice coaching in this session.
-    /// Reads from the parent-configured setting stored in UserDefaults.
+    /// Uses this child's saved setting, looked up by the ViewModel's own childId.
     var coachPersonality: String {
-        CoachPersonality.current.rawValue
+        CoachPersonality.saved(forChildId: childId).rawValue
+    }
+
+    /// The resolved CoachPersonality enum for this child.
+    private var persona: CoachPersonality {
+        CoachPersonality.saved(forChildId: childId)
     }
 
     // MARK: - Avatar
@@ -94,7 +99,7 @@ final class ActiveTrainingViewModel: ObservableObject {
         // Voice: announce drill start
         if let drill = currentDrill {
             let durationMinutes = max(1, drill.duration / 60)
-            let persona = CoachPersonality.current
+            let persona = persona
             coachVoice.speak(
                 persona.drillStartLine(name: drill.name, minutes: durationMinutes, tip: drill.coachTip),
                 personality: coachPersonality
@@ -118,7 +123,7 @@ final class ActiveTrainingViewModel: ObservableObject {
     }
 
     private func checkVoiceMilestones() {
-        let persona = CoachPersonality.current
+        let persona = persona
         // Mid-drill at 60s remaining
         if timeRemaining == 60 && !hasSpokedMidDrill {
             hasSpokedMidDrill = true
@@ -140,7 +145,7 @@ final class ActiveTrainingViewModel: ObservableObject {
         pauseTimer()
         phase = .repConfirm
         // Voice: timer expired
-        coachVoice.speak(CoachPersonality.current.drillCompleteLine, personality: coachPersonality)
+        coachVoice.speak(persona.drillCompleteLine, personality: coachPersonality)
     }
 
     func confirmReps() {
@@ -148,7 +153,7 @@ final class ActiveTrainingViewModel: ObservableObject {
             phase = .reflection
             loadReflectionOptions()
             // Voice: reflection start
-            coachVoice.speak(CoachPersonality.current.reflectionLine, personality: coachPersonality)
+            coachVoice.speak(persona.reflectionLine, personality: coachPersonality)
         } else {
             nextDrill()
         }
@@ -228,6 +233,7 @@ final class ActiveTrainingViewModel: ObservableObject {
     // MARK: - Save
 
     func saveSession() async {
+        guard !sessionSaved else { return } // Prevent duplicate saves
         isLoading = true
         errorMessage = nil
         do {
@@ -239,27 +245,33 @@ final class ActiveTrainingViewModel: ObservableObject {
                 win: selectedHighlights.isEmpty ? nil : selectedHighlights.joined(separator: ", "),
                 focus: selectedNextFocus.isEmpty ? nil : selectedNextFocus.joined(separator: ", ")
             )
+            Log.api.debug("Saving session for child \(self.childId), duration: \(self.sessionDurationMinutes)m, RPE: \(self.reflectionRPE)")
             let _: SessionSaveResult = try await apiClient.request(
                 APIRouter.createSession(childId: childId, body: body)
             )
-            // Log each drill
+            // Log each drill (non-critical — don't fail the whole save)
             for drill in sessionDrills {
                 let drillBody = LogDrillBody(
                     drillKey: drill.id,
                     repsCount: drill.reps,
                     confidence: reflectionRPE
                 )
-                let _: LogDrillResult = try await apiClient.request(
-                    APIRouter.logDrill(childId: childId, body: drillBody)
-                )
+                do {
+                    let _: LogDrillResult = try await apiClient.request(
+                        APIRouter.logDrill(childId: childId, body: drillBody)
+                    )
+                } catch {
+                    Log.api.error("Drill log failed for \(drill.id): \(error)")
+                    // Continue — session is saved, drill logs are supplementary
+                }
             }
             sessionSaved = true
             MissionsViewModel.shared.recordEvent(.sessionLogged, childId: childId)
             phase = .complete
             // Voice: session complete
-            coachVoice.speak(CoachPersonality.current.sessionCompleteLine, personality: coachPersonality)
+            coachVoice.speak(persona.sessionCompleteLine, personality: coachPersonality)
         } catch {
-            Log.api.error("Session save failed: \(error)")
+            Log.api.error("Session save failed for child \(self.childId): \(error)")
             errorMessage = "Failed to save session: \(error.localizedDescription)"
         }
         isLoading = false

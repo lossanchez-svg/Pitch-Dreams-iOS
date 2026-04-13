@@ -22,7 +22,7 @@ enum CoachPersonality: String, CaseIterable, Identifiable {
         case .manager: return "Balanced and professional"
         case .hype: return "Energetic and encouraging"
         case .zen: return "Calm and mindful"
-        case .drill: return "Direct and disciplined"
+        case .drill: return "Tough love with humor"
         }
     }
 
@@ -96,7 +96,7 @@ enum CoachPersonality: String, CaseIterable, Identifiable {
         case .manager: return "\(name). You've got \(minutes) minutes. \(tip)"
         case .hype:    return "Let's go! \(name)! \(minutes) minutes on the clock. \(tip)"
         case .zen:     return "\(name). Take a breath. You have \(minutes) minutes. \(tip)"
-        case .drill:   return "\(name). \(minutes) minutes. Execute. \(tip)"
+        case .drill:   return "Drop and give me \(name)! \(minutes) minutes. I've seen scarecrows with better coordination. Prove me wrong."
         }
     }
 
@@ -105,7 +105,7 @@ enum CoachPersonality: String, CaseIterable, Identifiable {
         case .manager: return "Keep going. \(secondsLeft) seconds to go."
         case .hype:    return "You're crushing it! \(secondsLeft) seconds, keep that energy!"
         case .zen:     return "Stay present. \(secondsLeft) seconds remain."
-        case .drill:   return "\(secondsLeft) seconds. Don't slow down."
+        case .drill:   return "\(secondsLeft) seconds! Is that ALL you've got?! I've seen more intensity from a sleeping cat!"
         }
     }
 
@@ -114,7 +114,7 @@ enum CoachPersonality: String, CaseIterable, Identifiable {
         case .manager: return "Thirty seconds. Finish strong."
         case .hype:    return "Thirty seconds! Let's go, bring it home!"
         case .zen:     return "Thirty seconds. Stay focused and breathe."
-        case .drill:   return "Thirty seconds. Push through."
+        case .drill:   return "Thirty seconds! If you slack off now I'll make you do this twice tomorrow!"
         }
     }
 
@@ -123,7 +123,7 @@ enum CoachPersonality: String, CaseIterable, Identifiable {
         case .manager: return "Time. How many reps did you get?"
         case .hype:    return "That's time! Great work! How many reps?"
         case .zen:     return "And time. Take a moment. How many reps did you complete?"
-        case .drill:   return "Time. Report your reps."
+        case .drill:   return "TIME! How many reps? And don't you dare lie to me."
         }
     }
 
@@ -132,7 +132,7 @@ enum CoachPersonality: String, CaseIterable, Identifiable {
         case .manager: return "Quick reflection. How hard was that, 1 to 10?"
         case .hype:    return "Awesome session! Rate that effort, 1 to 10."
         case .zen:     return "Let's reflect. On a scale of 1 to 10, how did that feel?"
-        case .drill:   return "Rate your effort. 1 to 10."
+        case .drill:   return "Effort rating. 1 to 10. And if you say anything below 5, I know you sandbagged it."
         }
     }
 
@@ -141,7 +141,7 @@ enum CoachPersonality: String, CaseIterable, Identifiable {
         case .manager: return "Well done. Session complete."
         case .hype:    return "Yes! Session complete! You're a legend!"
         case .zen:     return "Session complete. Be proud of the work you put in today."
-        case .drill:   return "Session logged. Good work. Dismissed."
+        case .drill:   return "Session over. You survived. Barely. Try to be less terrible tomorrow."
         }
     }
 
@@ -150,7 +150,7 @@ enum CoachPersonality: String, CaseIterable, Identifiable {
         case .manager: return "New personal record! Great progress."
         case .hype:    return "New personal record! That's what I'm talking about!"
         case .zen:     return "A new personal best. Wonderful."
-        case .drill:   return "New record. That's the standard now."
+        case .drill:   return "New record! Even a broken clock is right twice a day. Keep going."
         }
     }
 }

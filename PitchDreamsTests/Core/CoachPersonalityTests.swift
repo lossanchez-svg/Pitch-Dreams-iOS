@@ -137,7 +137,7 @@ final class CoachPersonalityTests: XCTestCase {
     func testStartDrillUsesConfiguredPersonality() {
         CoachPersonality.drill.save(forChildId: "test-child")
 
-        let vm = ActiveTrainingViewModel(childId: "c", drills: testDrills, spaceType: "small_indoor", apiClient: mockAPI)
+        let vm = ActiveTrainingViewModel(childId: "test-child", drills: testDrills, spaceType: "small_indoor", apiClient: mockAPI)
         vm.coachVoice = mockVoice
 
         vm.startDrill()
@@ -148,7 +148,7 @@ final class CoachPersonalityTests: XCTestCase {
     func testStartDrillUsesHypePersonality() {
         CoachPersonality.hype.save(forChildId: "test-child")
 
-        let vm = ActiveTrainingViewModel(childId: "c", drills: testDrills, spaceType: "small_indoor", apiClient: mockAPI)
+        let vm = ActiveTrainingViewModel(childId: "test-child", drills: testDrills, spaceType: "small_indoor", apiClient: mockAPI)
         vm.coachVoice = mockVoice
 
         vm.startDrill()
@@ -159,7 +159,7 @@ final class CoachPersonalityTests: XCTestCase {
     func testCompleteDrillUsesConfiguredPersonality() {
         CoachPersonality.zen.save(forChildId: "test-child")
 
-        let vm = ActiveTrainingViewModel(childId: "c", drills: testDrills, spaceType: "small_indoor", apiClient: mockAPI)
+        let vm = ActiveTrainingViewModel(childId: "test-child", drills: testDrills, spaceType: "small_indoor", apiClient: mockAPI)
         vm.coachVoice = mockVoice
 
         vm.startDrill()
@@ -176,7 +176,7 @@ final class CoachPersonalityTests: XCTestCase {
         mockAPI.enqueue([HighlightChip(id: "h1", key: "passing", label: "Passing")])
         mockAPI.enqueue([NextFocusChip(id: "n1", key: "shooting", label: "Shooting")])
 
-        let vm = ActiveTrainingViewModel(childId: "c", drills: testDrills, spaceType: "small_indoor", apiClient: mockAPI)
+        let vm = ActiveTrainingViewModel(childId: "test-child", drills: testDrills, spaceType: "small_indoor", apiClient: mockAPI)
         vm.coachVoice = mockVoice
         vm.currentDrillIndex = 1 // last drill
 
@@ -193,7 +193,7 @@ final class CoachPersonalityTests: XCTestCase {
         mockAPI.enqueue(LogDrillResult(logId: "l-1"))
         mockAPI.enqueue(LogDrillResult(logId: "l-2"))
 
-        let vm = ActiveTrainingViewModel(childId: "c", drills: testDrills, spaceType: "small_indoor", apiClient: mockAPI)
+        let vm = ActiveTrainingViewModel(childId: "test-child", drills: testDrills, spaceType: "small_indoor", apiClient: mockAPI)
         vm.coachVoice = mockVoice
         vm.startDrill()
 
@@ -208,7 +208,7 @@ final class CoachPersonalityTests: XCTestCase {
     func testAllVoiceCallsInDrillFlowUseConfiguredPersonality() {
         CoachPersonality.zen.save(forChildId: "test-child")
 
-        let vm = ActiveTrainingViewModel(childId: "c", drills: testDrills, spaceType: "small_indoor", apiClient: mockAPI)
+        let vm = ActiveTrainingViewModel(childId: "test-child", drills: testDrills, spaceType: "small_indoor", apiClient: mockAPI)
         vm.coachVoice = mockVoice
 
         // 1. Start drill → speaks drill name with zen
@@ -235,7 +235,7 @@ final class CoachPersonalityTests: XCTestCase {
     func testPersonalityChangeReflectedImmediately() {
         CoachPersonality.manager.save(forChildId: "test-child")
 
-        let vm = ActiveTrainingViewModel(childId: "c", drills: testDrills, spaceType: "small_indoor", apiClient: mockAPI)
+        let vm = ActiveTrainingViewModel(childId: "test-child", drills: testDrills, spaceType: "small_indoor", apiClient: mockAPI)
         vm.coachVoice = mockVoice
 
         vm.startDrill()
@@ -292,37 +292,37 @@ final class CoachPersonalityTests: XCTestCase {
         let drills = testDrills
 
         CoachPersonality.manager.save(forChildId: "test-child")
-        let vmManager = ActiveTrainingViewModel(childId: "c", drills: drills, spaceType: "small_indoor", apiClient: mockAPI)
+        let vmManager = ActiveTrainingViewModel(childId: "test-child", drills: drills, spaceType: "small_indoor", apiClient: mockAPI)
         vmManager.coachVoice = mockVoice
         vmManager.startDrill()
         let managerText = mockVoice.spokenTexts.last!
         XCTAssertTrue(managerText.contains("You've got"), "Manager should say 'You've got'")
 
         CoachPersonality.hype.save(forChildId: "test-child")
-        let vmHype = ActiveTrainingViewModel(childId: "c", drills: drills, spaceType: "small_indoor", apiClient: mockAPI)
+        let vmHype = ActiveTrainingViewModel(childId: "test-child", drills: drills, spaceType: "small_indoor", apiClient: mockAPI)
         vmHype.coachVoice = mockVoice
         vmHype.startDrill()
         let hypeText = mockVoice.spokenTexts.last!
         XCTAssertTrue(hypeText.contains("Let's go"), "Hype should say 'Let's go'")
 
         CoachPersonality.zen.save(forChildId: "test-child")
-        let vmZen = ActiveTrainingViewModel(childId: "c", drills: drills, spaceType: "small_indoor", apiClient: mockAPI)
+        let vmZen = ActiveTrainingViewModel(childId: "test-child", drills: drills, spaceType: "small_indoor", apiClient: mockAPI)
         vmZen.coachVoice = mockVoice
         vmZen.startDrill()
         let zenText = mockVoice.spokenTexts.last!
         XCTAssertTrue(zenText.contains("Take a breath"), "Zen should say 'Take a breath'")
 
         CoachPersonality.drill.save(forChildId: "test-child")
-        let vmDrill = ActiveTrainingViewModel(childId: "c", drills: drills, spaceType: "small_indoor", apiClient: mockAPI)
+        let vmDrill = ActiveTrainingViewModel(childId: "test-child", drills: drills, spaceType: "small_indoor", apiClient: mockAPI)
         vmDrill.coachVoice = mockVoice
         vmDrill.startDrill()
         let drillText = mockVoice.spokenTexts.last!
-        XCTAssertTrue(drillText.contains("Execute"), "Drill should say 'Execute'")
+        XCTAssertTrue(drillText.contains("scarecrows"), "Drill should say 'scarecrows'")
     }
 
     func testDrillCompleteTextMatchesPersonality() {
         CoachPersonality.hype.save(forChildId: "test-child")
-        let vm = ActiveTrainingViewModel(childId: "c", drills: testDrills, spaceType: "small_indoor", apiClient: mockAPI)
+        let vm = ActiveTrainingViewModel(childId: "test-child", drills: testDrills, spaceType: "small_indoor", apiClient: mockAPI)
         vm.coachVoice = mockVoice
         vm.startDrill()
         vm.completeDrill()
@@ -335,7 +335,7 @@ final class CoachPersonalityTests: XCTestCase {
         mockAPI.enqueue([HighlightChip(id: "h1", key: "p", label: "Passing")])
         mockAPI.enqueue([NextFocusChip(id: "n1", key: "s", label: "Shooting")])
 
-        let vm = ActiveTrainingViewModel(childId: "c", drills: testDrills, spaceType: "small_indoor", apiClient: mockAPI)
+        let vm = ActiveTrainingViewModel(childId: "test-child", drills: testDrills, spaceType: "small_indoor", apiClient: mockAPI)
         vm.coachVoice = mockVoice
         vm.currentDrillIndex = 1
         vm.confirmReps()
@@ -349,12 +349,12 @@ final class CoachPersonalityTests: XCTestCase {
         mockAPI.enqueue(LogDrillResult(logId: "l-1"))
         mockAPI.enqueue(LogDrillResult(logId: "l-2"))
 
-        let vm = ActiveTrainingViewModel(childId: "c", drills: testDrills, spaceType: "small_indoor", apiClient: mockAPI)
+        let vm = ActiveTrainingViewModel(childId: "test-child", drills: testDrills, spaceType: "small_indoor", apiClient: mockAPI)
         vm.coachVoice = mockVoice
         vm.startDrill()
         await vm.saveSession()
         let text = mockVoice.spokenTexts.last!
-        XCTAssertTrue(text.contains("Dismissed"), "Drill sergeant session complete should say 'Dismissed'")
+        XCTAssertTrue(text.contains("terrible tomorrow"), "Drill sergeant session complete should say 'terrible tomorrow'")
     }
 
     func testAllPersonalitiesHaveDistinctLines() {
@@ -370,13 +370,16 @@ final class CoachPersonalityTests: XCTestCase {
         XCTAssertEqual(Set(thirtySecLines).count, personas.count, "30-second lines should all be unique")
     }
 
-    func testCoachLinesContainDrillNameAndTip() {
-        // All personalities should include the drill name and tip
+    func testCoachLinesContainDrillNameAndMinutes() {
+        // All personalities should include the drill name and minutes
         for persona in CoachPersonality.allCases {
             let line = persona.drillStartLine(name: "Toe Taps", minutes: 2, tip: "Stay light")
             XCTAssertTrue(line.contains("Toe Taps"), "\(persona.displayName) drill start should include drill name")
-            XCTAssertTrue(line.contains("Stay light"), "\(persona.displayName) drill start should include tip")
             XCTAssertTrue(line.contains("2"), "\(persona.displayName) drill start should include minutes")
+            // Non-drill personas include the tip; drill sergeant replaces tip with an insult
+            if persona != .drill {
+                XCTAssertTrue(line.contains("Stay light"), "\(persona.displayName) drill start should include tip")
+            }
         }
     }
 }

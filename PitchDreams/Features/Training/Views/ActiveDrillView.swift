@@ -6,6 +6,8 @@ struct ActiveDrillView: View {
     @StateObject private var speechRecognizer = SpeechRecognizer()
     @State private var lastVoiceCommand: String?
     @State private var repBounce = false
+    /// Transcripts arriving before this date are discarded (coach voice protection).
+    @State private var ignoreTranscriptsUntil: Date = .distantPast
     @Environment(\.dismiss) private var dismiss
 
     init(childId: String, drills: [DrillDefinition], spaceType: String) {
@@ -46,26 +48,58 @@ struct ActiveDrillView: View {
                 }
             }
             ToolbarItem(placement: .navigationBarTrailing) {
-                Button {
-                    dismiss()
-                } label: {
-                    Image(systemName: "xmark")
-                        .foregroundStyle(Color.dsOnSurfaceVariant)
-                        .frame(width: 40, height: 40)
-                        .background(Color.dsSurfaceContainer)
-                        .clipShape(Circle())
+                HStack(spacing: 12) {
+                    Button {
+                        Task { await speechRecognizer.toggleListening() }
+                    } label: {
+                        Image(systemName: speechRecognizer.isListening ? "mic.fill" : "mic")
+                            .foregroundStyle(speechRecognizer.isListening ? .red : Color.dsSecondary)
+                            .frame(width: 40, height: 40)
+                            .background(Color.dsSurfaceContainer)
+                            .clipShape(Circle())
+                    }
+
+                    Button {
+                        dismiss()
+                    } label: {
+                        Image(systemName: "xmark")
+                            .foregroundStyle(Color.dsOnSurfaceVariant)
+                            .frame(width: 40, height: 40)
+                            .background(Color.dsSurfaceContainer)
+                            .clipShape(Circle())
+                    }
                 }
             }
         }
         .toolbarBackground(Color.dsBackground, for: .navigationBar)
         .onChange(of: speechRecognizer.transcript) { newTranscript in
             guard !newTranscript.isEmpty else { return }
+            // Discard transcripts during and shortly after coach speech.
+            // The mic stays on (no audio engine disruption) but we ignore
+            // anything the recognizer picks up from the coach's voice.
+            guard Date() > ignoreTranscriptsUntil else { return }
             processDrillVoiceCommand(newTranscript)
         }
         .task {
             await viewModel.loadProfile()
         }
+        .onAppear {
+            // When the coach starts speaking, set a discard window that extends
+            // 3 seconds past when it finishes. This covers the full recognition
+            // pipeline latency without touching the audio engine.
+            viewModel.coachVoice.onWillSpeak = {
+                // Extend far into the future; onDidFinishSpeaking narrows it
+                ignoreTranscriptsUntil = .distantFuture
+            }
+            viewModel.coachVoice.onDidFinishSpeaking = {
+                // Give the recognizer time to flush buffered coach audio.
+                // Keep short so voice input responds quickly after coach finishes.
+                ignoreTranscriptsUntil = Date().addingTimeInterval(1.5)
+            }
+        }
         .onDisappear {
+            viewModel.coachVoice.onWillSpeak = nil
+            viewModel.coachVoice.onDidFinishSpeaking = nil
             viewModel.cleanup()
         }
     }
@@ -73,6 +107,11 @@ struct ActiveDrillView: View {
     // MARK: - Voice Commands
 
     private func processDrillVoiceCommand(_ transcript: String) {
+        // Only process drill commands during drill/repConfirm phases.
+        // Reflection has its own voice handler — without this guard,
+        // shared phrases like "next"/"done" would fire both handlers.
+        guard viewModel.phase == .drilling || viewModel.phase == .repConfirm else { return }
+
         let commands: [VoiceCommand] = [
             VoiceCommand(label: "Pause", phrases: ["pause", "hold", "wait"]) {
                 if viewModel.isTimerRunning {
@@ -90,11 +129,11 @@ struct ActiveDrillView: View {
             VoiceCommand(label: "Next", phrases: ["next", "skip"]) {
                 viewModel.confirmReps()
             },
-            VoiceCommand(label: "Cancel", phrases: ["cancel", "stop", "quit"]) {
-                dismiss()
-            },
             VoiceCommand(label: "Mic Off", phrases: ["mic off", "stop listening", "mute mic"]) {
                 speechRecognizer.stopListening()
+            },
+            VoiceCommand(label: "Cancel", phrases: ["cancel", "stop", "quit"]) {
+                dismiss()
             },
         ]
 

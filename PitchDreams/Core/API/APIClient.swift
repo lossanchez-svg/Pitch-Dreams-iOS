@@ -96,7 +96,8 @@ final class APIClient: APIClientProtocol, @unchecked Sendable {
             let msg = parseErrorMessage(data)
             throw APIError.forbidden(msg ?? "Access denied")
         case 404:
-            throw APIError.notFound
+            let msg = parseErrorMessage(data)
+            throw APIError.notFound(msg ?? "Not found")
         case 400:
             let msg = parseErrorMessage(data)
             throw APIError.validation(msg ?? "Invalid input")

@@ -3,6 +3,9 @@ import AVFoundation
 @MainActor
 final class CoachVoice: ObservableObject, CoachVoiceProtocol {
     @Published var isSpeaking = false
+    private(set) var lastSpokeAt: Date?
+    var onWillSpeak: (() -> Void)?
+    var onDidFinishSpeaking: (() -> Void)?
 
     private let synthesizer = AVSpeechSynthesizer()
     private var delegate: CoachVoiceDelegate?
@@ -12,19 +15,31 @@ final class CoachVoice: ObservableObject, CoachVoiceProtocol {
         delegate = CoachVoiceDelegate { [weak self] in
             Task { @MainActor in
                 self?.isSpeaking = false
+                self?.lastSpokeAt = Date()
+                self?.onDidFinishSpeaking?()
             }
         }
         synthesizer.delegate = delegate
         resolvedVoice = Self.bestAvailableVoice()
     }
 
+    func isSpeakingOrCoolingDown(cooldown: TimeInterval = 2.0) -> Bool {
+        if isSpeaking { return true }
+        guard let lastSpokeAt else { return false }
+        return Date().timeIntervalSince(lastSpokeAt) < cooldown
+    }
+
     func speak(_ text: String, personality: String = "manager") {
+        onWillSpeak?()
         stop()
 
+        // Ensure audio session is active for speech output.
+        // Uses the same category/options as SpeechRecognizer so it's a no-op
+        // if the recognizer already configured it — avoids disrupting Bluetooth routes.
         try? AVAudioSession.sharedInstance().setCategory(
             .playAndRecord,
             mode: .default,
-            options: [.defaultToSpeaker, .duckOthers, .allowBluetooth]
+            options: [.defaultToSpeaker, .duckOthers, .allowBluetooth, .allowBluetoothA2DP]
         )
         try? AVAudioSession.sharedInstance().setActive(true)
 

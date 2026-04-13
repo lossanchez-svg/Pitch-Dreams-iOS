@@ -49,6 +49,7 @@
 		4259188688DCEF267427B6DC /* SkillAnimationTypeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81ADFFE04859A29B644F3318 /* SkillAnimationTypeTests.swift */; };
 		435F920CA58CC48D7D0D33E5 /* Streak.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11B3DAC7E608FCF46D319A36 /* Streak.swift */; };
 		471F6B97A98556FADF043526 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = C648472983CD531E1B08C552 /* Logger.swift */; };
+		4B1CC96F4FD2911EFE7792FF /* VoiceFlowIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C6B16E8226BBCE5A45E70AE /* VoiceFlowIntegrationTests.swift */; };
 		4EE9EB135A78083B0E619AF3 /* CelebrationModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CBFBA4D27B0830B2644DFC1 /* CelebrationModifier.swift */; };
 		4F38EFAB9CEAFE7F36F11152 /* ModelDecodingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 777246FAE75DA053681911F5 /* ModelDecodingTests.swift */; };
 		555977A26FE8DF3440DBA8A3 /* SpeedLinesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C81745521AE0440B38EEC10 /* SpeedLinesView.swift */; };
@@ -96,6 +97,7 @@
 		948BC407ACA1F076E06637A7 /* ChildLoginViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC06CE82C91B2857B35D558A /* ChildLoginViewModelTests.swift */; };
 		967F1D8755D22A9371098D96 /* ProgressViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB8025BA5D98AAC4F68FB9F4 /* ProgressViewModelTests.swift */; };
 		99AE928FF5FAB1E5ED3830D2 /* ForgotPasswordViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7600A9C6496EE991340EE21C /* ForgotPasswordViewModel.swift */; };
+		9BE255692C856F37B340D6DA /* VoiceCoachRegressionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 542BEB3BD9A4FE6F73E6C780 /* VoiceCoachRegressionTests.swift */; };
 		9CF6F59F56A96C7FB68AE260 /* TacticalLessonRegistry.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA424702C6509A17AAAA49E0 /* TacticalLessonRegistry.swift */; };
 		9CF828C12BE63AB0B41C34EC /* ChildTabNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E3A1F2AD92B03F449941535 /* ChildTabNavigation.swift */; };
 		9CFCB49DB59B0CF45ECD5669 /* ReflectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98951F192FE6A6FA357A44A7 /* ReflectionView.swift */; };
@@ -232,6 +234,7 @@
 		4B4898AC3F86F2C2D77C8565 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		4BC100653CB247610196D5D7 /* Session.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Session.swift; sourceTree = "<group>"; };
 		4BE8FF1164FABA36C38B9E90 /* ConsistencyRingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConsistencyRingView.swift; sourceTree = "<group>"; };
+		4C6B16E8226BBCE5A45E70AE /* VoiceFlowIntegrationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceFlowIntegrationTests.swift; sourceTree = "<group>"; };
 		4E664960E667F9B87AC14FB5 /* ParentDashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParentDashboardView.swift; sourceTree = "<group>"; };
 		4EC970DCD8B7BB77ACA5139C /* AddChildAndAvatarTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddChildAndAvatarTests.swift; sourceTree = "<group>"; };
 		4FB34840A263C9E27A101C4A /* TrainingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrainingViewModel.swift; sourceTree = "<group>"; };
@@ -239,6 +242,7 @@
 		528D338C57FDF31E1DF0206D /* AuthenticatedUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticatedUser.swift; sourceTree = "<group>"; };
 		530A972AEC110004D406073A /* ParentControlsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParentControlsView.swift; sourceTree = "<group>"; };
 		5360D8689E0F1A7D96006769 /* QuickLogViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickLogViewModelTests.swift; sourceTree = "<group>"; };
+		542BEB3BD9A4FE6F73E6C780 /* VoiceCoachRegressionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceCoachRegressionTests.swift; sourceTree = "<group>"; };
 		55725CC2638A2BE120CB57EB /* TestFixtures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestFixtures.swift; sourceTree = "<group>"; };
 		557992D84C25925279680A48 /* RegressionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegressionTests.swift; sourceTree = "<group>"; };
 		57528EF494942F4F0D831EEC /* ProgramPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgramPickerView.swift; sourceTree = "<group>"; };
@@ -298,7 +302,7 @@
 		A9DC36F93995532A66BDF7FA /* NewActivityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewActivityView.swift; sourceTree = "<group>"; };
 		AB326D8FC6A982C909F7E1C1 /* AnimatedArrowShape.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimatedArrowShape.swift; sourceTree = "<group>"; };
 		ACA8D43C962506A82767816B /* Trend.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Trend.swift; sourceTree = "<group>"; };
-		ADCE789A5091C8F7AE3FB282 /* PitchDreams.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = PitchDreams.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		ADCE789A5091C8F7AE3FB282 /* PitchDreams.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PitchDreams.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		ADDF00203559FD14E35F38D9 /* ProgressDashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressDashboardView.swift; sourceTree = "<group>"; };
 		AF202DEAE7B13449D21447FA /* LessonRegistryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LessonRegistryTests.swift; sourceTree = "<group>"; };
 		AF4F4F122C94E6082AA7AB1E /* SkeletonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkeletonView.swift; sourceTree = "<group>"; };
@@ -402,6 +406,7 @@
 				88E3A33D944C87844CDD2149 /* ModelDecodingRobustnessTests.swift */,
 				777246FAE75DA053681911F5 /* ModelDecodingTests.swift */,
 				DD8BE1106261B0939FF2B34A /* VoiceCommandMatcherTests.swift */,
+				4C6B16E8226BBCE5A45E70AE /* VoiceFlowIntegrationTests.swift */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -1004,6 +1009,7 @@
 			children = (
 				557992D84C25925279680A48 /* RegressionTests.swift */,
 				8294A4325D398E940E473C99 /* VisualPolishRegressionTests.swift */,
+				542BEB3BD9A4FE6F73E6C780 /* VoiceCoachRegressionTests.swift */,
 			);
 			path = Regression;
 			sourceTree = "<group>";
@@ -1065,8 +1071,6 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
 				LastUpgradeCheck = 1600;
-				TargetAttributes = {
-				};
 			};
 			buildConfigurationList = 9BA52F5B105083D63DD23B55 /* Build configuration list for PBXProject "PitchDreams" */;
 			developmentRegion = en;
@@ -1148,7 +1152,9 @@
 				B0173F7C3466C6AF284D744B /* TestFixtures.swift in Sources */,
 				E2D38149965DBD708021548A /* TrainingViewModelTests.swift in Sources */,
 				FF1618210A691A98A0FAE829 /* VisualPolishRegressionTests.swift in Sources */,
+				9BE255692C856F37B340D6DA /* VoiceCoachRegressionTests.swift in Sources */,
 				03086D0F2CD340D531C81814 /* VoiceCommandMatcherTests.swift in Sources */,
+				4B1CC96F4FD2911EFE7792FF /* VoiceFlowIntegrationTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1295,6 +1301,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 57ZXN9D8W5;
 				INFOPLIST_FILE = PitchDreams/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1330,6 +1337,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 57ZXN9D8W5;
 				INFOPLIST_FILE = PitchDreams/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

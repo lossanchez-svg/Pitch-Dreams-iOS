@@ -74,7 +74,10 @@ final class NetworkMonitor: ObservableObject {
         }
     }
 
-    private static func mapStatus(_ path: NWPath) -> Status {
+    // `nonisolated` because this pure function must be callable from the
+    // NWPathMonitor dispatch queue (not @MainActor), and the class itself is
+    // @MainActor-isolated.
+    private nonisolated static func mapStatus(_ path: NWPath) -> Status {
         guard path.status == .satisfied else { return .offline }
         let type: ConnectionType
         if path.usesInterfaceType(.wifi) {

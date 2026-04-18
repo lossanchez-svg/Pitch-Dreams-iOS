@@ -14,6 +14,13 @@ struct PlayerCard: Codable, Equatable {
 
     static let maxMoveLoadout = 4
     static let displayedStatCount = 4
+
+    /// Tagline the card should actually display — custom if set, otherwise
+    /// the current archetype's built-in line. Views should prefer this over
+    /// reading `archetypeTagline` directly so they never show a blank.
+    var effectiveTagline: String {
+        archetypeTagline ?? archetype.tagline
+    }
 }
 
 // MARK: - Archetype

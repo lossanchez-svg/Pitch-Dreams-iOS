@@ -84,7 +84,7 @@ actor PlayerCardStore {
             moveLoadout: [],
             clubCrestDesign: .defaultDesign,
             cardFrame: .standard,
-            archetypeTagline: PlayerArchetype.allrounder.tagline
+            archetypeTagline: nil  // nil = use archetype default; non-nil = user customized
         )
     }
 }

@@ -112,15 +112,25 @@ final class OnboardingViewModelTests: XCTestCase {
     func testPinValidation() {
         XCTAssertFalse(viewModel.isPinValid)
 
-        viewModel.pin = "1234"
-        viewModel.confirmPin = "1234"
+        viewModel.pin = "7392"
+        viewModel.confirmPin = "7392"
         XCTAssertTrue(viewModel.isPinValid)
     }
 
     func testPinValidationMismatch() {
-        viewModel.pin = "1234"
+        viewModel.pin = "7392"
         viewModel.confirmPin = "5678"
         XCTAssertFalse(viewModel.isPinValid)
+    }
+
+    func testPinValidationRejectsGuessableSequences() {
+        viewModel.pin = "1234"
+        viewModel.confirmPin = "1234"
+        XCTAssertFalse(viewModel.isPinValid, "Sequential PINs like 1234 should be rejected")
+
+        viewModel.pin = "0000"
+        viewModel.confirmPin = "0000"
+        XCTAssertFalse(viewModel.isPinValid, "All-same-digit PINs should be rejected")
     }
 
     func testPinValidationSkip() {

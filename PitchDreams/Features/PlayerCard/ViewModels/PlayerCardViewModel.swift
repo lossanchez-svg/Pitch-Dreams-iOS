@@ -66,13 +66,14 @@ final class PlayerCardViewModel: ObservableObject {
             APIRouter.getProfile(childId: childId)
         )
         let sessions = (await sessionsTask) ?? []
-        if let profile = await profileTask {
-            position = profile.position ?? ""
-        }
+        let profile = await profileTask
+        // Position isn't surfaced by getProfile today; the view falls back
+        // to "PLAYER" when empty. Upstream callers can set it directly once
+        // the backend exposes it.
 
         totalXP = await xpStore.getTotalXP(childId: childId)
         avatarStage = XPCalculator.avatarStageForXP(totalXP)
-        avatarAssetName = Avatar.assetName(for: childProfileAvatarId(await profileTask), totalXP: totalXP)
+        avatarAssetName = Avatar.assetName(for: profile?.avatarId, totalXP: totalXP)
 
         let newStats = await statComputer.computeStats(for: card, sessions: sessions)
         stats = newStats
@@ -113,10 +114,6 @@ final class PlayerCardViewModel: ObservableObject {
     }
 
     // MARK: - Private
-
-    private func childProfileAvatarId(_ profile: ChildProfileDetail?) -> String? {
-        profile?.avatarId
-    }
 
     /// Frames unlock as the child progresses: Bronze at Pro, Silver at Legend.
     /// Gold / Legendary / Platinum frames require milestones tracked elsewhere

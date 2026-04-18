@@ -98,6 +98,9 @@ struct ConsistencyRingView: View {
         .background(Color.dsSurfaceContainerLow)
         .clipShape(RoundedRectangle(cornerRadius: CornerRadius.lg))
         .ghostBorder()
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("Training streak")
+        .accessibilityValue("\(streak) day\(streak == 1 ? "" : "s"). \(freezes) shield\(freezes == 1 ? "" : "s") available. \(progressPercent) percent toward \(maxStreak) day target.")
     }
 
     // MARK: - Flame Image (iOS 16 compatible)

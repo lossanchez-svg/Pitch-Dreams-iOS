@@ -148,6 +148,8 @@ struct ChildTabNavigation: View {
                 }
             )
         }
+        .accessibilityLabel(label)
+        .accessibilityAddTraits(selectedTab == tab ? [.isSelected, .isButton] : .isButton)
     }
 
     private var moreMenu: some View {

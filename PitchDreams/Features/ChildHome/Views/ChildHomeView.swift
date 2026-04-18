@@ -188,6 +188,7 @@ struct ChildHomeView: View {
                         .background(Color.dsSurfaceContainerHighest.opacity(0.4))
                         .clipShape(Circle())
                 }
+                .accessibilityLabel(speechRecognizer.isListening ? "Stop voice commands" : "Start voice commands")
             }
         }
         .toolbarBackground(Color.dsBackground.opacity(0.6), for: .navigationBar)
@@ -331,6 +332,8 @@ struct ChildHomeView: View {
                     heroAvatarImage
                         .frame(width: 260, height: 260)
                         .onTapGesture { showAvatarPicker = true }
+                        .accessibilityLabel("Your avatar, \(resolvedAvatar.displayName) at \(currentStage.title) stage")
+                        .accessibilityHint("Double-tap to change avatar.")
 
                     // PRO badge
                     if currentStage.rawValue >= AvatarStage.pro.rawValue {

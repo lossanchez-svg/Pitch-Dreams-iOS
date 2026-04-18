@@ -16,6 +16,7 @@ struct EvolutionModal: View {
         ZStack {
             Color.dsBackground
                 .ignoresSafeArea()
+                .accessibilityHidden(true)
 
             ScrollView {
                 VStack(spacing: 0) {
@@ -43,6 +44,8 @@ struct EvolutionModal: View {
                                 .padding(.top, 4)
                         }
                     }
+                    .accessibilityElement(children: .combine)
+                    .accessibilityAddTraits(.isHeader)
 
                     // Timeline
                     VStack(spacing: 0) {

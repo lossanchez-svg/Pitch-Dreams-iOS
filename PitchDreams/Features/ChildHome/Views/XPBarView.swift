@@ -95,6 +95,17 @@ struct XPBarView: View {
         .background(Color.dsSurfaceContainerLow)
         .clipShape(RoundedRectangle(cornerRadius: CornerRadius.lg))
         .ghostBorder()
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("Experience progress")
+        .accessibilityValue(accessibilityDescription)
+    }
+
+    private var accessibilityDescription: String {
+        if isMaxed {
+            return "Legend stage reached. \(totalXP) total XP."
+        }
+        let percent = Int((progress * 100).rounded())
+        return "\(xpInStage) of \(xpNeeded) XP toward \(nextStageLabel). \(percent) percent complete."
     }
 }
 

@@ -38,6 +38,7 @@ struct StreakMilestoneModal: View {
 
             Text("Day Streak!")
                 .font(.title.bold())
+                .accessibilityLabel("\(milestone) day streak reached!")
 
             if freezeAwarded {
                 HStack(spacing: 8) {

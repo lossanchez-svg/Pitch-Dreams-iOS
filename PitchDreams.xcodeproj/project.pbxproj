@@ -43,6 +43,7 @@
 		25B8E11B817667EA79D35C4F /* XPStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5487807FFBC7342AC3FECAEB /* XPStoreTests.swift */; };
 		28CF6A531C1796CCEA8F174A /* InteractivePitchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC99B0F55F6FA8865E0A1253 /* InteractivePitchViewModel.swift */; };
 		292641C32E3FE8210A3D6074 /* BallPhysicsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A73699F42A50FFFAD7063E69 /* BallPhysicsTests.swift */; };
+		2981BA8F86D9EC6827B770A5 /* MysteryBoxOddsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34BF163D0EAAF82FF50C1421 /* MysteryBoxOddsView.swift */; };
 		29C0D49D015C6B33FDA61A30 /* ActivityLogViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99C0B86DA39281CD98B24F98 /* ActivityLogViewModelTests.swift */; };
 		29D934035A6AE394F91A6779 /* AuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3612E00A7532F669E3852990 /* AuthManager.swift */; };
 		2A07C88C39900800EEB0E05D /* XPBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05562D27E4B2CB014F9B53C6 /* XPBarView.swift */; };
@@ -64,11 +65,13 @@
 		4259188688DCEF267427B6DC /* SkillAnimationTypeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81ADFFE04859A29B644F3318 /* SkillAnimationTypeTests.swift */; };
 		4341537E91878FD0DEBC2731 /* InputValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 014590BC32D4E9DD3E2A7A55 /* InputValidator.swift */; };
 		435F920CA58CC48D7D0D33E5 /* Streak.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11B3DAC7E608FCF46D319A36 /* Streak.swift */; };
+		4420EA23CD0244F87288A59F /* MysteryBoxOpeningView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E1BD8E9901972F13812DEA8 /* MysteryBoxOpeningView.swift */; };
 		471F6B97A98556FADF043526 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = C648472983CD531E1B08C552 /* Logger.swift */; };
 		4963B2E70AEC671D50A4E9F9 /* DailyTipCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFDFD7CCE92B252BFD32697C /* DailyTipCard.swift */; };
 		4A9A11672E7AA877C48AD80E /* SignatureMoveStageCompleteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C6A641B26A48096F60FB90 /* SignatureMoveStageCompleteView.swift */; };
 		4B1CC96F4FD2911EFE7792FF /* VoiceFlowIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C6B16E8226BBCE5A45E70AE /* VoiceFlowIntegrationTests.swift */; };
 		4BD9443FD69D38F7982E6084 /* StretchingRoutineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D7658DCF8F62F53ACE85F1E /* StretchingRoutineView.swift */; };
+		4EBB92EB61F6BB3EB44323FE /* MysteryBoxViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA24BE5A0A452A3BC4AF2C67 /* MysteryBoxViewModel.swift */; };
 		4EE9EB135A78083B0E619AF3 /* CelebrationModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CBFBA4D27B0830B2644DFC1 /* CelebrationModifier.swift */; };
 		4F38EFAB9CEAFE7F36F11152 /* ModelDecodingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 777246FAE75DA053681911F5 /* ModelDecodingTests.swift */; };
 		551AD2688ED0F60C6B350170 /* MysteryBoxEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4FAB70E93FC323AF4FA256D /* MysteryBoxEngine.swift */; };
@@ -143,6 +146,7 @@
 		9E87859EFC859BA6463D6F26 /* OnboardingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B70630B7FD0AC0DF9F84C4C /* OnboardingViewModel.swift */; };
 		9F38B2718E4A73E05C874257 /* LessonRegistryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF202DEAE7B13449D21447FA /* LessonRegistryTests.swift */; };
 		A08F361E69CEEDEC7C3BF0B5 /* SkillDiagramView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E1FB3F890E9C4DB6129BFCD /* SkillDiagramView.swift */; };
+		A17438E466124E1044E7C709 /* MysteryBoxRevealView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24358153EF02A2FA5B04DF4F /* MysteryBoxRevealView.swift */; };
 		A22B5D6F2C12CA4253A85DF2 /* SignatureMoveDrillPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3226EC0FEA13454D6F6840F7 /* SignatureMoveDrillPlayerView.swift */; };
 		A734A88719E42A1E5F20AF7B /* NewActivityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9DC36F93995532A66BDF7FA /* NewActivityView.swift */; };
 		A735B68328ED46A377A3BAA7 /* AnimatedTacticalTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3327BA7EE2CB012553043FC9 /* AnimatedTacticalTypes.swift */; };
@@ -187,6 +191,7 @@
 		CE772FA1BE1675C34D85D3F3 /* APIContractTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF5D3DDCFF6955B9566C8853 /* APIContractTests.swift */; };
 		CF1E273CA551EE9C0ECCADD9 /* LearnView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB95ADF7A15FA44B042B786F /* LearnView.swift */; };
 		CF7B1704999A320734C4E9B7 /* TrainingReminderManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F53CDFC588F3F749AAA9FABF /* TrainingReminderManager.swift */; };
+		CFF3F22209BB26DD5C2B1A1D /* MysteryBoxCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0079F1AACDE438FEC1857DF /* MysteryBoxCardView.swift */; };
 		D111DCAE9FE5C015138C2D7C /* TrainingArc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 625761F9B4C85A65D7D30FFC /* TrainingArc.swift */; };
 		D133054D92EA03F93924CB3B /* ParentLoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E72073B55A4C01C5A02CE50 /* ParentLoginViewModel.swift */; };
 		D17B5ED42390038B126ADD9F /* CoachVoiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78F38ECF835F9315DA7C3092 /* CoachVoiceProtocol.swift */; };
@@ -231,6 +236,7 @@
 		FB1944BADD9A6F2856FB00A9 /* AuthManagerEdgeCaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 267053D4A1FA0FE1A7B04A19 /* AuthManagerEdgeCaseTests.swift */; };
 		FBCD4D7DC1140C52EDEA9887 /* OfflineBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A41DF0CEA26E19632DFDBB9 /* OfflineBanner.swift */; };
 		FC74C1AAC3F72C2F4D4D9ADE /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = DC670665B9CA30688AAA27B9 /* PrivacyInfo.xcprivacy */; };
+		FE06A492A157D2E7BFF2FB58 /* MysteryBoxFlowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 030848512E6916B225688E68 /* MysteryBoxFlowView.swift */; };
 		FF1618210A691A98A0FAE829 /* VisualPolishRegressionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8294A4325D398E940E473C99 /* VisualPolishRegressionTests.swift */; };
 		FF744ED1E3E82BAC3781846F /* StatComputerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 711FCBA5EC374C16A3E5B430 /* StatComputerTests.swift */; };
 		FF7D36B342566DB0AF76663E /* TokenInterceptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74C074FC714EA10A149172D /* TokenInterceptor.swift */; };
@@ -248,6 +254,7 @@
 
 /* Begin PBXFileReference section */
 		014590BC32D4E9DD3E2A7A55 /* InputValidator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputValidator.swift; sourceTree = "<group>"; };
+		030848512E6916B225688E68 /* MysteryBoxFlowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MysteryBoxFlowView.swift; sourceTree = "<group>"; };
 		0375EC069C5C1C24319E7E0F /* CoachCharacterViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoachCharacterViewModelTests.swift; sourceTree = "<group>"; };
 		05562D27E4B2CB014F9B53C6 /* XPBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XPBarView.swift; sourceTree = "<group>"; };
 		061F3F3007953DF6442295CF /* PinSetupStepView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinSetupStepView.swift; sourceTree = "<group>"; };
@@ -278,6 +285,7 @@
 		224D9C5DDABC7A010F5750AD /* ActiveTrainingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActiveTrainingViewModel.swift; sourceTree = "<group>"; };
 		2348EDF74B205A9360456B3A /* QuickLogViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickLogViewModel.swift; sourceTree = "<group>"; };
 		238032F237E996BE29A2DFB9 /* TrainingSessionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrainingSessionView.swift; sourceTree = "<group>"; };
+		24358153EF02A2FA5B04DF4F /* MysteryBoxRevealView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MysteryBoxRevealView.swift; sourceTree = "<group>"; };
 		267053D4A1FA0FE1A7B04A19 /* AuthManagerEdgeCaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthManagerEdgeCaseTests.swift; sourceTree = "<group>"; };
 		293A0D7276F1FC715F8BD190 /* SignatureMoveStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignatureMoveStoreTests.swift; sourceTree = "<group>"; };
 		2A6FEC328C8544C202018A74 /* CoachPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoachPickerView.swift; sourceTree = "<group>"; };
@@ -295,6 +303,7 @@
 		3327BA7EE2CB012553043FC9 /* AnimatedTacticalTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimatedTacticalTypes.swift; sourceTree = "<group>"; };
 		33852A12F4E7B165FB45DFAA /* WeeklyRecapCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeeklyRecapCardView.swift; sourceTree = "<group>"; };
 		344257E99338A83491CDD241 /* Avatar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Avatar.swift; sourceTree = "<group>"; };
+		34BF163D0EAAF82FF50C1421 /* MysteryBoxOddsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MysteryBoxOddsView.swift; sourceTree = "<group>"; };
 		3612E00A7532F669E3852990 /* AuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthManager.swift; sourceTree = "<group>"; };
 		38282594781EEDAFD64F6383 /* MissionsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MissionsViewModel.swift; sourceTree = "<group>"; };
 		39B2C79EAF73B5024BFADF61 /* PersonalBestStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonalBestStoreTests.swift; sourceTree = "<group>"; };
@@ -353,6 +362,7 @@
 		6C5474F82F2A43FDE0650934 /* OnboardingViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewModelTests.swift; sourceTree = "<group>"; };
 		6C81745521AE0440B38EEC10 /* SpeedLinesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeedLinesView.swift; sourceTree = "<group>"; };
 		6CC9F06B4D5E250C8216540F /* SignatureMoveUnlockedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignatureMoveUnlockedView.swift; sourceTree = "<group>"; };
+		6E1BD8E9901972F13812DEA8 /* MysteryBoxOpeningView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MysteryBoxOpeningView.swift; sourceTree = "<group>"; };
 		6F9B07C00381623ED91F5164 /* MysteryBoxStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MysteryBoxStore.swift; sourceTree = "<group>"; };
 		7047668ADC769856EF2C427D /* WeeklyRecap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeeklyRecap.swift; sourceTree = "<group>"; };
 		70D02BCD1734281F9F306858 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
@@ -439,6 +449,7 @@
 		C7C85199E8E50451D3143937 /* APIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
 		C9871D0DD27D344A90A57643 /* ParentLoginViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParentLoginViewModelTests.swift; sourceTree = "<group>"; };
 		C9CFAAE975F83C9BF87D237C /* ReviewPromptManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewPromptManager.swift; sourceTree = "<group>"; };
+		CA24BE5A0A452A3BC4AF2C67 /* MysteryBoxViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MysteryBoxViewModel.swift; sourceTree = "<group>"; };
 		CAC7C92AA08B3A12182F54AF /* EvolutionModal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EvolutionModal.swift; sourceTree = "<group>"; };
 		CB35BFB44D86F67BBBB2048E /* PermissionsStepView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionsStepView.swift; sourceTree = "<group>"; };
 		CB95ADF7A15FA44B042B786F /* LearnView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LearnView.swift; sourceTree = "<group>"; };
@@ -460,6 +471,7 @@
 		DDDCAD82B8B92654BFA6BB4C /* MissionCompleteModal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MissionCompleteModal.swift; sourceTree = "<group>"; };
 		DEFA83D316DC2B95949A7E78 /* XPLevel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XPLevel.swift; sourceTree = "<group>"; };
 		DFDF5946101B266029B9A60F /* AnimatedTacticalLessonRegistry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimatedTacticalLessonRegistry.swift; sourceTree = "<group>"; };
+		E0079F1AACDE438FEC1857DF /* MysteryBoxCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MysteryBoxCardView.swift; sourceTree = "<group>"; };
 		E0CAA820BAE740D5134576BA /* CoachPersonalityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoachPersonalityTests.swift; sourceTree = "<group>"; };
 		E25834D6CF3B5FA77BB11623 /* ChildHomeViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChildHomeViewModelTests.swift; sourceTree = "<group>"; };
 		E42894954332436074FDB959 /* MockCoachVoice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockCoachVoice.swift; sourceTree = "<group>"; };
@@ -753,6 +765,14 @@
 			path = Training;
 			sourceTree = "<group>";
 		};
+		42749981E5C43525C177AE25 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				CA24BE5A0A452A3BC4AF2C67 /* MysteryBoxViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
 		46500DE28472C728D6E0AE09 /* Voice */ = {
 			isa = PBXGroup;
 			children = (
@@ -820,6 +840,7 @@
 				A45B9164B7352FCA42713349 /* FirstTouch */,
 				60073BA01E797C507E0E2762 /* Learn */,
 				E20EA2BDA307C6F8C4D996D3 /* Missions */,
+				7EA93C2820ED3ABCD6CBBACC /* MysteryBox */,
 				A4E98549706658E9997A2BE2 /* Onboarding */,
 				2290215939762F78F47BAECB /* ParentControls */,
 				280B0A2E34C7A78F0B26D2B9 /* ParentDashboard */,
@@ -926,6 +947,15 @@
 				24334D64C58B6A0B90FA61A8 /* Views */,
 			);
 			path = Skills;
+			sourceTree = "<group>";
+		};
+		7EA93C2820ED3ABCD6CBBACC /* MysteryBox */ = {
+			isa = PBXGroup;
+			children = (
+				42749981E5C43525C177AE25 /* ViewModels */,
+				CB9BF75A72D81AB31CCB610E /* Views */,
+			);
+			path = MysteryBox;
 			sourceTree = "<group>";
 		};
 		850E6FD42291C9808BA5240D /* ViewModels */ = {
@@ -1084,6 +1114,18 @@
 				05F9C6624170FE80173FDE17 /* Views */,
 			);
 			path = ActivityLog;
+			sourceTree = "<group>";
+		};
+		CB9BF75A72D81AB31CCB610E /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				E0079F1AACDE438FEC1857DF /* MysteryBoxCardView.swift */,
+				030848512E6916B225688E68 /* MysteryBoxFlowView.swift */,
+				34BF163D0EAAF82FF50C1421 /* MysteryBoxOddsView.swift */,
+				6E1BD8E9901972F13812DEA8 /* MysteryBoxOpeningView.swift */,
+				24358153EF02A2FA5B04DF4F /* MysteryBoxRevealView.swift */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 		D062955588F8E5DB5CDDC869 /* ViewModels */ = {
@@ -1542,8 +1584,14 @@
 				8CF1C706E7527EE70CB12734 /* MissionsCard.swift in Sources */,
 				AC30FA1D64327942009E3E35 /* MissionsDetailView.swift in Sources */,
 				E3C87C6A306BF2FBD191BAAE /* MissionsViewModel.swift in Sources */,
+				CFF3F22209BB26DD5C2B1A1D /* MysteryBoxCardView.swift in Sources */,
 				551AD2688ED0F60C6B350170 /* MysteryBoxEngine.swift in Sources */,
+				FE06A492A157D2E7BFF2FB58 /* MysteryBoxFlowView.swift in Sources */,
+				2981BA8F86D9EC6827B770A5 /* MysteryBoxOddsView.swift in Sources */,
+				4420EA23CD0244F87288A59F /* MysteryBoxOpeningView.swift in Sources */,
+				A17438E466124E1044E7C709 /* MysteryBoxRevealView.swift in Sources */,
 				72487AF372B614E6E91F1DB8 /* MysteryBoxStore.swift in Sources */,
+				4EBB92EB61F6BB3EB44323FE /* MysteryBoxViewModel.swift in Sources */,
 				348179AE0E5A30F32BF0F1FF /* MysteryReward.swift in Sources */,
 				F6C1B5608F8B3831C111FC30 /* NetworkMonitor.swift in Sources */,
 				A734A88719E42A1E5F20AF7B /* NewActivityView.swift in Sources */,

@@ -28,9 +28,20 @@ struct ChildHomeView: View {
     @State private var showRecapSheet = false
     @State private var dailyTipDismissed: Bool = false
 
+    @StateObject private var mysteryBoxVM: MysteryBoxViewModel
+    @State private var showMysteryBoxFlow = false
+
     init(childId: String) {
         self.childId = childId
         _viewModel = StateObject(wrappedValue: ChildHomeViewModel(childId: childId))
+        _mysteryBoxVM = StateObject(wrappedValue: MysteryBoxViewModel(childId: childId))
+    }
+
+    /// Parental override — parents can disable the mystery box entirely
+    /// from ParentControls. Stored per child in UserDefaults; defaults to
+    /// true so the feature is on for new kids.
+    private var mysteryBoxEnabled: Bool {
+        UserDefaults.standard.object(forKey: "mysteryBoxEnabled_\(childId)") as? Bool ?? true
     }
 
     // MARK: - Derived State
@@ -97,6 +108,15 @@ struct ChildHomeView: View {
                             }
                         }
                         #endif
+
+                        // Daily Mystery Box — parental override can hide it entirely
+                        if mysteryBoxEnabled {
+                            MysteryBoxCardView(viewModel: mysteryBoxVM) {
+                                showMysteryBoxFlow = true
+                            }
+                            .padding(.horizontal, Spacing.xl)
+                            .padding(.top, Spacing.md)
+                        }
 
                         // Daily Focus Tip
                         if !dailyTipDismissed {
@@ -204,6 +224,7 @@ struct ChildHomeView: View {
             checkForMilestones()
             checkFirstSession()
             checkForAvatarEvolution()
+            await mysteryBoxVM.load()
             // Reschedule the daily training reminder so its content reflects
             // today's streak state instead of whatever was set at last toggle.
             await TrainingReminderManager.scheduleDailyReminder(
@@ -262,6 +283,11 @@ struct ChildHomeView: View {
         }
         .sheet(isPresented: $showRecapSheet) {
             WeeklyRecapSheetView(childId: childId)
+        }
+        .fullScreenCover(isPresented: $showMysteryBoxFlow) {
+            MysteryBoxFlowView(viewModel: mysteryBoxVM) {
+                showMysteryBoxFlow = false
+            }
         }
         .overlay(alignment: .top) {
             VStack(spacing: 8) {

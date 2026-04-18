@@ -252,6 +252,7 @@ struct ParentControlsView: View {
     @State private var isSaving = false
     @State private var saveSuccess = false
     @State private var isLoadingSettings = true
+    @State private var showMysteryBoxOdds = false
 
     // PIN
     @State private var newPin = ""
@@ -405,6 +406,36 @@ struct ParentControlsView: View {
             } label: {
                 Label("Training Reminders", systemImage: "bell.badge")
             }
+        }
+
+        mysteryBoxSection
+    }
+
+    @ViewBuilder
+    private var mysteryBoxSection: some View {
+        Section {
+            Toggle("Daily Mystery Box", isOn: Binding(
+                get: {
+                    UserDefaults.standard.object(forKey: "mysteryBoxEnabled_\(childId)") as? Bool ?? true
+                },
+                set: {
+                    UserDefaults.standard.set($0, forKey: "mysteryBoxEnabled_\(childId)")
+                }
+            ))
+
+            Button {
+                showMysteryBoxOdds = true
+            } label: {
+                Label("See Drop Rates", systemImage: "list.bullet.rectangle")
+            }
+            .foregroundStyle(Color.dsSecondary)
+        } header: {
+            Text("Mystery Box")
+        } footer: {
+            Text("Once per day, \(childName) can open a gift box for a random reward (XP, shields, free move attempts, cosmetics). Drop rates are fixed and transparent — tap \"See Drop Rates\" for the numbers. Money is never involved.")
+        }
+        .sheet(isPresented: $showMysteryBoxOdds) {
+            MysteryBoxOddsView()
         }
 
         Section {

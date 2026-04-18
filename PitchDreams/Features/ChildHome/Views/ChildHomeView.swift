@@ -31,10 +31,14 @@ struct ChildHomeView: View {
     @StateObject private var mysteryBoxVM: MysteryBoxViewModel
     @State private var showMysteryBoxFlow = false
 
+    @StateObject private var pitchVM: IRLPitchViewModel
+    @State private var showPitchSheet = false
+
     init(childId: String) {
         self.childId = childId
         _viewModel = StateObject(wrappedValue: ChildHomeViewModel(childId: childId))
         _mysteryBoxVM = StateObject(wrappedValue: MysteryBoxViewModel(childId: childId))
+        _pitchVM = StateObject(wrappedValue: IRLPitchViewModel(childId: childId))
     }
 
     /// Parental override — parents can disable the mystery box entirely
@@ -108,6 +112,15 @@ struct ChildHomeView: View {
                             }
                         }
                         #endif
+
+                        // IRL Pitch banner — only shows when GPS confirms we're at a known pitch
+                        if let pitch = pitchVM.detector.currentPitch, pitchVM.detector.isAtPitch {
+                            PitchLocationBanner(pitch: pitch) {
+                                showPitchSheet = true
+                            }
+                            .padding(.horizontal, Spacing.xl)
+                            .padding(.top, Spacing.md)
+                        }
 
                         // Daily Mystery Box — parental override can hide it entirely
                         if mysteryBoxEnabled {
@@ -225,6 +238,11 @@ struct ChildHomeView: View {
             checkFirstSession()
             checkForAvatarEvolution()
             await mysteryBoxVM.load()
+            // Start GPS-based pitch detection. Permission is requested in-
+            // context only when the detector starts; kids who never surface
+            // this feature won't get a location prompt they didn't ask for.
+            pitchVM.start()
+            await pitchVM.loadPitches()
             // Reschedule the daily training reminder so its content reflects
             // today's streak state instead of whatever was set at last toggle.
             await TrainingReminderManager.scheduleDailyReminder(
@@ -287,6 +305,18 @@ struct ChildHomeView: View {
         .fullScreenCover(isPresented: $showMysteryBoxFlow) {
             MysteryBoxFlowView(viewModel: mysteryBoxVM) {
                 showMysteryBoxFlow = false
+            }
+        }
+        .sheet(isPresented: $showPitchSheet) {
+            PitchHomeDesignationView(viewModel: pitchVM) {
+                showPitchSheet = false
+            }
+        }
+        // Auto-surface the designation sheet when GPS dwelled at a new
+        // unknown location long enough to qualify as a pitch.
+        .onChange(of: pitchVM.detector.pendingNewLocation != nil) { hasPending in
+            if hasPending {
+                showPitchSheet = true
             }
         }
         .overlay(alignment: .top) {

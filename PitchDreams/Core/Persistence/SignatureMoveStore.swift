@@ -123,6 +123,49 @@ actor SignatureMoveStore {
         }
     }
 
+    /// Credit in-progress moves for a normal training session via the
+    /// `TrainingMoveLink` mapping. For each matching (move, stage) pair
+    /// whose stage matches the move's current stage, the first incomplete
+    /// drill in that stage gets `TrainingMoveLink.repsPerMatch` reps.
+    ///
+    /// Returns the list of moves + total reps credited so the caller can
+    /// surface an optional "you made progress on X" notification.
+    @discardableResult
+    func creditFromTraining(
+        trainingDrillIds: [String],
+        childId: String
+    ) -> [(move: SignatureMove, repsCredited: Int)] {
+        let matches = TrainingMoveLink.matches(trainingDrillIds: trainingDrillIds)
+        guard !matches.isEmpty else { return [] }
+
+        var credited: [(move: SignatureMove, repsCredited: Int)] = []
+        // Dedupe to one credit per move per session — a heavy multi-drill
+        // session shouldn't cascade-advance a single move.
+        var seenMoveIds: Set<String> = []
+
+        for match in matches where !seenMoveIds.contains(match.moveId) {
+            guard let move = SignatureMoveRegistry.move(id: match.moveId) else { continue }
+            let progress = getProgress(moveId: move.id, childId: childId)
+            // Only credit the move's *current* in-progress stage.
+            guard match.stage == progress.currentStage, !progress.isMastered else { continue }
+            guard let stageDef = move.stages.first(where: { $0.order == match.stage }) else { continue }
+            guard let targetDrill = stageDef.drills.first(where: {
+                !progress.completedDrillIds.contains($0.id)
+            }) else { continue }
+
+            _ = recordDrillAttempt(
+                moveId: move.id,
+                drillId: targetDrill.id,
+                reps: TrainingMoveLink.repsPerMatch,
+                childId: childId
+            )
+            credited.append((move: move, repsCredited: TrainingMoveLink.repsPerMatch))
+            seenMoveIds.insert(move.id)
+        }
+
+        return credited
+    }
+
     // MARK: - Private
 
     private func save(_ progress: MoveProgress, childId: String) {

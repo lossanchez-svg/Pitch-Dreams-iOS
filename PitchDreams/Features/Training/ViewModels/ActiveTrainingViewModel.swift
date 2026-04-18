@@ -50,7 +50,12 @@ final class ActiveTrainingViewModel: ObservableObject {
     @Published var xpEarned: Int = 0
     @Published var didEvolve: Bool = false
     @Published var newStage: AvatarStage = .rookie
+    /// Names of signature moves that received ambient credit from this
+    /// session (via `TrainingMoveLink`). `SessionCompleteView` surfaces
+    /// a chip per move so the kid feels the connection.
+    @Published var creditedMoveNames: [String] = []
     private let xpStore = XPStore()
+    private let moveStore = SignatureMoveStore()
 
     // MARK: - Session Meta
     @Published var isLoading = false
@@ -300,6 +305,18 @@ final class ActiveTrainingViewModel: ObservableObject {
         xpEarned = earned
         didEvolve = result.evolved
         newStage = result.newStage
+
+        // Credit ambient signature-move progress for any session drills
+        // that reinforce an in-progress move's current stage. Silent —
+        // SessionCompleteView reads creditedMoveNames for an optional chip.
+        if !queuedForRetry {
+            let drillIds = sessionDrills.map(\.id)
+            let credited = await moveStore.creditFromTraining(
+                trainingDrillIds: drillIds,
+                childId: childId
+            )
+            creditedMoveNames = credited.map(\.move.name)
+        }
 
         phase = .complete
         UINotificationFeedbackGenerator().notificationOccurred(.success)

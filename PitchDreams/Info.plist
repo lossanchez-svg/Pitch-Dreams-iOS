@@ -51,5 +51,7 @@
 	<string>PitchDreams uses speech recognition for hands-free training commands</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>PitchDreams saves your weekly recap cards to your photo library so you can share them.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>PitchDreams detects when you're at a soccer pitch to give you bonus XP for real training.</string>
 </dict>
 </plist>

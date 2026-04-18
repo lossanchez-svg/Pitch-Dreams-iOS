@@ -9,12 +9,23 @@ final class ChildHomeViewModel: ObservableObject {
     @Published var isLoading = true
     @Published var errorMessage: String?
 
+    // XP + Avatar Evolution
+    @Published var totalXP: Int = 0
+    @Published var xpProgress: (progress: Double, xpInStage: Int, xpNeeded: Int) = (0, 0, 0)
+    @Published var avatarStage: AvatarStage = .rookie
+
+    // Streak shield
+    @Published var shieldDeployed = false
+    @Published var freezeResult: FreezeCheckResult?
+
     let childId: String
     private let apiClient: APIClientProtocol
+    let xpStore: XPStore
 
-    init(childId: String, apiClient: APIClientProtocol = APIClient()) {
+    init(childId: String, apiClient: APIClientProtocol = APIClient(), xpStore: XPStore = XPStore()) {
         self.childId = childId
         self.apiClient = apiClient
+        self.xpStore = xpStore
     }
 
     var streakCount: Int {
@@ -68,14 +79,30 @@ final class ChildHomeViewModel: ObservableObject {
             nudge = nil
         }
 
+        // Load XP data
+        totalXP = await xpStore.getTotalXP(childId: childId)
+        xpProgress = XPCalculator.progressToNextStage(totalXP)
+        avatarStage = XPCalculator.avatarStageForXP(totalXP)
+
         isLoading = false
 
-        // Auto-check streak freeze (fire and forget)
+        // Auto-check streak freeze
         do {
-            let _: FreezeCheckResult = try await apiClient.request(APIRouter.checkFreeze(childId: childId))
+            let result: FreezeCheckResult = try await apiClient.request(APIRouter.checkFreeze(childId: childId))
+            freezeResult = result
+            if result.freezeApplied {
+                shieldDeployed = true
+            }
         } catch {
             // Not critical
         }
+    }
+
+    /// Refresh XP data after earning XP elsewhere (training, quick log, etc.)
+    func refreshXP() async {
+        totalXP = await xpStore.getTotalXP(childId: childId)
+        xpProgress = XPCalculator.progressToNextStage(totalXP)
+        avatarStage = XPCalculator.avatarStageForXP(totalXP)
     }
 }
 

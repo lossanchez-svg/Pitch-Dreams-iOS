@@ -55,7 +55,7 @@ struct ReflectionView: View {
                     HStack(spacing: Spacing.lg) {
                         if reflectionStep > 0 {
                             Button {
-                                withAnimation(.easeInOut(duration: 0.3)) {
+                                withAnimation(.dsSnappy) {
                                     reflectionStep -= 1
                                 }
                             } label: {
@@ -77,7 +77,7 @@ struct ReflectionView: View {
 
                         Button {
                             if reflectionStep < 3 {
-                                withAnimation(.easeInOut(duration: 0.3)) {
+                                withAnimation(.dsSnappy) {
                                     reflectionStep += 1
                                 }
                             } else {
@@ -126,14 +126,14 @@ struct ReflectionView: View {
         var commands: [VoiceCommand] = [
             VoiceCommand(label: "Next", phrases: ["next", "continue"]) {
                 if reflectionStep < 3 {
-                    withAnimation(.easeInOut(duration: 0.3)) {
+                    withAnimation(.dsSnappy) {
                         reflectionStep += 1
                     }
                 }
             },
             VoiceCommand(label: "Back", phrases: ["back", "previous"]) {
                 if reflectionStep > 0 {
-                    withAnimation(.easeInOut(duration: 0.3)) {
+                    withAnimation(.dsSnappy) {
                         reflectionStep -= 1
                     }
                 }
@@ -142,7 +142,7 @@ struct ReflectionView: View {
                 if reflectionStep == 3 {
                     Task { await viewModel.saveSession() }
                 } else {
-                    withAnimation(.easeInOut(duration: 0.3)) {
+                    withAnimation(.dsSnappy) {
                         reflectionStep = 3
                     }
                 }

@@ -95,7 +95,7 @@ struct QuickLogView: View {
                     .padding()
                     .background(viewModel.saveSuccess ? DSGradient.secondaryCTA : DSGradient.orangeAccent)
                     .clipShape(RoundedRectangle(cornerRadius: 12))
-                    .animation(.easeInOut, value: viewModel.saveSuccess)
+                    .animation(.dsSpring, value: viewModel.saveSuccess)
                 }
                 .buttonStyle(.plain)
                 .disabled(viewModel.isSaving)

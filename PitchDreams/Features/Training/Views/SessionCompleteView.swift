@@ -49,6 +49,21 @@ struct SessionCompleteView: View {
                         .foregroundStyle(Color.dsOnSurfaceVariant)
                 }
 
+                // XP Earned
+                if viewModel.xpEarned > 0 {
+                    HStack(spacing: 8) {
+                        Image(systemName: "bolt.fill")
+                            .foregroundStyle(Color.dsAccentOrange)
+                        Text("+\(viewModel.xpEarned) XP")
+                            .font(.system(size: 20, weight: .heavy, design: .rounded))
+                            .foregroundStyle(Color.dsAccentOrange)
+                    }
+                    .padding(.horizontal, 20)
+                    .padding(.vertical, 12)
+                    .background(Color.dsAccentOrange.opacity(0.15))
+                    .clipShape(Capsule())
+                }
+
                 // Summary card
                 VStack(spacing: 0) {
                     summaryRow(icon: "clock.fill", label: "Duration", value: "\(viewModel.sessionDurationMinutes) min", color: .dsSecondary)

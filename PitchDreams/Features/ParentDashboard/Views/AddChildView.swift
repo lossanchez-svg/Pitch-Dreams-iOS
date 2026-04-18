@@ -63,7 +63,7 @@ struct AddChildView: View {
                         default: EmptyView()
                         }
                     }
-                    .animation(.easeInOut, value: localStep)
+                    .animation(.dsSpring, value: localStep)
 
                     if let error = viewModel.errorMessage {
                         Text(error)

@@ -119,7 +119,7 @@ struct ChildTabNavigation: View {
 
     private func tabBarItem(tab: ChildTab, icon: String, label: String) -> some View {
         Button {
-            withAnimation(.easeInOut(duration: 0.2)) {
+            withAnimation(.dsSnappy) {
                 selectedTab = tab
             }
             UIImpactFeedbackGenerator(style: .light).impactOccurred()

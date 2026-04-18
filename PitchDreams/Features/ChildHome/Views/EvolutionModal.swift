@@ -5,6 +5,7 @@ import SwiftUI
 struct EvolutionModal: View {
     let avatar: Avatar
     let newStage: AvatarStage
+    var totalXP: Int = 0
     let onDismiss: () -> Void
 
     @State private var avatarScale: CGFloat = 0
@@ -33,6 +34,13 @@ struct EvolutionModal: View {
                             .font(.system(size: 32, weight: .heavy, design: .rounded))
                             .multilineTextAlignment(.center)
                             .foregroundStyle(Color.dsOnSurface)
+
+                        if totalXP > 0 {
+                            Text("You've earned \(totalXP) XP!")
+                                .font(.system(size: 14, weight: .bold, design: .rounded))
+                                .foregroundStyle(Color.dsAccentOrange)
+                                .padding(.top, 4)
+                        }
                     }
 
                     // Timeline
@@ -78,6 +86,8 @@ struct EvolutionModal: View {
             }
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                 showCelebration = true
+                UIImpactFeedbackGenerator(style: .heavy).impactOccurred()
+                ReviewPromptManager.noteAvatarEvolution(to: newStage)
             }
         }
     }
@@ -177,24 +187,10 @@ struct EvolutionModal: View {
                             .foregroundStyle(Color.dsOnSurfaceVariant)
 
                         requirementPill(
-                            icon: "flame.fill",
-                            text: "Reach Level \(stage.unlockMilestone)",
+                            icon: "bolt.fill",
+                            text: "Earn \(XPCalculator.xpForStage(stage)) XP",
                             color: .dsAccentOrange
                         )
-
-                        if stage == .legend {
-                            requirementPill(
-                                icon: "star.fill",
-                                text: "Legendary (200 XP)",
-                                color: .dsTertiaryContainer
-                            )
-                        } else {
-                            requirementPill(
-                                icon: "bolt.fill",
-                                text: "Practice \(stage.unlockMilestone) days",
-                                color: .dsSecondary
-                            )
-                        }
                     }
                 }
             }
@@ -229,5 +225,5 @@ struct EvolutionModal: View {
 }
 
 #Preview {
-    EvolutionModal(avatar: .wolf, newStage: .pro) { }
+    EvolutionModal(avatar: .wolf, newStage: .pro, totalXP: 500) { }
 }

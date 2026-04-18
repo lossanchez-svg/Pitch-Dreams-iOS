@@ -1,5 +1,6 @@
 import Foundation
 import Combine
+import UIKit
 
 enum TrainingPhase {
     case drilling
@@ -44,6 +45,12 @@ final class ActiveTrainingViewModel: ObservableObject {
 
     // MARK: - Avatar
     @Published var avatarAssetName: String = "default_stage1"
+
+    // MARK: - XP
+    @Published var xpEarned: Int = 0
+    @Published var didEvolve: Bool = false
+    @Published var newStage: AvatarStage = .rookie
+    private let xpStore = XPStore()
 
     // MARK: - Session Meta
     @Published var isLoading = false
@@ -184,15 +191,8 @@ final class ActiveTrainingViewModel: ObservableObject {
             let profile: ChildProfileDetail = try await apiClient.request(
                 APIRouter.getProfile(childId: childId)
             )
-            let streaks: StreakData? = try? await apiClient.request(
-                APIRouter.getStreaks(childId: childId)
-            )
-            let milestones = streaks?.milestones ?? []
-            avatarAssetName = Avatar.assetName(
-                for: profile.avatarId,
-                milestones: milestones,
-                localMissionXP: MissionsViewModel.shared.localMissionXP
-            )
+            let totalXP = await xpStore.getTotalXP(childId: childId)
+            avatarAssetName = Avatar.assetName(for: profile.avatarId, totalXP: totalXP)
         } catch {
             // Keep default avatar on failure — non-critical
         }
@@ -267,9 +267,27 @@ final class ActiveTrainingViewModel: ObservableObject {
             }
             sessionSaved = true
             MissionsViewModel.shared.recordEvent(.sessionLogged, childId: childId)
+
+            // Award XP
+            let earned = XPCalculator.xpForSession(
+                duration: sessionDurationMinutes,
+                effortLevel: reflectionRPE,
+                activityType: "drill"
+            )
+            let result = await xpStore.addXP(earned, childId: childId)
+            await xpStore.recordXPEntry(
+                XPEntry(amount: earned, source: "drill", date: Date()),
+                childId: childId
+            )
+            xpEarned = earned
+            didEvolve = result.evolved
+            newStage = result.newStage
+
             phase = .complete
+            UINotificationFeedbackGenerator().notificationOccurred(.success)
             // Voice: session complete
             coachVoice.speak(persona.sessionCompleteLine, personality: coachPersonality)
+            ReviewPromptManager.noteSessionCompleted()
         } catch {
             Log.api.error("Session save failed for child \(self.childId): \(error)")
             errorMessage = "Failed to save session: \(error.localizedDescription)"

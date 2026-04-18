@@ -96,6 +96,29 @@ xcodebuild test -project PitchDreams.xcodeproj -scheme PitchDreams \
 
 Test account: `pitchdreams.soccer@gmail.com` / `Skyway7six#` / Child: `Tester1` PIN `1111`
 
+### Multi-Device Testing
+
+```bash
+# Quick test: 5 representative devices (iPhone SE, iPhone 17, iPad 10th, iPad Air, iPad Pro 13")
+./scripts/test-all-devices.sh --quick
+
+# Full matrix: all 10 devices across all installed iOS runtimes
+./scripts/test-all-devices.sh --full
+
+# Show device/iOS compatibility matrix
+./scripts/test-all-devices.sh --list
+
+# Download missing iOS runtimes (16, 17, 18) then run full matrix
+./scripts/test-all-devices.sh --install-runtimes --full
+
+# Remove all PD-Test-* simulators
+./scripts/test-all-devices.sh --cleanup
+```
+
+Multi-device tests auto-run in background after each `git commit` via `.git/hooks/post-commit`. Results logged to `/tmp/pd-multidevice-test.log`.
+
+**CI tiers:** Tier 1 (single device, every PR) → Tier 2 (5 devices, every PR) → Tier 3 (9 devices, nightly + manual dispatch)
+
 ## Project Generation
 
 Uses XcodeGen (`project.yml`). After adding/removing Swift files:

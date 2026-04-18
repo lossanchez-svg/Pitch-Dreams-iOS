@@ -8,9 +8,11 @@ final class QuickLogViewModel: ObservableObject {
     @Published var isSaving = false
     @Published var saveSuccess = false
     @Published var errorMessage: String?
+    @Published var xpEarned: Int = 0
 
     let childId: String
     private let apiClient: APIClientProtocol
+    private let xpStore = XPStore()
 
     init(childId: String, apiClient: APIClientProtocol = APIClient()) {
         self.childId = childId
@@ -55,6 +57,21 @@ final class QuickLogViewModel: ObservableObject {
             )
             saveSuccess = true
             MissionsViewModel.shared.recordEvent(.sessionLogged, childId: childId)
+
+            // Award XP
+            let earned = XPCalculator.xpForSession(
+                duration: duration,
+                effortLevel: effort * 2, // effort is 1-5, scale to 2-10
+                activityType: selectedType
+            )
+            let _ = await xpStore.addXP(earned, childId: childId)
+            await xpStore.recordXPEntry(
+                XPEntry(amount: earned, source: "session", date: Date()),
+                childId: childId
+            )
+            xpEarned = earned
+            ReviewPromptManager.noteSessionCompleted()
+
             resetForm()
         } catch {
             errorMessage = "Failed to log session: \(error.localizedDescription)"

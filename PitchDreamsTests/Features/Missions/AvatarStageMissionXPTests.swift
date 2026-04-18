@@ -2,30 +2,55 @@ import XCTest
 @testable import PitchDreams
 
 final class AvatarStageMissionXPTests: XCTestCase {
-    func testRookieWithNoProgress() {
-        XCTAssertEqual(AvatarStage.current(forMilestones: []), .rookie)
+    // MARK: - New XP-based API
+
+    func testRookieWithNoXP() {
+        XCTAssertEqual(AvatarStage.current(forTotalXP: 0), .rookie)
     }
 
-    func testXP50PromotesToPro() {
-        XCTAssertEqual(AvatarStage.current(forMilestones: [], localMissionXP: 50), .pro)
+    func testProAt500XP() {
+        XCTAssertEqual(AvatarStage.current(forTotalXP: 500), .pro)
     }
 
-    func testXP200PromotesToLegend() {
-        XCTAssertEqual(AvatarStage.current(forMilestones: [], localMissionXP: 200), .legend)
+    func testLegendAt2000XP() {
+        XCTAssertEqual(AvatarStage.current(forTotalXP: 2000), .legend)
     }
 
-    func testStreakStageTakesPrecedenceWhenHigher() {
-        let stage = AvatarStage.current(forMilestones: [30], localMissionXP: 50)
-        XCTAssertEqual(stage, .legend) // streak legend wins over XP pro
+    func testBelowProThreshold() {
+        XCTAssertEqual(AvatarStage.current(forTotalXP: 499), .rookie)
     }
 
-    func testXPStageTakesPrecedenceWhenHigher() {
-        let stage = AvatarStage.current(forMilestones: [7], localMissionXP: 200)
-        XCTAssertEqual(stage, .legend) // XP legend wins over streak pro
+    func testBetweenProAndLegend() {
+        XCTAssertEqual(AvatarStage.current(forTotalXP: 1000), .pro)
     }
 
-    func testPartialXPStaysAtCurrentStreakStage() {
-        let stage = AvatarStage.current(forMilestones: [7], localMissionXP: 30)
+    func testAboveLegendThreshold() {
+        XCTAssertEqual(AvatarStage.current(forTotalXP: 5000), .legend)
+    }
+
+    // MARK: - Avatar Asset Name with totalXP
+
+    func testAvatarAssetName_usesTotalXP() {
+        let name = Avatar.assetName(for: "wolf", totalXP: 600)
+        XCTAssertEqual(name, "wolf_stage2") // Pro stage
+    }
+
+    func testAvatarAssetName_rookieStage() {
+        let name = Avatar.assetName(for: "lion", totalXP: 100)
+        XCTAssertEqual(name, "lion_stage1")
+    }
+
+    func testAvatarAssetName_legendStage() {
+        let name = Avatar.assetName(for: "eagle", totalXP: 2500)
+        XCTAssertEqual(name, "eagle_stage3")
+    }
+
+    // MARK: - Legacy deprecated method still works
+
+    func testLegacyMethod_stillWorks() {
+        // The deprecated method uses localMissionXP as proxy for totalXP
+        // With new thresholds (500 for Pro), old XP values (50) won't trigger Pro
+        let stage = AvatarStage.current(forMilestones: [], localMissionXP: 500)
         XCTAssertEqual(stage, .pro)
     }
 }

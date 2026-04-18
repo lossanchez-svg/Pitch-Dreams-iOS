@@ -131,7 +131,7 @@ struct FirstSessionGuideView: View {
                     .stroke(Color.dsAccentOrange, style: StrokeStyle(lineWidth: 8, lineCap: .round))
                     .frame(width: 160, height: 160)
                     .rotationEffect(.degrees(-90))
-                    .animation(.easeInOut(duration: 0.2), value: tapCount)
+                    .animation(.dsSnappy, value: tapCount)
 
                 VStack(spacing: 4) {
                     Text("\(tapCount)")

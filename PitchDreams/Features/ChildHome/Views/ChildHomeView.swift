@@ -20,6 +20,10 @@ struct ChildHomeView: View {
     @State private var completedMission: Mission?
     @AppStorage("hasCompletedFirstSession") private var hasCompletedFirstSession = false
     @State private var showAvatarPicker = false
+    @State private var showXPToast = false
+    @State private var xpToastAmount: Int = 0
+    @State private var showShieldToast = false
+    @State private var showRecapSheet = false
 
     init(childId: String) {
         self.childId = childId
@@ -34,18 +38,11 @@ struct ChildHomeView: View {
     }
 
     private var avatarAssetName: String {
-        Avatar.assetName(
-            for: effectiveAvatarId,
-            milestones: viewModel.streakData?.milestones ?? [],
-            localMissionXP: missionsVM.localMissionXP
-        )
+        Avatar.assetName(for: effectiveAvatarId, totalXP: viewModel.totalXP)
     }
 
     private var currentStage: AvatarStage {
-        AvatarStage.current(
-            forMilestones: viewModel.streakData?.milestones ?? [],
-            localMissionXP: missionsVM.localMissionXP
-        )
+        AvatarStage.current(forTotalXP: viewModel.totalXP)
     }
 
     private var resolvedAvatar: Avatar {
@@ -72,6 +69,38 @@ struct ChildHomeView: View {
                             .padding(.horizontal, Spacing.xl)
                             .padding(.top, -20)
                             .zIndex(1)
+
+                        // XP Progress Bar
+                        XPBarView(
+                            avatarAssetName: avatarAssetName,
+                            totalXP: viewModel.totalXP,
+                            progress: viewModel.xpProgress.progress,
+                            xpInStage: viewModel.xpProgress.xpInStage,
+                            xpNeeded: viewModel.xpProgress.xpNeeded,
+                            currentStage: viewModel.avatarStage
+                        )
+                        .padding(.horizontal, Spacing.xl)
+                        .padding(.top, Spacing.md)
+                        #if DEBUG
+                        .onTapGesture(count: 3) {
+                            // Triple-tap to seed XP for testing
+                            Task {
+                                let result = await viewModel.xpStore.addXP(430, childId: childId)
+                                await viewModel.refreshXP()
+                                if result.evolved {
+                                    evolvedTo = result.newStage
+                                    showEvolutionModal = true
+                                }
+                            }
+                        }
+                        #endif
+
+                        // Weekly Recap Banner (shows on Sundays or if not viewed)
+                        if showWeeklyRecapBanner {
+                            weeklyRecapBanner
+                                .padding(.horizontal, Spacing.xl)
+                                .padding(.top, Spacing.md)
+                        }
 
                         // Weekly Goals
                         weeklyGoalsCard
@@ -178,7 +207,8 @@ struct ChildHomeView: View {
             if let milestone = newMilestone {
                 StreakMilestoneModal(
                     milestone: milestone,
-                    freezeAwarded: milestoneFreeze
+                    freezeAwarded: milestoneFreeze,
+                    childId: childId
                 ) {
                     showMilestoneModal = false
                     recordMilestone(milestone)
@@ -188,7 +218,7 @@ struct ChildHomeView: View {
         .sheet(isPresented: $showEvolutionModal) {
             if let stage = evolvedTo {
                 let avatar = Avatar.resolve(effectiveAvatarId)
-                EvolutionModal(avatar: avatar, newStage: stage) {
+                EvolutionModal(avatar: avatar, newStage: stage, totalXP: viewModel.totalXP) {
                     showEvolutionModal = false
                 }
             }
@@ -197,6 +227,22 @@ struct ChildHomeView: View {
             AvatarChangeSheet(childId: childId) {
                 showAvatarPicker = false
                 Task { await viewModel.loadData() }
+            }
+        }
+        .sheet(isPresented: $showRecapSheet) {
+            WeeklyRecapSheetView(childId: childId)
+        }
+        .overlay(alignment: .top) {
+            VStack(spacing: 8) {
+                XPEarnedToast(amount: xpToastAmount, isPresented: $showXPToast)
+                ShieldDeployedToast(streakDays: viewModel.streakCount, isPresented: $showShieldToast)
+            }
+            .padding(.top, 60)
+        }
+        .onChange(of: viewModel.shieldDeployed) { deployed in
+            if deployed {
+                showShieldToast = true
+                viewModel.shieldDeployed = false
             }
         }
         .onChange(of: speechRecognizer.transcript) { newTranscript in
@@ -414,7 +460,7 @@ struct ChildHomeView: View {
                     .font(.system(size: 9, weight: .bold))
                     .tracking(2)
                     .foregroundStyle(Color.dsOnSurfaceVariant)
-                Text("LVL \(missionsVM.localMissionXP / 10 + 1)")
+                Text("\(viewModel.totalXP) XP")
                     .font(.system(size: 22, weight: .heavy, design: .rounded))
                     .foregroundStyle(Color.dsOnSurface)
             }
@@ -639,7 +685,7 @@ struct ChildHomeView: View {
                         style: StrokeStyle(lineWidth: 4, lineCap: .round)
                     )
                     .rotationEffect(.degrees(-90))
-                    .animation(.easeInOut(duration: 0.8), value: ringProgress)
+                    .animation(.dsSpring, value: ringProgress)
 
                 VStack(spacing: 1) {
                     Text("\(viewModel.streakCount)")
@@ -997,11 +1043,7 @@ struct ChildHomeView: View {
 
     private func checkForAvatarEvolution() {
         guard effectiveAvatarId != nil else { return }
-        let milestones = viewModel.streakData?.milestones ?? []
-        let currentStage = AvatarStage.current(
-            forMilestones: milestones,
-            localMissionXP: missionsVM.localMissionXP
-        )
+        let currentStage = AvatarStage.current(forTotalXP: viewModel.totalXP)
 
         let storageKey = "lastSeenAvatarStage_\(childId)"
         let lastSeenRaw = UserDefaults.standard.integer(forKey: storageKey)
@@ -1044,6 +1086,41 @@ struct ChildHomeView: View {
 
         if !hasAnyActivity {
             // Don't auto-show — too aggressive. Let users tap "Start Training" instead.
+        }
+    }
+
+    // MARK: - Weekly Recap
+
+    private var showWeeklyRecapBanner: Bool {
+        let calendar = Calendar.current
+        let weekday = calendar.component(.weekday, from: Date())
+        let isSunday = weekday == 1
+        let lastViewed = UserDefaults.standard.string(forKey: "lastRecapViewed_\(childId)") ?? ""
+        let thisWeek = ISO8601DateFormatter().string(from: Date()).prefix(10)
+        return isSunday && lastViewed != String(thisWeek)
+    }
+
+    private var weeklyRecapBanner: some View {
+        Button {
+            showRecapSheet = true
+            let thisWeek = ISO8601DateFormatter().string(from: Date()).prefix(10)
+            UserDefaults.standard.set(String(thisWeek), forKey: "lastRecapViewed_\(childId)")
+        } label: {
+            HStack(spacing: 10) {
+                Image(systemName: "star.fill")
+                    .foregroundStyle(Color.dsTertiaryContainer)
+                Text("Your Weekly Recap is Ready!")
+                    .font(DSFont.headline(14))
+                    .foregroundStyle(Color.dsOnSurface)
+                Spacer()
+                Image(systemName: "chevron.right")
+                    .font(.system(size: 12, weight: .bold))
+                    .foregroundStyle(Color.dsOnSurfaceVariant)
+            }
+            .padding(Spacing.lg)
+            .background(DSGradient.secondaryCTA.opacity(0.15))
+            .clipShape(RoundedRectangle(cornerRadius: CornerRadius.md))
+            .ghostBorder()
         }
     }
 

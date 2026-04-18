@@ -10,6 +10,7 @@ struct EvolutionModal: View {
 
     @State private var avatarScale: CGFloat = 0
     @State private var showCelebration = false
+    @StateObject private var coachVoice = CoachVoice()
 
     var body: some View {
         ZStack {
@@ -88,6 +89,8 @@ struct EvolutionModal: View {
                 showCelebration = true
                 UIImpactFeedbackGenerator(style: .heavy).impactOccurred()
                 ReviewPromptManager.noteAvatarEvolution(to: newStage)
+                let personality = CoachPersonality.current
+                coachVoice.speak(personality.avatarEvolutionLine(to: newStage), personality: personality.rawValue)
             }
         }
     }

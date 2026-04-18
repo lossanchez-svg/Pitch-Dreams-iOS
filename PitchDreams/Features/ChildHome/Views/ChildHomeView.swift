@@ -25,6 +25,7 @@ struct ChildHomeView: View {
     @State private var xpToastAmount: Int = 0
     @State private var showShieldToast = false
     @State private var showRecapSheet = false
+    @State private var dailyTipDismissed: Bool = false
 
     init(childId: String) {
         self.childId = childId
@@ -95,6 +96,17 @@ struct ChildHomeView: View {
                             }
                         }
                         #endif
+
+                        // Daily Focus Tip
+                        if !dailyTipDismissed {
+                            DailyTipCard(
+                                childId: childId,
+                                tip: DailyTipRegistry.todaysTip(),
+                                isDismissed: $dailyTipDismissed
+                            )
+                            .padding(.horizontal, Spacing.xl)
+                            .padding(.top, Spacing.md)
+                        }
 
                         // Weekly Recap Banner (shows on Sundays or if not viewed)
                         if showWeeklyRecapBanner {
@@ -190,6 +202,18 @@ struct ChildHomeView: View {
             checkForMilestones()
             checkFirstSession()
             checkForAvatarEvolution()
+            // Reschedule the daily training reminder so its content reflects
+            // today's streak state instead of whatever was set at last toggle.
+            await TrainingReminderManager.scheduleDailyReminder(
+                childId: childId,
+                childNickname: viewModel.profile?.nickname,
+                streak: viewModel.streakCount
+            )
+            // Restore today's dismissal state for the daily focus tip.
+            dailyTipDismissed = DailyTipDismissal.isDismissed(
+                tip: DailyTipRegistry.todaysTip(),
+                childId: childId
+            )
         }
         .onReceive(missionsVM.$lastCompleted) { mission in
             guard let mission else { return }

@@ -9,6 +9,7 @@ struct StreakMilestoneModal: View {
     @State private var flameScale: CGFloat = 0
     @State private var showCelebration = false
     @State private var xpBonus: Int = 0
+    @StateObject private var coachVoice = CoachVoice()
 
     var body: some View {
         VStack(spacing: 28) {
@@ -93,6 +94,11 @@ struct StreakMilestoneModal: View {
             xpBonus = bonus
             UINotificationFeedbackGenerator().notificationOccurred(.success)
             ReviewPromptManager.noteStreakMilestone(milestone)
+
+            // Coach voice celebrates the milestone, tuned to the active
+            // personality. Runs after haptic so the two land together.
+            let personality = CoachPersonality.saved(forChildId: childId)
+            coachVoice.speak(personality.streakMilestoneLine(milestone), personality: personality.rawValue)
         }
     }
 }

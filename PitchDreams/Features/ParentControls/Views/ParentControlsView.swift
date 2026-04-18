@@ -153,6 +153,88 @@ enum CoachPersonality: String, CaseIterable, Identifiable {
         case .drill:   return "New record! Even a broken clock is right twice a day. Keep going."
         }
     }
+
+    // MARK: - Milestone Celebration Lines (B8)
+
+    /// Spoken the first time a child hits a named streak milestone.
+    func streakMilestoneLine(_ milestone: Int) -> String {
+        switch self {
+        case .manager:
+            switch milestone {
+            case 7:   return "Seven days. That's a real habit now. Keep going."
+            case 14:  return "Two weeks in. This is how real players are made."
+            case 30:  return "Thirty days. That's outstanding consistency."
+            case 100: return "One hundred days. You belong in a different conversation now."
+            default:  return "\(milestone) days strong. Keep showing up."
+            }
+        case .hype:
+            switch milestone {
+            case 7:   return "Seven days! You're on fire! Let's keep this going!"
+            case 14:  return "Two weeks of pure dedication! You're unstoppable!"
+            case 30:  return "Thirty days! That's legendary! You're built different!"
+            case 100: return "One hundred days! ONE HUNDRED! You're a machine!"
+            default:  return "\(milestone) days! Absolutely crushing it!"
+            }
+        case .zen:
+            switch milestone {
+            case 7:   return "Seven days. The habit is taking root. Stay present."
+            case 14:  return "Two weeks. The practice becomes the path."
+            case 30:  return "Thirty days. You have chosen consistency. Beautiful."
+            case 100: return "One hundred days. This is who you are now."
+            default:  return "\(milestone) days. The work continues."
+            }
+        case .drill:
+            switch milestone {
+            case 7:   return "Seven days. Finally doing what I told you. Don't stop."
+            case 14:  return "Two weeks. I'm almost impressed. Almost."
+            case 30:  return "Thirty days. You might actually be taking this seriously."
+            case 100: return "One hundred days. Alright. I respect it. Now do two hundred."
+            default:  return "\(milestone) days. Keep it up. Don't make me regret saying that."
+            }
+        }
+    }
+
+    /// Spoken when the child's avatar evolves into a new stage.
+    func avatarEvolutionLine(to stage: AvatarStage) -> String {
+        switch self {
+        case .manager:
+            return stage == .legend
+                ? "You've evolved to Legend. That's the top tier. You earned it."
+                : "You've evolved to Pro. The work is paying off. Let's keep climbing."
+        case .hype:
+            return stage == .legend
+                ? "LEGEND STATUS UNLOCKED! You are officially built different!"
+                : "PRO level! You're a different player now! Let's goooo!"
+        case .zen:
+            return stage == .legend
+                ? "Legend. The journey has brought you here. Honor it."
+                : "Pro. A meaningful step. Stay committed to the practice."
+        case .drill:
+            return stage == .legend
+                ? "Legend, huh. Don't let it go to your head. Back to work."
+                : "Pro stage. Welcome to the part where I expect more from you."
+        }
+    }
+
+    /// Spoken on the first session of a new day (not every session).
+    var firstSessionOfDayLine: String {
+        switch self {
+        case .manager: return "First session of the day. Set the tone."
+        case .hype:    return "First one today! Let's get this party started!"
+        case .zen:     return "The day's first session. Begin with intention."
+        case .drill:   return "First session of the day. Let's see if you're awake yet."
+        }
+    }
+
+    /// Spoken when the child starts training after a STRESSED or TIRED check-in.
+    var afterToughCheckInLine: String {
+        switch self {
+        case .manager: return "Tough day. Show up anyway. Short session counts too."
+        case .hype:    return "Rough day? Training is the reset button. Let's go!"
+        case .zen:     return "The day was heavy. The ball is still here for you. Breathe and begin."
+        case .drill:   return "Bad day? Good. Prove to yourself it doesn't run you."
+        }
+    }
 }
 
 struct ParentControlsView: View {
@@ -317,6 +399,14 @@ struct ParentControlsView: View {
                 .foregroundStyle(.secondary)
         }
 
+        Section("Notifications") {
+            NavigationLink {
+                NotificationSettingsView(childId: childId, childName: childName)
+            } label: {
+                Label("Training Reminders", systemImage: "bell.badge")
+            }
+        }
+
         Section {
             Button {
                 Task { await savePermissions() }
@@ -340,6 +430,20 @@ struct ParentControlsView: View {
 
     @ViewBuilder
     private var dataPrivacyTab: some View {
+        Section("Legal") {
+            Link(destination: URL(string: "https://pitchdreams.soccer/privacy")!) {
+                Label("Privacy Policy", systemImage: "hand.raised.fill")
+            }
+            Link(destination: URL(string: "https://pitchdreams.soccer/terms")!) {
+                Label("Terms of Service", systemImage: "doc.text.fill")
+            }
+            Link(destination: URL(string: "https://pitchdreams.soccer/kids-privacy")!) {
+                Label("Kids Privacy (COPPA)", systemImage: "figure.child")
+            }
+        } footer: {
+            Text("PitchDreams is designed for youth players with parental supervision. We do not share or sell child data. Third-party analytics are disabled.")
+        }
+
         Section("Export") {
             NavigationLink {
                 // Export is a download action; use a simple trigger view

@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #0C1322;
+        }
+        .mono-digits {
+            font-variant-numeric: tabular-nums;
+            font-feature-settings: "tnum";
+        }
+        .ghost-border {
+            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ffb59a",
+                        "surface-container-lowest": "#070e1d",
+                        "surface-container-low": "#151b2b",
+                        "secondary-fixed-dim": "#33daec",
+                        "background": "#0c1322",
+                        "primary-container": "#ff6b2c",
+                        "tertiary": "#d9c49a",
+                        "outline-variant": "#594139",
+                        "on-primary-fixed": "#380d00",
+                        "surface-container": "#191f2f",
+                        "on-secondary-fixed": "#001f23",
+                        "tertiary-container": "#aa9770",
+                        "surface-dim": "#0c1322",
+                        "primary-fixed-dim": "#ffb59a",
+                        "secondary": "#46e5f8",
+                        "inverse-surface": "#dce2f8",
+                        "surface-variant": "#2e3545",
+                        "on-tertiary-fixed": "#251a01",
+                        "primary-fixed": "#ffdbcf",
+                        "surface": "#0c1322",
+                        "on-surface": "#dce2f8",
+                        "on-tertiary": "#3b2f11",
+                        "outline": "#a98a7f",
+                        "on-primary-container": "#5c1c00",
+                        "on-surface-variant": "#e2bfb3",
+                        "on-tertiary-fixed-variant": "#534525",
+                        "tertiary-fixed-dim": "#d9c49a",
+                        "on-primary-fixed-variant": "#802900",
+                        "surface-container-high": "#232a3a",
+                        "secondary-fixed": "#91f1ff",
+                        "error": "#ffb4ab",
+                        "surface-container-highest": "#2e3545",
+                        "on-secondary": "#00363c",
+                        "on-error-container": "#ffdad6",
+                        "inverse-on-surface": "#293041",
+                        "on-tertiary-container": "#3c3012",
+                        "on-secondary-fixed-variant": "#004f57",
+                        "secondary-container": "#00c9db",
+                        "tertiary-fixed": "#f6e0b5",
+                        "surface-bright": "#32394a",
+                        "on-background": "#dce2f8",
+                        "on-primary": "#5b1b00",
+                        "on-error": "#690005",
+                        "inverse-primary": "#a83900",
+                        "surface-tint": "#ffb59a",
+                        "on-secondary-container": "#004f57",
+                        "error-container": "#93000a"
+                    },
+                    borderRadius: {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface min-h-screen flex flex-col items-center overflow-x-hidden">
+<!-- TopAppBar Anchor -->
+<header class="bg-[#0C1322] flex justify-between items-center w-full px-6 h-16 fixed top-0 z-50">
+<div class="active:scale-95 transition-transform cursor-pointer">
+<span class="material-symbols-outlined text-[#FF6B2C]">close</span>
+</div>
+<h1 class="font-['Plus_Jakarta_Sans'] font-black tracking-[3px] uppercase text-sm text-[#FF6B2C]">REWARD UNLOCKED</h1>
+<div class="w-6"></div> <!-- Spacer for center alignment -->
+</header>
+<main class="flex-1 w-full max-w-md px-6 pt-24 pb-32 flex flex-col gap-12">
+<!-- Variant A — Common -->
+<section class="relative flex flex-col items-center">
+<div class="absolute -top-12 left-1/2 -translate-x-1/2 w-64 h-64 bg-slate-500/10 blur-[60px] rounded-full pointer-events-none"></div>
+<div class="relative z-10 flex flex-col items-center text-center">
+<div class="w-16 h-16 bg-surface-container ghost-border rounded-full flex items-center justify-center mb-6 animate-bounce">
+<span class="material-symbols-outlined text-[#FF6B2C]" style="font-variation-settings: 'FILL' 1;">bolt</span>
+</div>
+<div class="mb-2">
+<span class="font-black text-6xl text-[#FF6B2C] mono-digits">+25 XP</span>
+</div>
+<p class="text-slate-400 font-bold text-[10px] tracking-widest uppercase mb-8">Small bonus. Keep the streak alive.</p>
+<button class="px-10 py-3 border border-secondary rounded-full font-black text-xs tracking-widest uppercase text-secondary hover:bg-secondary/10 active:scale-95 transition-all">
+                    GOT IT
+                </button>
+</div>
+</section>
+<div class="h-px w-full bg-surface-container-high opacity-50"></div>
+<!-- Variant B — Rare -->
+<section class="relative flex flex-col items-center">
+<div class="absolute top-0 left-1/2 -translate-x-1/2 w-72 h-72 bg-secondary/20 blur-[80px] rounded-full pointer-events-none"></div>
+<div class="relative z-10 flex flex-col items-center text-center">
+<div class="w-20 h-20 bg-surface-container-high ghost-border rounded-full flex items-center justify-center mb-8">
+<span class="material-symbols-outlined text-secondary text-4xl">sports_soccer</span>
+</div>
+<h2 class="text-2xl font-black text-white uppercase tracking-tight mb-1">FREE MOVE ATTEMPT</h2>
+<h3 class="text-lg font-bold text-secondary uppercase tracking-[2px] mb-4">Rainbow Flick</h3>
+<p class="text-slate-400 text-sm font-medium mb-10 max-w-[200px]">Try this locked move's drill free today.</p>
+<div class="flex flex-col items-center gap-4 w-full">
+<button class="w-full h-14 bg-gradient-to-br from-[#FFE6DE] to-[#FFD4C8] rounded-full flex items-center justify-center text-[#0C1322] font-black text-sm tracking-widest uppercase active:scale-95 transition-transform">
+                        TRY IT NOW
+                    </button>
+<button class="text-slate-500 font-bold text-[10px] tracking-widest uppercase hover:text-white transition-colors">
+                        SAVE FOR LATER
+                    </button>
+</div>
+</div>
+</section>
+<div class="h-px w-full bg-surface-container-high opacity-50"></div>
+<!-- Variant C — Legendary -->
+<section class="relative flex flex-col items-center pb-8">
+<!-- Radial Burst -->
+<div class="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(217,196,154,0.15)_0%,_transparent_70%)] pointer-events-none scale-150"></div>
+<div class="relative z-10 flex flex-col items-center text-center">
+<div class="flex items-center gap-2 mb-6">
+<span class="material-symbols-outlined text-tertiary" style="font-variation-settings: 'FILL' 1;">crown</span>
+<h2 class="text-[22px] font-black text-tertiary uppercase tracking-tighter italic">LEGENDARY DROP</h2>
+<span class="material-symbols-outlined text-tertiary" style="font-variation-settings: 'FILL' 1;">crown</span>
+</div>
+<!-- Platinum Card Frame Preview -->
+<div class="relative w-full max-w-[280px] aspect-[3/4] mb-8 rounded-[24px] overflow-hidden ghost-border bg-surface-container-highest shadow-2xl">
+<img class="w-full h-full object-cover" data-alt="Abstract metallic platinum texture with swirling gold veins and holographic shimmer reflecting stadium lights" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDSDKNs2-cctQ5GSZq2bazCMbEsEMX5ilQZ1GPCEfZfrMxMg6EM4s3eufv-gCduWmkzgzwvZToBpH1-UMgWjvwLz90ewwMemgRnnzVzKKiQEHTYDwJQ1X8iKcMjXhmQPvKBVMtwWN98Gt61Vyd7ZP5O4oPO5A7iK1eOqC1RcmGB8zvAwKvxDPCZvPHeXXSZ-sotBzgPGNI36KGZyCAlUNMML_kFMiNMeg4qEHDn8zw9kAcGcnaB2SQ4dzfEO0R7HSZu5mhfib865ig"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-white/10"></div>
+<div class="absolute inset-0 flex items-center justify-center">
+<div class="w-32 h-40 border-[3px] border-tertiary rounded-lg rotate-3 opacity-30 flex items-center justify-center">
+<span class="material-symbols-outlined text-tertiary text-6xl opacity-20">shield</span>
+</div>
+</div>
+</div>
+<p class="text-slate-300 text-sm font-bold mb-10">Ultra-rare Platinum frame for your Player Card.</p>
+<div class="flex flex-col items-center gap-4 w-full">
+<button class="w-full h-14 bg-gradient-to-br from-[#FFE6DE] to-[#FFD4C8] rounded-full flex items-center justify-center text-[#0C1322] font-black text-sm tracking-widest uppercase shadow-[0_0_20px_rgba(255,107,44,0.3)] active:scale-95 transition-transform">
+                        EQUIP NOW
+                    </button>
+<button class="text-slate-500 font-bold text-[10px] tracking-widest uppercase hover:text-tertiary transition-colors">
+                        VIEW COLLECTION
+                    </button>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar Anchor -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-8 pb-6 pt-4 bg-[#0C1322] shadow-[0_-8px_30px_rgb(7,14,29,0.08)] rounded-t-[32px]">
+<div class="text-slate-500 p-3 hover:text-[#46E5F8] active:scale-90 transition-all duration-200 cursor-pointer">
+<span class="material-symbols-outlined">home</span>
+</div>
+<div class="text-slate-500 p-3 hover:text-[#46E5F8] active:scale-90 transition-all duration-200 cursor-pointer">
+<span class="material-symbols-outlined">fitness_center</span>
+</div>
+<div class="bg-gradient-to-br from-[#FFE6DE] to-[#FFD4C8] text-[#0C1322] rounded-full p-3 active:scale-90 transition-all duration-200 cursor-pointer">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">military_tech</span>
+</div>
+<div class="text-slate-500 p-3 hover:text-[#46E5F8] active:scale-90 transition-all duration-200 cursor-pointer">
+<span class="material-symbols-outlined">person</span>
+</div>
+</nav>
+</body></html>

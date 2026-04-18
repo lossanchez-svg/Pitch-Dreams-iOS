@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #0C1322;
+            color: #dce2f8;
+            margin: 0;
+            overflow-x: hidden;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            line-height: 1;
+            text-transform: none;
+            letter-spacing: normal;
+            word-wrap: normal;
+            white-space: nowrap;
+            direction: ltr;
+        }
+        .ghost-border {
+            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "error": "#ffb4ab",
+                      "surface-dim": "#0c1322",
+                      "secondary-container": "#00c9db",
+                      "surface-tint": "#ffb59a",
+                      "surface-variant": "#2e3545",
+                      "surface-container-highest": "#2e3545",
+                      "on-tertiary": "#3b2f11",
+                      "on-primary": "#5b1b00",
+                      "tertiary-fixed-dim": "#d9c49a",
+                      "tertiary": "#d9c49a",
+                      "surface-container-lowest": "#070e1d",
+                      "on-tertiary-container": "#3c3012",
+                      "on-secondary-fixed": "#001f23",
+                      "inverse-on-surface": "#293041",
+                      "surface": "#0c1322",
+                      "on-tertiary-fixed-variant": "#534525",
+                      "on-background": "#dce2f8",
+                      "on-primary-fixed-variant": "#802900",
+                      "secondary-fixed": "#91f1ff",
+                      "outline-variant": "#594139",
+                      "surface-container-low": "#151b2b",
+                      "secondary-fixed-dim": "#33daec",
+                      "surface-container-high": "#232a3a",
+                      "on-primary-container": "#5c1c00",
+                      "on-secondary-fixed-variant": "#004f57",
+                      "inverse-primary": "#a83900",
+                      "error-container": "#93000a",
+                      "on-secondary": "#00363c",
+                      "on-error-container": "#ffdad6",
+                      "on-error": "#690005",
+                      "inverse-surface": "#dce2f8",
+                      "on-surface": "#dce2f8",
+                      "primary-fixed": "#ffdbcf",
+                      "tertiary-fixed": "#f6e0b5",
+                      "surface-bright": "#32394a",
+                      "secondary": "#46e5f8",
+                      "primary-fixed-dim": "#ffb59a",
+                      "on-primary-fixed": "#380d00",
+                      "on-tertiary-fixed": "#251a01",
+                      "tertiary-container": "#aa9770",
+                      "outline": "#a98a7f",
+                      "primary": "#ffb59a",
+                      "surface-container": "#191f2f",
+                      "on-secondary-container": "#004f57"
+              },
+              "borderRadius": {
+                      "DEFAULT": "1rem",
+                      "lg": "2rem",
+                      "xl": "3rem",
+                      "full": "9999px"
+              },
+              "fontFamily": {
+                      "headline": ["Plus Jakarta Sans"],
+                      "body": ["Plus Jakarta Sans"],
+                      "label": ["Plus Jakarta Sans"]
+              }
+            },
+          },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface-dim min-h-screen flex flex-col items-center">
+<!-- Top Navigation Shell -->
+<header class="fixed top-0 w-full z-50 bg-[#0C1322] flex items-center justify-between px-6 py-4 w-full">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full border-2 border-secondary overflow-hidden">
+<img alt="Rookie Wolf Avatar" class="w-full h-full object-cover" data-alt="A stylized wolf avatar inside a circular gold border representing a rookie user profile" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC4XzG06GZekbYWK8V4D2mdJOrnEObAICTY40Q-PXiV4oQI4ThbekFAtZjgcDwZ7IUoSF2mkQxQm4Ey2G2Dt8JsrY4TuZN7PJ38swFes4PPxzMkkCnyG99a5ePH-zKKmHV8Ccit0Mvz_CRUNEZQX5Irn2o1H_M9eZDziu5DbJ72rDB5qSDYITFAR4X192Wad5OJt9aMOu4qzf1AJHRlKHWMpXarwG80C47dtvGKM3HuhMegnOvT6VRCEJWvE_ZV-xHdncUszXq9Ejs"/>
+</div>
+<span class="text-xl font-black italic tracking-tighter text-[#FF6B2C]">TRAINING HUB</span>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-[#46E5F8] hover:opacity-80 transition-opacity active:scale-95 duration-150">
+<span class="material-symbols-outlined" data-icon="bolt">bolt</span>
+</button>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="w-full max-w-md px-6 pt-24 pb-32 flex flex-col gap-8 flex-grow">
+<!-- XP Earned Toast (The Target Component) -->
+<div class="fixed top-20 left-1/2 -translate-x-1/2 z-[60] pointer-events-none">
+<div class="min-w-[180px] h-[48px] px-6 bg-[#FF6B2C]/15 border border-[#FF6B2C]/30 rounded-full flex items-center justify-center gap-2 shadow-[0_10px_30px_rgba(7,14,29,0.4)] backdrop-blur-sm">
+<span class="text-[16px] font-black tracking-tight text-[#FF6B2C]">+45 XP</span>
+<span class="material-symbols-outlined text-[#FF6B2C] text-[20px]" data-icon="bolt" style="font-variation-settings: 'FILL' 1;">bolt</span>
+</div>
+</div>
+<!-- Featured Activity Card (Contextual Background) -->
+<section class="relative w-full aspect-square rounded-xl bg-surface-container overflow-hidden ghost-border">
+<img alt="Training Session" class="absolute inset-0 w-full h-full object-cover opacity-60" data-alt="Intense athlete doing heavy squats in a dark atmospheric gym with orange neon lighting accents" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCsyUUZzIwPXXaVC-hs6E-Y0GADwwJySI16b51_8TASlMxl6UaZ5KKmCx7m1yqwD74q_ROqK6tK0vCzzAqQw-hLbbX3IW3wDG8lvhY9yFjQtWRstnZs6ocQZXIrUc28Cswctc6cdBizpfDNHIu9-7sxRne75MUsWFvpRreJkCLZcWYOSEuh_A05rfkwCX9C7EuuXePM8QFvniRapGXGR6cFk4ZBulqhlRaKDelmFo-35XVoHPzJSO9pUcIZ9npUf09ajF-2ZgcDpdA"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface-dim via-transparent to-transparent"></div>
+<div class="absolute bottom-6 left-6 right-6">
+<p class="text-[10px] font-black tracking-[0.2em] uppercase text-secondary mb-2">Current Session</p>
+<h2 class="text-2xl font-black italic tracking-tighter text-on-surface">POWER EXPLOSION</h2>
+</div>
+</section>
+<!-- Stats Bento Grid -->
+<div class="grid grid-cols-2 gap-4">
+<div class="bg-surface-container-high p-6 rounded-lg flex flex-col gap-1 ghost-border">
+<span class="text-[9px] font-black tracking-[0.2em] uppercase text-slate-500">Duration</span>
+<div class="text-3xl font-black text-on-surface">24:<span class="text-[#FF6B2C]">02</span></div>
+</div>
+<div class="bg-surface-container-high p-6 rounded-lg flex flex-col gap-1 ghost-border">
+<span class="text-[9px] font-black tracking-[0.2em] uppercase text-slate-500">Heart Rate</span>
+<div class="text-3xl font-black text-on-surface">164 <span class="text-[10px] text-error">BPM</span></div>
+</div>
+</div>
+<!-- Progress Gauge -->
+<div class="bg-surface-container p-8 rounded-xl flex items-center justify-between ghost-border">
+<div class="flex flex-col gap-1">
+<span class="text-[10px] font-black tracking-[0.2em] uppercase text-[#FFE9BD]">Weekly Goal</span>
+<h3 class="text-xl font-bold text-on-surface">Stamina Peak</h3>
+</div>
+<div class="relative w-20 h-20 flex items-center justify-center">
+<svg class="w-full h-full -rotate-90">
+<circle class="text-surface-container-high" cx="40" cy="40" fill="transparent" r="36" stroke="currentColor" stroke-width="8"></circle>
+<circle class="text-primary-container" cx="40" cy="40" fill="transparent" r="36" stroke="currentColor" stroke-dasharray="226.19" stroke-dashoffset="67.85" stroke-width="8"></circle>
+</svg>
+<span class="absolute text-sm font-black">70%</span>
+</div>
+</div>
+<!-- Primary Action -->
+<button class="w-full h-14 bg-gradient-to-r from-[#FFE6DE] to-[#FFD4C8] rounded-full flex items-center justify-center gap-2 group active:scale-95 transition-transform">
+<span class="text-[#5b1b00] font-black tracking-[0.1em] uppercase text-sm">Resume Workout</span>
+<span class="material-symbols-outlined text-[#5b1b00]" data-icon="play_arrow" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+</button>
+</main>
+<!-- Bottom Navigation Shell -->
+<nav class="fixed bottom-0 left-0 w-full h-20 bg-[#191F2F] flex justify-around items-center px-8 pb-4 rounded-t-[24pt] shadow-[0_-10px_30px_rgba(7,14,29,0.4)] z-50">
+<a class="flex flex-col items-center justify-center text-[#FF6B2C] scale-110 group active:scale-90 duration-200 ease-out" href="#">
+<span class="material-symbols-outlined" data-icon="grid_view" style="font-variation-settings: 'FILL' 1;">grid_view</span>
+<span class="hidden">Dashboard</span>
+</a>
+<a class="flex flex-col items-center justify-center text-slate-500 hover:text-[#46E5F8] transition-colors active:scale-90 duration-200 ease-out" href="#">
+<span class="material-symbols-outlined" data-icon="fitness_center">fitness_center</span>
+<span class="hidden">Training</span>
+</a>
+<a class="flex flex-col items-center justify-center text-slate-500 hover:text-[#46E5F8] transition-colors active:scale-90 duration-200 ease-out" href="#">
+<span class="material-symbols-outlined" data-icon="leaderboard">leaderboard</span>
+<span class="hidden">Ranks</span>
+</a>
+<a class="flex flex-col items-center justify-center text-slate-500 hover:text-[#46E5F8] transition-colors active:scale-90 duration-200 ease-out" href="#">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="hidden">Profile</span>
+</a>
+</nav>
+</body></html>

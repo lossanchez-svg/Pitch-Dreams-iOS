@@ -3,181 +3,196 @@
 <html class="dark" lang="en"><head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<script id="tailwind-config">
-      tailwind.config = {
-        darkMode: "class",
-        theme: {
-          extend: {
-            "colors": {
-                    "on-error": "#690005",
-                    "on-background": "#dce2f8",
-                    "surface-dim": "#0c1322",
-                    "outline": "#a98a7f",
-                    "on-surface": "#dce2f8",
-                    "surface-tint": "#ffb59a",
-                    "on-secondary-fixed-variant": "#004f57",
-                    "inverse-on-surface": "#293041",
-                    "outline-variant": "#594139",
-                    "surface-container-highest": "#2e3545",
-                    "primary-container": "#ff6b2c",
-                    "secondary-container": "#00c9db",
-                    "on-tertiary-fixed-variant": "#534525",
-                    "primary-fixed": "#ffdbcf",
-                    "on-tertiary-container": "#3c3012",
-                    "tertiary": "#d9c49a",
-                    "primary-fixed-dim": "#ffb59a",
-                    "primary": "#ffb59a",
-                    "on-primary-fixed-variant": "#802900",
-                    "on-primary-fixed": "#380d00",
-                    "on-primary": "#5b1b00",
-                    "surface-container-low": "#151b2b",
-                    "on-tertiary": "#3b2f11",
-                    "on-secondary-fixed": "#001f23",
-                    "on-error-container": "#ffdad6",
-                    "surface-variant": "#2e3545",
-                    "on-primary-container": "#5c1c00",
-                    "secondary-fixed": "#91f1ff",
-                    "error": "#ffb4ab",
-                    "surface-bright": "#32394a",
-                    "surface": "#0c1322",
-                    "inverse-primary": "#a83900",
-                    "error-container": "#93000a",
-                    "tertiary-fixed-dim": "#d9c49a",
-                    "surface-container-high": "#232a3a",
-                    "on-secondary": "#00363c",
-                    "inverse-surface": "#dce2f8",
-                    "surface-container-lowest": "#070e1d",
-                    "surface-container": "#191f2f",
-                    "secondary": "#46e5f8",
-                    "background": "#0c1322",
-                    "on-tertiary-fixed": "#251a01",
-                    "on-surface-variant": "#e2bfb3",
-                    "secondary-fixed-dim": "#33daec",
-                    "tertiary-fixed": "#f6e0b5",
-                    "on-secondary-container": "#004f57",
-                    "tertiary-container": "#aa9770"
-            },
-            "borderRadius": {
-                    "DEFAULT": "1rem",
-                    "lg": "2rem",
-                    "xl": "3rem",
-                    "full": "9999px"
-            },
-            "fontFamily": {
-                    "headline": ["Plus Jakarta Sans", "sans-serif"],
-                    "body": ["Plus Jakarta Sans", "sans-serif"],
-                    "label": ["Plus Jakarta Sans", "sans-serif"]
-            }
-          },
-        },
-      }
-    </script>
 <style>
-        .ghost-border {
-            border: 1px solid rgba(255, 255, 255, 0.05);
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
         }
-        .mono-digits {
-            font-variant-numeric: tabular-nums;
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #0C1322;
+        }
+        .ghost-border {
+            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+        }
+        .cta-gradient {
+            background: linear-gradient(135deg, #FFE6DE 0%, #FFD4C8 100%);
+        }
+        .orange-glow {
+            box-shadow: 0 0 40px -10px rgba(255, 107, 44, 0.15);
         }
     </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "tertiary-fixed": "#f6e0b5",
+                        "surface-container-highest": "#2e3545",
+                        "on-tertiary-fixed-variant": "#534525",
+                        "on-surface": "#dce2f8",
+                        "surface-container": "#191f2f",
+                        "tertiary": "#d9c49a",
+                        "outline-variant": "#594139",
+                        "surface-container-high": "#232a3a",
+                        "primary-fixed": "#ffdbcf",
+                        "on-secondary-fixed": "#001f23",
+                        "on-primary-fixed-variant": "#802900",
+                        "inverse-primary": "#a83900",
+                        "on-secondary-fixed-variant": "#004f57",
+                        "on-tertiary": "#3b2f11",
+                        "error": "#ffb4ab",
+                        "on-background": "#dce2f8",
+                        "on-tertiary-container": "#3c3012",
+                        "on-surface-variant": "#e2bfb3",
+                        "on-primary-fixed": "#380d00",
+                        "tertiary-fixed-dim": "#d9c49a",
+                        "inverse-on-surface": "#293041",
+                        "surface-dim": "#0c1322",
+                        "primary-container": "#ff6b2c",
+                        "error-container": "#93000a",
+                        "on-secondary-container": "#004f57",
+                        "on-error": "#690005",
+                        "secondary-fixed": "#91f1ff",
+                        "outline": "#a98a7f",
+                        "secondary-fixed-dim": "#33daec",
+                        "secondary": "#46e5f8",
+                        "primary": "#ffb59a",
+                        "surface-container-lowest": "#070e1d",
+                        "primary-fixed-dim": "#ffb59a",
+                        "surface": "#0c1322",
+                        "inverse-surface": "#dce2f8",
+                        "background": "#0c1322",
+                        "surface-variant": "#2e3545",
+                        "on-secondary": "#00363c",
+                        "tertiary-container": "#aa9770",
+                        "on-tertiary-fixed": "#251a01",
+                        "surface-tint": "#ffb59a",
+                        "surface-bright": "#32394a",
+                        "on-error-container": "#ffdad6",
+                        "on-primary-container": "#5c1c00",
+                        "on-primary": "#5b1b00",
+                        "surface-container-low": "#151b2b",
+                        "secondary-container": "#00c9db"
+                    },
+                    borderRadius: {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    }
+                }
+            }
+        }
+    </script>
 <style>
     body {
       min-height: max(884px, 100dvh);
     }
   </style>
   </head>
-<body class="bg-[#0C1322] text-on-background font-body min-h-screen pb-32">
-<!-- Top App Bar -->
-<header class="bg-[#0C1322] flex justify-between items-center px-6 py-4 w-full fixed top-0 z-50">
-<div class="w-10 h-10 rounded-full border-2 border-secondary overflow-hidden">
-<img alt="Avatar" data-alt="Rookie Wolf avatar in circular frame with cyan border, professional vector style illustration of a young athlete" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDVN1Kd9BDJeIQs3KcR2Tbf-I6d7NJS0RRgp2aaO1dXj9wWxKgo4ohSol4SccTpU6FtUkmHF2VihmH8zXGVC6HriO9YoNLOcHT_bgoX38mcNWc5TzloktRgoC7CmMRPDa-l0B7LKCce0cyT2ghOQFEwyXxQbW8dhGTw4gZ5CoGU9e1M1DM1ScDm2obS6vHFRAUuNWkiYv96H8n8-TLsmjhJf1nU7SDyYr7MUL8AszXRJtqvLZMlGW7HANQU39UTTmKRPToasao2pjQ"/>
+<body class="bg-surface-dim min-h-screen text-on-surface">
+<!-- TopAppBar from JSON -->
+<header class="bg-[#0C1322] flex justify-between items-center w-full px-6 py-4 fixed top-0 z-50">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full border-2 border-secondary overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Stylized rookie wolf avatar in a circular gold frame with high energy gaming aesthetic" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD51zR9bsWrMV4jAZOWsZULCImhgrrXf2eqfe9XES1DehXdjrEXzBESdgWv7aYS35o3g3gCvkFxz7btYQWwqD-C6eRevQfhHLPtetaTWTw8tQnNQaErOV8KmQNArmZXmKrvCYzS5K7YWJ4mJaCYJu2lvPXU14STToFReBxOxk-OmbFas1p-_aVonu-u_xYKk4BbG3PpeQosYcOQvHI9JWKVgU9t7kkhnaPCz1tkqFuKMq_Gk-t9KtwSLqvZV90iz29sit9EZ9HMTyE"/>
 </div>
-<div class="font-['Plus_Jakarta_Sans'] font-black uppercase tracking-[2px] text-[11px] text-[#FF6B2C]">
-            PITCHDREAMS
-        </div>
-<div class="hover:opacity-80 transition-opacity scale-95 active:duration-150">
-<span class="material-symbols-outlined text-slate-400">notifications</span>
+<span class="text-[#FF6B2C] font-black text-xl">DASHBOARD</span>
+</div>
+<div class="text-[#FF6B2C] flex items-center justify-center p-2 hover:bg-[#191F2F] transition-colors rounded-full active:scale-95 duration-100">
+<span class="material-symbols-outlined">notifications</span>
 </div>
 </header>
-<main class="pt-24 px-6 space-y-8">
-<!-- Section Header -->
-<div class="text-center">
-<h1 class="text-[12px] font-extrabold tracking-[3px] text-tertiary uppercase">DAILY MYSTERY</h1>
+<main class="pt-20 pb-32 px-6 flex flex-col items-center gap-8">
+<!-- VARIANT 1: ACTIVE MYSTERY BOX -->
+<section class="w-full max-w-[361px]">
+<div class="mb-3">
+<span class="font-bold tracking-[3px] uppercase text-[11px] text-primary-container">Live Drop</span>
 </div>
-<!-- Component 1: Mystery Box (Active State) -->
-<div class="w-full max-w-[361px] h-[160px] mx-auto bg-surface-container rounded-DEFAULT ghost-border relative overflow-hidden flex items-center shadow-[0_0_40px_rgba(255,107,44,0.15)] group active:scale-95 transition-transform duration-200 cursor-pointer">
-<!-- Left Glow -->
-<div class="absolute left-0 top-1/2 -translate-y-1/2 w-48 h-48 bg-primary-container/20 blur-[60px] rounded-full pointer-events-none"></div>
-<!-- Left 40%: 3D Box Illustration -->
-<div class="w-[40%] flex justify-center items-center relative z-10">
-<div class="relative w-24 h-24 flex items-center justify-center">
-<img class="w-full h-full object-contain drop-shadow-[0_10px_20px_rgba(0,0,0,0.5)]" data-alt="High-quality 3D isometric gift box with a gold metallic lid hinge and vibrant orange silk bow, soft glowing particles around it" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBTZMfcMPsehISQp21eQ6lzG2wBszUIXa_Z9FfD8DIhYpo33-UkdHEi1aWU0_UyUpuSReviBrMvbyTEW3F5u9AqdoCVL7iTm5ex7HvEhfEiTgSahEjYhdWdiEh1JQaWye00mgl-epBakVD7qGUbxH_3aG81khNKiFq4pw7EhsRUlTEgSf0R5dGq3SD5uYGBgSf8W2fnVBj8oCTAw4VmFKM-pGwtVGikfoxnbL8TtdIAWNy1HId53WVMdtz0jBowoIENnOLL-QU2Jcc"/>
-<!-- Sparkles/Stars -->
-<span class="material-symbols-outlined absolute -top-2 -right-2 text-tertiary text-lg animate-pulse" style="font-variation-settings: 'FILL' 1;">star</span>
-<span class="material-symbols-outlined absolute top-4 -left-4 text-tertiary text-sm opacity-60" style="font-variation-settings: 'FILL' 1;">star</span>
-<span class="material-symbols-outlined absolute bottom-0 left-2 text-tertiary text-xs" style="font-variation-settings: 'FILL' 1;">star</span>
+<div class="w-[361px] h-[160px] bg-surface-container rounded-lg ghost-border orange-glow flex overflow-hidden relative active:scale-[0.98] transition-transform cursor-pointer">
+<!-- Left 40% (Visual) -->
+<div class="w-[40%] h-full flex items-center justify-center relative">
+<!-- Glow behind box -->
+<div class="absolute w-24 h-24 bg-primary-container/20 blur-2xl rounded-full"></div>
+<!-- 3D Box Illustration -->
+<div class="relative z-10">
+<img class="w-28 h-28 object-contain" data-alt="3D isometric closed mystery box with shiny gold hinges and a vibrant orange silk bow glowing with sparkles" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB5FbRJ9Dfjt4dt9tGgdIVcKqJttFCr4I_Kq776F-SSsm12Nt8BiDo3OusQrhLFHyi12Ev1xKeI76QnJf4l1t4CORhLPhg27vLhQIKLG0Wp96YmhQxMvbHqFxpINjiUIpH0ExPWATtfBMsyAvNm-fcZrvE09QJII9lGUqDJ_vcdJ8QVApnOXS5T98vEsS9xMl64BEkBNqhdSGPLBihjwxxvksBW2kjDrUg0Ke8hadzptn87jkY7Ryrp0Af4VwE9IYojJX-2DCjG_hk"/>
+<!-- Floating Sparkles -->
+<div class="absolute top-0 right-0 text-tertiary-fixed animate-pulse">
+<span class="material-symbols-outlined text-xs" style="font-variation-settings: 'FILL' 1;">star</span>
 </div>
-</div>
-<!-- Right 60%: Content -->
-<div class="w-[60%] pl-2 relative z-10">
-<p class="text-[10px] font-extrabold tracking-[3px] text-tertiary uppercase mb-1">TODAY'S MYSTERY</p>
-<h2 class="text-[18px] font-extrabold text-primary-container leading-tight mb-2">TAP TO OPEN</h2>
-<div class="flex items-center gap-1">
-<span class="text-[11px] font-bold text-secondary uppercase tracking-wider">🎁 12 day box streak</span>
+<div class="absolute bottom-4 left-0 text-primary animate-pulse delay-75">
+<span class="material-symbols-outlined text-[10px]" style="font-variation-settings: 'FILL' 1;">colors_spark</span>
 </div>
 </div>
 </div>
-<!-- Component 2: Mystery Box (Opened State) -->
-<div class="w-full max-w-[361px] h-[160px] mx-auto bg-surface-container-low rounded-DEFAULT ghost-border flex items-center opacity-70 filter grayscale transition-all duration-300">
-<!-- Left 40%: Grayscale Box Illustration -->
-<div class="w-[40%] flex justify-center items-center">
-<div class="w-24 h-24 flex items-center justify-center opacity-40">
-<img class="w-full h-full object-contain" data-alt="Opened 3D isometric gift box in desaturated colors showing it has been claimed, professional dark theme gaming aesthetic" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBNf4jgoTxZzFL9QB1dT_ARhn8FVMcc1KAB8pmd3m9Q9hEaIuMw1e2nkanSspo5ubpWOti-dVQyc_vAXK9O_abyadfdhOPA4YjBdTqfVqIxwpGfLrbgb0i4xa90Z-ZpSY3z0rJazTM_CBzNY79K0zfp8e7_WXdJs58yLyxhXr7QpIt_Y3NYVqtDym25MbRUCtMUcvOBGr2Rh95UO7KxLMZMWDFXbL8dfForblo2r9EuUxZyGEzHUTC_2DpUU_o22Sx3A1xLvNr8SOE"/>
-</div>
-</div>
-<!-- Right 60%: Content -->
-<div class="w-[60%] pl-2">
-<div class="inline-block bg-surface-container-highest px-3 py-1 rounded-full mb-2">
-<p class="text-[8px] font-extrabold tracking-widest text-on-surface-variant uppercase">COME BACK TOMORROW</p>
-</div>
-<h2 class="text-[18px] font-extrabold text-on-background mono-digits leading-tight mb-2 tracking-tighter">NEXT BOX IN 14:22:05</h2>
-<div class="flex items-center gap-1">
-<span class="text-[11px] font-bold text-secondary uppercase tracking-wider">STREAK PROTECTED</span>
+<!-- Right 60% (Content) -->
+<div class="w-[60%] h-full flex flex-col justify-center px-4 gap-1">
+<span class="font-['Plus_Jakarta_Sans'] font-extrabold tracking-[3px] uppercase text-[10px] text-tertiary-fixed">TODAY'S MYSTERY</span>
+<span class="font-['Plus_Jakarta_Sans'] font-black text-[18px] text-primary-container leading-tight">TAP TO OPEN</span>
+<div class="flex items-center gap-1 mt-2">
+<span class="text-secondary text-[11px] font-bold">🎁 12 day box streak</span>
 </div>
 </div>
 </div>
-<!-- Additional Kinetic Stats Bento -->
-<div class="grid grid-cols-2 gap-4 max-w-[361px] mx-auto">
-<div class="bg-surface-container h-32 rounded-DEFAULT ghost-border p-4 flex flex-col justify-between">
-<span class="text-[9px] font-extrabold tracking-[2px] text-slate-500 uppercase">Weekly Rank</span>
-<div class="text-3xl font-black text-tertiary italic">#04</div>
+</section>
+<!-- VARIANT 2: ALREADY OPENED -->
+<section class="w-full max-w-[361px] opacity-70">
+<div class="mb-3">
+<span class="font-bold tracking-[3px] uppercase text-[11px] text-slate-500">Next Available</span>
 </div>
-<div class="bg-surface-container h-32 rounded-DEFAULT ghost-border p-4 flex flex-col justify-between border-r-2 border-primary-container/20">
-<span class="text-[9px] font-extrabold tracking-[2px] text-slate-500 uppercase">Energy</span>
-<div class="text-3xl font-black text-secondary italic">88%</div>
+<div class="w-[361px] h-[160px] bg-surface-container-low rounded-lg ghost-border flex overflow-hidden relative grayscale">
+<!-- Left 40% (Visual) -->
+<div class="w-[40%] h-full flex items-center justify-center relative">
+<img class="w-28 h-28 object-contain opacity-50" data-alt="A grayscale 3D isometric closed mystery box sitting on a dark surface in shadow" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBLs1g_AhWXXxGWVHoeDTCUocQgt0kvp5tQ05Qp7v024ju3dRAwDKI2ngfaHifJkEOPLf_uChITu4erZ5hLFOidcn5ANThnYl7ju0JLIT9fNJ2pMaoAjNvcxO-zIKXdE-AwHzbKLja2rYOn2XNtUZrR_5hoo883P2Bp9AljbhYGE4vqfwGcsm36zeF7fnWs3H2bDOlZlMfT81kDsywyIthyClKqUQMykRhLvlL7U6lQ9rCtwVdzko0YVQTWGDYrMKkBHMAz4OUYdag"/>
+</div>
+<!-- Right 60% (Content) -->
+<div class="w-[60%] h-full flex flex-col justify-center px-4 gap-1">
+<div class="inline-block bg-slate-800/50 rounded-full px-2 py-1 w-fit mb-1">
+<span class="font-bold tracking-[2px] uppercase text-[9px] text-slate-400">COME BACK TOMORROW</span>
+</div>
+<span class="font-['Plus_Jakarta_Sans'] font-black text-[24px] text-slate-300 tabular-nums">14:22:05</span>
+<span class="text-slate-500 text-[11px] font-bold uppercase tracking-widest">UNTIL REFILL</span>
+</div>
+</div>
+</section>
+<!-- Informational Card (Editorial Space) -->
+<div class="w-full max-w-[361px] p-6 bg-surface-container-high rounded-lg ghost-border">
+<h3 class="text-tertiary font-black text-xl mb-2">LOOT DROPS</h3>
+<p class="text-on-surface-variant text-sm leading-relaxed">
+                Log in daily to claim your stadium loot. Streaks increase the rarity of gear found in mystery boxes. Legendary gear drops at 30+ day streaks.
+            </p>
+<div class="mt-4 flex gap-2">
+<div class="h-1 flex-1 bg-primary-container rounded-full"></div>
+<div class="h-1 flex-1 bg-primary-container rounded-full"></div>
+<div class="h-1 flex-1 bg-primary-container rounded-full"></div>
+<div class="h-1 flex-1 bg-surface-container-highest rounded-full"></div>
+<div class="h-1 flex-1 bg-surface-container-highest rounded-full"></div>
 </div>
 </div>
 </main>
-<!-- Bottom Nav Bar -->
-<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-8 pt-4 bg-[#191F2F] rounded-t-[32px] shadow-[0_-10px_40px_rgba(7,14,29,0.08)]">
-<button class="flex flex-col items-center justify-center text-slate-500 hover:text-[#46E5F8] transition-colors tactile scale-90 duration-200">
-<span class="material-symbols-outlined">stadium</span>
-<span class="font-['Plus_Jakarta_Sans'] font-bold uppercase tracking-[3px] text-[9px] mt-1">ARENA</span>
+<!-- BottomNavBar from JSON -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-6 pt-3 bg-[#191F2F] rounded-t-[24pt] shadow-[0_-8px_30px_rgb(7,14,29,0.08)]">
+<button class="flex flex-col items-center justify-center text-slate-500 hover:text-[#46E5F8] transition-all active:scale-90 tap-highlight-transparent">
+<span class="material-symbols-outlined">sports_esports</span>
+<span class="font-['Plus_Jakarta_Sans'] font-bold tracking-[2px] uppercase text-[9px] mt-1">ARENA</span>
 </button>
-<button class="flex flex-col items-center justify-center text-[#FF6B2C] bg-[#0C1322] rounded-full px-4 py-2 tactile scale-90 duration-200">
-<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">fitness_center</span>
-<span class="font-['Plus_Jakarta_Sans'] font-bold uppercase tracking-[3px] text-[9px] mt-1">TRAIN</span>
+<!-- ACTIVE TAB: LOOT -->
+<button class="flex flex-col items-center justify-center text-[#FF6B2C] scale-110 transition-transform tap-highlight-transparent">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">inventory_2</span>
+<span class="font-['Plus_Jakarta_Sans'] font-bold tracking-[2px] uppercase text-[9px] mt-1">LOOT</span>
 </button>
-<button class="flex flex-col items-center justify-center text-slate-500 hover:text-[#46E5F8] transition-colors tactile scale-90 duration-200">
+<button class="flex flex-col items-center justify-center text-slate-500 hover:text-[#46E5F8] transition-all active:scale-90 tap-highlight-transparent">
 <span class="material-symbols-outlined">leaderboard</span>
-<span class="font-['Plus_Jakarta_Sans'] font-bold uppercase tracking-[3px] text-[9px] mt-1">STATS</span>
+<span class="font-['Plus_Jakarta_Sans'] font-bold tracking-[2px] uppercase text-[9px] mt-1">RANK</span>
 </button>
-<button class="flex flex-col items-center justify-center text-slate-500 hover:text-[#46E5F8] transition-colors tactile scale-90 duration-200">
+<button class="flex flex-col items-center justify-center text-slate-500 hover:text-[#46E5F8] transition-all active:scale-90 tap-highlight-transparent">
 <span class="material-symbols-outlined">person</span>
-<span class="font-['Plus_Jakarta_Sans'] font-bold uppercase tracking-[3px] text-[9px] mt-1">WOLF</span>
+<span class="font-['Plus_Jakarta_Sans'] font-bold tracking-[2px] uppercase text-[9px] mt-1">PROFILE</span>
 </button>
 </nav>
 </body></html>

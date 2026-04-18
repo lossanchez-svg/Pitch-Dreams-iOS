@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "primary": "#ffb59a",
+                    "secondary-fixed": "#91f1ff",
+                    "error": "#ffb4ab",
+                    "secondary-fixed-dim": "#33daec",
+                    "on-surface": "#dce2f8",
+                    "on-primary-fixed": "#380d00",
+                    "inverse-on-surface": "#293041",
+                    "tertiary": "#d9c49a",
+                    "on-primary": "#5b1b00",
+                    "surface-dim": "#0c1322",
+                    "on-error-container": "#ffdad6",
+                    "surface-container-low": "#151b2b",
+                    "secondary": "#46e5f8",
+                    "primary-fixed": "#ffdbcf",
+                    "on-secondary-container": "#004f57",
+                    "outline": "#a98a7f",
+                    "background": "#0c1322",
+                    "on-surface-variant": "#e2bfb3",
+                    "tertiary-container": "#aa9770",
+                    "surface-container": "#191f2f",
+                    "tertiary-fixed": "#f6e0b5",
+                    "on-secondary": "#00363c",
+                    "surface-variant": "#2e3545",
+                    "on-primary-fixed-variant": "#802900",
+                    "on-error": "#690005",
+                    "on-background": "#dce2f8",
+                    "primary-container": "#ff6b2c",
+                    "surface-bright": "#32394a",
+                    "on-tertiary-fixed-variant": "#534525",
+                    "inverse-surface": "#dce2f8",
+                    "surface-tint": "#ffb59a",
+                    "surface-container-high": "#232a3a",
+                    "outline-variant": "#594139",
+                    "on-tertiary": "#3b2f11",
+                    "surface-container-lowest": "#070e1d",
+                    "error-container": "#93000a",
+                    "surface-container-highest": "#2e3545",
+                    "surface": "#0c1322",
+                    "inverse-primary": "#a83900",
+                    "tertiary-fixed-dim": "#d9c49a",
+                    "primary-fixed-dim": "#ffb59a",
+                    "on-primary-container": "#5c1c00",
+                    "on-tertiary-fixed": "#251a01",
+                    "on-tertiary-container": "#3c3012",
+                    "on-secondary-fixed-variant": "#004f57",
+                    "secondary-container": "#00c9db",
+                    "on-secondary-fixed": "#001f23"
+            },
+            "borderRadius": {
+                    "DEFAULT": "1rem",
+                    "lg": "2rem",
+                    "xl": "3rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Plus Jakarta Sans", "sans-serif"],
+                    "body": ["Plus Jakarta Sans", "sans-serif"],
+                    "label": ["Plus Jakarta Sans", "sans-serif"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .ghost-border-cyan {
+            box-shadow: inset 0 0 0 1px rgba(70, 229, 248, 0.05), 0 0 20px rgba(70, 229, 248, 0.1);
+        }
+        @keyframes subtle-pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.8; }
+        }
+        .animate-pulse-gold {
+            animation: subtle-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface font-body min-h-screen">
+<!-- TopAppBar Shell -->
+<header class="bg-[#0C1322] shadow-[0px_4px_20px_rgba(7,14,29,0.4)] flex justify-between items-center px-6 py-4 w-full fixed top-0 z-50">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full border-2 border-secondary overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="close up profile shot of a sleek robotic wolf head with glowing cyan eyes and sharp geometric fur patterns" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDOP6M5FJVJPjQdmchvTdLGdMeFoXqmL6zn5oQf-Mgt95KNa6LONTcH2yKKpGffkFGanozpQT3kmYQtA7RdWNjo-IjBEm5bNgRCCzWti_zmvRdBVO2bDhce9arRTbh4gMMLuEvOP7VBUJEmtTkBoA-vCfcY7H79ywk6W98qS9WDoVWTbrbQKwMA8OONmRfOIK0cR0zurBLAzFeRIUCB11P9DV2faY1uU6LIjjUk9qyTZHlEYZqITwCWVwVKQ9_HncFZaAyR-3PCnao"/>
+</div>
+<h1 class="text-[#FF6B2C] font-['Plus_Jakarta_Sans'] font-black uppercase tracking-[3px] text-xs">KINETIC ARENA</h1>
+</div>
+<button class="text-[#FF6B2C] hover:opacity-80 transition-opacity active:scale-95 duration-150">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+</header>
+<main class="pt-24 pb-32 px-4 max-w-md mx-auto flex flex-col gap-6">
+<!-- Welcome Section -->
+<section class="flex flex-col gap-1">
+<span class="text-[10px] font-bold uppercase tracking-[3px] text-secondary">LIVE STATUS</span>
+<h2 class="text-3xl font-extrabold tracking-tight">DASHBOARD</h2>
+</section>
+<!-- PITCH LOCATION BANNER (The Task) -->
+<div class="w-[361px] h-[100px] bg-surface-container rounded-lg ghost-border-cyan flex items-center px-4 gap-4 self-center overflow-hidden border border-secondary/10">
+<!-- Left Side: Icon Tile -->
+<div class="w-12 h-12 flex-shrink-0 bg-secondary/20 rounded-[12px] flex items-center justify-center border border-secondary/20 shadow-[0_0_15px_rgba(70,229,248,0.2)]">
+<span class="text-2xl">⚽</span>
+</div>
+<!-- Middle Side: Content -->
+<div class="flex-grow flex flex-col justify-center">
+<span class="text-[10px] font-black tracking-[3px] text-secondary uppercase leading-none mb-1">YOU'RE AT THE PITCH</span>
+<h3 class="text-[16px] font-black text-on-surface leading-tight mb-0.5">HOME PITCH</h3>
+<p class="text-[11px] font-bold text-tertiary leading-tight">Bonus XP active — 2× multiplier for this session</p>
+</div>
+<!-- Right Side: Pulse Badge -->
+<div class="w-12 h-12 flex items-center justify-center">
+<div class="bg-surface-container-lowest border border-tertiary/20 rounded-full w-11 h-11 flex items-center justify-center animate-pulse-gold">
+<span class="text-[18px] font-black text-tertiary">2×</span>
+</div>
+</div>
+</div>
+<!-- Featured Training Card (Bento Grid Style) -->
+<div class="grid grid-cols-2 gap-4">
+<div class="col-span-2 bg-surface-container-high rounded-lg p-6 flex flex-col gap-4 relative overflow-hidden">
+<img class="absolute inset-0 w-full h-full object-cover opacity-20" data-alt="dramatic high angle view of a professional soccer stadium pitch at night under floodlights with intense lens flare and deep shadows" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCEZUz8sdQ7ep2ZApnvBUkHKK-NjoHU4nl4vEnC1yzLrxUf0iY8_AOoPZeP39SdoP18dcElfhmxM9_RKx2PM6gOsajgQ4pTpr5U6712RMV9Otdowoc2T4JYZ3n8t0gdUi7dbkVCLF6_QM-rHF3xsI9hwB4THVbNgG3s2DRNAiemHfTFa8Jc4HMJ9OptOdrSFsut-CtuuHm308Gh0dgfnqQ-VvYhLlZi85xjpXSgFqHCfKqo7uaft0PAu2XGYBOoUx-Di4XYbj3UcEY"/>
+<div class="relative z-10">
+<span class="text-[10px] font-bold uppercase tracking-[2px] text-primary">DAILY CHALLENGE</span>
+<h3 class="text-2xl font-black mt-1">PRECISION STRIKE</h3>
+<p class="text-sm text-slate-400 mt-2 max-w-[200px]">Master the corner pockets in this high-intensity drill.</p>
+<button class="mt-4 bg-gradient-to-br from-[#FFE6DE] to-[#FFD4C8] text-[#0C1322] px-6 py-3 rounded-full font-black text-xs uppercase tracking-widest active:scale-95 transition-transform">
+                        START SESSION
+                    </button>
+</div>
+</div>
+<!-- Stats Mini Cards -->
+<div class="bg-surface-container rounded-lg p-4 flex flex-col items-center justify-center gap-1">
+<span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">RANK</span>
+<span class="text-3xl font-black text-tertiary">#12</span>
+</div>
+<div class="bg-surface-container rounded-lg p-4 flex flex-col items-center justify-center gap-1 border border-secondary/5">
+<span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">KINETIC ENERGY</span>
+<span class="text-3xl font-black text-secondary">88%</span>
+</div>
+</div>
+<!-- Quick Actions List (Asymmetric) -->
+<div class="flex flex-col gap-3">
+<h4 class="text-[11px] font-black uppercase tracking-[3px] text-slate-500 ml-1">UPCOMING DRILLS</h4>
+<div class="bg-surface-container-low rounded-lg p-4 flex items-center justify-between">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 bg-surface-variant rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-secondary">timer</span>
+</div>
+<div>
+<p class="font-bold text-sm">AGILITY LADDER</p>
+<p class="text-[10px] text-slate-500 font-bold uppercase tracking-wider">15 MINS • HIGH INTENSITY</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-slate-600">chevron_right</span>
+</div>
+<div class="bg-surface-container-low rounded-lg p-4 flex items-center justify-between ml-4">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 bg-surface-variant rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-primary">target</span>
+</div>
+<div>
+<p class="font-bold text-sm">WALL PASS SYNC</p>
+<p class="text-[10px] text-slate-500 font-bold uppercase tracking-wider">10 MINS • TECHNICAL</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-slate-600">chevron_right</span>
+</div>
+</div>
+</main>
+<!-- BottomNavBar Shell -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-6 pt-3 bg-[#191F2F] shadow-[0px_-10px_40px_rgba(7,14,29,0.6)] rounded-t-[32px]">
+<!-- Dashboard Active -->
+<a class="flex flex-col items-center justify-center bg-gradient-to-br from-[#FFE6DE] to-[#FFD4C8] text-[#0C1322] rounded-full px-5 py-2 scale-110 -translate-y-2 transition-all" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">grid_view</span>
+<span class="font-['Plus_Jakarta_Sans'] font-bold uppercase tracking-[2px] text-[10px] mt-0.5">DASHBOARD</span>
+</a>
+<a class="flex flex-col items-center justify-center text-slate-500 py-2 hover:text-[#46E5F8] transition-colors active:scale-90 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined">explore</span>
+<span class="font-['Plus_Jakarta_Sans'] font-bold uppercase tracking-[2px] text-[10px] mt-1">PITCHES</span>
+</a>
+<a class="flex flex-col items-center justify-center text-slate-500 py-2 hover:text-[#46E5F8] transition-colors active:scale-90 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined">fitness_center</span>
+<span class="font-['Plus_Jakarta_Sans'] font-bold uppercase tracking-[2px] text-[10px] mt-1">TRAINING</span>
+</a>
+<a class="flex flex-col items-center justify-center text-slate-500 py-2 hover:text-[#46E5F8] transition-colors active:scale-90 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="font-['Plus_Jakarta_Sans'] font-bold uppercase tracking-[2px] text-[10px] mt-1">PROFILE</span>
+</a>
+</nav>
+</body></html>

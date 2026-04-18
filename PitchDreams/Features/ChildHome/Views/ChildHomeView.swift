@@ -11,6 +11,7 @@ struct ChildHomeView: View {
     @State private var navigateToTraining = false
     @State private var navigateToQuickLog = false
     @State private var navigateToLearn = false
+    @State private var navigateToPlayerCard = false
     @State private var showMilestoneModal = false
     @State private var newMilestone: Int?
     @State private var milestoneFreeze = false
@@ -287,6 +288,9 @@ struct ChildHomeView: View {
         }
         .navigationDestination(isPresented: $navigateToLearn) {
             LearnView(childId: childId)
+        }
+        .navigationDestination(isPresented: $navigateToPlayerCard) {
+            PlayerCardScreen(childId: childId)
         }
     }
 
@@ -956,6 +960,13 @@ struct ChildHomeView: View {
 
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: Spacing.lg) {
+                    NavigationLink {
+                        PlayerCardScreen(childId: childId)
+                    } label: {
+                        exploreSkillCard(title: "My Card", color: Color(hex: "#FF6B2C"), icon: "person.text.rectangle.fill")
+                    }
+                    .buttonStyle(.plain)
+
                     NavigationLink {
                         FirstTouchView(childId: childId)
                     } label: {

@@ -52,17 +52,44 @@ struct ConsistencyRingView: View {
         }
     }
 
+    /// 100+ day streaks get a legendary gold outer halo ring around the
+    /// main streak ring — matches the third variant in
+    /// `proposals/Stitch/streak_ring_enhanced.png`.
+    private var hasLegendaryHalo: Bool { streak >= 100 }
+
+    /// Ring fill color darkens from orange (day 1+) through red (14+)
+    /// then to gold for the legendary tier.
+    private var ringColor: Color {
+        switch streak {
+        case 0..<7:    return Color.dsSecondary
+        case 7..<14:   return Color.dsAccentOrange
+        case 14..<100: return Color(hex: "#FF4500")
+        default:       return Color.dsTertiaryContainer  // 100+
+        }
+    }
+
     var body: some View {
         HStack(spacing: 20) {
             // Ring on the left
             ZStack {
+                // Legendary outer halo — only at 100+ days
+                if hasLegendaryHalo {
+                    Circle()
+                        .stroke(Color.dsTertiaryContainer.opacity(0.4), lineWidth: 2)
+                        .frame(width: 102, height: 102)
+                        .blur(radius: 3)
+                    Circle()
+                        .stroke(Color.dsTertiary, lineWidth: 2)
+                        .frame(width: 98, height: 98)
+                }
+
                 Circle()
                     .stroke(Color.dsSurfaceContainerHighest, lineWidth: 6)
 
                 Circle()
                     .trim(from: 0, to: progress)
                     .stroke(
-                        Color.dsSecondary,
+                        ringColor,
                         style: StrokeStyle(lineWidth: 6, lineCap: .round)
                     )
                     .rotationEffect(.degrees(-90))
@@ -118,18 +145,15 @@ struct ConsistencyRingView: View {
     }
 
     // MARK: - Shield Bank
+    // Matches the mockup's inline shield-icon visualization: the count is
+    // shown as literal shield pips (up to 3), with a numeric overflow
+    // suffix for bigger banks. Falls back to a single shield + count when
+    // shields are zero so the column layout stays stable.
 
     @ViewBuilder
     private var shieldItem: some View {
-        let icon = Image(systemName: "shield.fill")
-            .font(.system(size: 12))
-            .foregroundStyle(freezes > 0 ? Color.dsSecondary : Color.dsError)
         VStack(spacing: 4) {
-            if #available(iOS 17.0, *) {
-                icon.symbolEffect(.pulse, options: .repeating, isActive: freezes > 0)
-            } else {
-                icon
-            }
+            shieldIcons
             Text("\(freezes)")
                 .font(.system(size: 13, weight: .bold, design: .rounded).monospacedDigit())
                 .foregroundStyle(Color.dsOnSurface)
@@ -137,6 +161,38 @@ struct ConsistencyRingView: View {
                 .font(.system(size: 9, weight: .bold))
                 .tracking(0.5)
                 .foregroundStyle(Color.dsOnSurfaceVariant)
+        }
+    }
+
+    @ViewBuilder
+    private var shieldIcons: some View {
+        if freezes == 0 {
+            pulsingShield(color: Color.dsError)
+        } else {
+            HStack(spacing: 2) {
+                // Up to 3 pips side-by-side; if the user has >3, show
+                // "3+" rather than a cluttered row.
+                ForEach(0..<min(freezes, 3), id: \.self) { _ in
+                    pulsingShield(color: Color.dsSecondary)
+                }
+                if freezes > 3 {
+                    Text("+")
+                        .font(.system(size: 10, weight: .heavy, design: .rounded))
+                        .foregroundStyle(Color.dsSecondary)
+                }
+            }
+        }
+    }
+
+    @ViewBuilder
+    private func pulsingShield(color: Color) -> some View {
+        let icon = Image(systemName: "shield.fill")
+            .font(.system(size: 12))
+            .foregroundStyle(color)
+        if #available(iOS 17.0, *) {
+            icon.symbolEffect(.pulse, options: .repeating, isActive: freezes > 0)
+        } else {
+            icon
         }
     }
 

@@ -1,7 +1,10 @@
 import SwiftUI
 
 /// Shown when a child's avatar evolves into a new stage (Rookie -> Pro -> Legend).
-/// Can also be navigated to directly to view the full evolution path.
+/// Matches `proposals/Stitch/evolution_celebration_enhanced.png` — a centered
+/// vertical-spine timeline where the current stage is emphasized with a cyan
+/// ring + glow + "CURRENT STAGE" chip, while surrounding stages render as
+/// small circular tokens (dim + locked if not yet reached).
 struct EvolutionModal: View {
     let avatar: Avatar
     let newStage: AvatarStage
@@ -9,6 +12,7 @@ struct EvolutionModal: View {
     let onDismiss: () -> Void
 
     @State private var avatarScale: CGFloat = 0
+    @State private var glowPulse: Bool = false
     @State private var showCelebration = false
     @StateObject private var coachVoice = CoachVoice()
 
@@ -20,63 +24,28 @@ struct EvolutionModal: View {
 
             ScrollView {
                 VStack(spacing: 0) {
-                    // Header
-                    VStack(spacing: 8) {
-                        HStack(spacing: 8) {
-                            Image(systemName: "sparkles")
-                                .foregroundStyle(Color.dsSecondary)
-                            Text("EVOLUTION PROTOCOL")
-                                .font(.system(size: 10, weight: .bold))
-                                .tracking(3)
-                                .foregroundStyle(Color.dsSecondary)
-                        }
+                    header
                         .padding(.top, 24)
 
-                        Text("Your Evolution\nPath")
-                            .font(.system(size: 32, weight: .heavy, design: .rounded))
-                            .multilineTextAlignment(.center)
-                            .foregroundStyle(Color.dsOnSurface)
-
-                        if totalXP > 0 {
-                            Text("You've earned \(totalXP) XP!")
-                                .font(.system(size: 14, weight: .bold, design: .rounded))
-                                .foregroundStyle(Color.dsAccentOrange)
-                                .padding(.top, 4)
-                        }
-                    }
-                    .accessibilityElement(children: .combine)
-                    .accessibilityAddTraits(.isHeader)
-
-                    // Timeline
+                    // Vertical timeline, centered spine
                     VStack(spacing: 0) {
                         ForEach(AvatarStage.allCases, id: \.rawValue) { stage in
-                            evolutionStageCard(stage)
+                            stageNode(stage)
+                            if stage != .legend {
+                                spineConnector(
+                                    from: stage,
+                                    to: AvatarStage(rawValue: stage.rawValue + 1) ?? .legend
+                                )
+                            }
                         }
                     }
-                    .padding(.top, 32)
+                    .padding(.top, 28)
                     .padding(.horizontal, 24)
 
-                    // CTA
-                    Button {
-                        onDismiss()
-                    } label: {
-                        HStack(spacing: 8) {
-                            Text("BEGIN DAILY GRIND")
-                                .font(.system(size: 14, weight: .black, design: .rounded))
-                                .tracking(2)
-                            Image(systemName: "arrow.right")
-                                .font(.system(size: 14, weight: .bold))
-                        }
-                        .foregroundStyle(Color.dsCTALabel)
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, 18)
-                        .background(DSGradient.primaryCTA)
-                        .clipShape(Capsule())
-                        .dsPrimaryShadow()
-                    }
-                    .padding(.horizontal, 24)
-                    .padding(.top, 40)
-                    .padding(.bottom, 60)
+                    beginCTA
+                        .padding(.horizontal, 24)
+                        .padding(.top, 32)
+                        .padding(.bottom, 60)
                 }
             }
         }
@@ -88,6 +57,9 @@ struct EvolutionModal: View {
             withAnimation(.spring(response: 0.3, dampingFraction: 0.6).delay(0.6)) {
                 avatarScale = 1.0
             }
+            withAnimation(.easeInOut(duration: 1.6).repeatForever(autoreverses: true).delay(0.4)) {
+                glowPulse = true
+            }
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                 showCelebration = true
                 UIImpactFeedbackGenerator(style: .heavy).impactOccurred()
@@ -98,138 +70,258 @@ struct EvolutionModal: View {
         }
     }
 
-    // MARK: - Stage Card
+    // MARK: - Header
 
     @ViewBuilder
-    private func evolutionStageCard(_ stage: AvatarStage) -> some View {
+    private var header: some View {
+        VStack(spacing: 10) {
+            HStack(spacing: 8) {
+                Image(systemName: "sparkles")
+                    .font(.system(size: 12))
+                Text("EVOLUTION PROTOCOL")
+                    .font(.system(size: 11, weight: .heavy, design: .rounded))
+                    .tracking(3)
+            }
+            .foregroundStyle(Color.dsSecondary)
+
+            Text("Your Evolution\nPath")
+                .font(.system(size: 34, weight: .black, design: .rounded))
+                .multilineTextAlignment(.center)
+                .foregroundStyle(Color.dsOnSurface)
+
+            if totalXP > 0 {
+                HStack(spacing: 8) {
+                    Image(systemName: "bolt.fill")
+                        .font(.system(size: 13, weight: .bold))
+                    Text("YOU'VE EARNED \(totalXP) XP!")
+                        .font(.system(size: 13, weight: .heavy, design: .rounded))
+                        .tracking(1)
+                }
+                .foregroundStyle(Color.dsCTALabel)
+                .padding(.horizontal, 20)
+                .padding(.vertical, 10)
+                .background(
+                    Capsule()
+                        .fill(DSGradient.primaryCTA)
+                )
+                .dsPrimaryShadow()
+                .padding(.top, 4)
+            }
+        }
+        .accessibilityElement(children: .combine)
+        .accessibilityAddTraits(.isHeader)
+    }
+
+    // MARK: - Stage Node
+
+    @ViewBuilder
+    private func stageNode(_ stage: AvatarStage) -> some View {
         let isCurrent = stage == newStage
         let isUnlocked = stage.rawValue <= newStage.rawValue
-        let isLast = stage == .legend
 
-        HStack(alignment: .top, spacing: 20) {
-            // Timeline spine
-            VStack(spacing: 0) {
-                // Dot
-                ZStack {
-                    Circle()
-                        .fill(isUnlocked ? Color.dsSecondary : Color.dsSurfaceContainerHighest)
-                        .frame(width: 16, height: 16)
+        if isCurrent {
+            currentStageCard(stage)
+        } else {
+            compactStageToken(stage, isUnlocked: isUnlocked)
+        }
+    }
 
-                    if isCurrent {
-                        Circle()
-                            .fill(Color.dsSecondary)
-                            .frame(width: 16, height: 16)
-                            .shadow(color: Color.dsSecondary.opacity(0.6), radius: 8)
-                    }
-                }
-                .padding(.top, 20)
+    // MARK: - Compact (non-current) token
 
-                // Line
-                if !isLast {
-                    Rectangle()
-                        .fill(
-                            LinearGradient(
-                                colors: [
-                                    isUnlocked ? Color.dsSecondary.opacity(0.5) : Color.dsSurfaceContainerHighest,
-                                    Color.dsSurfaceContainerHighest
-                                ],
-                                startPoint: .top,
-                                endPoint: .bottom
-                            )
-                        )
-                        .frame(width: 2)
-                }
-            }
-            .frame(width: 16)
+    @ViewBuilder
+    private func compactStageToken(_ stage: AvatarStage, isUnlocked: Bool) -> some View {
+        let assetName = avatar.assetName(stage: stage)
+        VStack(spacing: 8) {
+            ZStack {
+                Circle()
+                    .fill(Color.dsSurfaceContainerLow)
+                    .frame(width: 72, height: 72)
+                Circle()
+                    .stroke(
+                        isUnlocked ? Color.dsSecondary.opacity(0.5) : Color.white.opacity(0.08),
+                        lineWidth: 1.5
+                    )
+                    .frame(width: 72, height: 72)
 
-            // Card
-            VStack(alignment: .leading, spacing: 12) {
-                HStack {
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text(stage.title)
-                            .font(.system(size: 20, weight: .bold, design: .rounded))
-                            .foregroundStyle(isCurrent ? Color.dsOnSurface : Color.dsOnSurfaceVariant)
-
-                        if isCurrent {
-                            Text("CURRENT STAGE")
-                                .font(.system(size: 10, weight: .bold))
-                                .tracking(2)
-                                .foregroundStyle(Color.dsSecondary)
-                        }
-                    }
-
-                    Spacer()
-                }
-
-                // Avatar image
-                let assetName = avatar.assetName(stage: stage)
                 if UIImage(named: assetName) != nil {
                     Image(assetName)
                         .resizable()
-                        .scaledToFit()
-                        .frame(height: isCurrent ? 160 : 100)
-                        .frame(maxWidth: .infinity)
-                        .scaleEffect(isCurrent ? avatarScale : 1.0)
-                        .grayscale(isUnlocked ? 0 : 0.8)
-                        .opacity(isUnlocked ? 1 : 0.4)
-                        .blur(radius: isUnlocked ? 0 : 2)
+                        .scaledToFill()
+                        .frame(width: 64, height: 64)
+                        .clipShape(Circle())
+                        .grayscale(isUnlocked ? 0 : 0.85)
+                        .opacity(isUnlocked ? 0.85 : 0.35)
                 } else {
-                    RoundedRectangle(cornerRadius: 12)
-                        .fill(Color.dsSurfaceContainerHigh)
-                        .frame(height: isCurrent ? 160 : 100)
-                        .overlay(
-                            Image(systemName: isUnlocked ? "figure.soccer" : "lock.fill")
-                                .font(.system(size: 32))
-                                .foregroundStyle(Color.dsOnSurfaceVariant.opacity(0.4))
-                        )
+                    Image(systemName: isUnlocked ? "figure.soccer" : "lock.fill")
+                        .font(.system(size: 24))
+                        .foregroundStyle(Color.dsOnSurfaceVariant.opacity(0.5))
                 }
 
-                // Requirement pills for locked stages
-                if !isUnlocked {
-                    VStack(alignment: .leading, spacing: 8) {
-                        Text("REQUIREMENTS")
-                            .font(.system(size: 10, weight: .bold))
-                            .tracking(2)
-                            .foregroundStyle(Color.dsOnSurfaceVariant)
-
-                        requirementPill(
-                            icon: "bolt.fill",
-                            text: "Earn \(XPCalculator.xpForStage(stage)) XP",
-                            color: .dsAccentOrange
-                        )
-                    }
+                if isUnlocked {
+                    // Small cyan check badge bottom-right
+                    Image(systemName: "checkmark.circle.fill")
+                        .font(.system(size: 16))
+                        .foregroundStyle(Color.dsSecondary)
+                        .background(Circle().fill(Color.dsBackground))
+                        .offset(x: 24, y: 24)
                 }
             }
-            .padding(20)
-            .background(isCurrent ? Color.dsSurfaceContainer : Color.dsSurfaceContainerLow)
-            .clipShape(RoundedRectangle(cornerRadius: CornerRadius.lg))
-            .overlay(
-                RoundedRectangle(cornerRadius: CornerRadius.lg)
-                    .stroke(
-                        isCurrent ? Color.dsSecondary.opacity(0.2) : Color.white.opacity(0.05),
-                        lineWidth: 1
-                    )
-            )
-            .padding(.bottom, 16)
+
+            Text(stage.title.uppercased())
+                .font(.system(size: 11, weight: .heavy, design: .rounded))
+                .tracking(2)
+                .foregroundStyle(Color.dsOnSurfaceVariant.opacity(isUnlocked ? 0.9 : 0.5))
         }
+        .frame(maxWidth: .infinity)
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("\(stage.title) stage, \(isUnlocked ? "complete" : "locked")")
     }
 
-    private func requirementPill(icon: String, text: String, color: Color) -> some View {
-        HStack(spacing: 8) {
-            Image(systemName: icon)
-                .font(.system(size: 12))
-                .foregroundStyle(color)
-            Text(text)
-                .font(.system(size: 12, weight: .medium))
-                .foregroundStyle(Color.dsOnSurfaceVariant)
+    // MARK: - Current stage hero card
+
+    @ViewBuilder
+    private func currentStageCard(_ stage: AvatarStage) -> some View {
+        let assetName = avatar.assetName(stage: stage)
+        let level = max(1, totalXP / 100)
+
+        VStack(spacing: 14) {
+            // CURRENT STAGE chip
+            Text("CURRENT STAGE")
+                .font(.system(size: 11, weight: .heavy, design: .rounded))
+                .tracking(2)
+                .foregroundStyle(Color.dsCTALabel)
+                .padding(.horizontal, 16)
+                .padding(.vertical, 6)
+                .background(
+                    Capsule()
+                        .fill(Color.dsSecondary)
+                )
+                .shadow(color: Color.dsSecondary.opacity(0.4), radius: 8)
+
+            // Avatar with cyan ring + glow
+            ZStack {
+                Circle()
+                    .fill(Color.dsSecondary.opacity(glowPulse ? 0.22 : 0.10))
+                    .frame(width: 180, height: 180)
+                    .blur(radius: 20)
+
+                Circle()
+                    .stroke(Color.dsSecondary, lineWidth: 2)
+                    .frame(width: 150, height: 150)
+
+                if UIImage(named: assetName) != nil {
+                    Image(assetName)
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 140, height: 140)
+                        .clipShape(Circle())
+                        .scaleEffect(avatarScale)
+                } else {
+                    Image(systemName: "figure.soccer")
+                        .font(.system(size: 48))
+                        .foregroundStyle(Color.dsSecondary)
+                        .frame(width: 140, height: 140)
+                        .background(Color.dsSurfaceContainerHigh)
+                        .clipShape(Circle())
+                        .scaleEffect(avatarScale)
+                }
+
+                // Sparkle badge bottom-right
+                Image(systemName: "sparkles")
+                    .font(.system(size: 14, weight: .bold))
+                    .foregroundStyle(Color.dsCTALabel)
+                    .frame(width: 34, height: 34)
+                    .background(Circle().fill(Color.dsSecondary))
+                    .shadow(color: Color.dsSecondary.opacity(0.5), radius: 6)
+                    .offset(x: 54, y: 54)
+            }
+            .padding(.top, 4)
+
+            // Stage + avatar name combined
+            Text("\(stage.title.uppercased()) \(avatar.displayName.uppercased())")
+                .font(.system(size: 24, weight: .heavy, design: .rounded).italic())
+                .foregroundStyle(Color.dsOnSurface)
+
+            // Level unlocked row
+            HStack(spacing: 6) {
+                Image(systemName: "star.fill")
+                    .font(.system(size: 11))
+                    .foregroundStyle(Color.dsSecondary)
+                Text("LEVEL \(level) UNLOCKED")
+                    .font(.system(size: 11, weight: .heavy, design: .rounded))
+                    .tracking(2)
+                    .foregroundStyle(Color.dsSecondary)
+            }
         }
-        .padding(.horizontal, 12)
-        .padding(.vertical, 8)
-        .background(Color.dsSurfaceContainerHigh)
-        .clipShape(Capsule())
+        .padding(.vertical, 20)
+        .padding(.horizontal, 20)
+        .frame(maxWidth: .infinity)
+        .background(
+            RoundedRectangle(cornerRadius: CornerRadius.xl)
+                .fill(Color.dsSurfaceContainerLow)
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: CornerRadius.xl)
+                .stroke(Color.dsSecondary.opacity(0.55), lineWidth: 1.5)
+        )
+        .shadow(color: Color.dsSecondary.opacity(0.2), radius: 20)
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("Current stage \(stage.title) \(avatar.displayName). Level \(level) unlocked.")
+    }
+
+    // MARK: - Spine connector between stages
+
+    @ViewBuilder
+    private func spineConnector(from: AvatarStage, to: AvatarStage) -> some View {
+        let fromUnlocked = from.rawValue <= newStage.rawValue
+        let toUnlocked = to.rawValue <= newStage.rawValue
+        Rectangle()
+            .fill(
+                LinearGradient(
+                    colors: [
+                        fromUnlocked ? Color.dsSecondary.opacity(0.6) : Color.white.opacity(0.08),
+                        toUnlocked ? Color.dsSecondary.opacity(0.6) : Color.white.opacity(0.08)
+                    ],
+                    startPoint: .top,
+                    endPoint: .bottom
+                )
+            )
+            .frame(width: 2, height: 28)
+            .frame(maxWidth: .infinity)
+    }
+
+    // MARK: - CTA
+
+    @ViewBuilder
+    private var beginCTA: some View {
+        Button {
+            onDismiss()
+        } label: {
+            HStack(spacing: 10) {
+                Text("BEGIN DAILY GRIND")
+                    .font(.system(size: 14, weight: .black, design: .rounded))
+                    .tracking(2)
+                Image(systemName: "arrow.right")
+                    .font(.system(size: 14, weight: .bold))
+            }
+            .foregroundStyle(Color.dsCTALabel)
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 18)
+            .background(DSGradient.primaryCTA)
+            .clipShape(Capsule())
+            .dsPrimaryShadow()
+        }
     }
 }
 
-#Preview {
-    EvolutionModal(avatar: .wolf, newStage: .pro, totalXP: 500) { }
+#Preview("Pro (current)") {
+    EvolutionModal(avatar: .wolf, newStage: .pro, totalXP: 1200) { }
+}
+
+#Preview("Legend (current)") {
+    EvolutionModal(avatar: .lion, newStage: .legend, totalXP: 3200) { }
+}
+
+#Preview("Rookie (current)") {
+    EvolutionModal(avatar: .fox, newStage: .rookie, totalXP: 120) { }
 }

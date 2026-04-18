@@ -86,20 +86,58 @@ struct WeeklyRecapCardView: View {
     }
 
     // MARK: - Avatar
+    // Matches `proposals/Stitch/weekly_recap_card.png` — avatar inside a
+    // gold ring with stage name pill nested at the bottom edge. The ring
+    // color shifts with avatar stage (gold at Legend, cyan at Pro, subtle
+    // at Rookie).
+
+    private var avatarRingColor: Color {
+        switch recap.avatarStage {
+        case .rookie: return Color.dsTertiaryContainer.opacity(0.5)
+        case .pro:    return Color.dsSecondary
+        case .legend: return Color.dsTertiary
+        }
+    }
 
     @ViewBuilder
     private var avatarSection: some View {
         let assetName = Avatar.assetName(for: recap.avatarId, totalXP: recap.totalXP)
-        if UIImage(named: assetName) != nil {
-            Image(assetName)
-                .resizable()
-                .scaledToFit()
-                .frame(height: 100)
-        } else {
-            Image(systemName: "figure.soccer")
-                .font(.system(size: 48))
-                .foregroundStyle(Color.dsSecondary.opacity(0.4))
-                .frame(height: 100)
+        VStack(spacing: -12) {
+            ZStack {
+                Circle()
+                    .stroke(avatarRingColor, lineWidth: 2)
+                    .frame(width: 106, height: 106)
+                Circle()
+                    .fill(Color.dsAccentOrange.opacity(0.25))
+                    .frame(width: 120, height: 120)
+                    .blur(radius: 18)
+
+                if UIImage(named: assetName) != nil {
+                    Image(assetName)
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 98, height: 98)
+                        .clipShape(Circle())
+                } else {
+                    Image(systemName: "figure.soccer")
+                        .font(.system(size: 40))
+                        .foregroundStyle(Color.dsSecondary.opacity(0.4))
+                        .frame(width: 98, height: 98)
+                        .background(Color.dsSurfaceContainerLow)
+                        .clipShape(Circle())
+                }
+            }
+            .zIndex(1)
+
+            Text(recap.avatarStage.title.uppercased())
+                .font(.system(size: 11, weight: .heavy, design: .rounded))
+                .tracking(2)
+                .foregroundStyle(Color(hex: "#2A1A08"))
+                .padding(.horizontal, 16)
+                .padding(.vertical, 6)
+                .background(Color.dsTertiaryContainer)
+                .clipShape(Capsule())
+                .shadow(color: Color.dsTertiaryContainer.opacity(0.3), radius: 6)
         }
     }
 

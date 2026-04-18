@@ -430,7 +430,7 @@ struct ParentControlsView: View {
 
     @ViewBuilder
     private var dataPrivacyTab: some View {
-        Section("Legal") {
+        Section {
             Link(destination: URL(string: "https://pitchdreams.soccer/privacy")!) {
                 Label("Privacy Policy", systemImage: "hand.raised.fill")
             }
@@ -440,6 +440,8 @@ struct ParentControlsView: View {
             Link(destination: URL(string: "https://pitchdreams.soccer/kids-privacy")!) {
                 Label("Kids Privacy (COPPA)", systemImage: "figure.child")
             }
+        } header: {
+            Text("Legal")
         } footer: {
             Text("PitchDreams is designed for youth players with parental supervision. We do not share or sell child data. Third-party analytics are disabled.")
         }

@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,700;0,800;1,400;1,800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-surface-variant": "#e2bfb3",
+                    "on-primary-fixed": "#380d00",
+                    "on-secondary-fixed": "#001f23",
+                    "tertiary-container": "#aa9770",
+                    "surface-container-lowest": "#070e1d",
+                    "surface": "#0c1322",
+                    "inverse-primary": "#a83900",
+                    "primary": "#ffb59a",
+                    "on-secondary-fixed-variant": "#004f57",
+                    "tertiary": "#d9c49a",
+                    "on-secondary": "#00363c",
+                    "secondary-container": "#00c9db",
+                    "outline-variant": "#594139",
+                    "primary-container": "#ff6b2c",
+                    "tertiary-fixed": "#f6e0b5",
+                    "tertiary-fixed-dim": "#d9c49a",
+                    "on-tertiary-fixed-variant": "#534525",
+                    "on-error-container": "#ffdad6",
+                    "secondary": "#46e5f8",
+                    "surface-container": "#191f2f",
+                    "surface-container-high": "#232a3a",
+                    "primary-fixed-dim": "#ffb59a",
+                    "inverse-on-surface": "#293041",
+                    "surface-dim": "#0c1322",
+                    "on-tertiary": "#3b2f11",
+                    "outline": "#a98a7f",
+                    "on-tertiary-container": "#3c3012",
+                    "error-container": "#93000a",
+                    "surface-tint": "#ffb59a",
+                    "surface-bright": "#32394a",
+                    "secondary-fixed-dim": "#33daec",
+                    "on-primary": "#5b1b00",
+                    "on-primary-fixed-variant": "#802900",
+                    "surface-container-low": "#151b2b",
+                    "background": "#0c1322",
+                    "primary-fixed": "#ffdbcf",
+                    "error": "#ffb4ab",
+                    "on-tertiary-fixed": "#251a01",
+                    "on-error": "#690005",
+                    "inverse-surface": "#dce2f8",
+                    "on-surface": "#dce2f8",
+                    "surface-container-highest": "#2e3545",
+                    "on-primary-container": "#5c1c00",
+                    "surface-variant": "#2e3545",
+                    "on-secondary-container": "#004f57",
+                    "on-background": "#dce2f8",
+                    "secondary-fixed": "#91f1ff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "1rem",
+                    "lg": "2rem",
+                    "xl": "3rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Plus Jakarta Sans", "sans-serif"],
+                    "body": ["Plus Jakarta Sans", "sans-serif"],
+                    "label": ["Plus Jakarta Sans", "sans-serif"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .glow-cyan {
+            text-shadow: 0 0 40px rgba(70, 229, 248, 0.6);
+        }
+        .ghost-border {
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .mastered-stroke {
+            -webkit-text-stroke: 1px rgba(255, 255, 255, 0.2);
+        }
+        .starlight-burst {
+            background: radial-gradient(circle at center, rgba(70, 229, 248, 0.15) 0%, rgba(217, 196, 154, 0.05) 40%, rgba(12, 19, 34, 1) 70%);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body min-h-screen overflow-hidden selection:bg-secondary selection:text-surface">
+<!-- Top Navigation Bar (JSON Guided) -->
+<header class="flex items-center justify-between px-6 py-4 z-50 w-full top-0 left-0 absolute bg-transparent">
+<button class="w-10 h-10 flex items-center justify-center text-[#FF6B2C] hover:opacity-80 transition-opacity scale-95 active:duration-100">
+<span class="material-symbols-outlined text-2xl">close</span>
+</button>
+<h1 class="text-[#FF6B2C] font-['Plus_Jakarta_Sans'] font-black tracking-tighter uppercase">SESSION COMPLETE</h1>
+<div class="w-10"></div> <!-- Spacer for center alignment -->
+</header>
+<!-- Main Content Canvas -->
+<main class="relative flex flex-col items-center justify-center min-h-screen pt-20 pb-32 px-8 starlight-burst">
+<!-- Mastery Header -->
+<div class="text-center mb-4">
+<h2 class="text-[48pt] font-black leading-none text-white mastered-stroke tracking-tight">MASTERED!</h2>
+</div>
+<!-- Identity Section -->
+<div class="flex flex-col items-center gap-2 mb-12">
+<h3 class="text-[32pt] font-extrabold text-secondary tracking-tight">La Croqueta</h3>
+<!-- Move Icon -->
+<div class="py-8">
+<span class="material-symbols-outlined text-[120pt] text-secondary glow-cyan" style="font-variation-settings: 'FILL' 1, 'wght' 700;">
+                    swap_horiz
+                </span>
+</div>
+<p class="text-[14pt] italic font-medium text-tertiary tracking-wide opacity-90">
+                Iniesta's disappearing act
+            </p>
+</div>
+<!-- XP Banner -->
+<div class="bg-gradient-to-r from-tertiary/10 via-tertiary/20 to-tertiary/10 px-12 py-4 rounded-full border border-tertiary/20 mb-16 shadow-[0_0_30px_rgba(217,196,154,0.15)]">
+<span class="text-[24pt] font-black text-tertiary tracking-tighter">+250 XP</span>
+</div>
+<!-- Loadout Section -->
+<div class="w-full max-w-sm">
+<div class="flex flex-col gap-4 mb-8">
+<p class="text-[9pt] font-bold uppercase tracking-[3px] text-white/40 text-center">Current Loadout</p>
+<div class="flex justify-center gap-3">
+<!-- Active Slot (La Croqueta) -->
+<div class="w-[56px] h-[56px] rounded-[16pt] bg-surface-container-high ghost-border flex items-center justify-center border-secondary/40 border-[2px]">
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">swap_horiz</span>
+</div>
+<!-- Empty/Locked Slots -->
+<div class="w-[56px] h-[56px] rounded-[16pt] bg-surface-container-low ghost-border flex items-center justify-center">
+<span class="material-symbols-outlined text-white/10">lock</span>
+</div>
+<div class="w-[56px] h-[56px] rounded-[16pt] bg-surface-container-low ghost-border flex items-center justify-center">
+<span class="material-symbols-outlined text-white/10">add</span>
+</div>
+<div class="w-[56px] h-[56px] rounded-[16pt] bg-surface-container-low ghost-border flex items-center justify-center">
+<span class="material-symbols-outlined text-white/10">add</span>
+</div>
+</div>
+</div>
+<!-- Primary CTA -->
+<button class="w-full h-[56px] rounded-full bg-gradient-to-br from-[#FFE6DE] to-[#FFD4C8] text-[#0C1322] font-black text-[14pt] uppercase tracking-wider shadow-[0_10px_30px_rgba(255,107,44,0.3)] hover:scale-[1.02] active:scale-[0.98] transition-all">
+                ADD TO MY CARD
+            </button>
+</div>
+</main>
+<!-- Bottom Secondary Action -->
+<div class="fixed bottom-10 right-8 z-50">
+<button class="w-14 h-14 rounded-full bg-surface-container-highest ghost-border flex items-center justify-center text-secondary shadow-lg hover:bg-surface-bright transition-colors">
+<span class="material-symbols-outlined text-2xl">share</span>
+</button>
+</div>
+<!-- Hidden Nav Shell (JSON Structure Placeholder) -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-8 pt-4 opacity-0 pointer-events-none bg-[#0C1322]/80">
+<div class="flex flex-col items-center justify-center text-slate-500 p-3"><span class="material-symbols-outlined">sports_soccer</span></div>
+<div class="flex flex-col items-center justify-center text-slate-500 p-3"><span class="material-symbols-outlined">leaderboard</span></div>
+<div class="flex flex-col items-center justify-center text-slate-500 p-3"><span class="material-symbols-outlined">workspace_premium</span></div>
+<div class="flex flex-col items-center justify-center text-slate-500 p-3"><span class="material-symbols-outlined">groups</span></div>
+<div class="flex flex-col items-center justify-center text-slate-500 p-3"><span class="material-symbols-outlined">person</span></div>
+</nav>
+<!-- Background Decoration -->
+<div class="fixed inset-0 pointer-events-none z-[-1] overflow-hidden">
+<img class="w-full h-full object-cover opacity-10 mix-blend-overlay" data-alt="atmospheric wide shot of a professional soccer stadium at night with bright floodlights creating a hazy glow against dark blue sky" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBfERvVUers-lN87e7Vd7zTszUFehX-ycEy3Crcl_iVmHfJb842R8upEwOYnpPtrWZPWi0pGeLGJeFi52D-noTHMniVPnJ2h-fQEhXOLhrdJYrGhLgtnu7rLK5-R0uUtEzEqrITNFy0K8q8ghWfGMDfBc3RLHHUnzoEsmC9MqJoqOjVGOeVVXAQ_rSlcj-S1oM90_wM71grmc0vZ1MEIY9k3k54QUOdwRPlEiHYXCQtQ4k10SeBlWSv1urcJ6iYkjI3lz3ZVELk0Ec"/>
+</div>
+</body></html>

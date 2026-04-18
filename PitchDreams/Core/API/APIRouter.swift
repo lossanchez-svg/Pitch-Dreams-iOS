@@ -252,8 +252,8 @@ struct CreateChildBody: Encodable {
 }
 struct SignupResponse: Decodable { let success: Bool; let parentId: String }
 struct CreateChildResponse: Decodable { let success: Bool; let childId: String }
-struct CreateSessionBody: Encodable { var activityType: String?; let effortLevel: Int; let mood: String; let duration: Int; var win: String?; var focus: String? }
-struct QuickSessionBody: Encodable { let type: String; let duration: Int; let effort: Int }
+struct CreateSessionBody: Codable { var activityType: String?; let effortLevel: Int; let mood: String; let duration: Int; var win: String?; var focus: String? }
+struct QuickSessionBody: Codable { let type: String; let duration: Int; let effort: Int }
 struct CreateActivityBody: Encodable { let activityType: String; let durationMinutes: Int; let gameIQImpact: String; var focusTagIds: [String]?; var highlightIds: [String]?; var nextFocusIds: [String]? }
 struct CreateCheckInBody: Encodable { let energy: Int; let soreness: String; let focus: Int; let mood: String; let timeAvail: Int; let painFlag: Bool }
 struct QuickCheckInBody: Encodable { let mood: String; var timeAvail: Int? }

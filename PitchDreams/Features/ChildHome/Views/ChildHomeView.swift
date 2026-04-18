@@ -5,6 +5,7 @@ struct ChildHomeView: View {
     @StateObject private var viewModel: ChildHomeViewModel
     @StateObject private var speechRecognizer = SpeechRecognizer()
     @EnvironmentObject var authManager: AuthManager
+    @EnvironmentObject var networkMonitor: NetworkMonitor
     @State private var lastVoiceCommand: String?
     @State private var voiceEnabled = false
     @State private var navigateToTraining = false
@@ -134,6 +135,10 @@ struct ChildHomeView: View {
                 }
                 .padding(.bottom, 140)
             }
+        }
+        .safeAreaInset(edge: .top) {
+            OfflineBanner(isOffline: networkMonitor.status == .offline)
+                .animation(.spring(response: 0.5, dampingFraction: 0.8), value: networkMonitor.status)
         }
         .safeAreaInset(edge: .bottom) {
             if speechRecognizer.isListening {
@@ -1139,5 +1144,6 @@ struct ChildHomeView: View {
     NavigationStack {
         ChildHomeView(childId: "preview-child")
             .environmentObject(AuthManager())
+            .environmentObject(NetworkMonitor.shared)
     }
 }

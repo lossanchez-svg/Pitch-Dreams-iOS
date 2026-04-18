@@ -46,36 +46,45 @@ final class QuickLogViewModel: ObservableObject {
         isSaving = true
         errorMessage = nil
         saveSuccess = false
+        let body = QuickSessionBody(
+            type: selectedType,
+            duration: duration,
+            effort: effort
+        )
+
         do {
-            let body = QuickSessionBody(
-                type: selectedType,
-                duration: duration,
-                effort: effort
-            )
             let _: SessionSaveResult = try await apiClient.request(
                 APIRouter.createQuickSession(childId: childId, body: body)
             )
-            saveSuccess = true
-            MissionsViewModel.shared.recordEvent(.sessionLogged, childId: childId)
-
-            // Award XP
-            let earned = XPCalculator.xpForSession(
-                duration: duration,
-                effortLevel: effort * 2, // effort is 1-5, scale to 2-10
-                activityType: selectedType
-            )
-            let _ = await xpStore.addXP(earned, childId: childId)
-            await xpStore.recordXPEntry(
-                XPEntry(amount: earned, source: "session", date: Date()),
-                childId: childId
-            )
-            xpEarned = earned
-            ReviewPromptManager.noteSessionCompleted()
-
-            resetForm()
+        } catch APIError.network {
+            // Offline — enqueue for background retry and treat as success so
+            // the user's momentum isn't interrupted.
+            await SessionSyncQueue.shared.enqueueQuickSession(childId: childId, body: body)
+            Log.api.info("Quick session queued for retry for child \(self.childId)")
         } catch {
             errorMessage = "Failed to log session: \(error.localizedDescription)"
+            isSaving = false
+            return
         }
+
+        saveSuccess = true
+        MissionsViewModel.shared.recordEvent(.sessionLogged, childId: childId)
+
+        // Award XP
+        let earned = XPCalculator.xpForSession(
+            duration: duration,
+            effortLevel: effort * 2, // effort is 1-5, scale to 2-10
+            activityType: selectedType
+        )
+        let _ = await xpStore.addXP(earned, childId: childId)
+        await xpStore.recordXPEntry(
+            XPEntry(amount: earned, source: "session", date: Date()),
+            childId: childId
+        )
+        xpEarned = earned
+        ReviewPromptManager.noteSessionCompleted()
+
+        resetForm()
         isSaving = false
     }
 

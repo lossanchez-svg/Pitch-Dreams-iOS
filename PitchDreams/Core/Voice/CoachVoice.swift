@@ -29,7 +29,7 @@ final class CoachVoice: ObservableObject, CoachVoiceProtocol {
         return Date().timeIntervalSince(lastSpokeAt) < cooldown
     }
 
-    func speak(_ text: String, personality: String = "manager") {
+    func speak(_ text: String, personality: String = "manager", rate: Double = 1.0) {
         onWillSpeak?()
         stop()
 
@@ -50,24 +50,29 @@ final class CoachVoice: ObservableObject, CoachVoiceProtocol {
         utterance.preUtteranceDelay = 0.1
         utterance.postUtteranceDelay = 0.05
 
+        let baseRate: Float
         switch personality {
         case "hype":
-            utterance.rate = 0.50
+            baseRate = 0.50
             utterance.pitchMultiplier = 1.08
             utterance.volume = 1.0
         case "zen":
-            utterance.rate = 0.42
+            baseRate = 0.42
             utterance.pitchMultiplier = 0.95
             utterance.volume = 0.9
         case "drill":
-            utterance.rate = 0.50
+            baseRate = 0.50
             utterance.pitchMultiplier = 0.85
             utterance.volume = 1.0
         default: // manager — warm, encouraging coach tone
-            utterance.rate = 0.46
+            baseRate = 0.46
             utterance.pitchMultiplier = 1.02
             utterance.volume = 0.95
         }
+        // Apply the F4 slow-mo multiplier. Clamped to AVSpeech's legal range
+        // so 0.25× doesn't underflow to silence.
+        let scaledRate = baseRate * Float(max(0.25, min(2.0, rate)))
+        utterance.rate = max(AVSpeechUtteranceMinimumSpeechRate, min(AVSpeechUtteranceMaximumSpeechRate, scaledRate))
 
         isSpeaking = true
         synthesizer.speak(utterance)

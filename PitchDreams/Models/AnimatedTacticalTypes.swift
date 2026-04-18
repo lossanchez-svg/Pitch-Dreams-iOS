@@ -144,8 +144,54 @@ struct TacticalDiagramState: Equatable {
 
 struct TacticalStep: Equatable {
     let narration: String
+    /// Age-adapted narration (≤11). Falls back to `narration` when absent.
+    let narrationYoung: String?
     let diagram: TacticalDiagramState
     let duration: TimeInterval  // seconds
+    /// Optional element to spotlight for ~1.5s before the step animates.
+    /// Matches `TacticalPlayer.id`, `TacticalArrow.id`, or `TacticalZone.id`.
+    /// When set, `AnimatedTacticalPitchView` dims all other elements and
+    /// pulses a ring around the spotlight target.
+    let spotlightElementId: String?
+    /// Short caption displayed during the spotlight phase.
+    /// Falls back to a generic "Watch this…" if nil.
+    let spotlightCaption: String?
+    /// Age-adapted spotlight caption (≤11). Falls back to `spotlightCaption`.
+    let spotlightCaptionYoung: String?
+
+    init(
+        narration: String,
+        narrationYoung: String? = nil,
+        diagram: TacticalDiagramState,
+        duration: TimeInterval,
+        spotlightElementId: String? = nil,
+        spotlightCaption: String? = nil,
+        spotlightCaptionYoung: String? = nil
+    ) {
+        self.narration = narration
+        self.narrationYoung = narrationYoung
+        self.diagram = diagram
+        self.duration = duration
+        self.spotlightElementId = spotlightElementId
+        self.spotlightCaption = spotlightCaption
+        self.spotlightCaptionYoung = spotlightCaptionYoung
+    }
+
+    /// Resolve the narration variant for a given child age.
+    /// Treats ages 11 and below as "young" per the design constraint.
+    func preferredNarration(childAge: Int?) -> String {
+        if let age = childAge, age <= 11, let y = narrationYoung { return y }
+        return narration
+    }
+
+    /// Resolve the spotlight caption for a given child age.
+    func preferredSpotlightCaption(childAge: Int?) -> String? {
+        if let age = childAge, age <= 11, let y = spotlightCaptionYoung { return y }
+        return spotlightCaption
+    }
+
+    /// Whether this step has spotlight content that should pre-play.
+    var hasSpotlight: Bool { spotlightElementId != nil }
 }
 
 // MARK: - Animated Lesson

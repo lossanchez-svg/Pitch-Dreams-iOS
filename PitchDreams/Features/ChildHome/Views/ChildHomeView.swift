@@ -968,6 +968,13 @@ struct ChildHomeView: View {
                     .buttonStyle(.plain)
 
                     NavigationLink {
+                        SignatureMovesLibraryView(childId: childId)
+                    } label: {
+                        exploreSkillCard(title: "Moves", color: Color(hex: "#FFE9BD"), icon: "scissors")
+                    }
+                    .buttonStyle(.plain)
+
+                    NavigationLink {
                         FirstTouchView(childId: childId)
                     } label: {
                         exploreSkillCard(title: "First Touch", color: .dsAccentOrange, icon: "shoe.fill")

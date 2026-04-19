@@ -141,6 +141,13 @@ struct ChildDetailView: View {
                 } label: {
                     premiumRow(label: "Development Profile PDF", systemImage: "doc.richtext")
                 }
+
+                NavigationLink {
+                    WeeklyInsightsEmailSettingsView(child: child)
+                        .gated(by: .parentWeeklyInsightsEmail, context: .settingsBrowse)
+                } label: {
+                    premiumRow(label: "Weekly Insights Email", systemImage: "envelope.fill")
+                }
             }
 
             // Actions section

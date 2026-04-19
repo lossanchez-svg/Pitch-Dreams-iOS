@@ -96,20 +96,28 @@ final class PaywallViewModel: ObservableObject {
 }
 
 /// Where the paywall was surfaced from. Used to pick headline copy and
-/// decide which features to lead with — per the plan's "never paywall the
-/// kid during training, paywall parents in parent contexts" principle.
+/// decide which features to lead with. Model 1 principle: NEVER paywall the
+/// kid during training. All contexts here are parent-facing.
 enum PaywallContext: String, Equatable {
-    /// Surfaced after a 7-day streak milestone — the "you're committed" moment.
+    /// Triggered after the child hits a 7-day streak. Parent sees the
+    /// celebration in their dashboard and is pitched on seeing the full
+    /// development picture.
     case streakMilestone
 
-    /// Surfaced when a parent first opens the dashboard.
+    /// Parent's first visit to the parent dashboard after signup.
     case parentDashboard
 
-    /// Surfaced when a kid tries to pick a locked avatar.
-    case avatarPicker
+    /// Parent tries to view training history beyond the last 30 days.
+    case historyHorizon
 
-    /// Surfaced when a kid tries to share a weekly recap.
-    case weeklyRecapShare
+    /// Parent taps into a locked analytics chart.
+    case advancedAnalytics
+
+    /// Parent tries to open the Development Profile PDF export.
+    case developmentReport
+
+    /// Parent tries to add a second child to the account (family tier).
+    case addSecondChild
 
     /// Surfaced from Settings as a browse-the-tiers view.
     case settingsBrowse

@@ -23,33 +23,45 @@ final class EntitlementStoreTests: XCTestCase {
         XCTAssertFalse(store.isPaid)
     }
 
-    func testFreeTierHasNoFeatures() {
+    // MARK: - Model 1 philosophy: free tier has NO paid features gated,
+    // because paid features are parent-only. Kid-facing features aren't
+    // in the enum at all — they can't be gated.
+
+    func testFreeTierGrantsNoParentFeatures() {
         let store = EntitlementStore(defaults: defaults)
         for feature in Feature.allCases {
-            XCTAssertFalse(store.has(feature), "Free tier should not have \(feature)")
+            XCTAssertFalse(store.has(feature), "Free tier should not have \(feature) — all paid features are parent-value in Model 1")
         }
     }
 
-    func testPremiumMonthlyUnlocksCoreFeatures() {
+    func testPremiumUnlocksParentValueFeatures() {
         let store = EntitlementStore(defaults: defaults)
         store.setActiveTier(.premiumMonthly)
-        XCTAssertTrue(store.has(.allAvatars))
-        XCTAssertTrue(store.has(.weeklyRecapExport))
         XCTAssertTrue(store.has(.parentInsightsDashboard))
-        XCTAssertTrue(store.has(.coachVoicePacks))
+        XCTAssertTrue(store.has(.advancedAnalytics))
+        XCTAssertTrue(store.has(.unlimitedHistory))
+        XCTAssertTrue(store.has(.restDayIntelligence))
+        XCTAssertTrue(store.has(.parentWeeklyInsightsEmail))
+        XCTAssertTrue(store.has(.developmentProfilePDF))
+        XCTAssertTrue(store.has(.prioritySupport))
+        // Premium does NOT include family/club features.
         XCTAssertFalse(store.has(.familyMultiChild))
+        XCTAssertFalse(store.has(.siblingLeague))
         XCTAssertFalse(store.has(.clubCoachDashboard))
     }
 
-    func testFamilyTierIncludesPremiumPlusFamily() {
+    func testFamilyTierExtendsPremiumWithMultiChild() {
         let store = EntitlementStore(defaults: defaults)
         store.setActiveTier(.familyYearly)
         // Inherits all premium features
-        XCTAssertTrue(store.has(.allAvatars))
-        XCTAssertTrue(store.has(.weeklyRecapExport))
+        XCTAssertTrue(store.has(.parentInsightsDashboard))
+        XCTAssertTrue(store.has(.advancedAnalytics))
+        XCTAssertTrue(store.has(.developmentProfilePDF))
         // Plus family extras
         XCTAssertTrue(store.has(.familyMultiChild))
         XCTAssertTrue(store.has(.siblingLeague))
+        // Not club though
+        XCTAssertFalse(store.has(.clubCoachDashboard))
     }
 
     func testClubTierIsSuperset() {
@@ -62,11 +74,13 @@ final class EntitlementStoreTests: XCTestCase {
 
     func testFoundersMatchesPremiumFeatures() {
         let store = EntitlementStore(defaults: defaults)
-        store.setActiveTier(.foundersMonthly)
-        // Founders price differs but the feature set is identical to premium.
+        store.setActiveTier(.founders)
         let foundersFeatures = store.activeTier.features
         store.setActiveTier(.premiumMonthly)
         let premiumFeatures = store.activeTier.features
+        // Founders price differs ($4.99 vs $6.99 locked) but feature parity
+        // with Premium is an intentional Model 1 decision — founders users
+        // get the same experience, just grandfathered.
         XCTAssertEqual(foundersFeatures, premiumFeatures)
     }
 
@@ -76,7 +90,7 @@ final class EntitlementStoreTests: XCTestCase {
 
         let store2 = EntitlementStore(defaults: defaults)
         XCTAssertEqual(store2.activeTier, .premiumYearly)
-        XCTAssertTrue(store2.has(.allAvatars))
+        XCTAssertTrue(store2.has(.advancedAnalytics))
     }
 
     func testFoundersCohortStickyAcrossInstances() {
@@ -95,25 +109,39 @@ final class EntitlementStoreTests: XCTestCase {
         XCTAssertEqual(store.activeTier, .free)
         XCTAssertFalse(store.foundersCohort)
 
-        // Second instance should also see the reset.
         let store2 = EntitlementStore(defaults: defaults)
         XCTAssertEqual(store2.activeTier, .free)
         XCTAssertFalse(store2.foundersCohort)
     }
+
+    // MARK: - Product catalog
 
     func testProductIDTierMapping() {
         XCTAssertEqual(ProductIDs.tier(for: ProductIDs.premiumMonthly), .premiumMonthly)
         XCTAssertEqual(ProductIDs.tier(for: ProductIDs.premiumYearly), .premiumYearly)
         XCTAssertEqual(ProductIDs.tier(for: ProductIDs.familyMonthly), .familyMonthly)
         XCTAssertEqual(ProductIDs.tier(for: ProductIDs.familyYearly), .familyYearly)
-        XCTAssertEqual(ProductIDs.tier(for: ProductIDs.foundersMonthly), .foundersMonthly)
-        XCTAssertEqual(ProductIDs.tier(for: ProductIDs.foundersYearly), .foundersYearly)
+        XCTAssertEqual(ProductIDs.tier(for: ProductIDs.founders), .founders)
         XCTAssertNil(ProductIDs.tier(for: "com.unknown.product"))
     }
 
     func testAllConsumerFacingProductIDsIncluded() {
-        // Club is B2B only and should NOT be in the consumer catalog.
-        XCTAssertEqual(ProductIDs.all.count, 6)
+        // 5 consumer products: premium monthly/yearly, family monthly/yearly,
+        // founders monthly. Club is B2B only and intentionally excluded.
+        XCTAssertEqual(ProductIDs.all.count, 5)
         XCTAssertFalse(ProductIDs.all.contains { ProductIDs.tier(for: $0) == .club })
+        XCTAssertTrue(ProductIDs.all.contains(ProductIDs.founders))
+    }
+
+    // MARK: - Pricing reference
+
+    func testPricingReferenceMatchesDecisions() {
+        // Decisions locked 2026-04-18:
+        XCTAssertEqual(PricingReference.premiumMonthly, "$6.99/mo")
+        XCTAssertEqual(PricingReference.premiumYearly, "$69/yr")
+        XCTAssertEqual(PricingReference.familyMonthly, "$10.99/mo")
+        XCTAssertEqual(PricingReference.familyYearly, "$109/yr")
+        XCTAssertEqual(PricingReference.founders, "$4.99/mo")
+        XCTAssertEqual(PricingReference.foundersCohortSize, 500)
     }
 }

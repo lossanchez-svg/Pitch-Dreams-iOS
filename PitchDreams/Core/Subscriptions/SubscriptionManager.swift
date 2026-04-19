@@ -68,8 +68,7 @@ final class SubscriptionManager: ObservableObject {
                 // Stamp founders cohort on the very first founders purchase
                 // so future renewals at the grandfathered price continue to
                 // treat the user as a founder even if marketing prices change.
-                if transaction.productID == ProductIDs.foundersMonthly ||
-                   transaction.productID == ProductIDs.foundersYearly {
+                if transaction.productID == ProductIDs.founders {
                     entitlementStore.markFoundersCohort()
                 }
                 return true
@@ -156,13 +155,13 @@ final class SubscriptionManager: ObservableObject {
 
     /// Order tiers from least to most featureful so we can pick the best
     /// if a user somehow has multiple active subscriptions (edge case —
-    /// refund + repurchase, family-share overlap).
+    /// refund + repurchase, family-share overlap). Founders has the same
+    /// feature set as premium so they share rank 1.
     private func tierRank(_ tier: SubscriptionTier) -> Int {
         switch tier {
         case .free:             return 0
-        case .foundersMonthly:  return 1
+        case .founders:         return 1
         case .premiumMonthly:   return 1
-        case .foundersYearly:   return 2
         case .premiumYearly:    return 2
         case .familyMonthly:    return 3
         case .familyYearly:     return 4

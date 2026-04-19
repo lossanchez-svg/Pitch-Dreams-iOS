@@ -80,11 +80,12 @@ struct PaywallView: View {
 
     private var benefits: some View {
         VStack(alignment: .leading, spacing: 12) {
-            benefitRow(icon: "person.3.fill", text: "All 7 avatars unlocked")
             benefitRow(icon: "chart.line.uptrend.xyaxis", text: "Parent Insights Dashboard")
-            benefitRow(icon: "square.and.arrow.up", text: "Shareable Weekly Recap cards")
-            benefitRow(icon: "waveform", text: "All Coach Voice packs")
-            benefitRow(icon: "moon.fill", text: "Rest Day intelligence")
+            benefitRow(icon: "chart.bar.fill", text: "Advanced trends & comparisons")
+            benefitRow(icon: "doc.richtext", text: "Development Profile PDF report")
+            benefitRow(icon: "envelope.fill", text: "Weekly parent insights email")
+            benefitRow(icon: "moon.fill", text: "Rest Day intelligence for parents")
+            benefitRow(icon: "clock.arrow.circlepath", text: "Unlimited training history")
         }
         .padding(16)
         .frame(maxWidth: .infinity, alignment: .leading)
@@ -221,23 +222,31 @@ struct PaywallView: View {
 
     // MARK: - Context-driven copy
 
+    // Copy reflects Model 1: the kid's training experience stays free; paid
+    // tiers unlock PARENT insights and multi-kid support. Every headline
+    // speaks to the parent.
+
     private var headline: String {
         switch viewModel.context {
-        case .streakMilestone:      return "You're Committed.\nUnlock the Full Experience."
-        case .parentDashboard:      return "See the Full Picture.\nUpgrade to Premium."
-        case .avatarPicker:         return "All 7 Avatars.\nPick Any, Switch Anytime."
-        case .weeklyRecapShare:     return "Share Your Week.\nWith Premium."
-        case .settingsBrowse:       return "Go Further.\nGo Premium."
+        case .streakMilestone:      return "Your Kid Is Committed.\nSee Their Full Development."
+        case .parentDashboard:      return "See the Full Picture\nof Your Kid's Training."
+        case .historyHorizon:       return "Track Every Session.\nSee the Full Journey."
+        case .advancedAnalytics:    return "Deeper Insights\nInto Their Progress."
+        case .developmentReport:    return "A Report Coaches Actually Read."
+        case .addSecondChild:       return "Track All Your Kids\nIn One Place."
+        case .settingsBrowse:       return "Unlock the Parent Dashboard."
         }
     }
 
     private var subhead: String {
         switch viewModel.context {
-        case .streakMilestone:      return "You've built a real habit. Keep the momentum."
-        case .parentDashboard:      return "Deeper analytics, rest-day intelligence, and a full shareable profile."
-        case .avatarPicker:         return "Express yourself with Wolf, Lion, Fox, Shark, Panther, Eagle, or Bear."
-        case .weeklyRecapShare:     return "Instagram-ready cards generated every Sunday."
-        case .settingsBrowse:       return "Unlock every feature across player, parent, and family experiences."
+        case .streakMilestone:      return "They've built a real habit. Get the weekly insights, rest-day intelligence, and development reports that help them keep going."
+        case .parentDashboard:      return "Weekly insights, rest-day intelligence, and a PDF report you can share with coaches — all for 1% of what you already spend on soccer."
+        case .historyHorizon:       return "Free tier shows last 30 days. Premium unlocks every session, ever — the full arc of their development."
+        case .advancedAnalytics:    return "Trend charts, month-over-month progress, age-group benchmarks — the data behind the streaks."
+        case .developmentReport:    return "A seasonal development PDF perfect for coaches, grandparents, or college applications."
+        case .addSecondChild:       return "Family plan covers up to 4 kids with one parent dashboard and a gentle sibling league."
+        case .settingsBrowse:       return "Kids train free forever. Parents unlock the insights — analytics, reports, multi-kid support."
         }
     }
 

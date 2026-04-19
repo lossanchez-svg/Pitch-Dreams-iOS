@@ -232,6 +232,7 @@
 		E84A2A3C14DE9189816D2317 /* AnimatedTacticalLessonRegistry.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFDF5946101B266029B9A60F /* AnimatedTacticalLessonRegistry.swift */; };
 		E8AB9928EBD380D69AAF6A23 /* Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BC100653CB247610196D5D7 /* Session.swift */; };
 		E8B4DA9546EBFA2E50397963 /* ForgotPasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B251D2264067A15819D694BA /* ForgotPasswordView.swift */; };
+		EA2A78F1945407C338DB5097 /* PremiumTeaserCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4B9D9016055DCF15EC068C9 /* PremiumTeaserCard.swift */; };
 		EAB12D4A88D33B0E596DDDD8 /* NotificationSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBEA7E867532766BE8BA6ED1 /* NotificationSettingsView.swift */; };
 		EAC8574BC77EE4B4B3C73F8C /* LessonPlayerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 821752D3582FE5932505CAD1 /* LessonPlayerViewModel.swift */; };
 		ED5AEF7AB919FAA84858DCDC /* DrillRegistryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 313A67CAF2360DE46BBA9BFE /* DrillRegistryTests.swift */; };
@@ -434,6 +435,7 @@
 		9F3324B857A9AA11635238B1 /* APIEndpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIEndpoint.swift; sourceTree = "<group>"; };
 		9FB8EB22E63BF920C23442EB /* TrainingViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrainingViewModelTests.swift; sourceTree = "<group>"; };
 		A16249D791FC2019B4605FE9 /* RestDayCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestDayCardView.swift; sourceTree = "<group>"; };
+		A4B9D9016055DCF15EC068C9 /* PremiumTeaserCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PremiumTeaserCard.swift; sourceTree = "<group>"; };
 		A69AF56C9F54B2AF1EAC1FC1 /* QuickLogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickLogView.swift; sourceTree = "<group>"; };
 		A73699F42A50FFFAD7063E69 /* BallPhysicsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BallPhysicsTests.swift; sourceTree = "<group>"; };
 		A7A1CDBFAD6B59D638849FD9 /* ChildLoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChildLoginView.swift; sourceTree = "<group>"; };
@@ -1383,6 +1385,7 @@
 			isa = PBXGroup;
 			children = (
 				8F20823C0C8B144EBEE5025B /* PaywallView.swift */,
+				A4B9D9016055DCF15EC068C9 /* PremiumTeaserCard.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -1739,6 +1742,7 @@
 				316FF152BC7C49C5BD7A279F /* PlayerCardStore.swift in Sources */,
 				031876DB18DA56406314EF4A /* PlayerCardView.swift in Sources */,
 				77B35C616C1340896B451712 /* PlayerCardViewModel.swift in Sources */,
+				EA2A78F1945407C338DB5097 /* PremiumTeaserCard.swift in Sources */,
 				08527DBC2C2A724B127E42C3 /* ProgramPickerView.swift in Sources */,
 				DF9BCCA7DA76BE683589E82C /* ProgressDashboardView.swift in Sources */,
 				B8B390096CE421AC516C887E /* ProgressViewModel.swift in Sources */,

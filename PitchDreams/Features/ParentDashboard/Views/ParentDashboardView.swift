@@ -37,6 +37,13 @@ struct ParentDashboardView: View {
                     .padding(.horizontal, 24)
                     .padding(.top, 16)
 
+                    // Premium upsell card — Track D stopgap until full
+                    // premium parent surfaces ship. Hides for paid users
+                    // and for 7 days after dismissal.
+                    PremiumTeaserCard()
+                        .padding(.horizontal, 24)
+                        .padding(.top, 20)
+
                     // Children list
                     if isLoading {
                         VStack(spacing: 16) {

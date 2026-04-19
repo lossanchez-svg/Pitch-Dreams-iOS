@@ -24,6 +24,7 @@ targets:
     scheme:
       testTargets:
         - PitchDreamsTests
+      storeKitConfiguration: PitchDreams.storekit
 
   PitchDreamsTests:
     type: bundle.unit-test

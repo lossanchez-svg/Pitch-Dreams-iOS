@@ -74,6 +74,7 @@
 		4963B2E70AEC671D50A4E9F9 /* DailyTipCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFDFD7CCE92B252BFD32697C /* DailyTipCard.swift */; };
 		4A9A11672E7AA877C48AD80E /* SignatureMoveStageCompleteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C6A641B26A48096F60FB90 /* SignatureMoveStageCompleteView.swift */; };
 		4B1CC96F4FD2911EFE7792FF /* VoiceFlowIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C6B16E8226BBCE5A45E70AE /* VoiceFlowIntegrationTests.swift */; };
+		4B559EBC5C282EF41AFB41C4 /* AdvancedAnalyticsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8950E64981A3F94B08D0E2B /* AdvancedAnalyticsView.swift */; };
 		4BD9443FD69D38F7982E6084 /* StretchingRoutineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D7658DCF8F62F53ACE85F1E /* StretchingRoutineView.swift */; };
 		4BF9D2F9FC8BA9EA1BC55EC8 /* Entitlement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CFC972E7CCB7940D8FD9F66 /* Entitlement.swift */; };
 		4EBB92EB61F6BB3EB44323FE /* MysteryBoxViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA24BE5A0A452A3BC4AF2C67 /* MysteryBoxViewModel.swift */; };
@@ -179,6 +180,7 @@
 		B0173F7C3466C6AF284D744B /* TestFixtures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55725CC2638A2BE120CB57EB /* TestFixtures.swift */; };
 		B0E1AFD950349010C94F1DC2 /* XPStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EF11628DFC4C280AFE64EF8 /* XPStore.swift */; };
 		B3183AA65A3D0E4879F965CB /* SpeechRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98613E0C90A5B1D32CC21EEF /* SpeechRecognizer.swift */; };
+		B35544136302E8E9153B7098 /* AdvancedAnalyticsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D7860BE9D829B777D8603F9 /* AdvancedAnalyticsViewModel.swift */; };
 		B41A5D5622F683237AF41C16 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E9C25A374026A93FA31F3EFE /* Assets.xcassets */; };
 		B48746BA8C5FD30943F93EAC /* Tags.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C7A5056FB1866BF93CD09B6 /* Tags.swift */; };
 		B4C2A4C09BDD18F64D0F6522 /* TrainingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FB34840A263C9E27A101C4A /* TrainingViewModel.swift */; };
@@ -371,6 +373,7 @@
 		5B1137D561B2F9C65D9613C2 /* ActiveDrillView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActiveDrillView.swift; sourceTree = "<group>"; };
 		5BEDD297B63681EB608ED827 /* DailyTipRegistry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyTipRegistry.swift; sourceTree = "<group>"; };
 		5D7658DCF8F62F53ACE85F1E /* StretchingRoutineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StretchingRoutineView.swift; sourceTree = "<group>"; };
+		5D7860BE9D829B777D8603F9 /* AdvancedAnalyticsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedAnalyticsViewModel.swift; sourceTree = "<group>"; };
 		5E3B99F212E79DAE6FDCDD76 /* PitchElementPopover.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PitchElementPopover.swift; sourceTree = "<group>"; };
 		5E3BF19FC589A1338AD73B32 /* SignatureMoves+Scissor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SignatureMoves+Scissor.swift"; sourceTree = "<group>"; };
 		60D0F27759FE657465C28C8F /* AnimatedTacticalLessonRegistryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimatedTacticalLessonRegistryTests.swift; sourceTree = "<group>"; };
@@ -505,6 +508,7 @@
 		E0CAA820BAE740D5134576BA /* CoachPersonalityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoachPersonalityTests.swift; sourceTree = "<group>"; };
 		E25834D6CF3B5FA77BB11623 /* ChildHomeViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChildHomeViewModelTests.swift; sourceTree = "<group>"; };
 		E42894954332436074FDB959 /* MockCoachVoice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockCoachVoice.swift; sourceTree = "<group>"; };
+		E8950E64981A3F94B08D0E2B /* AdvancedAnalyticsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedAnalyticsView.swift; sourceTree = "<group>"; };
 		E8B4F2D45C9020B802295632 /* AnimatedTacticalTypesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimatedTacticalTypesTests.swift; sourceTree = "<group>"; };
 		E9C25A374026A93FA31F3EFE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		EE1BAFF0EA8615884299D0CE /* PlayerCardShareSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerCardShareSheet.swift; sourceTree = "<group>"; };
@@ -886,6 +890,7 @@
 		51F3F165FF00BBB15EE1770B /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
+				5D7860BE9D829B777D8603F9 /* AdvancedAnalyticsViewModel.swift */,
 				C48E8658D0F60C52712A6B03 /* ChildDetailViewModel.swift */,
 			);
 			path = ViewModels;
@@ -1357,6 +1362,7 @@
 			isa = PBXGroup;
 			children = (
 				61700F305A9F2DD4B8DE88A9 /* AddChildView.swift */,
+				E8950E64981A3F94B08D0E2B /* AdvancedAnalyticsView.swift */,
 				57C6BFA02F61938478B529F2 /* ChildDetailView.swift */,
 				4E664960E667F9B87AC14FB5 /* ParentDashboardView.swift */,
 				FB16019BB64331E4B6E149E4 /* PinSetupSheet.swift */,
@@ -1633,6 +1639,8 @@
 				9D5E0683EC438D281DFD5773 /* ActivityLogView.swift in Sources */,
 				3E7A78B58AF22A1BF1D6F7ED /* ActivityLogViewModel.swift in Sources */,
 				7BDDCC305B0AC36EAC43413D /* AddChildView.swift in Sources */,
+				4B559EBC5C282EF41AFB41C4 /* AdvancedAnalyticsView.swift in Sources */,
+				B35544136302E8E9153B7098 /* AdvancedAnalyticsViewModel.swift in Sources */,
 				EE06484BEC1B1D142A319EB1 /* AnimatedArrowShape.swift in Sources */,
 				E84A2A3C14DE9189816D2317 /* AnimatedTacticalLessonRegistry.swift in Sources */,
 				8A5602BAB0E14530D523DFB8 /* AnimatedTacticalPitchView.swift in Sources */,

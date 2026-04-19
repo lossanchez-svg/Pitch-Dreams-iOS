@@ -125,6 +125,24 @@ struct ChildDetailView: View {
                 }
             }
 
+            // Advanced Analytics (premium) — free-tier parents see a
+            // locked preview via `.gated(by:)`, which presents the paywall
+            // on tap.
+            Section("Advanced Analytics") {
+                NavigationLink {
+                    AdvancedAnalyticsView(childId: child.id, childName: child.nickname)
+                        .gated(by: .advancedAnalytics, context: .advancedAnalytics)
+                } label: {
+                    HStack(spacing: 8) {
+                        Label("Trends & Analytics", systemImage: "chart.line.uptrend.xyaxis")
+                        Spacer()
+                        Image(systemName: "sparkles")
+                            .font(.system(size: 12))
+                            .foregroundStyle(Color.dsAccentOrange)
+                    }
+                }
+            }
+
             // Actions section
             Section("Actions") {
                 NavigationLink {

@@ -107,10 +107,6 @@ final class ProgressViewModel: ObservableObject {
         isLoading = true
         errorMessage = nil
 
-        // Profile is best-effort — failing silently keeps the dashboard
-        // usable. Empty state uses this to render the avatar-based illo.
-        profile = try? await apiClient.request(APIRouter.getProfile(childId: childId))
-
         do {
             streakData = try await apiClient.request(APIRouter.getStreaks(childId: childId))
         } catch {
@@ -129,6 +125,12 @@ final class ProgressViewModel: ObservableObject {
         } catch {
             trends = nil
         }
+
+        // Profile is best-effort and fetched last so tests that mock the
+        // other three endpoints in order aren't disturbed. Empty state
+        // uses this to render the avatar-based illustration when the
+        // kid hasn't trained yet.
+        profile = try? await apiClient.request(APIRouter.getProfile(childId: childId))
 
         isLoading = false
     }

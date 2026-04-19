@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+                  "on-background": "#dce2f8",
+                  "surface-bright": "#32394a",
+                  "surface-container-highest": "#2e3545",
+                  "on-surface": "#dce2f8",
+                  "surface-variant": "#2e3545",
+                  "inverse-on-surface": "#293041",
+                  "surface-dim": "#0c1322",
+                  "surface-container": "#191f2f",
+                  "inverse-primary": "#a83900",
+                  "tertiary": "#d9c49a",
+                  "secondary-fixed-dim": "#33daec",
+                  "tertiary-container": "#aa9770",
+                  "on-secondary-fixed-variant": "#004f57",
+                  "inverse-surface": "#dce2f8",
+                  "on-primary-fixed-variant": "#802900",
+                  "tertiary-fixed": "#f6e0b5",
+                  "primary-container": "#ff6b2c",
+                  "error-container": "#93000a",
+                  "on-tertiary-fixed": "#251a01",
+                  "on-tertiary-fixed-variant": "#534525",
+                  "on-primary": "#5b1b00",
+                  "primary-fixed-dim": "#ffb59a",
+                  "on-primary-container": "#5c1c00",
+                  "on-secondary-container": "#004f57",
+                  "secondary-fixed": "#91f1ff",
+                  "primary": "#ffb59a",
+                  "on-error-container": "#ffdad6",
+                  "surface-container-low": "#151b2b",
+                  "on-secondary": "#00363c",
+                  "tertiary-fixed-dim": "#d9c49a",
+                  "surface-container-high": "#232a3a",
+                  "surface": "#0c1322",
+                  "outline": "#a98a7f",
+                  "on-secondary-fixed": "#001f23",
+                  "on-primary-fixed": "#380d00",
+                  "surface-tint": "#ffb59a",
+                  "on-surface-variant": "#e2bfb3",
+                  "error": "#ffb4ab",
+                  "on-tertiary-container": "#3c3012",
+                  "primary-fixed": "#ffdbcf",
+                  "surface-container-lowest": "#070e1d",
+                  "outline-variant": "#594139",
+                  "secondary-container": "#00c9db",
+                  "secondary": "#46e5f8",
+                  "background": "#0c1322",
+                  "on-tertiary": "#3b2f11",
+                  "on-error": "#690005"
+          },
+          "borderRadius": {
+                  "DEFAULT": "1rem",
+                  "lg": "2rem",
+                  "xl": "3rem",
+                  "full": "9999px"
+          },
+          "fontFamily": {
+                  "headline": ["Plus Jakarta Sans", "sans-serif"],
+                  "body": ["Plus Jakarta Sans", "sans-serif"],
+                  "label": ["Plus Jakarta Sans", "sans-serif"]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+    .ghost-border {
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+    }
+    .kinetic-gradient {
+      background: linear-gradient(135deg, #FFE6DE 0%, #FFD4C8 100%);
+    }
+    .confetti-cyan { background-color: #46E5F8; }
+    .confetti-white { background-color: #FFFFFF; }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body min-h-screen flex flex-col overflow-hidden selection:bg-secondary selection:text-surface">
+<!-- TopAppBar -->
+<nav class="flex items-center justify-between px-6 h-16 w-full z-50 bg-[#0C1322]">
+<div class="flex items-center gap-2">
+<span class="text-xl font-black text-white tracking-tighter">Recap</span>
+</div>
+<button class="w-8 h-8 flex items-center justify-center rounded-full bg-surface-container-high ghost-border hover:opacity-80 transition-opacity active:scale-95 duration-100">
+<span class="material-symbols-outlined text-on-surface text-[20px]" data-icon="close">close</span>
+</button>
+</nav>
+<!-- Main Presentation Canvas -->
+<main class="flex-1 relative flex items-center justify-center px-6 overflow-visible">
+<!-- Celebratory Confetti Burst Background -->
+<div class="absolute inset-0 pointer-events-none z-0">
+<div class="absolute top-1/4 left-1/4 w-2 h-2 rounded-full confetti-cyan opacity-40 rotate-12"></div>
+<div class="absolute top-1/3 right-1/4 w-3 h-3 rounded-sm confetti-white opacity-30 -rotate-45"></div>
+<div class="absolute bottom-1/3 left-1/3 w-1.5 h-4 rounded-full confetti-cyan opacity-50 rotate-45"></div>
+<div class="absolute top-1/2 right-1/3 w-2 h-2 rounded-full confetti-white opacity-40"></div>
+<div class="absolute bottom-1/4 right-1/4 w-4 h-1.5 rounded-full confetti-cyan opacity-30 -rotate-12"></div>
+<div class="absolute top-1/2 left-1/4 w-3 h-3 rounded-full confetti-white opacity-20 rotate-[30deg]"></div>
+<div class="absolute top-[60%] left-[60%] w-2 h-2 rounded-sm confetti-cyan opacity-40"></div>
+</div>
+<!-- Weekly Recap Card {{DATA:SCREEN:SCREEN_8}} -->
+<div class="relative z-10 w-full max-w-sm aspect-[4/5] bg-surface-container rounded-lg ghost-border overflow-hidden shadow-2xl">
+<!-- Card Image/Header -->
+<div class="h-1/2 relative">
+<img alt="Weekly Recap Hero" class="w-full h-full object-cover" data-alt="dramatic action shot of an athlete sprinting in a stadium at dusk with cinematic lighting and deep shadows" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDyiAiRa_lbivnOvPYe66J7I-3qQk1H_Y_prZYcdc5tOdpTuOFvjZ9t4MUHXx7qpicyuhtIkApautEWAcF6ZcGc5mETDqa508tNeXsmc6i7ogBwOEPWm_f6Ue-653Pv3TV5LglNyw26tsiJrGJr7kbEi9fIQWp72ZYO8D9to0RRWPPHafa1lWdvELiQE2n2tPdaoboaX7Z-YdGa-vmwMkSbm_zWp8lGfcQWkVaC8nOUrJ0ClWIF2OapsBiItOG0tJp3j6TJWh3pB6I"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container to-transparent"></div>
+<div class="absolute bottom-4 left-6">
+<p class="text-[10px] font-bold tracking-widest uppercase text-secondary mb-1">WEEKLY SUMMARY</p>
+<h1 class="text-2xl font-black text-white leading-tight">YOU ARE A<br/>BEAST</h1>
+</div>
+</div>
+<!-- Card Stats Grid -->
+<div class="p-6 grid grid-cols-2 gap-4">
+<div class="space-y-1">
+<p class="text-[9px] font-bold tracking-widest uppercase text-slate-400">TOTAL SESSIONS</p>
+<div class="flex items-baseline gap-1">
+<span class="text-3xl font-black text-white tabular-nums">12</span>
+<span class="material-symbols-outlined text-secondary text-sm" data-icon="trending_up">trending_up</span>
+</div>
+</div>
+<div class="space-y-1 text-right">
+<p class="text-[9px] font-bold tracking-widest uppercase text-slate-400">INTENSITY</p>
+<div class="flex items-baseline justify-end gap-1">
+<span class="text-3xl font-black text-white tabular-nums">92</span>
+<span class="text-xs font-bold text-secondary">%</span>
+</div>
+</div>
+<div class="col-span-2 pt-4 border-t border-white/5 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full border-2 border-tertiary flex items-center justify-center p-0.5">
+<img alt="Rookie Wolf Avatar" class="w-full h-full rounded-full object-cover" data-alt="dynamic close up portrait of a focused young man with intense eyes wearing athletic gear" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAmMX31FySzSbX2pDuNYW4UmLjLTK-Nhukz4uz3BDIirG8NtG7enKs4mvv65IYdm1lE6PK68rf4N6R7zu2Mo2nR-gG6WQt24tnDAI-EpcpJakbtoJeEEeW3TN6VvUH0BJ8NqXxGl03VGoecNOPFl2ceLqF36sAbSHu84Y1sco5vetZCuYRhEquGmf5wkeWqyysU1W-jEGnQCgQ33p_qOQHFpCOqgewFk712mWTYv13IlUJ0mZSaxoPQx70k6wYtBiGgQ4C6LxW50Fc"/>
+</div>
+<div>
+<p class="text-[10px] font-bold tracking-widest uppercase text-tertiary">RANK ACHIEVED</p>
+<p class="text-sm font-extrabold text-white">ROOKIE WOLF</p>
+</div>
+</div>
+<div class="w-12 h-12">
+<svg class="w-full h-full transform -rotate-90" viewbox="0 0 36 36">
+<circle class="stroke-surface-variant" cx="18" cy="18" fill="none" r="16" stroke-width="3"></circle>
+<circle class="stroke-primary-container" cx="18" cy="18" fill="none" r="16" stroke-dasharray="100" stroke-dashoffset="25" stroke-width="3"></circle>
+</svg>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Share Action Area -->
+<div class="px-6 pb-12 pt-4 relative z-20">
+<button class="kinetic-gradient h-14 w-full rounded-full flex items-center justify-center gap-3 shadow-lg hover:scale-[1.02] transition-transform active:scale-[0.98] duration-200">
+<span class="material-symbols-outlined text-surface-dim font-bold" data-icon="share">share</span>
+<span class="text-surface-dim font-bold uppercase tracking-widest text-[12px]">SHARE RECAP</span>
+</button>
+</div>
+<!-- Bottom Navigation (Modal Version - Minimal) -->
+<footer class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-8 pb-8 pt-4 bg-[#0C1322] rounded-t-[32pt] shadow-[0_-10px_40px_rgba(7,14,29,0.8)]">
+<button class="flex flex-col items-center justify-center text-secondary p-4 hover:scale-105 transition-transform duration-200">
+<span class="material-symbols-outlined text-[24px]" data-icon="check_circle">check_circle</span>
+<span class="font-['Plus_Jakarta_Sans'] font-bold uppercase text-[10px] tracking-widest mt-1">DONE</span>
+</button>
+<div class="h-8 w-px bg-white/5"></div>
+<button class="flex flex-col items-center justify-center bg-gradient-to-br from-[#FFE6DE] to-[#FFD4C8] text-[#0C1322] rounded-full p-4 h-14 w-14 hover:scale-105 transition-transform duration-200">
+<span class="material-symbols-outlined text-[24px]" data-icon="share" data-weight="fill" style="font-variation-settings: 'FILL' 1;">share</span>
+</button>
+</footer>
+</body></html>

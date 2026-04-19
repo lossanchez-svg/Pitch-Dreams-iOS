@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
+<title>Stage Complete | STADIUM</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta_Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "surface-container-highest": "#2e3545",
+                        "on-surface": "#dce2f8",
+                        "error": "#ffb4ab",
+                        "on-tertiary-fixed-variant": "#534525",
+                        "secondary-container": "#00c9db",
+                        "surface": "#0c1322",
+                        "surface-bright": "#32394a",
+                        "on-primary-fixed-variant": "#802900",
+                        "on-tertiary": "#3b2f11",
+                        "surface-dim": "#0c1322",
+                        "on-surface-variant": "#e2bfb3",
+                        "on-secondary-fixed-variant": "#004f57",
+                        "tertiary-fixed": "#f6e0b5",
+                        "surface-container": "#191f2f",
+                        "on-primary-fixed": "#380d00",
+                        "on-primary": "#5b1b00",
+                        "primary-container": "#ff6b2c",
+                        "on-tertiary-container": "#3c3012",
+                        "secondary-fixed-dim": "#33daec",
+                        "on-tertiary-fixed": "#251a01",
+                        "on-error-container": "#ffdad6",
+                        "on-error": "#690005",
+                        "surface-container-high": "#232a3a",
+                        "primary-fixed-dim": "#ffb59a",
+                        "primary-fixed": "#ffdbcf",
+                        "outline": "#a98a7f",
+                        "on-secondary-fixed": "#001f23",
+                        "error-container": "#93000a",
+                        "tertiary-fixed-dim": "#d9c49a",
+                        "surface-tint": "#ffb59a",
+                        "inverse-on-surface": "#293041",
+                        "primary": "#ffb59a",
+                        "on-primary-container": "#5c1c00",
+                        "outline-variant": "#594139",
+                        "on-secondary-container": "#004f57",
+                        "tertiary": "#d9c49a",
+                        "surface-variant": "#2e3545",
+                        "on-secondary": "#00363c",
+                        "on-background": "#dce2f8",
+                        "secondary": "#46e5f8",
+                        "inverse-surface": "#dce2f8",
+                        "tertiary-container": "#aa9770",
+                        "surface-container-lowest": "#070e1d",
+                        "secondary-fixed": "#91f1ff",
+                        "inverse-primary": "#a83900",
+                        "background": "#0c1322",
+                        "surface-container-low": "#151b2b"
+                    },
+                    borderRadius: {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    },
+                    fontFamily: {
+                        "headline": ["Plus Jakarta Sans", "sans-serif"],
+                        "body": ["Plus Jakarta Sans", "sans-serif"],
+                        "label": ["Plus Jakarta Sans", "sans-serif"]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .mono-score { font-variant-numeric: tabular-nums; }
+        .ghost-border { border: 1px solid rgba(255, 255, 255, 0.05); }
+        .cta-gradient { background: linear-gradient(135deg, #FFE6DE 0%, #FFD4C8 100%); }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface selection:bg-secondary/30 overflow-x-hidden">
+<!-- Top Navigation Shell -->
+<header class="fixed top-0 w-full z-50 flex items-center justify-between px-6 h-16 bg-[#191F2F]">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full border-2 border-tertiary overflow-hidden">
+<img alt="Rookie Wolf Legend" class="w-full h-full object-cover" data-alt="close-up portrait of a determined young athlete with dramatic lighting and a dark background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBVS8UzbEJJKTYRBfr0uiq5wG6qhcoSJzATf5GW5LVcrnUG4LlyM0K09GccXA0hQciWBt5sP5kU7MsIXt1N6sVqAbx75QpzWwqA2KdxgC1O5T6V82-Ag9U6shWdslzHC8iev_c676EOgamcRsJMMznuFTI6ch3nO3FmmFa6QTQtv2T8lohbJvJ5s2XiaWDaWRsT5dI8GxZw99vplAqBxuYotFR9ZWgU07ArY8MEgjl4vhLfPrl620iGStC1R3B2ktb6bPum-b7Q0E0"/>
+</div>
+<span class="font-['Plus_Jakarta_Sans'] font-black tracking-widest uppercase text-xs text-slate-500">STADIUM</span>
+</div>
+<button class="material-symbols-outlined text-slate-500 hover:opacity-80 transition-opacity active:scale-95">settings</button>
+</header>
+<!-- Main Canvas -->
+<main class="pt-24 pb-32 px-6 min-h-screen flex flex-col items-center">
+<!-- Success Header Section -->
+<section class="relative w-full flex flex-col items-center text-center mb-10">
+<!-- Decorative Confetti Layer -->
+<div class="absolute inset-0 -top-12 flex justify-center items-center pointer-events-none opacity-40">
+<div class="w-64 h-64 bg-secondary/10 rounded-full blur-[60px]"></div>
+<div class="absolute top-0 left-1/4 w-2 h-2 bg-secondary rounded-full"></div>
+<div class="absolute top-10 right-1/3 w-3 h-3 bg-secondary/50 rotate-45"></div>
+<div class="absolute bottom-10 left-1/3 w-2 h-4 bg-secondary/30 -rotate-12"></div>
+</div>
+<!-- Phase Icon -->
+<div class="relative z-10 mb-4 bg-secondary/10 p-6 rounded-full">
+<span class="material-symbols-outlined text-[64px] text-secondary" style="font-variation-settings: 'FILL' 1;">sports_soccer</span>
+</div>
+<span class="font-label text-[11px] font-bold tracking-[3px] uppercase text-secondary mb-2">STAGE 2 · TECHNIQUE</span>
+<h1 class="text-[28px] font-extrabold leading-tight tracking-tight">Stage Complete!</h1>
+<!-- XP Row -->
+<div class="mt-4 flex items-center gap-2 bg-surface-container-high px-4 py-2 rounded-full border border-white/5">
+<span class="material-symbols-outlined text-secondary text-xl" style="font-variation-settings: 'FILL' 1;">bolt</span>
+<span class="text-xl font-black mono-score text-secondary">+25 XP</span>
+</div>
+</section>
+<!-- Summary Metrics Bento-lite -->
+<section class="w-full grid grid-cols-3 gap-3 mb-8">
+<div class="bg-surface-container p-4 rounded-lg flex flex-col items-center justify-center text-center">
+<span class="font-label text-[9px] font-bold tracking-widest uppercase text-slate-400 mb-2">DRILLS</span>
+<span class="text-2xl font-black mono-score">3 of 3</span>
+</div>
+<div class="bg-surface-container p-4 rounded-lg flex flex-col items-center justify-center text-center">
+<span class="font-label text-[9px] font-bold tracking-widest uppercase text-slate-400 mb-2">TOTAL REPS</span>
+<span class="text-2xl font-black mono-score">78</span>
+</div>
+<div class="bg-surface-container p-4 rounded-lg flex flex-col items-center justify-center text-center">
+<span class="font-label text-[9px] font-bold tracking-widest uppercase text-slate-400 mb-2">TIME</span>
+<span class="text-2xl font-black mono-score text-nowrap">14 MIN</span>
+</div>
+</section>
+<!-- Next Stage Preview Card -->
+<section class="w-full mb-10">
+<div class="bg-surface-container p-6 rounded-lg ghost-border relative overflow-hidden">
+<div class="absolute -right-4 -top-4 w-24 h-24 bg-primary-container/5 rounded-full blur-2xl"></div>
+<div class="flex items-start gap-4">
+<div class="bg-primary-container/20 p-3 rounded-2xl">
+<span class="material-symbols-outlined text-primary-container text-3xl" style="font-variation-settings: 'FILL' 1;">local_fire_department</span>
+</div>
+<div class="flex-1">
+<span class="font-label text-[10px] font-bold tracking-widest uppercase text-primary-container block mb-1">UP NEXT</span>
+<h3 class="text-lg font-bold mb-1">Stage 3 — Mastery</h3>
+<p class="text-slate-400 text-sm leading-relaxed">Full-speed execution and double-scissor combos.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Action Area -->
+<footer class="w-full mt-auto flex flex-col items-center gap-6">
+<button class="w-full h-14 cta-gradient rounded-full flex items-center justify-center gap-2 group transition-transform active:scale-95 shadow-lg shadow-primary-container/20">
+<span class="text-surface font-extrabold tracking-widest uppercase text-sm">BEGIN STAGE 3</span>
+<span class="material-symbols-outlined text-surface font-bold">arrow_forward</span>
+</button>
+<button class="font-label text-[11px] font-bold tracking-widest uppercase text-secondary hover:opacity-80 transition-opacity active:scale-95">
+                FINISH AND RETURN LATER
+            </button>
+</footer>
+</main>
+<!-- Bottom Navigation Shell (Persistent) -->
+<nav class="fixed bottom-0 w-full z-50 flex justify-around items-center px-4 py-3 pb-safe bg-[#191F2F] rounded-t-[32px] shadow-[0_-8px_30px_rgb(7,14,29,0.08)]">
+<a class="flex flex-col items-center justify-center text-orange-600 bg-[#FF6B2C]/10 rounded-full px-4 py-2 active:scale-90 transition-all" href="#">
+<span class="material-symbols-outlined">sports_soccer</span>
+<span class="font-['Plus_Jakarta_Sans'] font-bold tracking-widest uppercase text-[10px]">TRAIN</span>
+</a>
+<a class="flex flex-col items-center justify-center text-slate-400 hover:text-cyan-400 transition-colors active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined">leaderboard</span>
+<span class="font-['Plus_Jakarta_Sans'] font-bold tracking-widest uppercase text-[10px]">STATS</span>
+</a>
+<a class="flex flex-col items-center justify-center text-slate-400 hover:text-cyan-400 transition-colors active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined">groups</span>
+<span class="font-['Plus_Jakarta_Sans'] font-bold tracking-widest uppercase text-[10px]">SOCIAL</span>
+</a>
+<a class="flex flex-col items-center justify-center text-slate-400 hover:text-cyan-400 transition-colors active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="font-['Plus_Jakarta_Sans'] font-bold tracking-widest uppercase text-[10px]">PROFILE</span>
+</a>
+</nav>
+</body></html>

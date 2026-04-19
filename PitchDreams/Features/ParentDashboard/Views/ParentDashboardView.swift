@@ -197,7 +197,7 @@ struct ParentDashboardView: View {
 
     @ViewBuilder
     private func childAvatarHero(child: ChildSummary) -> some View {
-        let assetName = Avatar.assetName(for: child.avatarId, milestones: [])
+        let assetName = Avatar.assetName(for: child.avatarId, totalXP: 0)
         ZStack {
             // Ambient glow
             RadialGradient(

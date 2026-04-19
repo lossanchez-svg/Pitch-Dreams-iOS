@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "background": "#0c1322",
+                        "surface-container-low": "#151b2b",
+                        "secondary-fixed-dim": "#33daec",
+                        "surface-container-lowest": "#070e1d",
+                        "primary": "#ffb59a",
+                        "primary-container": "#ff6b2c",
+                        "tertiary-container": "#aa9770",
+                        "surface-dim": "#0c1322",
+                        "tertiary": "#d9c49a",
+                        "outline-variant": "#594139",
+                        "on-primary-fixed": "#380d00",
+                        "surface-container": "#191f2f",
+                        "on-secondary-fixed": "#001f23",
+                        "secondary": "#46e5f8",
+                        "primary-fixed-dim": "#ffb59a",
+                        "on-tertiary": "#3b2f11",
+                        "outline": "#a98a7f",
+                        "surface": "#0c1322",
+                        "on-surface": "#dce2f8",
+                        "surface-variant": "#2e3545",
+                        "on-tertiary-fixed": "#251a01",
+                        "primary-fixed": "#ffdbcf",
+                        "inverse-surface": "#dce2f8",
+                        "surface-container-high": "#232a3a",
+                        "on-tertiary-fixed-variant": "#534525",
+                        "tertiary-fixed-dim": "#d9c49a",
+                        "on-primary-fixed-variant": "#802900",
+                        "on-primary-container": "#5c1c00",
+                        "on-surface-variant": "#e2bfb3",
+                        "on-error-container": "#ffdad6",
+                        "inverse-on-surface": "#293041",
+                        "on-tertiary-container": "#3c3012",
+                        "surface-container-highest": "#2e3545",
+                        "on-secondary": "#00363c",
+                        "secondary-fixed": "#91f1ff",
+                        "error": "#ffb4ab",
+                        "surface-tint": "#ffb59a",
+                        "on-secondary-container": "#004f57",
+                        "error-container": "#93000a",
+                        "on-background": "#dce2f8",
+                        "on-primary": "#5b1b00",
+                        "on-error": "#690005",
+                        "inverse-primary": "#a83900",
+                        "tertiary-fixed": "#f6e0b5",
+                        "surface-bright": "#32394a",
+                        "on-secondary-fixed-variant": "#004f57",
+                        "secondary-container": "#00c9db"
+                    },
+                    borderRadius: {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    },
+                    fontFamily: {
+                        "headline": ["Plus Jakarta Sans"],
+                        "body": ["Plus Jakarta Sans"],
+                        "label": ["Plus Jakarta Sans"]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .font-mono-stadium {
+            font-variant-numeric: tabular-nums;
+        }
+        .ghost-border {
+            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+        }
+        .cta-gradient {
+            background: linear-gradient(135deg, #FFE6DE 0%, #FFD4C8 100%);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface-container-lowest text-on-surface font-body flex items-start justify-center min-h-screen gap-12 p-10 overflow-x-auto">
+<!-- Frame A: Intro -->
+<div class="relative w-[393px] h-[852px] bg-background rounded-[48px] overflow-hidden flex flex-col items-center justify-between shadow-2xl shrink-0">
+<!-- Status Bar Mock -->
+<div class="w-full h-12 flex justify-between items-center px-8 pt-4">
+<span class="text-sm font-bold">9:41</span>
+<div class="flex gap-1.5">
+<div class="w-4 h-4 rounded-full border border-on-surface/20"></div>
+<div class="w-4 h-4 rounded-full border border-on-surface/20"></div>
+</div>
+</div>
+<div class="flex flex-col items-center px-8 text-center space-y-8">
+<div class="w-24 h-24 rounded-full bg-primary-container/20 flex items-center justify-center animate-pulse">
+<span class="material-symbols-outlined text-[72px] text-primary-container" style="font-variation-settings: 'FILL' 1;">videocam</span>
+</div>
+<div class="space-y-4">
+<h1 class="text-[24px] font-extrabold uppercase tracking-tight text-tertiary font-headline">Film Yourself</h1>
+<p class="text-[14px] leading-relaxed text-on-surface/80 font-medium">
+                    10 seconds of your best scissor sequence. We'll save it to your Journey. Only you and your parents can see it.
+                </p>
+</div>
+</div>
+<div class="w-full px-8 pb-16 flex flex-col gap-4">
+<button class="w-full h-[56px] cta-gradient rounded-full flex items-center justify-center text-on-primary-fixed font-extrabold text-[14px] tracking-widest uppercase shadow-lg active:scale-95 transition-transform">
+                OPEN CAMERA
+            </button>
+<button class="w-full h-[56px] flex items-center justify-center text-secondary font-bold text-[11px] tracking-[2px] uppercase active:opacity-60 transition-opacity">
+                SKIP THIS
+            </button>
+</div>
+</div>
+<!-- Frame B: Recording -->
+<div class="relative w-[393px] h-[852px] bg-[#000000] rounded-[48px] overflow-hidden flex flex-col shadow-2xl shrink-0">
+<!-- Camera View Area (Simulation) -->
+<div class="absolute inset-0 bg-cover bg-center opacity-70" data-alt="POV of a soccer ball on a green pitch at night under stadium lights, athlete legs visible in motion" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAWKWN3Sm6n_Ny1K6p1LiXQ8Cxc-Uxphf36Me6IpyF-mk72RBycuSVLN1m9rDNAvzh_EedfwwrKvh-wdGsAfyUXWZ-Vouy5kTh1y21pw3dSF1SHJ3iGq-AE0V4CRGumo6PBWy2lOxoOorfuppnIefuluOmDfKRX3-G12XRI-koOD_8Ljx-45LeWT5qn6KCS-8mUb2LQwxdxeD39DHgmFc60llpqnWM1M37NbiWnMU5jaiwRxi2dQdeqijZ_naxvhuMmZq4oSTbibUk')">
+<div class="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-black/80"></div>
+</div>
+<!-- Top Controls -->
+<div class="relative w-full flex justify-between items-center px-8 pt-14 z-10">
+<div class="bg-black/40 px-3 py-1 rounded-full border border-white/10">
+<span class="text-[10px] font-bold tracking-[2px] uppercase text-white">RECORDING</span>
+</div>
+<button class="text-secondary">
+<span class="material-symbols-outlined text-[28px]" style="font-variation-settings: 'FILL' 1;">flip_camera_ios</span>
+</button>
+</div>
+<!-- Countdown Overlay -->
+<div class="absolute inset-0 flex items-center justify-center z-20 pointer-events-none">
+<span class="text-[64px] font-extrabold text-white tracking-tighter drop-shadow-2xl">3-2-1</span>
+</div>
+<!-- Bottom UI -->
+<div class="mt-auto w-full flex flex-col items-center pb-16 z-10">
+<div class="mb-8">
+<span class="text-[48px] font-extrabold font-mono-stadium text-white tracking-tighter">00:04</span>
+</div>
+<!-- Record Button with Progress Ring -->
+<div class="relative w-24 h-24 flex items-center justify-center">
+<!-- Cyan Progress Ring (SVG) -->
+<svg class="absolute w-full h-full -rotate-90">
+<circle class="text-white/20" cx="48" cy="48" fill="transparent" r="44" stroke="currentColor" stroke-width="4"></circle>
+<circle class="text-secondary" cx="48" cy="48" fill="transparent" r="44" stroke="currentColor" stroke-dasharray="276" stroke-dashoffset="160" stroke-width="4"></circle>
+</svg>
+<!-- Red Button -->
+<div class="w-20 h-20 rounded-full bg-white flex items-center justify-center p-1.5">
+<div class="w-full h-full rounded-full bg-red-600 animate-pulse"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Frame C: Review -->
+<div class="relative w-[393px] h-[852px] bg-background rounded-[48px] overflow-hidden flex flex-col shadow-2xl shrink-0">
+<!-- Video Player Area -->
+<div class="w-full aspect-[3/4] bg-surface-container-high relative overflow-hidden rounded-b-[24px]">
+<img class="w-full h-full object-cover" data-alt="static frame of a young soccer player finishing a scissor kick on a night field with bright floodlights" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDnPX4zRwE1J-fSnHir71O69i_Enff3jZr63IJB1ZAuv2xd3uM75CHevz28_ThFSSazVbOUpewYgE5niKKRWjgF82T_M6UARb698Z41XwgRUP0Q4Kc4x0hAr5JGBo5NIpfd8CINOjQAWyFZsdOu5Dbn1-NLdrrnBD4C9jAgO4RcffxEVrE0TCVXKENvrKkhaqibe02_iW7_GJ9d4zV-MTc6Jf2j6nb_FMPYYLqmqqwbmNu1BjiVEZuGpPRp-tZz-c_AqAeCqqGS-68"/>
+<div class="absolute inset-0 flex items-center justify-center">
+<div class="w-16 h-16 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center border border-white/20">
+<span class="material-symbols-outlined text-white text-3xl" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+</div>
+</div>
+<!-- Scrubber -->
+<div class="absolute bottom-4 left-6 right-6 h-1.5 bg-white/20 rounded-full overflow-hidden">
+<div class="h-full w-2/3 bg-primary-container"></div>
+</div>
+</div>
+<div class="flex-1 flex flex-col items-center justify-center px-8 space-y-4">
+<button class="w-full h-[56px] cta-gradient rounded-full flex items-center justify-center text-on-primary-fixed font-extrabold text-[14px] tracking-widest uppercase shadow-lg">
+                SAVE
+            </button>
+<button class="w-full h-[56px] rounded-full flex items-center justify-center text-secondary font-extrabold text-[14px] tracking-widest uppercase border border-secondary/30 ghost-border active:bg-secondary/10">
+                RETAKE
+            </button>
+<button class="w-full h-[40px] flex items-center justify-center text-on-surface/60 font-bold text-[11px] tracking-[2px] uppercase">
+                SKIP THIS
+            </button>
+</div>
+<div class="w-full text-center pb-12">
+<span class="text-[11px] font-bold uppercase tracking-[2px] text-on-surface/40">Saved on this device only.</span>
+</div>
+</div>
+</body></html>

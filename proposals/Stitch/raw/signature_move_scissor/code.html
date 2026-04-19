@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Signature Move Overview - Scissor</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "secondary-container": "#00c9db",
+                    "on-background": "#dce2f8",
+                    "surface-container-highest": "#2e3545",
+                    "background": "#0c1322",
+                    "inverse-surface": "#dce2f8",
+                    "surface-dim": "#0c1322",
+                    "primary-fixed": "#ffdbcf",
+                    "on-surface": "#dce2f8",
+                    "on-secondary-fixed": "#001f23",
+                    "error-container": "#93000a",
+                    "tertiary-fixed": "#f6e0b5",
+                    "on-primary-fixed": "#380d00",
+                    "surface-container-lowest": "#070e1d",
+                    "on-surface-variant": "#e2bfb3",
+                    "primary": "#ffb59a",
+                    "surface-container-high": "#232a3a",
+                    "on-tertiary-fixed-variant": "#534525",
+                    "surface-variant": "#2e3545",
+                    "secondary-fixed": "#91f1ff",
+                    "primary-container": "#ff6b2c",
+                    "surface": "#0c1322",
+                    "primary-fixed-dim": "#ffb59a",
+                    "on-primary": "#5b1b00",
+                    "tertiary": "#d9c49a",
+                    "inverse-primary": "#a83900",
+                    "surface-container": "#191f2f",
+                    "tertiary-fixed-dim": "#d9c49a",
+                    "secondary-fixed-dim": "#33daec",
+                    "surface-tint": "#ffb59a",
+                    "surface-container-low": "#151b2b",
+                    "secondary": "#46e5f8",
+                    "tertiary-container": "#aa9770",
+                    "surface-bright": "#32394a",
+                    "on-tertiary": "#3b2f11",
+                    "on-error-container": "#ffdad6",
+                    "on-error": "#690005",
+                    "on-secondary-fixed-variant": "#004f57",
+                    "inverse-on-surface": "#293041",
+                    "error": "#ffb4ab",
+                    "outline-variant": "#594139",
+                    "on-primary-fixed-variant": "#802900",
+                    "outline": "#a98a7f",
+                    "on-primary-container": "#5c1c00",
+                    "on-tertiary-fixed": "#251a01",
+                    "on-tertiary-container": "#3c3012",
+                    "on-secondary-container": "#004f57",
+                    "on-secondary": "#00363c"
+            },
+            "borderRadius": {
+                    "DEFAULT": "1rem",
+                    "lg": "2rem",
+                    "xl": "3rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Plus Jakarta Sans"],
+                    "body": ["Plus Jakarta Sans"],
+                    "label": ["Plus Jakarta Sans"]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #0c1322;
+            -webkit-font-smoothing: antialiased;
+        }
+        .sf-rounded { font-family: 'Plus Jakarta Sans', sans-serif; border-radius: 1000px; } /* Simulating rounded feel */
+        .ghost-border { border: 1px solid rgba(255, 255, 255, 0.05); }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .fill-icon {
+            font-variation-settings: 'FILL' 1;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="text-on-background min-h-screen pb-32">
+<!-- TopAppBar -->
+<header class="bg-slate-950 fixed top-0 left-0 w-full z-50 flex justify-between items-center w-full px-6 py-4">
+<button class="flex items-center justify-center w-10 h-10 hover:bg-slate-800 transition-colors rounded-full active:scale-95">
+<span class="material-symbols-outlined text-orange-600 dark:text-orange-500">arrow_back</span>
+</button>
+<h1 class="font-['Plus_Jakarta_Sans'] font-black tracking-widest uppercase text-sm text-orange-600 dark:text-orange-500">SIGNATURE MOVE</h1>
+<button class="flex items-center justify-center w-10 h-10 hover:bg-slate-800 transition-colors rounded-full active:scale-95">
+<span class="material-symbols-outlined text-orange-600 dark:text-orange-500">share</span>
+</button>
+</header>
+<main class="pt-[72px]">
+<!-- Hero Demo Player -->
+<section class="relative h-[280px] w-full bg-surface-container-lowest overflow-hidden">
+<div class="absolute inset-0 z-0">
+<img class="w-full h-full object-cover opacity-60" data-alt="Cinematic high-angle shot of a soccer pitch at night under bright stadium lights with a focus on an athlete performing a scissor move" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCuFVOfM1egPoWZbIaOcHnT0B-WkkVajocNaKtB4fGo7SGwoy0TX47Vg5ypVavy0C9drz1z63CMaQGCHt-qwChX14jduEB_tgi2oXhCpIesCre1gF_2ej_PSoyVKnU7NmTwd6QBcgCfzkoFYOAM9wrc5-bK-V41eh5SVmjKbim6FK5CD4m1sB8TqWu3605jCDPNVbFOGWbc4wexznsavtZiRHBDQZ1FGBuYzReuVMFGfYvhI0Tas1WmtJIECKsAAfcqJhkeABJzJS0"/>
+<div class="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent"></div>
+</div>
+<!-- Controls Overlay -->
+<div class="absolute inset-0 z-10 flex flex-col justify-between p-6">
+<div class="flex justify-end gap-3">
+<button class="bg-black/40 backdrop-blur-md px-3 py-1.5 rounded-full text-[10px] font-bold tracking-widest text-secondary uppercase ghost-border">0.5x</button>
+<button class="bg-black/40 backdrop-blur-md px-3 py-1.5 rounded-full text-[10px] font-bold tracking-widest text-on-surface uppercase ghost-border">
+<span class="material-symbols-outlined text-sm leading-none align-middle">loop</span>
+</button>
+</div>
+<div class="flex items-center justify-center">
+<button class="w-16 h-16 bg-primary-container rounded-full flex items-center justify-center text-on-primary-container shadow-xl transform active:scale-90 transition-transform">
+<span class="material-symbols-outlined text-4xl fill-icon">play_arrow</span>
+</button>
+</div>
+<div class="w-full">
+<div class="h-1 w-full bg-white/20 rounded-full overflow-hidden">
+<div class="h-full w-1/3 bg-primary-container rounded-full"></div>
+</div>
+</div>
+</div>
+</section>
+<div class="px-6 space-y-8 mt-6">
+<!-- Title Block -->
+<section class="space-y-3">
+<div class="flex items-center justify-between">
+<h2 class="text-[28px] font-black text-on-background tracking-tight">Scissor</h2>
+<div class="flex gap-2">
+<span class="px-3 py-1 bg-surface-container-highest rounded-full text-[10px] font-bold tracking-widest uppercase text-slate-400">Common</span>
+<span class="px-3 py-1 bg-surface-container-highest rounded-full text-[10px] font-bold tracking-widest uppercase text-secondary">Beginner</span>
+</div>
+</div>
+<p class="text-[12px] italic text-tertiary font-medium opacity-80">"Cristiano Ronaldo's go-to."</p>
+</section>
+<!-- Description Card -->
+<section class="bg-surface-container rounded-lg p-5 space-y-4 shadow-lg">
+<p class="text-sm leading-relaxed text-on-surface-variant">
+                    Step over the ball with one foot, faking a move in that direction, then quickly explode the opposite way with your other foot. It’s the ultimate deceptive weapon.
+                </p>
+<div class="flex items-center justify-between pt-2 border-t border-white/5">
+<div class="flex flex-col">
+<span class="text-[10px] font-black tracking-widest text-on-surface uppercase">Young Mode</span>
+<span class="text-[11px] text-slate-500">For kids ≤ 11</span>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input class="sr-only peer" type="checkbox" value=""/>
+<div class="w-11 h-6 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-secondary"></div>
+</label>
+</div>
+</section>
+<!-- 3-Stage Vertical Stepper -->
+<section class="space-y-6">
+<!-- Stage 1 -->
+<div class="flex gap-4">
+<div class="flex flex-col items-center">
+<div class="w-10 h-10 bg-secondary/10 rounded-full flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined fill-icon">check_circle</span>
+</div>
+<div class="w-0.5 h-16 bg-secondary/20 my-2"></div>
+</div>
+<div class="flex-1 pt-1">
+<div class="flex justify-between items-start">
+<div>
+<h3 class="text-xs font-black tracking-[0.2em] text-secondary uppercase">Groundwork</h3>
+<p class="text-lg font-bold text-on-surface">The Fake</p>
+</div>
+<span class="text-[10px] font-bold text-slate-500">2 DRILLS • 41 REPS</span>
+</div>
+</div>
+</div>
+<!-- Stage 2 -->
+<div class="flex gap-4">
+<div class="flex flex-col items-center">
+<div class="w-10 h-10 bg-secondary rounded-full flex items-center justify-center text-slate-900 shadow-[0_0_15px_rgba(70,229,248,0.4)]">
+<span class="material-symbols-outlined">sports_soccer</span>
+</div>
+<div class="w-0.5 h-20 bg-slate-800 my-2"></div>
+</div>
+<div class="flex-1 pt-1 space-y-3">
+<div class="flex justify-between items-start">
+<div>
+<h3 class="text-xs font-black tracking-[0.2em] text-secondary uppercase">Technique</h3>
+<p class="text-lg font-bold text-on-surface">With the Ball</p>
+</div>
+<span class="text-[10px] font-bold text-secondary">IN PROGRESS</span>
+</div>
+<div class="space-y-1.5">
+<div class="h-2 w-full bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full w-[45%] bg-secondary rounded-full"></div>
+</div>
+<div class="flex justify-between">
+<span class="text-[9px] font-bold text-slate-400">3 DRILLS</span>
+<span class="text-[9px] font-bold text-slate-400">0/75 REPS</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Stage 3 -->
+<div class="flex gap-4 opacity-40">
+<div class="flex flex-col items-center">
+<div class="w-10 h-10 bg-surface-container-highest rounded-full flex items-center justify-center text-slate-500">
+<span class="material-symbols-outlined">local_fire_department</span>
+</div>
+</div>
+<div class="flex-1 pt-1">
+<div class="flex justify-between items-start">
+<div>
+<h3 class="text-xs font-black tracking-[0.2em] text-slate-500 uppercase">Mastery</h3>
+<p class="text-lg font-bold text-on-surface">Sell It at Speed</p>
+</div>
+<span class="material-symbols-outlined text-sm text-slate-500">lock</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Coach Tip Card -->
+<section class="bg-surface-container-high rounded-lg p-6 ghost-border relative overflow-hidden">
+<div class="absolute top-0 right-0 p-4 opacity-10">
+<span class="material-symbols-outlined text-6xl">lightbulb</span>
+</div>
+<h4 class="text-[11px] font-black tracking-[0.2em] text-tertiary uppercase mb-3">Coach Tip</h4>
+<p class="text-[14px] font-medium leading-relaxed text-on-surface">
+                    The fake is sold by the <span class="text-primary-container">lean</span>, not the foot. Your shoulders and hips go with the swing, then explode opposite.
+                </p>
+</section>
+</div>
+</main>
+<!-- Sticky Bottom CTA -->
+<div class="fixed bottom-0 left-0 w-full p-6 bg-gradient-to-t from-background via-background to-transparent z-40">
+<button class="w-full h-14 rounded-full bg-gradient-to-r from-[#FF6B2C] to-[#FFE6DE] flex items-center justify-center text-slate-950 font-black tracking-widest text-sm shadow-2xl active:scale-95 transition-transform">
+            CONTINUE STAGE 2
+        </button>
+</div>
+<!-- BottomNavBar (Hidden on this focused sub-page but required by schema logic if top-level, suppressed here for transactional focus) -->
+</body></html>

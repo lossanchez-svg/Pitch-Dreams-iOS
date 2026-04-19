@@ -18,7 +18,7 @@ struct LessonProgressBar: View {
                     }
             }
         }
-        .animation(.easeInOut(duration: 0.3), value: currentStep)
+        .animation(.dsSpring, value: currentStep)
     }
 
     private func fillColor(for index: Int) -> Color {

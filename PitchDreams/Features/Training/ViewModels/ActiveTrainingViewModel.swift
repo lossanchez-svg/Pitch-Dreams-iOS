@@ -1,5 +1,6 @@
 import Foundation
 import Combine
+import UIKit
 
 enum TrainingPhase {
     case drilling
@@ -44,6 +45,17 @@ final class ActiveTrainingViewModel: ObservableObject {
 
     // MARK: - Avatar
     @Published var avatarAssetName: String = "default_stage1"
+
+    // MARK: - XP
+    @Published var xpEarned: Int = 0
+    @Published var didEvolve: Bool = false
+    @Published var newStage: AvatarStage = .rookie
+    /// Names of signature moves that received ambient credit from this
+    /// session (via `TrainingMoveLink`). `SessionCompleteView` surfaces
+    /// a chip per move so the kid feels the connection.
+    @Published var creditedMoveNames: [String] = []
+    private let xpStore = XPStore()
+    private let moveStore = SignatureMoveStore()
 
     // MARK: - Session Meta
     @Published var isLoading = false
@@ -184,15 +196,8 @@ final class ActiveTrainingViewModel: ObservableObject {
             let profile: ChildProfileDetail = try await apiClient.request(
                 APIRouter.getProfile(childId: childId)
             )
-            let streaks: StreakData? = try? await apiClient.request(
-                APIRouter.getStreaks(childId: childId)
-            )
-            let milestones = streaks?.milestones ?? []
-            avatarAssetName = Avatar.assetName(
-                for: profile.avatarId,
-                milestones: milestones,
-                localMissionXP: MissionsViewModel.shared.localMissionXP
-            )
+            let totalXP = await xpStore.getTotalXP(childId: childId)
+            avatarAssetName = Avatar.assetName(for: profile.avatarId, totalXP: totalXP)
         } catch {
             // Keep default avatar on failure — non-critical
         }
@@ -236,20 +241,37 @@ final class ActiveTrainingViewModel: ObservableObject {
         guard !sessionSaved else { return } // Prevent duplicate saves
         isLoading = true
         errorMessage = nil
+        let body = CreateSessionBody(
+            activityType: "SELF_TRAINING",
+            effortLevel: reflectionRPE,
+            mood: reflectionMood.uppercased(),
+            duration: sessionDurationMinutes,
+            win: selectedHighlights.isEmpty ? nil : selectedHighlights.joined(separator: ", "),
+            focus: selectedNextFocus.isEmpty ? nil : selectedNextFocus.joined(separator: ", ")
+        )
+        Log.api.debug("Saving session for child \(self.childId), duration: \(self.sessionDurationMinutes)m, RPE: \(self.reflectionRPE)")
+
+        var queuedForRetry = false
         do {
-            let body = CreateSessionBody(
-                activityType: "SELF_TRAINING",
-                effortLevel: reflectionRPE,
-                mood: reflectionMood.uppercased(),
-                duration: sessionDurationMinutes,
-                win: selectedHighlights.isEmpty ? nil : selectedHighlights.joined(separator: ", "),
-                focus: selectedNextFocus.isEmpty ? nil : selectedNextFocus.joined(separator: ", ")
-            )
-            Log.api.debug("Saving session for child \(self.childId), duration: \(self.sessionDurationMinutes)m, RPE: \(self.reflectionRPE)")
             let _: SessionSaveResult = try await apiClient.request(
                 APIRouter.createSession(childId: childId, body: body)
             )
-            // Log each drill (non-critical — don't fail the whole save)
+        } catch APIError.network {
+            // Offline or weak connection — queue for background retry and
+            // proceed with the success UI so the kid doesn't lose the moment.
+            await SessionSyncQueue.shared.enqueueSession(childId: childId, body: body)
+            queuedForRetry = true
+            Log.api.info("Session save queued for retry for child \(self.childId)")
+        } catch {
+            Log.api.error("Session save failed for child \(self.childId): \(error)")
+            errorMessage = "Failed to save session: \(error.localizedDescription)"
+            isLoading = false
+            return
+        }
+
+        // Log each drill (non-critical — don't fail the whole save).
+        // Skip when queued offline — we'll log drills on the next successful session.
+        if !queuedForRetry {
             for drill in sessionDrills {
                 let drillBody = LogDrillBody(
                     drillKey: drill.id,
@@ -265,15 +287,42 @@ final class ActiveTrainingViewModel: ObservableObject {
                     // Continue — session is saved, drill logs are supplementary
                 }
             }
-            sessionSaved = true
-            MissionsViewModel.shared.recordEvent(.sessionLogged, childId: childId)
-            phase = .complete
-            // Voice: session complete
-            coachVoice.speak(persona.sessionCompleteLine, personality: coachPersonality)
-        } catch {
-            Log.api.error("Session save failed for child \(self.childId): \(error)")
-            errorMessage = "Failed to save session: \(error.localizedDescription)"
         }
+        sessionSaved = true
+        MissionsViewModel.shared.recordEvent(.sessionLogged, childId: childId)
+
+        // Award XP
+        let earned = XPCalculator.xpForSession(
+            duration: sessionDurationMinutes,
+            effortLevel: reflectionRPE,
+            activityType: "drill"
+        )
+        let result = await xpStore.addXP(earned, childId: childId)
+        await xpStore.recordXPEntry(
+            XPEntry(amount: earned, source: "drill", date: Date()),
+            childId: childId
+        )
+        xpEarned = earned
+        didEvolve = result.evolved
+        newStage = result.newStage
+
+        // Credit ambient signature-move progress for any session drills
+        // that reinforce an in-progress move's current stage. Silent —
+        // SessionCompleteView reads creditedMoveNames for an optional chip.
+        if !queuedForRetry {
+            let drillIds = sessionDrills.map(\.id)
+            let credited = await moveStore.creditFromTraining(
+                trainingDrillIds: drillIds,
+                childId: childId
+            )
+            creditedMoveNames = credited.map(\.move.name)
+        }
+
+        phase = .complete
+        UINotificationFeedbackGenerator().notificationOccurred(.success)
+        // Voice: session complete
+        coachVoice.speak(persona.sessionCompleteLine, personality: coachPersonality)
+        ReviewPromptManager.noteSessionCompleted()
         isLoading = false
     }
 }

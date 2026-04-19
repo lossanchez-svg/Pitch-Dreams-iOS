@@ -23,6 +23,9 @@ struct TrainingSessionView: View {
                 VStack(spacing: Spacing.xl) {
                     if viewModel.checkInState != nil {
                         sessionModeCard
+                        if let restReason = currentRestReason {
+                            RestDayCardView(childId: childId, reason: restReason)
+                        }
                         actionButtons
                     } else {
                         moodPickerSection
@@ -313,6 +316,11 @@ struct TrainingSessionView: View {
     }
 
     // MARK: - Helpers
+
+    private var currentRestReason: RestDayCardView.RestReason? {
+        guard let checkIn = viewModel.checkInState?.checkIn else { return nil }
+        return RestDayCardView.reason(for: checkIn)
+    }
 
     private var modeIcon: String {
         switch viewModel.sessionMode {

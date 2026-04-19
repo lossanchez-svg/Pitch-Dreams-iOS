@@ -6,12 +6,39 @@ import SwiftUI
 struct AnimatedTacticalPitchView: View {
     let diagram: TacticalDiagramState
     let stepIndex: Int
+    /// F1 — element id to spotlight before the step animates.
+    /// When set, non-matching elements dim to 15% for 1.5s with a pulse ring
+    /// on the spotlighted target, then everything returns to full visibility
+    /// as the main step animation plays.
+    var spotlightElementId: String? = nil
+    /// F1 — short caption shown during the spotlight phase only.
+    /// Already age-resolved by the caller.
+    var spotlightCaption: String? = nil
+    /// F4 — multiplier applied to animation durations. 0.5 = half speed.
+    var animationRate: Double = 1.0
+    /// F5 — asset name for the child's avatar image, stage-aware. When set,
+    /// the `.self_` player dot renders as this asset instead of an abstract
+    /// dot. Falls back silently to the abstract dot when the asset is missing.
+    var avatarAssetName: String? = nil
     var onPlayerTap: ((TacticalPlayer, CGPoint) -> Void)?
     var onArrowTap: ((TacticalArrow, CGPoint) -> Void)?
     var onZoneTap: ((TacticalZone, CGPoint) -> Void)?
 
     @State private var appeared = false
+    @State private var spotlightActive = false
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
+    /// Whether an element is the current spotlight target.
+    private func isSpotlighted(elementId: String) -> Bool {
+        spotlightActive && spotlightElementId == elementId
+    }
+
+    /// Dim factor during spotlight: full-opacity if no spotlight active,
+    /// or if this element IS the spotlight. Otherwise 15%.
+    private func elementOpacity(elementId: String) -> Double {
+        guard spotlightActive else { return 1 }
+        return spotlightElementId == elementId ? 1 : 0.15
+    }
 
     var body: some View {
         GeometryReader { geo in
@@ -22,53 +49,115 @@ struct AnimatedTacticalPitchView: View {
 
                 // Zones layer (behind everything)
                 ForEach(diagram.zones) { zone in
-                    ZoneOverlay(zone: zone, size: size, appeared: appeared, reduceMotion: reduceMotion)
-                        .onTapGesture {
-                            let pos = CGPoint(x: size.width * (zone.x + zone.w / 2) / 100,
-                                              y: size.height * zone.y / 100)
-                            onZoneTap?(zone, pos)
-                        }
+                    ZoneOverlay(
+                        zone: zone, size: size,
+                        appeared: appeared, reduceMotion: reduceMotion,
+                        animationRate: animationRate,
+                        opacity: elementOpacity(elementId: zone.id),
+                        isSpotlighted: isSpotlighted(elementId: zone.id)
+                    )
+                    .onTapGesture {
+                        let pos = CGPoint(x: size.width * (zone.x + zone.w / 2) / 100,
+                                          y: size.height * zone.y / 100)
+                        onZoneTap?(zone, pos)
+                    }
                 }
 
                 // Arrows layer
                 ForEach(diagram.arrows) { arrow in
-                    ArrowOverlay(arrow: arrow, size: size, appeared: appeared, reduceMotion: reduceMotion)
-                        .onTapGesture {
-                            let pos = CGPoint(x: size.width * (arrow.fromX + arrow.toX) / 200,
-                                              y: size.height * (arrow.fromY + arrow.toY) / 200)
-                            onArrowTap?(arrow, pos)
-                        }
+                    ArrowOverlay(
+                        arrow: arrow, size: size,
+                        appeared: appeared, reduceMotion: reduceMotion,
+                        animationRate: animationRate,
+                        opacity: elementOpacity(elementId: arrow.id),
+                        isSpotlighted: isSpotlighted(elementId: arrow.id)
+                    )
+                    .onTapGesture {
+                        let pos = CGPoint(x: size.width * (arrow.fromX + arrow.toX) / 200,
+                                          y: size.height * (arrow.fromY + arrow.toY) / 200)
+                        onArrowTap?(arrow, pos)
+                    }
                 }
 
                 // Ball
                 if let ball = diagram.ball {
-                    BallDot(ball: ball, size: size, appeared: appeared, reduceMotion: reduceMotion)
+                    BallDot(ball: ball, size: size, appeared: appeared, reduceMotion: reduceMotion, animationRate: animationRate)
                 }
 
                 // Players layer (on top)
                 ForEach(diagram.players) { player in
-                    PlayerDot(player: player, size: size, appeared: appeared, reduceMotion: reduceMotion) {
+                    PlayerDot(
+                        player: player, size: size,
+                        appeared: appeared, reduceMotion: reduceMotion,
+                        avatarAssetName: avatarAssetName,
+                        opacity: elementOpacity(elementId: player.id),
+                        isSpotlighted: isSpotlighted(elementId: player.id)
+                    ) {
                         let pos = CGPoint(x: size.width * player.x / 100,
                                           y: size.height * player.y / 100)
                         onPlayerTap?(player, pos)
                     }
+                }
+
+                // Spotlight caption (top, during spotlight phase only)
+                if spotlightActive, let caption = spotlightCaption {
+                    VStack {
+                        Text(caption)
+                            .font(.system(size: 13, weight: .heavy, design: .rounded))
+                            .foregroundStyle(.white)
+                            .padding(.horizontal, 14)
+                            .padding(.vertical, 8)
+                            .background(Color.black.opacity(0.7))
+                            .clipShape(Capsule())
+                            .overlay(
+                                Capsule().stroke(Color.dsSecondary.opacity(0.5), lineWidth: 1)
+                            )
+                            .transition(.opacity.combined(with: .move(edge: .top)))
+                            .padding(.top, 16)
+                        Spacer()
+                    }
+                    .frame(maxWidth: .infinity)
                 }
             }
         }
         .aspectRatio(3.0 / 4.0, contentMode: .fit)
         .clipShape(RoundedRectangle(cornerRadius: 12))
         .onChange(of: stepIndex) { _ in
-            // Reset and re-animate on step change
-            appeared = false
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
-                withAnimation(reduceMotion ? .none : .easeOut(duration: 0.4)) {
-                    appeared = true
-                }
-            }
+            resetAndPlay()
         }
         .onAppear {
+            resetAndPlay()
+        }
+    }
+
+    /// Per-step animation sequencing: optional spotlight phase (1.5s) → main
+    /// animation. When `spotlightElementId` is nil we skip straight to the
+    /// main animation so lessons without spotlights don't pay any extra time.
+    private func resetAndPlay() {
+        appeared = false
+        spotlightActive = false
+
+        let hasSpotlight = spotlightElementId != nil && !reduceMotion
+        let spotlightDuration: Double = 1.5
+
+        if hasSpotlight {
+            // Spotlight phase: dim, then pulse, then reveal.
+            withAnimation(.easeIn(duration: 0.25)) {
+                spotlightActive = true
+            }
+            DispatchQueue.main.asyncAfter(deadline: .now() + spotlightDuration) {
+                withAnimation(.easeOut(duration: 0.4)) {
+                    spotlightActive = false
+                }
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                    withAnimation(reduceMotion ? .none : .easeOut(duration: 0.4 / animationRate)) {
+                        appeared = true
+                    }
+                }
+            }
+        } else {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                withAnimation(reduceMotion ? .none : .easeOut(duration: 0.4)) {
+                withAnimation(reduceMotion ? .none : .easeOut(duration: 0.4 / animationRate)) {
                     appeared = true
                 }
             }
@@ -152,6 +241,9 @@ private struct PlayerDot: View {
     let size: CGSize
     let appeared: Bool
     let reduceMotion: Bool
+    let avatarAssetName: String?
+    let opacity: Double
+    let isSpotlighted: Bool
     let onTap: () -> Void
 
     @State private var pulseScale: CGFloat = 1.0
@@ -172,10 +264,25 @@ private struct PlayerDot: View {
         player.type == .self_ ? 9 : 7
     }
 
+    /// F5 — show avatar image only when the player is the user's self_
+    /// AND an asset is provided AND the asset actually exists. Any failure
+    /// falls through to the abstract dot so legacy diagrams stay intact.
+    private var showsAvatarImage: Bool {
+        guard player.type == .self_ else { return false }
+        guard let asset = avatarAssetName, !asset.isEmpty else { return false }
+        return UIImage(named: asset) != nil
+    }
+
     var body: some View {
         ZStack {
-            // Highlight pulse ring
-            if player.highlight {
+            // Spotlight pulse ring (overrides highlight pulse when spotlighted)
+            if isSpotlighted {
+                Circle()
+                    .stroke(Color.dsSecondary, lineWidth: 3)
+                    .frame(width: (radius + 12) * 2, height: (radius + 12) * 2)
+                    .scaleEffect(pulseScale)
+                    .opacity(2.0 - Double(pulseScale))
+            } else if player.highlight {
                 Circle()
                     .stroke(dotColor.opacity(0.5), lineWidth: 2)
                     .frame(width: (radius + 6) * 2, height: (radius + 6) * 2)
@@ -190,11 +297,21 @@ private struct PlayerDot: View {
                     .frame(width: (radius + 3) * 2, height: (radius + 3) * 2)
             }
 
-            // Main dot
-            Circle()
-                .fill(dotColor)
-                .frame(width: radius * 2, height: radius * 2)
-                .shadow(color: .black.opacity(0.4), radius: 2, y: 1)
+            // Main dot — or avatar image when available for self_
+            if showsAvatarImage, let asset = avatarAssetName {
+                Image(asset)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: radius * 4, height: radius * 4)
+                    .clipShape(Circle())
+                    .overlay(Circle().stroke(dotColor, lineWidth: 2))
+                    .shadow(color: .black.opacity(0.4), radius: 2, y: 1)
+            } else {
+                Circle()
+                    .fill(dotColor)
+                    .frame(width: radius * 2, height: radius * 2)
+                    .shadow(color: .black.opacity(0.4), radius: 2, y: 1)
+            }
 
             // Label
             if let label = player.label {
@@ -202,19 +319,29 @@ private struct PlayerDot: View {
                     .font(.system(size: 10, weight: .semibold))
                     .foregroundStyle(.white)
                     .shadow(color: .black.opacity(0.6), radius: 2)
-                    .offset(y: -(radius + 10))
+                    .offset(y: -(radius + (showsAvatarImage ? 22 : 10)))
                     .opacity(appeared ? 1 : 0)
                     .animation(reduceMotion ? .none : .easeOut(duration: 0.3).delay(0.3), value: appeared)
             }
         }
         .position(position)
         .scaleEffect(appeared ? 1.0 : 0)
+        .opacity(opacity)
         .animation(reduceMotion ? .none : .spring(response: 0.4, dampingFraction: 0.6), value: appeared)
+        .animation(.easeInOut(duration: 0.25), value: opacity)
         .onTapGesture(perform: onTap)
         .onAppear {
-            guard player.highlight, !reduceMotion else { return }
+            guard (player.highlight || isSpotlighted), !reduceMotion else { return }
             withAnimation(.easeInOut(duration: 1.5).repeatForever(autoreverses: true)) {
                 pulseScale = 1.3
+            }
+        }
+        .onChange(of: isSpotlighted) { newValue in
+            guard !reduceMotion else { return }
+            if newValue {
+                withAnimation(.easeInOut(duration: 1.0).repeatForever(autoreverses: true)) {
+                    pulseScale = 1.3
+                }
             }
         }
     }
@@ -227,6 +354,9 @@ private struct ArrowOverlay: View {
     let size: CGSize
     let appeared: Bool
     let reduceMotion: Bool
+    let animationRate: Double
+    let opacity: Double
+    let isSpotlighted: Bool
 
     @State private var trimEnd: CGFloat = 0
 
@@ -258,7 +388,7 @@ private struct ArrowOverlay: View {
                 .stroke(
                     arrowColor,
                     style: StrokeStyle(
-                        lineWidth: 2,
+                        lineWidth: isSpotlighted ? 3 : 2,
                         lineCap: .round,
                         lineJoin: .round,
                         dash: isDashed ? [6, 4] : []
@@ -279,10 +409,12 @@ private struct ArrowOverlay: View {
                     .animation(reduceMotion ? .none : .easeOut(duration: 0.3), value: trimEnd)
             }
         }
+        .opacity(opacity)
+        .animation(.easeInOut(duration: 0.25), value: opacity)
         .onChange(of: appeared) { isAppeared in
             if isAppeared {
-                let delay = reduceMotion ? 0 : arrow.delay
-                withAnimation(reduceMotion ? .none : .easeOut(duration: 0.6).delay(delay)) {
+                let delay = reduceMotion ? 0 : (arrow.delay / animationRate)
+                withAnimation(reduceMotion ? .none : .easeOut(duration: 0.6 / animationRate).delay(delay)) {
                     trimEnd = 1.0
                 }
             } else {
@@ -299,6 +431,9 @@ private struct ZoneOverlay: View {
     let size: CGSize
     let appeared: Bool
     let reduceMotion: Bool
+    let animationRate: Double
+    let opacity: Double
+    let isSpotlighted: Bool
 
     private var rect: CGRect {
         CGRect(
@@ -328,7 +463,10 @@ private struct ZoneOverlay: View {
                 .frame(width: rect.width, height: rect.height)
 
             RoundedRectangle(cornerRadius: 6)
-                .stroke(strokeColor.opacity(0.4), style: StrokeStyle(lineWidth: 1, dash: [4, 3]))
+                .stroke(
+                    isSpotlighted ? Color.dsSecondary : strokeColor.opacity(0.4),
+                    style: StrokeStyle(lineWidth: isSpotlighted ? 2 : 1, dash: [4, 3])
+                )
                 .frame(width: rect.width, height: rect.height)
 
             if let label = zone.label {
@@ -340,8 +478,9 @@ private struct ZoneOverlay: View {
         }
         .position(x: rect.midX, y: rect.midY)
         .scaleEffect(appeared ? 1.0 : 0.8)
-        .opacity(appeared ? 1 : 0)
-        .animation(reduceMotion ? .none : .easeOut(duration: 0.5), value: appeared)
+        .opacity(appeared ? opacity : 0)
+        .animation(reduceMotion ? .none : .easeOut(duration: 0.5 / animationRate), value: appeared)
+        .animation(.easeInOut(duration: 0.25), value: opacity)
     }
 }
 
@@ -352,6 +491,7 @@ private struct BallDot: View {
     let size: CGSize
     let appeared: Bool
     let reduceMotion: Bool
+    let animationRate: Double
 
     private var position: CGPoint {
         CGPoint(x: size.width * ball.x / 100, y: size.height * ball.y / 100)
@@ -376,6 +516,6 @@ private struct BallDot: View {
         }
         .position(position)
         .scaleEffect(appeared ? 1.0 : 0)
-        .animation(reduceMotion ? .none : .spring(response: 0.3, dampingFraction: 0.5), value: appeared)
+        .animation(reduceMotion ? .none : .spring(response: 0.3 / animationRate, dampingFraction: 0.5), value: appeared)
     }
 }

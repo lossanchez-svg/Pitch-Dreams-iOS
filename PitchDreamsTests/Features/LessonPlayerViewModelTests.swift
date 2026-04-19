@@ -157,4 +157,110 @@ final class LessonPlayerViewModelTests: XCTestCase {
         vm.toggleVoice()
         XCTAssertEqual(mock.stopCallCount, 1)
     }
+
+    // MARK: - Track F (age-adaptive + slow-mo)
+
+    func testAnimationRate_normalWhenNotSlowMo() {
+        let (vm, _) = makeVM()
+        XCTAssertFalse(vm.isSlowMo)
+        XCTAssertEqual(vm.animationRate, 1.0)
+    }
+
+    func testAnimationRate_halfWhenSlowMo() {
+        let (vm, _) = makeVM()
+        vm.toggleSlowMo()
+        XCTAssertTrue(vm.isSlowMo)
+        XCTAssertEqual(vm.animationRate, 0.5)
+    }
+
+    func testToggleSlowMo_pausesAutoAdvance() {
+        let (vm, _) = makeVM()
+        XCTAssertTrue(vm.isAutoAdvancing)
+        vm.toggleSlowMo()
+        XCTAssertFalse(vm.isAutoAdvancing)
+    }
+
+    func testToggleSlowMo_respeaksAtHalfRate() {
+        let mock = MockCoachVoice()
+        let (vm, _) = makeVM(voice: mock)
+        vm.onAppear()
+        let baselineCalls = mock.speakCallCount
+        vm.toggleSlowMo()
+        XCTAssertGreaterThan(mock.speakCallCount, baselineCalls)
+        XCTAssertEqual(mock.lastRate, 0.5)
+    }
+
+    func testCurrentNarrationText_standardForOlderChild() {
+        let mock = MockCoachVoice()
+        let step = TacticalStep(
+            narration: "Identify the half-space and exploit the passing lane.",
+            narrationYoung: "See the gap? Run into it!",
+            diagram: TacticalDiagramState(),
+            duration: 3
+        )
+        let lesson = AnimatedTacticalLesson(
+            id: "t", title: "Test", track: "scanning", description: "",
+            difficulty: "beginner", steps: [step]
+        )
+        let vm = LessonPlayerViewModel(lesson: lesson, childAge: 14, voice: mock)
+        XCTAssertEqual(vm.currentNarrationText, "Identify the half-space and exploit the passing lane.")
+    }
+
+    func testCurrentNarrationText_youngVariantForYoungerChild() {
+        let mock = MockCoachVoice()
+        let step = TacticalStep(
+            narration: "Identify the half-space and exploit the passing lane.",
+            narrationYoung: "See the gap? Run into it!",
+            diagram: TacticalDiagramState(),
+            duration: 3
+        )
+        let lesson = AnimatedTacticalLesson(
+            id: "t", title: "Test", track: "scanning", description: "",
+            difficulty: "beginner", steps: [step]
+        )
+        let vm = LessonPlayerViewModel(lesson: lesson, childAge: 9, voice: mock)
+        XCTAssertEqual(vm.currentNarrationText, "See the gap? Run into it!")
+    }
+
+    func testCurrentNarrationText_fallsBackWhenYoungVariantMissing() {
+        let mock = MockCoachVoice()
+        let step = TacticalStep(
+            narration: "Classic phrasing.",
+            narrationYoung: nil,  // no young variant
+            diagram: TacticalDiagramState(),
+            duration: 3
+        )
+        let lesson = AnimatedTacticalLesson(
+            id: "t", title: "Test", track: "scanning", description: "",
+            difficulty: "beginner", steps: [step]
+        )
+        let vm = LessonPlayerViewModel(lesson: lesson, childAge: 8, voice: mock)
+        XCTAssertEqual(vm.currentNarrationText, "Classic phrasing.")
+    }
+
+    func testCurrentSpotlightCaption_respectsAge() {
+        let step = TacticalStep(
+            narration: "n",
+            spotlightElementId: "self",
+            spotlightCaption: "Watch the midfielder first.",
+            spotlightCaptionYoung: "Look at the player in the middle!",
+            diagram: TacticalDiagramState(),
+            duration: 3
+        )
+        let lesson = AnimatedTacticalLesson(
+            id: "t", title: "Test", track: "scanning", description: "",
+            difficulty: "beginner", steps: [step]
+        )
+        let youngVM = LessonPlayerViewModel(lesson: lesson, childAge: 9)
+        let oldVM = LessonPlayerViewModel(lesson: lesson, childAge: 15)
+        XCTAssertEqual(youngVM.currentSpotlightCaption, "Look at the player in the middle!")
+        XCTAssertEqual(oldVM.currentSpotlightCaption, "Watch the midfielder first.")
+    }
+
+    func testSpeakUsesRate_normalByDefault() {
+        let mock = MockCoachVoice()
+        let (vm, _) = makeVM(voice: mock)
+        vm.onAppear()
+        XCTAssertEqual(mock.lastRate, 1.0)
+    }
 }

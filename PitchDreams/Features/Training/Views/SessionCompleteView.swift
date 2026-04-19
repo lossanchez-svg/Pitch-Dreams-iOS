@@ -49,6 +49,21 @@ struct SessionCompleteView: View {
                         .foregroundStyle(Color.dsOnSurfaceVariant)
                 }
 
+                // XP Earned
+                if viewModel.xpEarned > 0 {
+                    HStack(spacing: 8) {
+                        Image(systemName: "bolt.fill")
+                            .foregroundStyle(Color.dsAccentOrange)
+                        Text("+\(viewModel.xpEarned) XP")
+                            .font(.system(size: 20, weight: .heavy, design: .rounded))
+                            .foregroundStyle(Color.dsAccentOrange)
+                    }
+                    .padding(.horizontal, 20)
+                    .padding(.vertical, 12)
+                    .background(Color.dsAccentOrange.opacity(0.15))
+                    .clipShape(Capsule())
+                }
+
                 // Summary card
                 VStack(spacing: 0) {
                     summaryRow(icon: "clock.fill", label: "Duration", value: "\(viewModel.sessionDurationMinutes) min", color: .dsSecondary)
@@ -62,6 +77,14 @@ struct SessionCompleteView: View {
                 .clipShape(RoundedRectangle(cornerRadius: CornerRadius.lg))
                 .ghostBorder()
                 .padding(.horizontal, Spacing.xl)
+
+                // Signature move progress credit — silent ambient reinforcement
+                // from TrainingMoveLink mapping, shown as chip pills so the
+                // kid sees the connection between today's drills and their moves.
+                if !viewModel.creditedMoveNames.isEmpty {
+                    signatureMoveCredit
+                        .padding(.horizontal, Spacing.xl)
+                }
 
                 Spacer()
 
@@ -100,6 +123,45 @@ struct SessionCompleteView: View {
                 }
             }
         }
+    }
+
+    private var signatureMoveCredit: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            HStack(spacing: 6) {
+                Image(systemName: "scissors")
+                    .font(.system(size: 10, weight: .heavy))
+                    .foregroundStyle(Color.dsTertiaryContainer)
+                Text("MOVE PROGRESS")
+                    .font(.system(size: 10, weight: .heavy, design: .rounded))
+                    .tracking(2)
+                    .foregroundStyle(Color.dsTertiaryContainer)
+            }
+            Text("This session pushed you forward on:")
+                .font(.system(size: 12, weight: .medium))
+                .foregroundStyle(Color.dsOnSurfaceVariant)
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 6) {
+                    ForEach(viewModel.creditedMoveNames, id: \.self) { name in
+                        Text(name)
+                            .font(.system(size: 11, weight: .heavy, design: .rounded))
+                            .tracking(1)
+                            .foregroundStyle(Color.dsTertiaryContainer)
+                            .padding(.horizontal, 10)
+                            .padding(.vertical, 6)
+                            .background(Color.dsTertiaryContainer.opacity(0.18))
+                            .clipShape(Capsule())
+                    }
+                }
+            }
+        }
+        .padding(Spacing.lg)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(Color.dsTertiaryContainer.opacity(0.1))
+        .clipShape(RoundedRectangle(cornerRadius: CornerRadius.lg))
+        .overlay(
+            RoundedRectangle(cornerRadius: CornerRadius.lg)
+                .stroke(Color.dsTertiaryContainer.opacity(0.3), lineWidth: 1)
+        )
     }
 
     private func summaryRow(icon: String, label: String, value: String, color: Color) -> some View {

@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary": "#3b2f11",
+                        "surface-tint": "#ffb59a",
+                        "surface-dim": "#0c1322",
+                        "on-surface-variant": "#e2bfb3",
+                        "primary-fixed": "#ffdbcf",
+                        "inverse-surface": "#dce2f8",
+                        "surface-container-low": "#151b2b",
+                        "surface-bright": "#32394a",
+                        "on-tertiary-fixed-variant": "#534525",
+                        "on-tertiary-container": "#3c3012",
+                        "outline": "#a98a7f",
+                        "on-secondary-fixed": "#001f23",
+                        "on-background": "#dce2f8",
+                        "error": "#ffb4ab",
+                        "on-secondary-container": "#004f57",
+                        "on-primary-fixed": "#380d00",
+                        "tertiary-container": "#aa9770",
+                        "inverse-on-surface": "#293041",
+                        "tertiary": "#d9c49a",
+                        "primary-container": "#ff6b2c",
+                        "secondary-fixed-dim": "#33daec",
+                        "on-surface": "#dce2f8",
+                        "secondary-fixed": "#91f1ff",
+                        "on-secondary-fixed-variant": "#004f57",
+                        "inverse-primary": "#a83900",
+                        "surface": "#0c1322",
+                        "secondary-container": "#00c9db",
+                        "primary": "#ffb59a",
+                        "on-primary": "#5b1b00",
+                        "outline-variant": "#594139",
+                        "on-secondary": "#00363c",
+                        "on-error-container": "#ffdad6",
+                        "background": "#0c1322",
+                        "tertiary-fixed": "#f6e0b5",
+                        "on-tertiary-fixed": "#251a01",
+                        "secondary": "#46e5f8",
+                        "on-primary-fixed-variant": "#802900",
+                        "surface-container-highest": "#2e3545",
+                        "surface-container-high": "#232a3a",
+                        "error-container": "#93000a",
+                        "surface-container-lowest": "#070e1d",
+                        "primary-fixed-dim": "#ffb59a",
+                        "on-error": "#690005",
+                        "surface-container": "#191f2f",
+                        "tertiary-fixed-dim": "#d9c49a"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Plus Jakarta Sans", "sans-serif"],
+                        "body": ["Plus Jakarta Sans", "sans-serif"],
+                        "label": ["Plus Jakarta Sans", "sans-serif"]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .ghost-border {
+            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+        }
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #0c1322;
+        }
+        .font-mono-stadium {
+            font-family: 'ui-monospace', 'SF Mono', 'Cascadia Mono', 'Segoe UI Mono', monospace;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background min-h-screen flex flex-col items-center justify-center p-6 space-y-12">
+<!-- Top AppBar Integration -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-6 py-4 bg-[#0C1322]">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full overflow-hidden border-2 border-secondary">
+<img alt="Rookie Wolf" class="w-full h-full object-cover" data-alt="close-up 3d render of a stylized cybernetic wolf avatar wearing orange neon goggles with a dark blue background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDbc4guuYg2WUeDe9GzsMHmJ15LR14NMMKraKVigx7zm04u1ISje2Ir7_b97AgQG4jp9tHGEh8AfbLgGHG932OKro1ECiGGLzvkiIVksRrBr0w2QLunD5BPVnWkCqJFMYo9_nChv84kbb1-54Of9qTTugW48hyQemd6y6uxkF82-uBs1ypmBcdIDzk2RJEL4Br_WXCTECl5Q9K3CNTq0uVzKU5IhuKnSd0NRwEWElm-S_Qxtrwy5-0I_CDalPQ3kLZu5R8QClaopMo"/>
+</div>
+<h1 class="font-headline font-black tracking-widest text-[#FF6B2C] text-xl uppercase">STADIUM DASHBOARD</h1>
+</div>
+<button class="material-symbols-outlined text-slate-400 hover:bg-white/5 transition-colors p-2 rounded-full active:scale-95 duration-150">settings</button>
+</header>
+<main class="w-full max-w-md flex flex-col items-center gap-8 pt-20">
+<div class="w-full">
+<p class="text-slate-500 font-bold text-[10px] tracking-[3px] uppercase mb-4 ml-2">Current Progression</p>
+<!-- Variant 1: Standard Progress (Rookie Stage) -->
+<div class="w-[361px] h-[80px] bg-background rounded-[16px] ghost-border flex items-center px-4 relative overflow-hidden mb-6">
+<!-- Left: Avatar Section -->
+<div class="relative flex-shrink-0 w-10 h-10 rounded-full border-2 border-secondary overflow-hidden">
+<img alt="Rookie" class="w-full h-full object-cover" data-alt="stylized 3d digital illustration of a rookie athlete wolf character in a high-tech training suit with cyan lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDXsWDdZxIS1MxfgUyflUFvVjaw8Jmkq2dB2EApSJW1zMyj91Wb1Gsz5N5k8qTrQbRt6tquUMfYP2-kswCUB4n_HEHL_XZoN37KuM8yQZ0rbgonLko4FpGFCvaSNvSBuDkUwws4FxLkShh0VVjNdk4ARJjQc6z4TeJVkDiUziIuJJl3SEVt_aC2FKzu3fLUM17QoqSFf5KDtG3IALWVL23CyXt97gM_oMUrPvjlSKAhPCerw_1TInV5gYcp6xbXLHW1_d-JnroSfTA"/>
+</div>
+<!-- Center: Progress Track -->
+<div class="flex-grow px-4 flex flex-col gap-1.5">
+<div class="w-full h-[10px] bg-surface-container-high rounded-full overflow-hidden">
+<div class="h-full rounded-full bg-gradient-to-r from-[#FF6B2C] to-[#FFE6DE]" style="width: 68%;"></div>
+</div>
+<span class="font-mono-stadium font-extrabold text-[11px] text-on-surface tracking-wider">340 / 500 XP</span>
+</div>
+<!-- Right: Label -->
+<div class="flex flex-col items-end gap-0.5">
+<div class="flex items-center gap-1 text-[#FF6B2C]">
+<span class="font-headline font-extrabold text-[12px]">→ Pro</span>
+</div>
+<span class="text-[8px] font-bold text-slate-500 tracking-[1px] uppercase">Next Rank</span>
+</div>
+</div>
+<!-- Variant 2: Legend Stage -->
+<div class="w-[361px] h-[80px] bg-background rounded-[16px] ghost-border flex items-center px-4 relative overflow-hidden">
+<!-- Left: Avatar Section -->
+<div class="relative flex-shrink-0 w-10 h-10 rounded-full border-2 border-tertiary overflow-hidden">
+<img alt="Legend" class="w-full h-full object-cover" data-alt="epic cinematic portrait of a golden cybernetic wolf warrior with glowing eyes and intricate armor details in a stadium setting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDSuxSGygEW0nbiWbxBaatvoEmJmyjbupvjbgBFNBnVYxIU2Mdx8QBRsrsHeP_Vu_KSZXfpJpo96a5qUVoM4ESP85dzcNMBXtZLpSippca2lp073qtBVeGqtlgkxvwC6qhv4eGGB5IPXA_wMZZeBv5dB3LgbMWH3kC_cxjycDaTf9TyGE-AZ7ISzrw-NRqgwlwu18zvirvaa-wFYk0vh8Wd0uOrEADNIv15Za1HpkBcMVhnCR-sctYq5bvPAU0cDhQQwxMhVypH94s"/>
+</div>
+<!-- Center: Progress Track -->
+<div class="flex-grow px-4 flex flex-col gap-1.5">
+<div class="w-full h-[10px] bg-surface-container-high rounded-full overflow-hidden">
+<div class="h-full rounded-full bg-gradient-to-r from-tertiary to-[#FFD700]" style="width: 100%;"></div>
+</div>
+<span class="font-mono-stadium font-extrabold text-[11px] text-tertiary tracking-widest">MAX LEVEL</span>
+</div>
+<!-- Right: Label -->
+<div class="flex flex-col items-end">
+<span class="font-headline font-extrabold text-[12px] text-tertiary tracking-[2px] uppercase">LEGEND</span>
+<span class="material-symbols-outlined text-tertiary text-xs" style="font-variation-settings: 'FILL' 1;">workspace_premium</span>
+</div>
+</div>
+</div>
+<!-- Descriptive Content for Context -->
+<div class="grid grid-cols-2 gap-4 w-full">
+<div class="bg-surface-container p-6 rounded-lg ghost-border aspect-square flex flex-col justify-between">
+<span class="material-symbols-outlined text-secondary text-3xl">fitness_center</span>
+<div>
+<h3 class="font-headline font-extrabold text-lg text-on-surface leading-tight">Morning Drill</h3>
+<p class="text-slate-500 font-bold text-[9px] tracking-[2px] uppercase">Start Session</p>
+</div>
+</div>
+<div class="bg-surface-container-high p-6 rounded-lg ghost-border aspect-square flex flex-col justify-between">
+<span class="material-symbols-outlined text-primary text-3xl">leaderboard</span>
+<div>
+<h3 class="font-headline font-extrabold text-lg text-on-surface leading-tight">Rank #24</h3>
+<p class="text-slate-500 font-bold text-[9px] tracking-[2px] uppercase">View Arena</p>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-6 pt-3 bg-[#0C1322] rounded-t-[24px] shadow-[0_-8px_30px_rgb(7,14,29,0.4)]">
+<button class="flex flex-col items-center justify-center bg-[#FF6B2C] text-[#0C1322] rounded-full p-3 active:scale-90 transition-all duration-200">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-headline font-bold text-[10px] tracking-[3px] uppercase mt-1">ARENA</span>
+</button>
+<button class="flex flex-col items-center justify-center text-slate-500 p-3 hover:text-[#46E5F8] active:scale-90 transition-all duration-200">
+<span class="material-symbols-outlined">fitness_center</span>
+<span class="font-headline font-bold text-[10px] tracking-[3px] uppercase mt-1">TRAIN</span>
+</button>
+<button class="flex flex-col items-center justify-center text-slate-500 p-3 hover:text-[#46E5F8] active:scale-90 transition-all duration-200">
+<span class="material-symbols-outlined">leaderboard</span>
+<span class="font-headline font-bold text-[10px] tracking-[3px] uppercase mt-1">RANK</span>
+</button>
+<button class="flex flex-col items-center justify-center text-slate-500 p-3 hover:text-[#46E5F8] active:scale-90 transition-all duration-200">
+<span class="material-symbols-outlined">inventory_2</span>
+<span class="font-headline font-bold text-[10px] tracking-[3px] uppercase mt-1">GEAR</span>
+</button>
+</nav>
+</body></html>

@@ -185,10 +185,7 @@ struct ChildDetailView: View {
 
     @ViewBuilder
     private var childProfileAvatar: some View {
-        let assetName = Avatar.assetName(
-            for: child.avatarId,
-            milestones: viewModel.streakData?.milestones ?? []
-        )
+        let assetName = Avatar.assetName(for: child.avatarId, totalXP: 0)
         if UIImage(named: assetName) != nil {
             Image(assetName)
                 .resizable()

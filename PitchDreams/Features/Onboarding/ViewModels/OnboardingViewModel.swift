@@ -47,19 +47,39 @@ final class OnboardingViewModel: ObservableObject {
         self.apiClient = apiClient
     }
 
-    // MARK: - Validation
+    // MARK: - Validation (inline errors for live display)
+
+    /// Inline email error text, or nil while valid / empty.
+    var emailError: String? { InputValidator.email(email) }
+    /// Inline password error text (first unmet requirement), or nil.
+    var passwordError: String? { InputValidator.password(password) }
+    /// Password strength (0-3) for a live meter.
+    var passwordStrength: Int { InputValidator.passwordStrength(password) }
+    /// "Passwords don't match" when confirm is populated but mismatches.
+    var confirmPasswordError: String? { InputValidator.passwordsMatch(password, confirmPassword) }
+    /// Nickname issue (length, chars, profanity), or nil.
+    var nicknameError: String? { InputValidator.nickname(nickname) }
+    /// PIN issue (length, banned, sequential), or nil.
+    var pinError: String? { InputValidator.pin(pin) }
+    /// "PINs don't match" when confirm is populated but mismatches.
+    var confirmPinError: String? { InputValidator.pinsMatch(pin, confirmPin) }
+
+    // MARK: - Validation gates (used by Continue buttons)
 
     var isSignupValid: Bool {
-        !email.isEmpty && email.contains("@") && email.contains(".") &&
-        password.count >= 8 && password == confirmPassword && agreedToTerms
+        !email.isEmpty && emailError == nil &&
+        !password.isEmpty && passwordError == nil &&
+        password == confirmPassword &&
+        agreedToTerms
     }
 
     var isChildProfileValid: Bool {
-        !nickname.isEmpty && nickname.count <= 20 && age >= 8 && age <= 18
+        !nickname.isEmpty && nicknameError == nil && age >= 8 && age <= 18
     }
 
     var isPinValid: Bool {
-        skipPin || (pin.count >= 4 && pin.count <= 6 && pin == confirmPin && pin.allSatisfy(\.isNumber))
+        if skipPin { return true }
+        return !pin.isEmpty && pinError == nil && pin == confirmPin
     }
 
     // MARK: - Navigation

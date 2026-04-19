@@ -5,11 +5,13 @@ struct ChildHomeView: View {
     @StateObject private var viewModel: ChildHomeViewModel
     @StateObject private var speechRecognizer = SpeechRecognizer()
     @EnvironmentObject var authManager: AuthManager
+    @EnvironmentObject var networkMonitor: NetworkMonitor
     @State private var lastVoiceCommand: String?
     @State private var voiceEnabled = false
     @State private var navigateToTraining = false
     @State private var navigateToQuickLog = false
     @State private var navigateToLearn = false
+    @State private var navigateToPlayerCard = false
     @State private var showMilestoneModal = false
     @State private var newMilestone: Int?
     @State private var milestoneFreeze = false
@@ -20,10 +22,30 @@ struct ChildHomeView: View {
     @State private var completedMission: Mission?
     @AppStorage("hasCompletedFirstSession") private var hasCompletedFirstSession = false
     @State private var showAvatarPicker = false
+    @State private var showXPToast = false
+    @State private var xpToastAmount: Int = 0
+    @State private var showShieldToast = false
+    @State private var showRecapSheet = false
+    @State private var dailyTipDismissed: Bool = false
+
+    @StateObject private var mysteryBoxVM: MysteryBoxViewModel
+    @State private var showMysteryBoxFlow = false
+
+    @StateObject private var pitchVM: IRLPitchViewModel
+    @State private var showPitchSheet = false
 
     init(childId: String) {
         self.childId = childId
         _viewModel = StateObject(wrappedValue: ChildHomeViewModel(childId: childId))
+        _mysteryBoxVM = StateObject(wrappedValue: MysteryBoxViewModel(childId: childId))
+        _pitchVM = StateObject(wrappedValue: IRLPitchViewModel(childId: childId))
+    }
+
+    /// Parental override — parents can disable the mystery box entirely
+    /// from ParentControls. Stored per child in UserDefaults; defaults to
+    /// true so the feature is on for new kids.
+    private var mysteryBoxEnabled: Bool {
+        UserDefaults.standard.object(forKey: "mysteryBoxEnabled_\(childId)") as? Bool ?? true
     }
 
     // MARK: - Derived State
@@ -34,18 +56,11 @@ struct ChildHomeView: View {
     }
 
     private var avatarAssetName: String {
-        Avatar.assetName(
-            for: effectiveAvatarId,
-            milestones: viewModel.streakData?.milestones ?? [],
-            localMissionXP: missionsVM.localMissionXP
-        )
+        Avatar.assetName(for: effectiveAvatarId, totalXP: viewModel.totalXP)
     }
 
     private var currentStage: AvatarStage {
-        AvatarStage.current(
-            forMilestones: viewModel.streakData?.milestones ?? [],
-            localMissionXP: missionsVM.localMissionXP
-        )
+        AvatarStage.current(forTotalXP: viewModel.totalXP)
     }
 
     private var resolvedAvatar: Avatar {
@@ -72,6 +87,67 @@ struct ChildHomeView: View {
                             .padding(.horizontal, Spacing.xl)
                             .padding(.top, -20)
                             .zIndex(1)
+
+                        // XP Progress Bar
+                        XPBarView(
+                            avatarAssetName: avatarAssetName,
+                            totalXP: viewModel.totalXP,
+                            progress: viewModel.xpProgress.progress,
+                            xpInStage: viewModel.xpProgress.xpInStage,
+                            xpNeeded: viewModel.xpProgress.xpNeeded,
+                            currentStage: viewModel.avatarStage
+                        )
+                        .padding(.horizontal, Spacing.xl)
+                        .padding(.top, Spacing.md)
+                        #if DEBUG
+                        .onTapGesture(count: 3) {
+                            // Triple-tap to seed XP for testing
+                            Task {
+                                let result = await viewModel.xpStore.addXP(430, childId: childId)
+                                await viewModel.refreshXP()
+                                if result.evolved {
+                                    evolvedTo = result.newStage
+                                    showEvolutionModal = true
+                                }
+                            }
+                        }
+                        #endif
+
+                        // IRL Pitch banner — only shows when GPS confirms we're at a known pitch
+                        if let pitch = pitchVM.detector.currentPitch, pitchVM.detector.isAtPitch {
+                            PitchLocationBanner(pitch: pitch) {
+                                showPitchSheet = true
+                            }
+                            .padding(.horizontal, Spacing.xl)
+                            .padding(.top, Spacing.md)
+                        }
+
+                        // Daily Mystery Box — parental override can hide it entirely
+                        if mysteryBoxEnabled {
+                            MysteryBoxCardView(viewModel: mysteryBoxVM) {
+                                showMysteryBoxFlow = true
+                            }
+                            .padding(.horizontal, Spacing.xl)
+                            .padding(.top, Spacing.md)
+                        }
+
+                        // Daily Focus Tip
+                        if !dailyTipDismissed {
+                            DailyTipCard(
+                                childId: childId,
+                                tip: DailyTipRegistry.todaysTip(),
+                                isDismissed: $dailyTipDismissed
+                            )
+                            .padding(.horizontal, Spacing.xl)
+                            .padding(.top, Spacing.md)
+                        }
+
+                        // Weekly Recap Banner (shows on Sundays or if not viewed)
+                        if showWeeklyRecapBanner {
+                            weeklyRecapBanner
+                                .padding(.horizontal, Spacing.xl)
+                                .padding(.top, Spacing.md)
+                        }
 
                         // Weekly Goals
                         weeklyGoalsCard
@@ -105,6 +181,10 @@ struct ChildHomeView: View {
                 }
                 .padding(.bottom, 140)
             }
+        }
+        .safeAreaInset(edge: .top) {
+            OfflineBanner(isOffline: networkMonitor.status == .offline)
+                .animation(.spring(response: 0.5, dampingFraction: 0.8), value: networkMonitor.status)
         }
         .safeAreaInset(edge: .bottom) {
             if speechRecognizer.isListening {
@@ -142,6 +222,7 @@ struct ChildHomeView: View {
                         .background(Color.dsSurfaceContainerHighest.opacity(0.4))
                         .clipShape(Circle())
                 }
+                .accessibilityLabel(speechRecognizer.isListening ? "Stop voice commands" : "Start voice commands")
             }
         }
         .toolbarBackground(Color.dsBackground.opacity(0.6), for: .navigationBar)
@@ -156,6 +237,24 @@ struct ChildHomeView: View {
             checkForMilestones()
             checkFirstSession()
             checkForAvatarEvolution()
+            await mysteryBoxVM.load()
+            // Start GPS-based pitch detection. Permission is requested in-
+            // context only when the detector starts; kids who never surface
+            // this feature won't get a location prompt they didn't ask for.
+            pitchVM.start()
+            await pitchVM.loadPitches()
+            // Reschedule the daily training reminder so its content reflects
+            // today's streak state instead of whatever was set at last toggle.
+            await TrainingReminderManager.scheduleDailyReminder(
+                childId: childId,
+                childNickname: viewModel.profile?.nickname,
+                streak: viewModel.streakCount
+            )
+            // Restore today's dismissal state for the daily focus tip.
+            dailyTipDismissed = DailyTipDismissal.isDismissed(
+                tip: DailyTipRegistry.todaysTip(),
+                childId: childId
+            )
         }
         .onReceive(missionsVM.$lastCompleted) { mission in
             guard let mission else { return }
@@ -178,7 +277,8 @@ struct ChildHomeView: View {
             if let milestone = newMilestone {
                 StreakMilestoneModal(
                     milestone: milestone,
-                    freezeAwarded: milestoneFreeze
+                    freezeAwarded: milestoneFreeze,
+                    childId: childId
                 ) {
                     showMilestoneModal = false
                     recordMilestone(milestone)
@@ -188,7 +288,7 @@ struct ChildHomeView: View {
         .sheet(isPresented: $showEvolutionModal) {
             if let stage = evolvedTo {
                 let avatar = Avatar.resolve(effectiveAvatarId)
-                EvolutionModal(avatar: avatar, newStage: stage) {
+                EvolutionModal(avatar: avatar, newStage: stage, totalXP: viewModel.totalXP) {
                     showEvolutionModal = false
                 }
             }
@@ -197,6 +297,39 @@ struct ChildHomeView: View {
             AvatarChangeSheet(childId: childId) {
                 showAvatarPicker = false
                 Task { await viewModel.loadData() }
+            }
+        }
+        .sheet(isPresented: $showRecapSheet) {
+            WeeklyRecapSheetView(childId: childId)
+        }
+        .fullScreenCover(isPresented: $showMysteryBoxFlow) {
+            MysteryBoxFlowView(viewModel: mysteryBoxVM) {
+                showMysteryBoxFlow = false
+            }
+        }
+        .sheet(isPresented: $showPitchSheet) {
+            PitchHomeDesignationView(viewModel: pitchVM) {
+                showPitchSheet = false
+            }
+        }
+        // Auto-surface the designation sheet when GPS dwelled at a new
+        // unknown location long enough to qualify as a pitch.
+        .onChange(of: pitchVM.detector.pendingNewLocation != nil) { hasPending in
+            if hasPending {
+                showPitchSheet = true
+            }
+        }
+        .overlay(alignment: .top) {
+            VStack(spacing: 8) {
+                XPEarnedToast(amount: xpToastAmount, isPresented: $showXPToast)
+                ShieldDeployedToast(streakDays: viewModel.streakCount, isPresented: $showShieldToast)
+            }
+            .padding(.top, 60)
+        }
+        .onChange(of: viewModel.shieldDeployed) { deployed in
+            if deployed {
+                showShieldToast = true
+                viewModel.shieldDeployed = false
             }
         }
         .onChange(of: speechRecognizer.transcript) { newTranscript in
@@ -211,6 +344,9 @@ struct ChildHomeView: View {
         }
         .navigationDestination(isPresented: $navigateToLearn) {
             LearnView(childId: childId)
+        }
+        .navigationDestination(isPresented: $navigateToPlayerCard) {
+            PlayerCardScreen(childId: childId)
         }
     }
 
@@ -256,6 +392,8 @@ struct ChildHomeView: View {
                     heroAvatarImage
                         .frame(width: 260, height: 260)
                         .onTapGesture { showAvatarPicker = true }
+                        .accessibilityLabel("Your avatar, \(resolvedAvatar.displayName) at \(currentStage.title) stage")
+                        .accessibilityHint("Double-tap to change avatar.")
 
                     // PRO badge
                     if currentStage.rawValue >= AvatarStage.pro.rawValue {
@@ -414,7 +552,7 @@ struct ChildHomeView: View {
                     .font(.system(size: 9, weight: .bold))
                     .tracking(2)
                     .foregroundStyle(Color.dsOnSurfaceVariant)
-                Text("LVL \(missionsVM.localMissionXP / 10 + 1)")
+                Text("\(viewModel.totalXP) XP")
                     .font(.system(size: 22, weight: .heavy, design: .rounded))
                     .foregroundStyle(Color.dsOnSurface)
             }
@@ -639,7 +777,7 @@ struct ChildHomeView: View {
                         style: StrokeStyle(lineWidth: 4, lineCap: .round)
                     )
                     .rotationEffect(.degrees(-90))
-                    .animation(.easeInOut(duration: 0.8), value: ringProgress)
+                    .animation(.dsSpring, value: ringProgress)
 
                 VStack(spacing: 1) {
                     Text("\(viewModel.streakCount)")
@@ -879,6 +1017,20 @@ struct ChildHomeView: View {
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: Spacing.lg) {
                     NavigationLink {
+                        PlayerCardScreen(childId: childId)
+                    } label: {
+                        exploreSkillCard(title: "My Card", color: Color(hex: "#FF6B2C"), icon: "person.text.rectangle.fill")
+                    }
+                    .buttonStyle(.plain)
+
+                    NavigationLink {
+                        SignatureMovesLibraryView(childId: childId)
+                    } label: {
+                        exploreSkillCard(title: "Moves", color: Color(hex: "#FFE9BD"), icon: "scissors")
+                    }
+                    .buttonStyle(.plain)
+
+                    NavigationLink {
                         FirstTouchView(childId: childId)
                     } label: {
                         exploreSkillCard(title: "First Touch", color: .dsAccentOrange, icon: "shoe.fill")
@@ -997,11 +1149,7 @@ struct ChildHomeView: View {
 
     private func checkForAvatarEvolution() {
         guard effectiveAvatarId != nil else { return }
-        let milestones = viewModel.streakData?.milestones ?? []
-        let currentStage = AvatarStage.current(
-            forMilestones: milestones,
-            localMissionXP: missionsVM.localMissionXP
-        )
+        let currentStage = AvatarStage.current(forTotalXP: viewModel.totalXP)
 
         let storageKey = "lastSeenAvatarStage_\(childId)"
         let lastSeenRaw = UserDefaults.standard.integer(forKey: storageKey)
@@ -1047,6 +1195,41 @@ struct ChildHomeView: View {
         }
     }
 
+    // MARK: - Weekly Recap
+
+    private var showWeeklyRecapBanner: Bool {
+        let calendar = Calendar.current
+        let weekday = calendar.component(.weekday, from: Date())
+        let isSunday = weekday == 1
+        let lastViewed = UserDefaults.standard.string(forKey: "lastRecapViewed_\(childId)") ?? ""
+        let thisWeek = ISO8601DateFormatter().string(from: Date()).prefix(10)
+        return isSunday && lastViewed != String(thisWeek)
+    }
+
+    private var weeklyRecapBanner: some View {
+        Button {
+            showRecapSheet = true
+            let thisWeek = ISO8601DateFormatter().string(from: Date()).prefix(10)
+            UserDefaults.standard.set(String(thisWeek), forKey: "lastRecapViewed_\(childId)")
+        } label: {
+            HStack(spacing: 10) {
+                Image(systemName: "star.fill")
+                    .foregroundStyle(Color.dsTertiaryContainer)
+                Text("Your Weekly Recap is Ready!")
+                    .font(DSFont.headline(14))
+                    .foregroundStyle(Color.dsOnSurface)
+                Spacer()
+                Image(systemName: "chevron.right")
+                    .font(.system(size: 12, weight: .bold))
+                    .foregroundStyle(Color.dsOnSurfaceVariant)
+            }
+            .padding(Spacing.lg)
+            .background(DSGradient.secondaryCTA.opacity(0.15))
+            .clipShape(RoundedRectangle(cornerRadius: CornerRadius.md))
+            .ghostBorder()
+        }
+    }
+
     private func recordMilestone(_ milestone: Int) {
         Task {
             let apiClient: APIClientProtocol = APIClient()
@@ -1062,5 +1245,6 @@ struct ChildHomeView: View {
     NavigationStack {
         ChildHomeView(childId: "preview-child")
             .environmentObject(AuthManager())
+            .environmentObject(NetworkMonitor.shared)
     }
 }

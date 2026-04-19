@@ -295,14 +295,14 @@ final class AddChildAndAvatarTests: XCTestCase {
         vm.confirmPin = "12"
         XCTAssertFalse(vm.isPinValid)
 
-        // Just right (4 digits)
-        vm.pin = "1234"
-        vm.confirmPin = "1234"
+        // Just right (4 digits, non-guessable)
+        vm.pin = "7392"
+        vm.confirmPin = "7392"
         XCTAssertTrue(vm.isPinValid)
 
-        // Max (6 digits)
-        vm.pin = "123456"
-        vm.confirmPin = "123456"
+        // Max (6 digits, non-guessable)
+        vm.pin = "483716"
+        vm.confirmPin = "483716"
         XCTAssertTrue(vm.isPinValid)
 
         // Too long
@@ -311,9 +311,18 @@ final class AddChildAndAvatarTests: XCTestCase {
         XCTAssertFalse(vm.isPinValid)
 
         // Mismatch
-        vm.pin = "1234"
+        vm.pin = "7392"
         vm.confirmPin = "5678"
         XCTAssertFalse(vm.isPinValid)
+
+        // Guessable sequences rejected (C10 tightening)
+        vm.pin = "1234"
+        vm.confirmPin = "1234"
+        XCTAssertFalse(vm.isPinValid, "Sequential PINs like 1234 should be rejected")
+
+        vm.pin = "0000"
+        vm.confirmPin = "0000"
+        XCTAssertFalse(vm.isPinValid, "All-same-digit PINs should be rejected")
 
         // Non-numeric
         vm.pin = "abcd"

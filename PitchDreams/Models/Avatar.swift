@@ -56,22 +56,19 @@ enum AvatarStage: Int, CaseIterable, Comparable {
         }
     }
 
-    /// Derive the highest unlocked stage from the streak milestones the child has reached,
-    /// optionally boosted by locally-earned mission XP. Missions provide a parallel path
-    /// to evolution: 50 XP → Pro, 200 XP → Legend. The returned stage is the max of the
-    /// streak-based stage and the XP-based stage.
-    /// Streak milestones are server-tracked day counts (e.g. 7, 14, 30).
+    /// Derive avatar stage from total XP. This is now the SINGLE source of truth
+    /// for avatar evolution. Streak milestones and missions contribute XP, which
+    /// flows through here.
+    static func current(forTotalXP totalXP: Int) -> AvatarStage {
+        XPCalculator.avatarStageForXP(totalXP)
+    }
+
+    /// Legacy convenience -- reads milestones and mission XP.
+    /// Call sites should migrate to pass totalXP.
+    @available(*, deprecated, message: "Use current(forTotalXP:) instead")
     static func current(forMilestones milestones: [Int], localMissionXP: Int = 0) -> AvatarStage {
-        let best = milestones.max() ?? 0
-        var stage: AvatarStage = .rookie
-        if best >= AvatarStage.legend.unlockMilestone { stage = .legend }
-        else if best >= AvatarStage.pro.unlockMilestone { stage = .pro }
-
-        var xpStage: AvatarStage = .rookie
-        if localMissionXP >= 200 { xpStage = .legend }
-        else if localMissionXP >= 50 { xpStage = .pro }
-
-        return max(stage, xpStage)
+        // Keep backward compat during migration: use mission XP as proxy
+        current(forTotalXP: localMissionXP)
     }
 
     static func < (lhs: AvatarStage, rhs: AvatarStage) -> Bool {
@@ -100,10 +97,16 @@ extension Avatar {
         return .default
     }
 
-    /// Resolve the right asset name from a stored avatarId string + the child's milestones.
-    static func assetName(for avatarId: String?, milestones: [Int], localMissionXP: Int = 0) -> String {
+    /// Resolve the right asset name from a stored avatarId + the child's total XP.
+    static func assetName(for avatarId: String?, totalXP: Int) -> String {
         let avatar = resolve(avatarId)
-        let stage = AvatarStage.current(forMilestones: milestones, localMissionXP: localMissionXP)
+        let stage = AvatarStage.current(forTotalXP: totalXP)
         return avatar.assetName(stage: stage)
+    }
+
+    /// Legacy convenience -- call sites should migrate to use totalXP variant.
+    @available(*, deprecated, message: "Use assetName(for:totalXP:) instead")
+    static func assetName(for avatarId: String?, milestones: [Int], localMissionXP: Int = 0) -> String {
+        assetName(for: avatarId, totalXP: localMissionXP)
     }
 }

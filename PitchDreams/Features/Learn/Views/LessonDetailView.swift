@@ -77,7 +77,7 @@ struct LessonDetailView: View {
             }
             .fullScreenCover(isPresented: $showingLessonPlayer) {
                 if let animated = TacticalLessonRegistry.animatedLesson(for: lesson.id) {
-                    LessonPlayerView(lesson: animated)
+                    LessonPlayerView(lesson: animated, childId: childId)
                 }
             }
         }

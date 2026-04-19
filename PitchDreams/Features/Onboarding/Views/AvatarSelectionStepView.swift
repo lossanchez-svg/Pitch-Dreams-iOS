@@ -95,7 +95,7 @@ struct AvatarSelectionStepView: View {
                         HStack(spacing: 12) {
                             ForEach(Array(avatarOptions.enumerated()), id: \.offset) { index, avatar in
                                 Button {
-                                    withAnimation(.easeInOut(duration: 0.2)) {
+                                    withAnimation(.dsSnappy) {
                                         selectedIndex = index
                                     }
                                 } label: {

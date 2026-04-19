@@ -278,3 +278,33 @@ extension View {
         modifier(GlassBackground())
     }
 }
+
+// MARK: - Haptic Feedback
+
+extension View {
+    /// Adds haptic feedback on tap gesture.
+    func dsHaptic(_ style: UIImpactFeedbackGenerator.FeedbackStyle = .medium) -> some View {
+        self.simultaneousGesture(TapGesture().onEnded {
+            UIImpactFeedbackGenerator(style: style).impactOccurred()
+        })
+    }
+}
+
+// MARK: - Spring Animation Helpers
+
+extension Animation {
+    /// Standard spring for most transitions.
+    static var dsSpring: Animation {
+        .spring(response: 0.5, dampingFraction: 0.7)
+    }
+
+    /// Snappy spring for button presses.
+    static var dsSnappy: Animation {
+        .spring(response: 0.3, dampingFraction: 0.6)
+    }
+
+    /// Gentle spring for modals/sheets.
+    static var dsGentle: Animation {
+        .spring(response: 0.6, dampingFraction: 0.8)
+    }
+}

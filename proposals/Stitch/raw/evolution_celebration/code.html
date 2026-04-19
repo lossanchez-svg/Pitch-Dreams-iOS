@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-variant": "#2e3545",
+                        "surface-container-highest": "#2e3545",
+                        "on-tertiary": "#3b2f11",
+                        "surface-tint": "#ffb59a",
+                        "secondary-container": "#00c9db",
+                        "surface-dim": "#0c1322",
+                        "error": "#ffb4ab",
+                        "on-background": "#dce2f8",
+                        "surface": "#0c1322",
+                        "on-tertiary-fixed-variant": "#534525",
+                        "on-secondary-fixed": "#001f23",
+                        "inverse-on-surface": "#293041",
+                        "on-tertiary-container": "#3c3012",
+                        "tertiary-fixed-dim": "#d9c49a",
+                        "tertiary": "#d9c49a",
+                        "surface-container-lowest": "#070e1d",
+                        "on-primary": "#5b1b00",
+                        "error-container": "#93000a",
+                        "inverse-primary": "#a83900",
+                        "on-secondary-fixed-variant": "#004f57",
+                        "on-primary-container": "#5c1c00",
+                        "surface-container-high": "#232a3a",
+                        "surface-container-low": "#151b2b",
+                        "secondary-fixed-dim": "#33daec",
+                        "secondary-fixed": "#91f1ff",
+                        "outline-variant": "#594139",
+                        "on-primary-fixed-variant": "#802900",
+                        "surface-container": "#191f2f",
+                        "on-secondary-container": "#004f57",
+                        "primary": "#ffb59a",
+                        "tertiary-container": "#aa9770",
+                        "outline": "#a98a7f",
+                        "on-tertiary-fixed": "#251a01",
+                        "on-primary-fixed": "#380d00",
+                        "tertiary-fixed": "#f6e0b5",
+                        "surface-bright": "#32394a",
+                        "secondary": "#46e5f8",
+                        "primary-fixed-dim": "#ffb59a",
+                        "primary-fixed": "#ffdbcf",
+                        "on-surface": "#dce2f8",
+                        "primary-container": "#ff6b2c",
+                        "on-surface-variant": "#e2bfb3",
+                        "on-error": "#690005",
+                        "inverse-surface": "#dce2f8",
+                        "background": "#0c1322",
+                        "on-error-container": "#ffdad6",
+                        "on-secondary": "#00363c"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Plus Jakarta Sans"],
+                        "body": ["Plus Jakarta Sans"],
+                        "label": ["Plus Jakarta Sans"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 48;
+        }
+        .cta-gradient {
+            background: linear-gradient(135deg, #FFE6DE 0%, #FFD4C8 100%);
+        }
+        .text-glow-secondary {
+            text-shadow: 0 0 15px rgba(70, 229, 248, 0.4);
+        }
+        .ghost-border {
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .cyan-outer-glow {
+            box-shadow: 0 0 40px rgba(70, 229, 248, 0.15);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface font-body min-h-screen selection:bg-secondary selection:text-on-secondary overflow-x-hidden">
+<!-- Top Navigation Anchor -->
+<header class="fixed top-0 w-full bg-[#0C1322] flex items-center justify-between px-6 py-4 w-full z-50">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-[#FF6B2C] cursor-pointer scale-95 duration-200">arrow_back</span>
+</div>
+<h1 class="font-['Plus_Jakarta_Sans'] font-bold tracking-widest uppercase text-xs text-[#FF6B2C]">YOUR EVOLUTION PATH</h1>
+<div class="w-6"></div> <!-- Spacer for centering -->
+</header>
+<main class="relative pt-24 pb-32 px-6 flex flex-col items-center">
+<!-- Radial Background Glow -->
+<div class="fixed inset-0 pointer-events-none overflow-hidden">
+<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-secondary/5 rounded-full blur-[120px]"></div>
+</div>
+<!-- Celebration Header -->
+<div class="text-center mb-12 relative z-10">
+<span class="text-secondary font-bold tracking-[3px] text-[10px] uppercase mb-4 block">EVOLUTION PROTOCOL</span>
+<h2 class="text-3xl font-black text-on-surface leading-tight mb-2 max-w-[280px] mx-auto uppercase">Your Evolution Path</h2>
+<div class="inline-flex items-center gap-2 bg-primary-container/10 px-4 py-2 rounded-full border border-primary-container/20">
+<span class="material-symbols-outlined text-primary-container text-sm" style="font-variation-settings: 'FILL' 1;">bolt</span>
+<p class="text-[14px] font-extrabold text-primary-container uppercase tracking-wider">You've earned 500 XP!</p>
+</div>
+</div>
+<!-- Evolution Timeline Spine -->
+<div class="relative w-full max-w-md flex flex-col items-center gap-10">
+<!-- Timeline Path Line -->
+<div class="absolute top-0 bottom-0 left-1/2 -translate-x-1/2 w-[2px] bg-surface-container-highest/30 z-0"></div>
+<!-- STAGE 1: ROOKIE (PAST) -->
+<div class="relative z-10 w-full flex flex-col items-center opacity-60">
+<div class="bg-surface-container-low p-1 rounded-full mb-4">
+<div class="w-20 h-20 rounded-full border-2 border-surface-variant overflow-hidden">
+<img alt="Rookie Wolf Avatar" class="w-full h-full object-cover grayscale" data-alt="Detailed digital illustration of a young anthropomorphic wolf wearing a basic grey training hoodie, energetic expression, cinematic dark blue lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD_OtxPWN7rgJbQVHQbM4DxK8voGhOZ_DHfdpxZ7-mCj5wbDoJ0dEroA-hI7ScinjDlgGPXnNmsIW7zSKM7D5Zo3BBbcwjv-bTVeBZ807KN1yAc3rgjyDj9HXPwXGCAUkMN65Xknslt2HvjszEUrKVO4F3PpmxYFK4W4wm0yOAFykvZBpkhv842pjC6zg-h_z6fcdekN0xj6A4Jt4XdVzidT-E2hPkExB-8grPYPt9kZ1kwIEgT3DHvMj8xGJzGh0epLoynBidesR0"/>
+</div>
+</div>
+<div class="bg-surface-container px-4 py-1 rounded-full mb-2">
+<span class="text-[10px] font-black tracking-widest uppercase text-slate-500">ROOKIE</span>
+</div>
+<div class="w-6 h-6 bg-surface-container-highest rounded-full flex items-center justify-center border-2 border-background">
+<span class="material-symbols-outlined text-[14px] text-secondary font-bold">check</span>
+</div>
+</div>
+<!-- STAGE 2: PRO (CURRENT/NEW) -->
+<div class="relative z-20 w-full flex flex-col items-center">
+<!-- Outer Glow and Floating Indicator -->
+<div class="absolute -top-4 bg-secondary text-on-secondary px-4 py-1 rounded-full z-30 shadow-lg shadow-secondary/20">
+<span class="text-[10px] font-black tracking-[2px] uppercase">CURRENT STAGE</span>
+</div>
+<div class="bg-surface-container-high p-4 rounded-xl border border-secondary/30 cyan-outer-glow flex flex-col items-center w-full max-w-[280px]">
+<div class="w-36 h-36 rounded-full border-4 border-secondary p-1 mb-6 relative">
+<div class="w-full h-full rounded-full overflow-hidden">
+<img alt="Pro Wolf Avatar" class="w-full h-full object-cover" data-alt="Digital art of a powerful anthropomorphic wolf in sleek orange and cyan tactical training gear, intense gaze, glowing cyan eyes, dramatic stadium lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCzXT_RgmmnO19_76VDwjQ3euVJBoYpNO3qD38JoyOpQOgeRWWBzhoko--Cwx8kDAvAReiAx_O-bqDYlLo366d1ZdPM5jAISVc34utEoKRxBxDZF4YLwKWqrMYkd32KRETCBf3c6R9CIgBV0HWcnON1GLgwySAQtjR-tgQ7Yyo5ckh14r39d7GbtoVmsZh7UF6-qXaYCjohJeUMp124AaZodjfN1foalcpwKaCP2SvBqb4mplJo7BwCCvCxDe4LhDAPRVfdWmcHWdo"/>
+</div>
+<div class="absolute -bottom-2 -right-2 bg-secondary rounded-full p-2 border-4 border-[#191F2F]">
+<span class="material-symbols-outlined text-[#0C1322] text-xl" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+</div>
+</div>
+<h3 class="text-2xl font-black tracking-tight text-on-surface uppercase mb-1 italic">PRO WOLF</h3>
+<div class="flex items-center gap-1 text-secondary text-glow-secondary mb-4">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="text-[11px] font-bold tracking-[2px] uppercase">LEVEL 12 UNLOCKED</span>
+</div>
+</div>
+</div>
+<!-- STAGE 3: LEGEND (LOCKED) -->
+<div class="relative z-10 w-full flex flex-col items-center blur-[1px]">
+<div class="w-24 h-24 rounded-full border-2 border-surface-container-highest overflow-hidden mb-4 desaturate bg-surface-container-lowest">
+<img alt="Legend Wolf Avatar Locked" class="w-full h-full object-cover opacity-20" data-alt="Epic illustration of a majestic anthropomorphic wolf with silver fur and golden armor, glowing aura, silhouette in a high-tech arena, extremely detailed" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBzC4-7b98WocMp9BjmHZkfCgjpkQBmeObHVxa6wCykw2sQf9vn_Rk09-n5uWSe0ff6MuDTOaXovicRKOlan-nH-H5MKGUgRkJjZ7ONvLxs7NYFoydcap84FHNVcj91-gSbU9akZ-dBXVeFCGlGTQMGBTTXlj2KZohKLyjyBr81s6KXWZaRJpCsv1rDOv0FrK21mEmTCrZH35hdgTy8Q93FHm3WFNRYXvuU_2FO37-XAxGCJdXsUJdnHUi8PwoTe_vw3gAmHO7_qRU"/>
+</div>
+<div class="bg-surface-container-low px-4 py-1 rounded-full mb-4">
+<span class="text-[10px] font-black tracking-widest uppercase text-slate-600">LEGEND</span>
+</div>
+<!-- Requirement Pill -->
+<div class="bg-surface-container-high px-6 py-2 rounded-full ghost-border flex items-center gap-2">
+<span class="material-symbols-outlined text-slate-500 text-sm">lock</span>
+<span class="text-[10px] font-black tracking-[2px] uppercase text-slate-400">EARN 1500 MORE XP</span>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation Shell -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-6 pt-3 bg-[#191F2F] rounded-t-[32px] shadow-[0_-8px_40px_rgba(7,14,29,0.4)]">
+<div class="flex flex-col items-center justify-center text-slate-500 hover:text-[#46E5F8] transition-transform active:scale-90">
+<span class="material-symbols-outlined">sports_score</span>
+<span class="font-['Plus_Jakarta_Sans'] font-bold tracking-[2px] uppercase text-[10px] mt-1">ARENA</span>
+</div>
+<div class="flex flex-col items-center justify-center bg-[#FF6B2C] text-[#0C1322] rounded-full p-3 scale-110 shadow-lg shadow-primary-container/20">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+<span class="sr-only text-[10px]">EVOLVE</span>
+</div>
+<div class="flex flex-col items-center justify-center text-slate-500 hover:text-[#46E5F8] transition-transform active:scale-90">
+<span class="material-symbols-outlined">groups</span>
+<span class="font-['Plus_Jakarta_Sans'] font-bold tracking-[2px] uppercase text-[10px] mt-1">SOCIAL</span>
+</div>
+<div class="flex flex-col items-center justify-center text-slate-500 hover:text-[#46E5F8] transition-transform active:scale-90">
+<span class="material-symbols-outlined">person</span>
+<span class="font-['Plus_Jakarta_Sans'] font-bold tracking-[2px] uppercase text-[10px] mt-1">PROFILE</span>
+</div>
+</nav>
+<!-- Floating Primary CTA -->
+<div class="fixed bottom-28 left-0 right-0 px-6 flex justify-center z-40 pointer-events-none">
+<button class="cta-gradient h-14 w-full max-w-md rounded-full flex items-center justify-center gap-3 shadow-xl shadow-primary-container/30 pointer-events-auto active:scale-95 duration-200">
+<span class="text-[#0C1322] font-black tracking-[3px] uppercase text-sm">BEGIN DAILY GRIND</span>
+<span class="material-symbols-outlined text-[#0C1322]" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+</button>
+</div>
+</body></html>

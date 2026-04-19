@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-error": "#690005",
+                        "inverse-primary": "#a83900",
+                        "on-primary-fixed-variant": "#802900",
+                        "surface-container-lowest": "#070e1d",
+                        "outline": "#a98a7f",
+                        "surface-dim": "#0c1322",
+                        "on-surface-variant": "#e2bfb3",
+                        "error-container": "#93000a",
+                        "tertiary": "#d9c49a",
+                        "on-secondary": "#00363c",
+                        "tertiary-container": "#aa9770",
+                        "surface-tint": "#ffb59a",
+                        "on-tertiary-fixed": "#251a01",
+                        "secondary-container": "#00c9db",
+                        "on-primary-fixed": "#380d00",
+                        "secondary-fixed-dim": "#33daec",
+                        "secondary-fixed": "#91f1ff",
+                        "surface-container-highest": "#2e3545",
+                        "tertiary-fixed": "#f6e0b5",
+                        "on-tertiary-fixed-variant": "#534525",
+                        "error": "#ffb4ab",
+                        "surface-bright": "#32394a",
+                        "inverse-on-surface": "#293041",
+                        "on-primary-container": "#5c1c00",
+                        "surface-container": "#191f2f",
+                        "on-primary": "#5b1b00",
+                        "surface-variant": "#2e3545",
+                        "primary-container": "#ff6b2c",
+                        "secondary": "#46e5f8",
+                        "surface": "#0c1322",
+                        "primary-fixed-dim": "#ffb59a",
+                        "on-tertiary": "#3b2f11",
+                        "outline-variant": "#594139",
+                        "on-secondary-container": "#004f57",
+                        "surface-container-low": "#151b2b",
+                        "on-background": "#dce2f8",
+                        "on-secondary-fixed": "#001f23",
+                        "primary": "#ffb59a",
+                        "on-error-container": "#ffdad6",
+                        "inverse-surface": "#dce2f8",
+                        "surface-container-high": "#232a3a",
+                        "on-secondary-fixed-variant": "#004f57",
+                        "on-surface": "#dce2f8",
+                        "primary-fixed": "#ffdbcf",
+                        "on-tertiary-container": "#3c3012",
+                        "tertiary-fixed-dim": "#d9c49a",
+                        "background": "#0c1322"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Plus Jakarta Sans", "sans-serif"],
+                        "body": ["Plus Jakarta Sans", "sans-serif"],
+                        "label": ["Plus Jakarta Sans", "sans-serif"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .ghost-border {
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .cta-gradient {
+            background: linear-gradient(135deg, #FFE6DE 0%, #FFD4C8 100%);
+        }
+        .primary-orange-gradient {
+            background: linear-gradient(180deg, #FF6B2C 0%, #E65A1F 100%);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-surface font-body text-on-surface">
+<div class="relative flex min-h-screen w-full flex-col overflow-x-hidden">
+<!-- Minimal Header (Process View) -->
+<header class="flex items-center justify-between p-6">
+<button class="flex size-12 items-center justify-center rounded-full bg-surface-container-low">
+<span class="material-symbols-outlined text-white">arrow_back</span>
+</button>
+<h2 class="text-lg font-bold uppercase tracking-[0.2em] text-on-surface">Vault Reveals</h2>
+<div class="size-12"></div>
+</header>
+<main class="flex flex-col gap-12 px-6 pb-24">
+<!-- Variant A: COMMON DROP -->
+<section class="flex flex-col items-center">
+<div class="mb-2">
+<span class="text-[10px] font-bold tracking-[0.3em] text-on-surface-variant uppercase">Variant A</span>
+</div>
+<div class="relative flex w-full max-w-md flex-col items-center rounded-lg bg-surface-container p-8 ghost-border">
+<div class="absolute -top-12 left-1/2 -translate-x-1/2">
+<div class="relative flex size-24 items-center justify-center">
+<!-- Slate Particle Halo -->
+<div class="absolute inset-0 rounded-full border-4 border-surface-container-highest opacity-40 blur-xl"></div>
+<div class="z-10 flex size-16 items-center justify-center rounded-full bg-surface-container-highest">
+<span class="material-symbols-outlined text-secondary text-3xl" style="font-variation-settings: 'FILL' 1;">bolt</span>
+</div>
+</div>
+</div>
+<div class="mt-12 flex flex-col items-center text-center">
+<h4 class="text-[11px] font-bold tracking-[0.25em] text-on-surface-variant uppercase">Common Drop</h4>
+<h1 class="font-headline text-[64px] font-extrabold leading-none text-primary-container tabular-nums mt-4">+25 XP</h1>
+<p class="mt-4 text-sm font-medium text-secondary">Small bonus. Keep the streak alive.</p>
+</div>
+<button class="mt-8 flex h-14 w-full items-center justify-center rounded-full border border-secondary px-8 font-bold uppercase tracking-widest text-secondary hover:bg-secondary/10">
+                        Got It
+                    </button>
+</div>
+</section>
+<!-- Variant B: RARE DROP -->
+<section class="flex flex-col items-center">
+<div class="mb-2">
+<span class="text-[10px] font-bold tracking-[0.3em] text-on-surface-variant uppercase">Variant B</span>
+</div>
+<div class="relative flex w-full max-w-md flex-col items-center rounded-lg bg-surface-container-high p-8 ghost-border">
+<div class="absolute -top-12 left-1/2 -translate-x-1/2">
+<div class="relative flex size-24 items-center justify-center">
+<!-- Cyan Halo -->
+<div class="absolute inset-0 rounded-full bg-secondary opacity-20 blur-2xl"></div>
+<div class="z-10 flex size-16 items-center justify-center rounded-full bg-secondary">
+<span class="material-symbols-outlined text-surface-dim text-3xl" style="font-variation-settings: 'FILL' 1;">sports_soccer</span>
+</div>
+</div>
+</div>
+<div class="mt-12 flex flex-col items-center text-center">
+<h4 class="text-[11px] font-bold tracking-[0.25em] text-secondary uppercase">Rare Drop</h4>
+<h2 class="mt-4 font-headline text-2xl font-extrabold text-white">FREE MOVE ATTEMPT</h2>
+<div class="mt-2 rounded bg-secondary/10 px-3 py-1">
+<span class="text-sm font-bold text-secondary uppercase tracking-wider">Rainbow Flick</span>
+</div>
+<p class="mt-4 text-sm font-medium text-on-surface-variant">Try this locked move's drill free today.</p>
+</div>
+<div class="mt-8 flex w-full flex-col gap-4">
+<button class="primary-orange-gradient flex h-14 w-full items-center justify-center rounded-full px-8 font-bold uppercase tracking-widest text-surface-dim">
+                            Try It Now
+                        </button>
+<button class="flex h-10 w-full items-center justify-center text-xs font-bold uppercase tracking-widest text-on-surface-variant hover:text-white">
+                            Save For Later
+                        </button>
+</div>
+</div>
+</section>
+<!-- Variant C: LEGENDARY DROP -->
+<section class="flex flex-col items-center">
+<div class="mb-2">
+<span class="text-[10px] font-bold tracking-[0.3em] text-on-surface-variant uppercase">Variant C</span>
+</div>
+<div class="relative flex w-full max-w-md flex-col items-center overflow-hidden rounded-lg bg-surface-container-highest p-8 shadow-[0_0_40px_rgba(217,196,154,0.15)]">
+<!-- Gold Radial Burst Elements -->
+<div class="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(217,196,154,0.15)_0%,transparent_70%)]"></div>
+<div class="absolute -top-12 left-1/2 -translate-x-1/2">
+<div class="relative flex size-24 items-center justify-center">
+<!-- Gold Sparkle Effect -->
+<div class="absolute inset-0 rounded-full bg-tertiary opacity-30 blur-3xl"></div>
+<div class="z-10 flex size-16 items-center justify-center rounded-full bg-tertiary"><span class="material-symbols-outlined text-surface-dim text-3xl" style="font-variation-settings: 'FILL' 1;">crown</span></div>
+</div>
+</div>
+<div class="relative z-10 mt-12 flex flex-col items-center text-center">
+<h4 class="text-[11px] font-bold tracking-[0.25em] text-tertiary uppercase">Legendary Drop</h4>
+<h2 class="mt-4 font-headline text-[22px] font-extrabold text-tertiary">LEGENDARY DROP</h2>
+<!-- Platinum Card Frame Preview -->
+<div class="mt-6 flex aspect-square w-48 items-center justify-center overflow-hidden rounded-xl border-2 border-tertiary/50 bg-surface-dim shadow-[0_0_30px_rgba(217,196,154,0.3)]">
+<img alt="Legendary Soccer Player Card" class="h-full w-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA6BCyE5_SmWIAOTFZVcxvAcD27imqPaYLiV5U2xeCkXepZR4mZB6RriR3HrXBGZzIXLg6aYe36NjMyu8U60ed2Yr8VK6JeH1W9c-_Vrsuvrn0LQOlk5mzIDddB0NW-TabGVD3LVqCZvCcBOXLCNqp6nsaDYbUP7n-QHJtywwaFkxwARzmmRdcTZSTEOSq1tMnEaoGDFWglfKDWnVvOSZ38Yyno9E211GwIEANPnXRmDb76d9K_19jtooZ_-QCiz8f1bg7k1k6etUw"/>
+</div>
+<p class="mt-6 text-sm font-medium text-on-surface-variant">Ultra-rare Platinum frame for your Player Card.</p>
+</div>
+<div class="relative z-10 mt-8 flex w-full flex-col gap-4">
+<button class="primary-orange-gradient flex h-14 w-full items-center justify-center rounded-full px-8 font-bold uppercase tracking-widest text-surface-dim">
+                            Equip Now
+                        </button>
+<button class="flex h-10 w-full items-center justify-center text-xs font-bold uppercase tracking-widest text-tertiary hover:text-white">
+                            View Collection
+                        </button>
+</div>
+<!-- Sparkle "Confetti" decorations -->
+<div class="pointer-events-none absolute left-10 top-20 text-tertiary/40">
+<span class="material-symbols-outlined scale-75">auto_awesome</span>
+</div>
+<div class="pointer-events-none absolute right-12 top-40 text-tertiary/30">
+<span class="material-symbols-outlined scale-50">stars</span>
+</div>
+<div class="pointer-events-none absolute left-1/4 bottom-32 text-tertiary/20">
+<span class="material-symbols-outlined">flare</span>
+</div>
+</div>
+</section>
+</main>
+</div>
+</body></html>

@@ -60,5 +60,6 @@ fastlane/report.xml
 fastlane/Preview.html
 fastlane/screenshots/**/*.png
 fastlane/test_output
-.claude/settings.local.json
-.claude/worktrees/
+.claude/
+.DS_Store
+**/.DS_Store

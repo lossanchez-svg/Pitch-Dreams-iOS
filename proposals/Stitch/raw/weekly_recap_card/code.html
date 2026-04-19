@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #0C1322;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .monospaced-digits {
+            font-variant-numeric: tabular-nums;
+        }
+        .starlight-pitch-gradient {
+            background: linear-gradient(180deg, #0C1322 0%, #191F2F 100%);
+        }
+        .wolf-glow {
+            filter: drop-shadow(0 0 20px rgba(255, 107, 44, 0.3));
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "outline-variant": "#594139",
+                        "surface-container-highest": "#2e3545",
+                        "on-primary-fixed": "#380d00",
+                        "surface": "#0c1322",
+                        "outline": "#a98a7f",
+                        "on-secondary-container": "#004f57",
+                        "on-secondary-fixed": "#001f23",
+                        "secondary-fixed": "#91f1ff",
+                        "secondary-container": "#00c9db",
+                        "on-background": "#dce2f8",
+                        "error": "#ffb4ab",
+                        "secondary": "#46e5f8",
+                        "error-container": "#93000a",
+                        "on-primary-container": "#5c1c00",
+                        "primary-fixed-dim": "#ffb59a",
+                        "on-surface": "#dce2f8",
+                        "inverse-surface": "#dce2f8",
+                        "tertiary-container": "#aa9770",
+                        "surface-bright": "#32394a",
+                        "surface-tint": "#ffb59a",
+                        "on-secondary-fixed-variant": "#004f57",
+                        "primary-fixed": "#ffdbcf",
+                        "on-primary-fixed-variant": "#802900",
+                        "surface-dim": "#0c1322",
+                        "on-error-container": "#ffdad6",
+                        "on-secondary": "#00363c",
+                        "surface-container-high": "#232a3a",
+                        "on-tertiary": "#3b2f11",
+                        "primary": "#ffb59a",
+                        "on-tertiary-fixed": "#251a01",
+                        "surface-container-low": "#151b2b",
+                        "surface-variant": "#2e3545",
+                        "on-tertiary-container": "#3c3012",
+                        "on-primary": "#5b1b00",
+                        "surface-container-lowest": "#070e1d",
+                        "secondary-fixed-dim": "#33daec",
+                        "tertiary-fixed": "#f6e0b5",
+                        "on-error": "#690005",
+                        "tertiary": "#d9c49a",
+                        "surface-container": "#191f2f",
+                        "on-tertiary-fixed-variant": "#534525",
+                        "inverse-primary": "#a83900",
+                        "on-surface-variant": "#e2bfb3",
+                        "inverse-on-surface": "#293041",
+                        "tertiary-fixed-dim": "#d9c49a",
+                        "primary-container": "#ff6b2c",
+                        "background": "#0c1322"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="flex items-center justify-center min-h-screen p-4">
+<!-- Top Navigation Shell (Suppressed based on focused journey rule, but present for context if needed by shell logic) -->
+<header class="fixed top-0 left-0 w-full flex justify-between items-center px-6 h-16 bg-[#191F2F] z-50">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-[#FF6B2C]">arrow_back</span>
+<h1 class="font-['Plus_Jakarta_Sans'] font-bold tracking-widest uppercase text-xs text-[#FF6B2C]">WEEKLY RECAP</h1>
+</div>
+<span class="material-symbols-outlined text-slate-400">share</span>
+</header>
+<!-- Main Content Canvas -->
+<main class="mt-16 mb-24">
+<!-- Weekly Recap Card (390x520 pt equivalent) -->
+<div class="w-[390px] h-[520px] rounded-lg starlight-pitch-gradient relative overflow-hidden flex flex-col items-center justify-between p-8 shadow-2xl border border-white/5">
+<!-- Header Section -->
+<div class="text-center">
+<div class="flex items-center justify-center gap-2 mb-1">
+<span class="material-symbols-outlined text-secondary text-sm">sports_soccer</span>
+<span class="font-bold tracking-[0.2em] uppercase text-[10px] text-secondary">WEEKLY RECAP</span>
+</div>
+<p class="text-sm font-medium text-secondary/80">Apr 7 – Apr 13</p>
+</div>
+<!-- Avatar Section -->
+<div class="relative group">
+<div class="absolute inset-0 bg-[#FF6B2C] blur-[40px] opacity-20 rounded-full"></div>
+<div class="w-32 h-32 rounded-full border-2 border-tertiary flex items-center justify-center bg-surface-container-high relative z-10 wolf-glow">
+<img alt="Rookie Wolf Avatar" class="w-24 h-24 object-contain" data-alt="Illustration of a fierce but youthful wolf character mascot, soccer themed, centered against a dark nocturnal background with orange rim lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA33HgwX3tNU4ALXeqyDLLFuMvcDWw8hW7TweWQEnnM1quShB2aHPgQtYt1n55h2TEMS_F1zSSwJrmeOOutgc6tTP3bDTtb5MP9DhlJ9IMwArov-UPWatejy0fK6wV7gTHIJA-F5BxZLG_x3OnTkyiZrbEsFHoPl7kNeDezOxgSvAs_yAghc8NdNfRuJ13aHU7niJGoGcM87azuvRSwa9yDmEMOW3LjeMBjkMSkkttdEKCLqDrCF99dcy1HCntu8Nt7PPpnuwAUgmY"/>
+</div>
+<!-- Rookie Badge -->
+<div class="absolute -bottom-2 left-1/2 -translate-x-1/2 bg-tertiary px-3 py-0.5 rounded-full z-20">
+<span class="font-bold tracking-widest uppercase text-[8px] text-on-tertiary">ROOKIE</span>
+</div>
+</div>
+<!-- Sessions Display -->
+<div class="text-center">
+<h2 class="text-6xl font-extrabold monospaced-digits text-on-background leading-none">5</h2>
+<p class="font-bold tracking-[0.2em] uppercase text-[11px] text-slate-500 mt-2">SESSIONS</p>
+</div>
+<!-- Stat Row -->
+<div class="flex gap-3 w-full justify-center">
+<!-- Pill 1: Time -->
+<div class="w-[90px] h-[70px] bg-white/[0.06] rounded-xl flex flex-col items-center justify-center gap-1 border border-white/5">
+<span class="material-symbols-outlined text-xs text-secondary">schedule</span>
+<span class="text-sm font-bold text-on-surface">2h30</span>
+<span class="font-bold tracking-widest uppercase text-[8px] text-slate-500">TIME</span>
+</div>
+<!-- Pill 2: Streak -->
+<div class="w-[90px] h-[70px] bg-white/[0.06] rounded-xl flex flex-col items-center justify-center gap-1 border border-white/5">
+<span class="material-symbols-outlined text-xs text-primary-container">local_fire_department</span>
+<span class="text-sm font-bold text-on-surface">12</span>
+<span class="font-bold tracking-widest uppercase text-[8px] text-slate-500">STREAK</span>
+</div>
+<!-- Pill 3: XP -->
+<div class="w-[90px] h-[70px] bg-white/[0.06] rounded-xl flex flex-col items-center justify-center gap-1 border border-white/5">
+<span class="material-symbols-outlined text-xs text-secondary">bolt</span>
+<span class="text-sm font-bold text-on-surface">+340</span>
+<span class="font-bold tracking-widest uppercase text-[8px] text-slate-500">XP</span>
+</div>
+</div>
+<!-- Activity Row -->
+<div class="w-full flex justify-between px-4">
+<div class="flex flex-col items-center gap-2">
+<div class="w-2 h-2 rounded-full border border-slate-700"></div>
+<span class="font-bold uppercase text-[9px] text-slate-600">M</span>
+</div>
+<div class="flex flex-col items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-primary-container shadow-[0_0_8px_rgba(255,107,44,0.6)]"></div>
+<span class="font-bold uppercase text-[9px] text-on-background">T</span>
+</div>
+<div class="flex flex-col items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-primary-container shadow-[0_0_8px_rgba(255,107,44,0.6)]"></div>
+<span class="font-bold uppercase text-[9px] text-on-background">W</span>
+</div>
+<div class="flex flex-col items-center gap-2">
+<div class="w-2 h-2 rounded-full border border-slate-700"></div>
+<span class="font-bold uppercase text-[9px] text-slate-600">T</span>
+</div>
+<div class="flex flex-col items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-primary-container shadow-[0_0_8px_rgba(255,107,44,0.6)]"></div>
+<span class="font-bold uppercase text-[9px] text-on-background">F</span>
+</div>
+<div class="flex flex-col items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-primary-container shadow-[0_0_8px_rgba(255,107,44,0.6)]"></div>
+<span class="font-bold uppercase text-[9px] text-on-background">S</span>
+</div>
+<div class="flex flex-col items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-primary-container shadow-[0_0_8px_rgba(255,107,44,0.6)]"></div>
+<span class="font-bold uppercase text-[9px] text-on-background">S</span>
+</div>
+</div>
+<!-- Watermark -->
+<div class="opacity-25 pb-2">
+<span class="font-black tracking-tighter text-[#FF6B2C] text-lg italic">PitchDreams</span>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation Shell -->
+<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 pb-6 pt-2 bg-[#0C1322] z-50 rounded-t-[32px] shadow-[0_-8px_30px_rgba(7,14,29,0.4)]">
+<div class="flex flex-col items-center justify-center text-slate-500 p-3">
+<span class="material-symbols-outlined">home_max</span>
+</div>
+<div class="flex flex-col items-center justify-center text-slate-500 p-3">
+<span class="material-symbols-outlined">fitness_center</span>
+</div>
+<!-- Active Tab: Leaderboard/Recap context -->
+<div class="flex flex-col items-center justify-center bg-[#FF6B2C] text-[#0C1322] rounded-full p-3 scale-110 -translate-y-2 transition-all ring-4 ring-[#FF6B2C]/20">
+<span class="material-symbols-outlined">leaderboard</span>
+</div>
+<div class="flex flex-col items-center justify-center text-slate-500 p-3">
+<span class="material-symbols-outlined">groups</span>
+</div>
+<div class="flex flex-col items-center justify-center text-slate-500 p-3">
+<span class="material-symbols-outlined">person</span>
+</div>
+</nav>
+</body></html>

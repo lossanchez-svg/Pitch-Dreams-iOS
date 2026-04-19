@@ -9,8 +9,10 @@ struct FirstTouchView: View {
     @State private var lastVoiceCommand: String?
     @State private var voiceEnabled = false
 
-    // Timer challenge state
+    // Personal best + XP state
     @State private var showPRCelebration = false
+    @State private var showXPToast = false
+    @State private var showPBToast = false
 
     // Timer challenge state
     @State private var timerActive = false
@@ -31,6 +33,32 @@ struct FirstTouchView: View {
             }
         }
         .celebration(isPresented: $showPRCelebration)
+        .overlay(alignment: .top) {
+            VStack(spacing: 8) {
+                XPEarnedToast(amount: viewModel.xpEarned, isPresented: $showXPToast)
+                if showPBToast, let metric = viewModel.personalBestMetric {
+                    HStack(spacing: 8) {
+                        Image(systemName: "trophy.fill")
+                            .foregroundStyle(Color.dsTertiaryContainer)
+                        Text("New PB! \(metric): \(viewModel.activeCount)")
+                            .font(.system(size: 14, weight: .bold, design: .rounded))
+                            .foregroundStyle(Color.dsTertiaryContainer)
+                    }
+                    .padding(.horizontal, 20)
+                    .padding(.vertical, 12)
+                    .background(Color.dsTertiaryContainer.opacity(0.15))
+                    .clipShape(Capsule())
+                    .overlay(Capsule().stroke(Color.dsTertiaryContainer.opacity(0.3), lineWidth: 1))
+                    .transition(.move(edge: .top).combined(with: .opacity))
+                    .onAppear {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                            withAnimation { showPBToast = false }
+                        }
+                    }
+                }
+            }
+            .padding(.top, 60)
+        }
         .safeAreaInset(edge: .bottom) {
             if voiceEnabled && viewModel.activeDrillKey != nil {
                 VoiceCommandBar(speechRecognizer: speechRecognizer, lastCommand: $lastVoiceCommand)
@@ -309,16 +337,21 @@ struct FirstTouchView: View {
 
                 Button {
                     Task {
-                        let previousBest = bestForActiveDrill()
                         await viewModel.saveDrill()
                         stopTimerChallenge()
                         if viewModel.saveSuccess {
-                            showPRCelebration = true
-                        }
-                        // Announce PR if beaten
-                        if voiceEnabled, let best = previousBest, viewModel.activeCount > best {
-                            let persona = CoachPersonality.current
-                            coachVoice.speak(persona.personalRecordLine, personality: persona.rawValue)
+                            // Show XP toast
+                            showXPToast = true
+                            // PB celebration if new personal best
+                            if viewModel.isNewPersonalBest {
+                                showPRCelebration = true
+                                showPBToast = true
+                                UINotificationFeedbackGenerator().notificationOccurred(.success)
+                                if voiceEnabled {
+                                    let persona = CoachPersonality.current
+                                    coachVoice.speak(persona.personalRecordLine, personality: persona.rawValue)
+                                }
+                            }
                         }
                     }
                 } label: {

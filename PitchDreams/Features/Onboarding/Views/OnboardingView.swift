@@ -51,7 +51,7 @@ struct OnboardingView: View {
                     default: EmptyView()
                     }
                 }
-                .animation(.easeInOut, value: viewModel.step)
+                .animation(.dsSpring, value: viewModel.step)
                 .transition(.slide)
 
                 if let error = viewModel.errorMessage {

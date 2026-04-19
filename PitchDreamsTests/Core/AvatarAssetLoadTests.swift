@@ -21,7 +21,7 @@ final class AvatarAssetLoadTests: XCTestCase {
     func testLegacyMigrationResolvesToLoadableAsset() {
         let legacyIds = ["defender_girl_01", "midfield_boy_01", "midfield_boy_02", "winger_boy_01"]
         for id in legacyIds {
-            let assetName = Avatar.assetName(for: id, milestones: [])
+            let assetName = Avatar.assetName(for: id, totalXP: 0)
             XCTAssertNotNil(
                 UIImage(named: assetName),
                 "Legacy id '\(id)' resolved to '\(assetName)' which is not loadable"

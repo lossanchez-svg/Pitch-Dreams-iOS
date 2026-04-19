@@ -8,15 +8,37 @@ struct LessonPlayerView: View {
     @StateObject private var interactiveVM = InteractivePitchViewModel()
     @Environment(\.dismiss) private var dismiss
 
+    /// F2/F5 — profile is loaded async on task; when present, drives age-
+    /// adaptive narration and avatar-as-player rendering.
+    @State private var childProfile: ChildProfileDetail?
+    @State private var childTotalXP: Int = 0
+
     private let trackColor: Color
     private let injectedVoice: CoachVoiceProtocol?
+    private let childId: String?
+    private let initialChildAge: Int?
 
-    init(lesson: AnimatedTacticalLesson, voice: CoachVoiceProtocol? = nil) {
+    init(
+        lesson: AnimatedTacticalLesson,
+        childId: String? = nil,
+        childAge: Int? = nil,
+        voice: CoachVoiceProtocol? = nil
+    ) {
+        self.childId = childId
+        self.initialChildAge = childAge
         self.injectedVoice = voice
         // ViewModel gets wired to voice in onAppear since @StateObject
         // isn't available in init for cross-referencing
-        _viewModel = StateObject(wrappedValue: LessonPlayerViewModel(lesson: lesson))
+        _viewModel = StateObject(wrappedValue: LessonPlayerViewModel(lesson: lesson, childAge: childAge))
         trackColor = Self.color(for: lesson.track)
+    }
+
+    /// F5 — resolve the child's avatar asset name once we know both avatarId
+    /// and totalXP. Returns nil when we don't have profile data yet, which
+    /// falls the pitch view back to abstract dots.
+    private var avatarAssetName: String? {
+        guard let profile = childProfile else { return nil }
+        return Avatar.assetName(for: profile.avatarId, totalXP: childTotalXP)
     }
 
     var body: some View {
@@ -45,13 +67,16 @@ struct LessonPlayerView: View {
             let voice = injectedVoice ?? coachVoice
             viewModel.setVoice(voice)
             viewModel.onAppear()
-            coachVM.speak(viewModel.currentStep.narration)
+            coachVM.speak(viewModel.currentNarrationText)
+        }
+        .task {
+            await loadChildContext()
         }
         .onDisappear {
             viewModel.onDisappear()
         }
         .onChange(of: viewModel.currentStepIndex) { _ in
-            coachVM.speak(viewModel.currentStep.narration)
+            coachVM.speak(viewModel.currentNarrationText)
         }
         .onChange(of: viewModel.isCompleted) { _ in
             if viewModel.isCompleted {
@@ -105,6 +130,10 @@ struct LessonPlayerView: View {
                 AnimatedTacticalPitchView(
                     diagram: viewModel.currentStep.diagram,
                     stepIndex: viewModel.currentStepIndex,
+                    spotlightElementId: viewModel.currentStep.spotlightElementId,
+                    spotlightCaption: viewModel.currentSpotlightCaption,
+                    animationRate: viewModel.animationRate,
+                    avatarAssetName: avatarAssetName,
                     onPlayerTap: { player, pos in
                         interactiveVM.tapPlayer(player, at: pos)
                     },
@@ -165,6 +194,7 @@ struct LessonPlayerView: View {
                     .background(.ultraThinMaterial)
                     .clipShape(Circle())
             }
+            .accessibilityLabel(viewModel.voiceEnabled ? "Mute coach" : "Unmute coach")
 
             // Auto-play toggle
             Button {
@@ -176,6 +206,24 @@ struct LessonPlayerView: View {
                     .background(.ultraThinMaterial)
                     .clipShape(Circle())
             }
+            .accessibilityLabel(viewModel.isAutoAdvancing ? "Pause auto-advance" : "Resume auto-advance")
+
+            // F4 — Slow-mo replay toggle. Active tint flips to cyan so it's
+            // visually obvious you're in slow-mo.
+            Button {
+                viewModel.toggleSlowMo()
+            } label: {
+                Text("🐢")
+                    .font(.system(size: 16))
+                    .frame(width: 36, height: 36)
+                    .background(viewModel.isSlowMo ? AnyShapeStyle(Color.dsSecondary.opacity(0.35)) : AnyShapeStyle(.ultraThinMaterial))
+                    .clipShape(Circle())
+                    .overlay(
+                        Circle()
+                            .stroke(viewModel.isSlowMo ? Color.dsSecondary : Color.clear, lineWidth: 2)
+                    )
+            }
+            .accessibilityLabel(viewModel.isSlowMo ? "Play at normal speed" : "Play at half speed")
 
             // Next / Finish
             Button {
@@ -244,5 +292,19 @@ struct LessonPlayerView: View {
         case "tempo": return .orange
         default: return .blue
         }
+    }
+
+    /// Load the child's profile + total XP so we can pass avatar into the
+    /// pitch view. Age is supplied via init from the parent context (the
+    /// profile endpoint doesn't currently surface age); failure silently
+    /// falls back to the default (abstract dots) — lessons are still usable.
+    private func loadChildContext() async {
+        guard let childId else { return }
+        let apiClient: APIClientProtocol = APIClient()
+        if let profile: ChildProfileDetail = try? await apiClient.request(APIRouter.getProfile(childId: childId)) {
+            childProfile = profile
+        }
+        let xp = await XPStore().getTotalXP(childId: childId)
+        childTotalXP = xp
     }
 }

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Signature Move Drill Player Mimic</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "error": "#ffb4ab",
+                        "surface-container-lowest": "#070e1d",
+                        "tertiary-fixed": "#f6e0b5",
+                        "surface-container": "#191f2f",
+                        "surface-container-high": "#232a3a",
+                        "on-secondary-fixed": "#001f23",
+                        "tertiary-fixed-dim": "#d9c49a",
+                        "outline-variant": "#594139",
+                        "on-primary-fixed-variant": "#802900",
+                        "surface": "#0c1322",
+                        "tertiary": "#d9c49a",
+                        "on-tertiary-container": "#3c3012",
+                        "on-error-container": "#ffdad6",
+                        "secondary-container": "#00c9db",
+                        "on-error": "#690005",
+                        "on-secondary": "#00363c",
+                        "secondary-fixed-dim": "#33daec",
+                        "surface-tint": "#ffb59a",
+                        "on-tertiary-fixed-variant": "#534525",
+                        "secondary": "#46e5f8",
+                        "on-primary-container": "#5c1c00",
+                        "background": "#0c1322",
+                        "primary-container": "#ff6b2c",
+                        "on-tertiary": "#3b2f11",
+                        "primary-fixed-dim": "#ffb59a",
+                        "on-surface": "#dce2f8",
+                        "on-secondary-container": "#004f57",
+                        "on-primary-fixed": "#380d00",
+                        "inverse-primary": "#a83900",
+                        "surface-dim": "#0c1322",
+                        "surface-variant": "#2e3545",
+                        "primary": "#ffb59a",
+                        "surface-container-low": "#151b2b",
+                        "inverse-surface": "#dce2f8",
+                        "secondary-fixed": "#91f1ff",
+                        "inverse-on-surface": "#293041",
+                        "surface-container-highest": "#2e3545",
+                        "surface-bright": "#32394a",
+                        "on-secondary-fixed-variant": "#004f57",
+                        "error-container": "#93000a",
+                        "on-background": "#dce2f8",
+                        "on-primary": "#5b1b00",
+                        "outline": "#a98a7f",
+                        "on-surface-variant": "#e2bfb3",
+                        "on-tertiary-fixed": "#251a01",
+                        "primary-fixed": "#ffdbcf",
+                        "tertiary-container": "#aa9770"
+                    },
+                    borderRadius: {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    },
+                    fontFamily: {
+                        "headline": ["Plus Jakarta Sans", "sans-serif"],
+                        "body": ["Plus Jakarta Sans", "sans-serif"],
+                        "label": ["Plus Jakarta Sans", "sans-serif"],
+                        "mono": ["JetBrains Mono", "monospace"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .ghost-border {
+            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-background text-on-background font-body select-none overflow-hidden">
+<!-- Focused Header (Hierarchy of Focus: Process Screen) -->
+<header class="flex items-center justify-between px-6 py-4">
+<button class="flex items-center justify-center size-10 rounded-full bg-surface-container-high">
+<span class="material-symbols-outlined text-on-surface">arrow_back</span>
+</button>
+<div class="flex flex-col items-end gap-1.5">
+<div class="bg-surface-container-highest px-4 py-1.5 rounded-full flex items-center gap-2">
+<span class="text-primary text-[10px] font-extrabold tracking-[0.2em] uppercase">Lean into it!</span>
+</div>
+<button class="bg-surface-container-low px-3 py-1 rounded-full flex items-center gap-2 ghost-border">
+<span class="material-symbols-outlined text-secondary text-sm">timer</span>
+<span class="text-secondary text-[9px] font-bold tracking-[0.15em] uppercase">Metronome</span>
+</button>
+</div>
+</header>
+<main class="flex flex-col items-center px-6 pt-4 pb-32 h-screen">
+<!-- Visual Drill Reference -->
+<div class="relative w-full flex justify-center mb-8">
+<div class="flex items-center justify-center" style="height: 180px;"><img alt="Rookie Wolf performing a scissor move" class="h-[180px] w-auto object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAd1qKS3tvaUSxl7VgkGGeM2MxyL36drSkrb80uCLYjdwntyjqijr0KJApLhZkNwU9jK_20WQ6FlIfby1ENSIIff2rcxqZQxTCcVkydBYBwlHM4uHqf8eRgQAjm817q4dB373qm9m3wkaDplHkamNSQXpTW3PAlpbras2y91AH8tW7KUuBY2-Lqxm0K6mEFgPiyp_u5zf_SNqBVlONtSAfhhMPBu-9zsRmQvYRpwUJLqopM2ATiFhETdtzmsNhn1NRYVj5lQHTXtzM"/></div>
+</div>
+<!-- Rep Counter Core Interaction -->
+<div class="flex flex-col items-center justify-center flex-1 w-full">
+<div class="relative group active:scale-95 transition-transform duration-75">
+<!-- Progress Ring -->
+<svg class="absolute -inset-4 w-[252px] h-[252px] -rotate-90">
+<circle cx="126" cy="126" fill="transparent" r="118" stroke="#191f2f" stroke-width="6"></circle>
+<circle cx="126" cy="126" fill="transparent" r="118" stroke="#46e5f8" stroke-dasharray="741" stroke-dashoffset="300" stroke-linecap="round" stroke-width="6"></circle>
+</svg>
+<!-- Main Tap Area -->
+<button class="relative w-[220px] h-[220px] bg-primary-container rounded-[48px] flex flex-col items-center justify-center shadow-[0_20px_50px_rgba(255,107,44,0.15)] overflow-hidden">
+<span class="font-mono text-on-primary-fixed text-[72px] font-extrabold leading-none">24</span>
+<span class="text-on-primary-fixed text-[11px] font-black tracking-[0.25em] uppercase mt-2 opacity-60">Reps Done</span>
+<!-- Tactile Overlay -->
+<div class="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent pointer-events-none"></div>
+</button>
+</div>
+<div class="mt-12 text-center">
+<h3 class="text-on-surface text-[11px] font-black tracking-[0.3em] uppercase opacity-70">Target: 40 Reps</h3>
+</div>
+</div>
+<!-- Feedback Card -->
+<div class="w-full mt-auto mb-8">
+<div class="bg-surface-container-low p-5 rounded-lg ghost-border flex items-start gap-4">
+<div class="size-10 rounded-full bg-error-container flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-error text-xl">warning</span>
+</div>
+<div class="flex flex-col gap-1">
+<span class="text-error text-[10px] font-black tracking-[0.2em] uppercase">Common Mistake</span>
+<p class="text-on-surface text-sm font-medium">🚫 Don't look at your feet! Keep your chest up for maximum balance.</p>
+</div>
+</div>
+</div>
+</main>
+<!-- Sticky Footer Navigation -->
+<div class="fixed bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-background via-background to-transparent pt-12">
+<div class="flex flex-col gap-4 items-center">
+<button class="w-full h-14 rounded-full bg-surface-variant flex items-center justify-center cursor-not-allowed opacity-60" disabled="">
+<span class="text-on-surface-variant text-sm font-black tracking-[0.15em] uppercase">I'm Done</span>
+</button>
+<a class="text-secondary text-[11px] font-bold tracking-[0.15em] uppercase hover:underline" href="#">Skip Drill</a>
+</div>
+</div>
+</body></html>

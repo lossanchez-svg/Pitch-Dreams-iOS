@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-surface-variant": "#e2bfb3",
+                        "surface-dim": "#0c1322",
+                        "surface-tint": "#ffb59a",
+                        "on-tertiary": "#3b2f11",
+                        "surface-bright": "#32394a",
+                        "surface-container-low": "#151b2b",
+                        "inverse-surface": "#dce2f8",
+                        "primary-fixed": "#ffdbcf",
+                        "on-background": "#dce2f8",
+                        "outline": "#a98a7f",
+                        "on-secondary-fixed": "#001f23",
+                        "on-tertiary-container": "#3c3012",
+                        "on-tertiary-fixed-variant": "#534525",
+                        "tertiary-container": "#aa9770",
+                        "on-primary-fixed": "#380d00",
+                        "on-secondary-container": "#004f57",
+                        "error": "#ffb4ab",
+                        "on-secondary-fixed-variant": "#004f57",
+                        "secondary-fixed": "#91f1ff",
+                        "secondary-fixed-dim": "#33daec",
+                        "on-surface": "#dce2f8",
+                        "primary-container": "#ff6b2c",
+                        "tertiary": "#d9c49a",
+                        "inverse-on-surface": "#293041",
+                        "primary": "#ffb59a",
+                        "secondary-container": "#00c9db",
+                        "surface": "#0c1322",
+                        "inverse-primary": "#a83900",
+                        "on-primary": "#5b1b00",
+                        "outline-variant": "#594139",
+                        "on-primary-container": "#5c1c00",
+                        "on-secondary": "#00363c",
+                        "on-error-container": "#ffdad6",
+                        "surface-variant": "#2e3545",
+                        "background": "#0c1322",
+                        "secondary": "#46e5f8",
+                        "on-primary-fixed-variant": "#802900",
+                        "on-tertiary-fixed": "#251a01",
+                        "tertiary-fixed": "#f6e0b5",
+                        "surface-container-high": "#232a3a",
+                        "surface-container-highest": "#2e3545",
+                        "surface-container-lowest": "#070e1d",
+                        "error-container": "#93000a",
+                        "on-error": "#690005",
+                        "primary-fixed-dim": "#ffb59a",
+                        "tertiary-fixed-dim": "#d9c49a",
+                        "surface-container": "#191f2f"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Plus Jakarta Sans", "sans-serif"],
+                        "body": ["Plus Jakarta Sans", "sans-serif"],
+                        "label": ["Plus Jakarta Sans", "sans-serif"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .ghost-border {
+            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface font-body selection:bg-secondary/30">
+<div class="flex flex-col min-h-screen">
+<!-- Header: Minimal Back Navigation -->
+<header class="flex items-center px-4 pt-6 pb-2">
+<button class="flex items-center justify-center size-10 rounded-full surface-container-high ghost-border">
+<span class="material-symbols-outlined text-on-surface">arrow_back</span>
+</button>
+<div class="ml-4">
+<p class="text-[10px] font-bold tracking-[0.2em] uppercase text-secondary">Signature Move</p>
+<h1 class="text-lg font-extrabold text-white leading-none">THE SCISSOR</h1>
+</div>
+</header>
+<!-- Main Content Area -->
+<main class="flex-1 overflow-y-auto pb-32">
+<!-- Video Player Section -->
+<section class="mt-4 px-4">
+<div class="relative w-full aspect-[9/12] rounded-xl overflow-hidden bg-surface-container-lowest ghost-border">
+<!-- Background Placeholder: Stylized pro player blurred -->
+<div class="absolute inset-0 bg-cover bg-center opacity-60 grayscale scale-105" data-alt="dynamic close-up of a professional soccer player feet performing a dribble move on grass, dramatic lighting with motion blur" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCBv4TCLNNgOAtViXYeB6hEtNpy1YtG92RgG2QI7LhXAuUPTX90iIa6JhJc1b8dS734ZE1ZERAKAcZYxAtBj8q2UEhxmi0SEOF4EHWp3x3QKGncbOprVW8UTMogIkkdwUgAktGbCdYMA-1D1OikOR69N6HE11bKJU7fpmM4un_bAGp4BKFBxT6s6vn4wQKnFW0GVtRZEk56CAYVtSPrLygwAJZYOf0WN3BFwRGSMSAkrMADKPp-3Li2SLjAadqw4v2LDsB8xIia_2k");'>
+</div>
+<!-- Centered Play Button -->
+<div class="absolute inset-0 flex items-center justify-center">
+<button class="size-20 flex items-center justify-center rounded-full bg-secondary/20 border-2 border-secondary text-secondary shadow-[0_0_40px_rgba(70,229,248,0.2)]">
+<span class="material-symbols-outlined !text-4xl" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+</button>
+</div>
+<!-- Video Controls Overlay -->
+<div class="absolute inset-x-0 bottom-0 p-6 flex flex-col gap-4 bg-gradient-to-t from-surface-container-lowest to-transparent">
+<!-- Progress Bar -->
+<div class="w-full h-1.5 bg-white/20 rounded-full relative overflow-hidden">
+<div class="absolute inset-y-0 left-0 w-[25%] bg-secondary rounded-full"></div>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-4">
+<span class="text-xs font-mono font-bold tracking-tight text-white">0:15 / 1:00</span>
+<button class="px-3 py-1 rounded-full bg-white/10 ghost-border text-[10px] font-bold text-white tracking-widest">0.5X</button>
+</div>
+<button class="text-white/80">
+<span class="material-symbols-outlined !text-xl">replay</span>
+</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Coach Caption Strip -->
+<section class="mt-6 px-4">
+<div class="p-6 rounded-lg bg-surface-container ghost-border">
+<p class="text-[10px] font-bold tracking-[0.2em] uppercase text-secondary mb-2">COACH CUE</p>
+<p class="text-base font-medium text-white leading-relaxed">
+                        Watch the plant foot. See the hip swivel. Notice the explosion the other way.<span class="inline-block w-[2px] h-5 bg-secondary align-middle ml-1"></span>
+</p>
+</div>
+</section>
+<!-- Common Mistake Card -->
+<section class="mt-4 px-4">
+<div class="flex rounded-lg bg-surface-container-high ghost-border overflow-hidden">
+<div class="w-1 bg-primary/40"></div>
+<div class="p-4">
+<div class="flex items-center gap-2 mb-1">
+<span class="material-symbols-outlined text-primary !text-sm">warning</span>
+<p class="text-[9px] font-bold tracking-[0.2em] uppercase text-primary/80">Common Mistake</p>
+</div>
+<p class="text-sm font-medium text-on-surface-variant leading-normal">
+                            Don't lean too late! If your weight isn't committed to the fake, the defender won't bite.
+                        </p>
+</div>
+</div>
+</section>
+</main>
+<!-- Sticky Bottom CTA Area -->
+<footer class="fixed bottom-0 inset-x-0 bg-gradient-to-t from-background via-background to-transparent pt-12 pb-8 px-6 text-center pointer-events-none">
+<div class="pointer-events-auto max-w-md mx-auto">
+<p class="text-[11px] font-bold tracking-[0.2em] uppercase text-secondary mb-4 opacity-80">0:45 remaining</p>
+<button class="w-full h-[56px] rounded-full border-2 border-secondary flex items-center justify-center group active:scale-[0.98] transition-transform">
+<span class="text-secondary text-[13px] font-extrabold tracking-[0.25em] uppercase">I'VE WATCHED THIS</span>
+</button>
+<!-- Spacer for safe area -->
+<div class="h-4"></div>
+</div>
+</footer>
+</div>
+</body></html>

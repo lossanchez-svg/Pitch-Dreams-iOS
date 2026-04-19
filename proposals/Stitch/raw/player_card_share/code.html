@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-bright": "#32394a",
+                        "inverse-on-surface": "#293041",
+                        "surface": "#0c1322",
+                        "outline-variant": "#594139",
+                        "on-tertiary-fixed-variant": "#534525",
+                        "on-error": "#690005",
+                        "surface-container-low": "#151b2b",
+                        "on-secondary-container": "#004f57",
+                        "surface-container-high": "#232a3a",
+                        "on-background": "#dce2f8",
+                        "surface-variant": "#2e3545",
+                        "secondary-fixed-dim": "#33daec",
+                        "primary-container": "#ff6b2c",
+                        "on-tertiary": "#3b2f11",
+                        "surface-container": "#191f2f",
+                        "primary-fixed-dim": "#ffb59a",
+                        "secondary-fixed": "#91f1ff",
+                        "on-surface-variant": "#e2bfb3",
+                        "on-tertiary-fixed": "#251a01",
+                        "inverse-primary": "#a83900",
+                        "surface-tint": "#ffb59a",
+                        "tertiary-fixed": "#f6e0b5",
+                        "on-secondary": "#00363c",
+                        "secondary-container": "#00c9db",
+                        "outline": "#a98a7f",
+                        "background": "#0c1322",
+                        "surface-container-lowest": "#070e1d",
+                        "on-primary-container": "#5c1c00",
+                        "on-primary-fixed-variant": "#802900",
+                        "on-primary-fixed": "#380d00",
+                        "primary-fixed": "#ffdbcf",
+                        "error-container": "#93000a",
+                        "on-secondary-fixed": "#001f23",
+                        "tertiary-fixed-dim": "#d9c49a",
+                        "on-primary": "#5b1b00",
+                        "error": "#ffb4ab",
+                        "tertiary": "#d9c49a",
+                        "on-error-container": "#ffdad6",
+                        "on-tertiary-container": "#3c3012",
+                        "on-surface": "#dce2f8",
+                        "surface-container-highest": "#2e3545",
+                        "primary": "#ffb59a"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Plus Jakarta Sans", "sans-serif"],
+                        "body": ["Plus Jakarta Sans", "sans-serif"],
+                        "label": ["Plus Jakarta Sans", "sans-serif"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .ghost-border {
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .text-glow-orange {
+            text-shadow: 0 0 15px rgba(255, 107, 44, 0.4);
+        }
+        .card-glow {
+            filter: drop-shadow(0 0 40px rgba(255, 107, 44, 0.3));
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body min-h-screen flex flex-col overflow-x-hidden">
+<!-- Top App Bar (Shared Component Strategy) -->
+<header class="bg-[#0C1322] flex justify-between items-center w-full px-6 py-4 fixed top-0 z-50">
+<div class="active:scale-95 transition-transform hover:opacity-80 transition-opacity">
+<span class="material-symbols-outlined text-slate-400" data-icon="close">close</span>
+</div>
+<div class="font-['Plus_Jakarta_Sans'] font-heavy tracking-tighter uppercase text-sm font-black italic text-[#FF6B2C] tracking-[3px]">
+            SHARE MOMENT
+        </div>
+<div class="w-6"></div> <!-- Spacer for centering -->
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-1 flex flex-col items-center justify-center pt-20 pb-32 px-6">
+<!-- Player Card Preview Container -->
+<div class="relative w-full max-w-[320px] scale-[0.85] md:scale-100 transition-transform card-glow">
+<!-- Orange Glow Base -->
+<div class="absolute inset-0 bg-primary-container blur-[80px] opacity-20 rounded-full"></div>
+<!-- Actual Card -->
+<div class="relative bg-surface-container-high rounded-[24px] overflow-hidden ghost-border aspect-[3/4] flex flex-col">
+<!-- Card Header -->
+<div class="p-6 flex justify-between items-start">
+<div class="flex flex-col">
+<span class="font-headline font-black text-5xl leading-none italic text-on-background tracking-tighter">87</span>
+<span class="font-label font-bold text-[10px] tracking-[2px] text-secondary uppercase">OVR</span>
+</div>
+<div class="text-right">
+<span class="font-label font-black text-xs tracking-[1px] text-tertiary uppercase">ROOKIE WOLF</span>
+</div>
+</div>
+<!-- Player Visual -->
+<div class="relative flex-1 flex items-end justify-center px-4">
+<img class="w-full h-full object-contain object-bottom drop-shadow-2xl z-10" data-alt="Dynamic portrait of a young elite soccer player in action pose, cinematic lighting, sharp focus, deep navy and orange atmosphere" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCdM53eqEbAuuqJlwaiMK5HjzgTV1kbwLTKP3AMGiVR53un2MD80MYitUPJjwnFSMzgEhzK5Sh4qErklLZyj1THxa1Df4ez2PhGT04S9OmoXU6wsGLauYR4fC1XgCTuRjJxYTMh-wRyzFq2oYgGAhYDYBJZcJdIdV3gdDITq74qCDBKk06DOIuUGE_j-hiDIwVTiTHcG541PbVE7v3n7qqEAoLOdeGGb4aXWwMKBTp0xjOt9J-2mYrUI41QziOxFwo4UqEvomIaMNQ"/>
+<!-- Dynamic Text Overlay -->
+<div class="absolute bottom-8 left-0 right-0 z-20 text-center">
+<h2 class="font-headline font-black text-4xl italic text-on-background tracking-tighter uppercase leading-none">SPEEDSTER</h2>
+<div class="flex justify-center gap-4 mt-2">
+<div class="flex flex-col">
+<span class="font-headline font-bold text-xl text-primary leading-none">94</span>
+<span class="font-label font-bold text-[8px] tracking-[1px] text-slate-500 uppercase">SPD</span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline font-bold text-xl text-primary leading-none">88</span>
+<span class="font-label font-bold text-[8px] tracking-[1px] text-slate-500 uppercase">DRI</span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline font-bold text-xl text-primary leading-none">82</span>
+<span class="font-label font-bold text-[8px] tracking-[1px] text-slate-500 uppercase">SHO</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Card Footer Logo -->
+<div class="bg-surface-container p-4 flex justify-center">
+<span class="font-headline font-black italic text-primary-container tracking-[4px] text-[10px]">PITCHDREAMS</span>
+</div>
+</div>
+</div>
+<!-- Share Actions Row -->
+<div class="w-full max-w-md mt-8 grid grid-cols-5 gap-3">
+<!-- AirDrop -->
+<button class="flex flex-col items-center gap-2 group active:scale-90 transition-all">
+<div class="w-[72px] h-[72px] flex items-center justify-center bg-surface-container rounded-lg ghost-border group-hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-on-surface" data-icon="airplay">airplay</span>
+</div>
+<span class="font-label font-extrabold text-[9px] tracking-[2px] uppercase text-on-surface-variant">AIRDROP</span>
+</button>
+<!-- Messages -->
+<button class="flex flex-col items-center gap-2 group active:scale-90 transition-all">
+<div class="w-[72px] h-[72px] flex items-center justify-center bg-surface-container rounded-lg ghost-border group-hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-on-surface" data-icon="chat_bubble" style="font-variation-settings: 'FILL' 1;">chat_bubble</span>
+</div>
+<span class="font-label font-extrabold text-[9px] tracking-[2px] uppercase text-on-surface-variant">MESSAGES</span>
+</button>
+<!-- Instagram -->
+<button class="flex flex-col items-center gap-2 group active:scale-90 transition-all">
+<div class="w-[72px] h-[72px] flex items-center justify-center bg-surface-container rounded-lg ghost-border group-hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-on-surface" data-icon="photo_camera" style="font-variation-settings: 'FILL' 1;">photo_camera</span>
+</div>
+<span class="font-label font-extrabold text-[9px] tracking-[2px] uppercase text-on-surface-variant">INSTAGRAM</span>
+</button>
+<!-- Save -->
+<button class="flex flex-col items-center gap-2 group active:scale-90 transition-all">
+<div class="w-[72px] h-[72px] flex items-center justify-center bg-surface-container rounded-lg ghost-border group-hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-on-surface" data-icon="download">download</span>
+</div>
+<span class="font-label font-extrabold text-[9px] tracking-[2px] uppercase text-on-surface-variant">SAVE</span>
+</button>
+<!-- Link -->
+<button class="flex flex-col items-center gap-2 group active:scale-90 transition-all">
+<div class="w-[72px] h-[72px] flex items-center justify-center bg-surface-container rounded-lg ghost-border group-hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-on-surface" data-icon="link">link</span>
+</div>
+<span class="font-label font-extrabold text-[9px] tracking-[2px] uppercase text-on-surface-variant">LINK</span>
+</button>
+</div>
+<!-- Helper Text -->
+<div class="mt-8 px-8 text-center">
+<p class="text-[11px] font-medium text-secondary opacity-60 leading-relaxed max-w-[280px]">
+                The card is saved locally. Sharing sends the image only — no account info.
+            </p>
+</div>
+</main>
+<!-- Bottom Footer Button -->
+<footer class="fixed bottom-0 left-0 w-full p-8 flex justify-center">
+<button class="font-headline font-extrabold text-[18px] text-[#FF6B2C] active:scale-95 transition-transform uppercase tracking-wider text-glow-orange">
+            DONE
+        </button>
+</footer>
+</body></html>

@@ -5,12 +5,22 @@ on:
     branches: [main]
   pull_request:
     branches: [main]
+  schedule:
+    # Nightly full-matrix run at 3:17 AM UTC (off-minute to reduce load)
+    - cron: '17 3 * * *'
+  workflow_dispatch:
+    inputs:
+      run_full_matrix:
+        description: 'Run full device/iOS matrix'
+        type: boolean
+        default: true
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
+  # ─── Tier 1: Fast gate (every push/PR) ────────────────────────────────────
   build-and-test:
     runs-on: macos-15
     timeout-minutes: 30
@@ -84,6 +94,183 @@ jobs:
           path: TestResults.xcresult
           retention-days: 14
 
+  # ─── Tier 2: Device matrix (every push/PR, after Tier 1) ─────────────────
+  device-matrix:
+    runs-on: macos-15
+    timeout-minutes: 30
+    needs: build-and-test
+    if: github.event_name != 'schedule'
+    strategy:
+      fail-fast: false
+      matrix:
+        device:
+          - name: "iPhone SE (3rd generation)"
+            type: "com.apple.CoreSimulator.SimDeviceType.iPhone-SE-3rd-generation"
+            label: "iPhoneSE3"
+          - name: "iPhone 16"
+            type: "com.apple.CoreSimulator.SimDeviceType.iPhone-16"
+            label: "iPhone16"
+          - name: "iPad (10th generation)"
+            type: "com.apple.CoreSimulator.SimDeviceType.iPad-10th-generation"
+            label: "iPad10"
+          - name: "iPad Air (5th generation)"
+            type: "com.apple.CoreSimulator.SimDeviceType.iPad-Air-5th-generation"
+            label: "iPadAir5"
+          - name: "iPad Pro 13-inch (M4)"
+            type: "com.apple.CoreSimulator.SimDeviceType.iPad-Pro-13-inch-M4-8GB"
+            label: "iPadPro13M4"
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Select Xcode
+        run: |
+          XCODE=$(ls -d /Applications/Xcode*.app 2>/dev/null | sort -V | tail -1)
+          sudo xcode-select -s "$XCODE/Contents/Developer"
+
+      - name: Install XcodeGen
+        run: brew install xcodegen
+
+      - name: Generate Xcode project
+        run: xcodegen generate
+
+      - name: Create Simulator
+        run: |
+          RUNTIME=$(xcrun simctl list runtimes -j | python3 -c "
+          import json, sys
+          data = json.load(sys.stdin)
+          for rt in data.get('runtimes', []):
+              if rt.get('isAvailable') and 'iOS' in rt.get('name', ''):
+                  print(rt['identifier'])
+                  sys.exit(0)
+          " 2>/dev/null)
+          echo "Runtime: $RUNTIME"
+          UDID=$(xcrun simctl create "TestDevice-${{ matrix.device.label }}" \
+            "${{ matrix.device.type }}" "$RUNTIME")
+          echo "Created simulator: $UDID"
+          echo "SIM_UDID=$UDID" >> $GITHUB_ENV
+          xcrun simctl boot "$UDID"
+
+      - name: Run Tests on ${{ matrix.device.name }}
+        run: |
+          xcodebuild test \
+            -project PitchDreams.xcodeproj \
+            -scheme PitchDreams \
+            -destination "platform=iOS Simulator,id=$SIM_UDID" \
+            -configuration Debug \
+            -skip-testing:PitchDreamsTests/APIContractTests \
+            -skip-testing:PitchDreamsTests/EndToEndFlowTests \
+            CODE_SIGNING_ALLOWED=NO \
+            -resultBundlePath "TestResults-${{ matrix.device.label }}.xcresult"
+
+      - name: Upload Test Results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: "test-results-${{ matrix.device.label }}"
+          path: "TestResults-${{ matrix.device.label }}.xcresult"
+          retention-days: 14
+
+      - name: Cleanup Simulator
+        if: always()
+        run: xcrun simctl delete "$SIM_UDID" 2>/dev/null || true
+
+  # ─── Tier 3: Full matrix (nightly + manual dispatch) ─────────────────────
+  full-device-matrix:
+    runs-on: macos-15
+    timeout-minutes: 45
+    if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.run_full_matrix)
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # All devices on the runner's pre-installed iOS runtime
+          - device_name: "iPhone SE (3rd generation)"
+            device_type: "com.apple.CoreSimulator.SimDeviceType.iPhone-SE-3rd-generation"
+            label: "iPhoneSE3"
+          - device_name: "iPhone 14"
+            device_type: "com.apple.CoreSimulator.SimDeviceType.iPhone-14"
+            label: "iPhone14"
+          - device_name: "iPhone 16"
+            device_type: "com.apple.CoreSimulator.SimDeviceType.iPhone-16"
+            label: "iPhone16"
+          - device_name: "iPhone 16 Plus"
+            device_type: "com.apple.CoreSimulator.SimDeviceType.iPhone-16-Plus"
+            label: "iPhone16Plus"
+          - device_name: "iPhone 16 Pro Max"
+            device_type: "com.apple.CoreSimulator.SimDeviceType.iPhone-16-Pro-Max"
+            label: "iPhone16ProMax"
+          - device_name: "iPad mini (6th generation)"
+            device_type: "com.apple.CoreSimulator.SimDeviceType.iPad-mini-6th-generation"
+            label: "iPadMini6"
+          - device_name: "iPad (10th generation)"
+            device_type: "com.apple.CoreSimulator.SimDeviceType.iPad-10th-generation"
+            label: "iPad10"
+          - device_name: "iPad Air (5th generation)"
+            device_type: "com.apple.CoreSimulator.SimDeviceType.iPad-Air-5th-generation"
+            label: "iPadAir5"
+          - device_name: "iPad Pro 13-inch (M4)"
+            device_type: "com.apple.CoreSimulator.SimDeviceType.iPad-Pro-13-inch-M4-8GB"
+            label: "iPadPro13M4"
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Select Xcode
+        run: |
+          XCODE=$(ls -d /Applications/Xcode*.app 2>/dev/null | sort -V | tail -1)
+          sudo xcode-select -s "$XCODE/Contents/Developer"
+
+      - name: Install XcodeGen
+        run: brew install xcodegen
+
+      - name: Generate Xcode project
+        run: xcodegen generate
+
+      - name: Create Simulator
+        run: |
+          RUNTIME=$(xcrun simctl list runtimes -j | python3 -c "
+          import json, sys
+          data = json.load(sys.stdin)
+          for rt in data.get('runtimes', []):
+              if rt.get('isAvailable') and 'iOS' in rt.get('name', ''):
+                  print(rt['identifier'])
+                  sys.exit(0)
+          " 2>/dev/null)
+          echo "Runtime: $RUNTIME"
+          UDID=$(xcrun simctl create "TestDevice-${{ matrix.label }}" \
+            "${{ matrix.device_type }}" "$RUNTIME")
+          echo "Created simulator: $UDID"
+          echo "SIM_UDID=$UDID" >> $GITHUB_ENV
+          xcrun simctl boot "$UDID"
+
+      - name: Run Tests on ${{ matrix.device_name }}
+        run: |
+          xcodebuild test \
+            -project PitchDreams.xcodeproj \
+            -scheme PitchDreams \
+            -destination "platform=iOS Simulator,id=$SIM_UDID" \
+            -configuration Debug \
+            -skip-testing:PitchDreamsTests/APIContractTests \
+            -skip-testing:PitchDreamsTests/EndToEndFlowTests \
+            CODE_SIGNING_ALLOWED=NO \
+            -resultBundlePath "TestResults-${{ matrix.label }}.xcresult"
+
+      - name: Upload Test Results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: "full-test-results-${{ matrix.label }}"
+          path: "TestResults-${{ matrix.label }}.xcresult"
+          retention-days: 14
+
+      - name: Cleanup Simulator
+        if: always()
+        run: xcrun simctl delete "$SIM_UDID" 2>/dev/null || true
+
+  # ─── API Contract Tests (main branch only) ───────────────────────────────
   api-contract-tests:
     runs-on: macos-15
     timeout-minutes: 15

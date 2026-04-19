@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "inverse-on-surface": "#293041",
+            "on-primary-fixed": "#380d00",
+            "tertiary-fixed-dim": "#d9c49a",
+            "error": "#ffb4ab",
+            "on-tertiary": "#3b2f11",
+            "on-background": "#dce2f8",
+            "on-tertiary-container": "#3c3012",
+            "on-surface-variant": "#e2bfb3",
+            "inverse-primary": "#a83900",
+            "on-secondary-fixed-variant": "#004f57",
+            "primary-fixed": "#ffdbcf",
+            "surface-container-high": "#232a3a",
+            "on-secondary-fixed": "#001f23",
+            "on-primary-fixed-variant": "#802900",
+            "surface-container": "#191f2f",
+            "outline-variant": "#594139",
+            "tertiary": "#d9c49a",
+            "tertiary-fixed": "#f6e0b5",
+            "surface-container-highest": "#2e3545",
+            "on-tertiary-fixed-variant": "#534525",
+            "on-surface": "#dce2f8",
+            "surface-container-low": "#151b2b",
+            "secondary-container": "#00c9db",
+            "on-primary": "#5b1b00",
+            "on-primary-container": "#5c1c00",
+            "on-error-container": "#ffdad6",
+            "surface-bright": "#32394a",
+            "surface-variant": "#2e3545",
+            "on-secondary": "#00363c",
+            "tertiary-container": "#aa9770",
+            "on-tertiary-fixed": "#251a01",
+            "surface-tint": "#ffb59a",
+            "background": "#0c1322",
+            "surface": "#0c1322",
+            "inverse-surface": "#dce2f8",
+            "secondary-fixed-dim": "#33daec",
+            "secondary": "#46e5f8",
+            "primary": "#ffb59a",
+            "primary-fixed-dim": "#ffb59a",
+            "surface-container-lowest": "#070e1d",
+            "surface-dim": "#0c1322",
+            "error-container": "#93000a",
+            "primary-container": "#ff6b2c",
+            "on-error": "#690005",
+            "on-secondary-container": "#004f57",
+            "secondary-fixed": "#91f1ff",
+            "outline": "#a98a7f"
+          },
+          borderRadius: {
+            "DEFAULT": "1rem",
+            "lg": "2rem",
+            "xl": "3rem",
+            "full": "9999px"
+          },
+          fontFamily: {
+            "headline": ["Plus Jakarta Sans", "sans-serif"],
+            "body": ["Plus Jakarta Sans", "sans-serif"],
+            "label": ["Plus Jakarta Sans", "sans-serif"]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+    .ghost-border {
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    .text-glow-cyan {
+      text-shadow: 0 0 20px rgba(70, 229, 248, 0.6);
+    }
+    .cta-gradient {
+      background: linear-gradient(135deg, #FFE6DE 0%, #FFD4C8 100%);
+    }
+    .monospaced-digits {
+      font-variant-numeric: tabular-nums;
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface font-body antialiased">
+<!-- FRAME A: COUNTDOWN -->
+<div class="relative flex h-screen w-full flex-col items-center justify-center overflow-hidden p-6">
+<div class="absolute top-8 left-0 right-0 flex flex-col items-center gap-2">
+<div class="flex h-8 items-center justify-center gap-x-2 rounded-full bg-surface-container px-4 ghost-border">
+<span class="material-symbols-outlined text-sm text-secondary">schedule</span>
+<p class="text-[10px] font-bold tracking-[0.2em] text-on-surface uppercase">Timed</p>
+</div>
+<h2 class="text-on-surface text-lg font-extrabold tracking-tight uppercase">Speed Cone Corridor</h2>
+</div>
+<div class="text-center">
+<h1 class="text-secondary text-[64px] font-extrabold leading-none tracking-tighter text-glow-cyan uppercase italic">
+        3... 2... 1...<br/>GO!
+      </h1>
+</div>
+</div>
+<div class="h-12 bg-surface-container-lowest"></div>
+<!-- FRAME B: RUNNING -->
+<div class="relative flex min-h-screen w-full flex-col bg-background p-6 overflow-hidden">
+<!-- Top Floating Toast -->
+<div class="absolute top-4 left-1/2 -translate-x-1/2 z-10">
+<div class="flex h-12 items-center rounded-full bg-secondary px-6 shadow-lg">
+<p class="text-on-secondary text-sm font-extrabold uppercase tracking-widest">Clean at speed!</p>
+</div>
+</div>
+<!-- Header Stats -->
+<div class="mt-16 flex justify-between items-start">
+<div class="flex flex-col gap-1">
+<div class="flex h-6 items-center gap-x-1.5 rounded-full bg-surface-container px-3 ghost-border w-fit">
+<p class="text-[9px] font-bold tracking-[0.15em] text-secondary uppercase">Timed</p>
+</div>
+<h2 class="text-on-surface text-sm font-extrabold tracking-tight uppercase">Speed Cone Corridor</h2>
+</div>
+<!-- Circular Timer -->
+<div class="relative flex h-28 w-28 items-center justify-center">
+<svg class="absolute inset-0 h-full w-full -rotate-90">
+<circle class="text-surface-container-high" cx="56" cy="56" fill="transparent" r="50" stroke="currentColor" stroke-width="8"></circle>
+<circle class="text-primary-container" cx="56" cy="56" fill="transparent" r="50" stroke="currentColor" stroke-dasharray="314" stroke-dashoffset="100" stroke-width="8"></circle>
+</svg>
+<span class="monospaced-digits text-2xl font-extrabold text-primary-container">00:42</span>
+</div>
+</div>
+<!-- Rep Counter -->
+<div class="flex flex-1 flex-col items-center justify-center py-12">
+<p class="text-[12px] font-bold tracking-[0.3em] text-secondary uppercase mb-2">Current Progress</p>
+<div class="flex items-baseline gap-2">
+<span class="text-8xl font-extrabold tracking-tighter text-on-surface monospaced-digits">7</span>
+<span class="text-2xl font-extrabold text-outline uppercase">/ 10 reps</span>
+</div>
+</div>
+<!-- Common Mistake Card -->
+<div class="rounded-lg bg-surface-container p-6 ghost-border mb-8">
+<div class="flex items-center gap-2 mb-3">
+<span class="material-symbols-outlined text-primary-container" data-weight="fill">warning</span>
+<p class="text-[10px] font-bold tracking-[0.2em] text-primary-container uppercase">Common Mistake</p>
+</div>
+<p class="text-on-surface-variant text-sm leading-relaxed font-medium">
+        Dropping your head during the turn causes loss of balance. Keep your eyes up to spot the next corridor exit.
+      </p>
+</div>
+<!-- Footer Action -->
+<button class="mb-4 w-full text-center py-4">
+<span class="text-sm font-bold tracking-widest text-outline uppercase">End Early</span>
+</button>
+</div>
+<div class="h-12 bg-surface-container-lowest"></div>
+<!-- FRAME C: FINAL -->
+<div class="relative flex min-h-screen w-full flex-col bg-background p-6">
+<div class="flex flex-col items-center pt-12 text-center">
+<div class="mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-surface-container-high ghost-border">
+<span class="material-symbols-outlined text-4xl text-tertiary" style="font-variation-settings: 'FILL' 1;">trophy</span>
+</div>
+<h2 class="text-[11px] font-bold tracking-[0.4em] text-secondary uppercase mb-2">Challenge Complete</h2>
+<h1 class="text-4xl font-extrabold tracking-tight text-on-surface uppercase mb-12 italic">The Corridor</h1>
+</div>
+<!-- Results Surface -->
+<div class="rounded-lg bg-surface-container p-8 ghost-border mb-8">
+<div class="grid grid-cols-2 gap-8 mb-8">
+<div class="flex flex-col">
+<p class="text-[9px] font-bold tracking-[0.2em] text-outline uppercase mb-2">Performance</p>
+<p class="text-4xl font-extrabold text-on-surface monospaced-digits">8 <span class="text-sm uppercase text-outline">Clean</span></p>
+</div>
+<div class="flex flex-col">
+<p class="text-[9px] font-bold tracking-[0.2em] text-outline uppercase mb-2">Time Taken</p>
+<p class="text-4xl font-extrabold text-on-surface monospaced-digits">1:30</p>
+</div>
+</div>
+<div class="h-[1px] w-full bg-white/5 mb-6"></div>
+<p class="text-center text-on-surface font-medium italic">
+        "So close! Just 2 more for a perfect score."
+      </p>
+</div>
+<!-- CTAs -->
+<div class="mt-auto flex flex-col gap-4 pb-8">
+<button class="cta-gradient flex h-14 w-full items-center justify-center rounded-full shadow-[0_20px_40px_rgba(255,107,44,0.15)]">
+<span class="text-[14px] font-extrabold uppercase tracking-[0.2em] text-on-primary-fixed">I'm Done</span>
+</button>
+<button class="flex h-14 w-full items-center justify-center rounded-full ghost-border">
+<span class="text-[14px] font-extrabold uppercase tracking-[0.2em] text-secondary">Try Again</span>
+</button>
+</div>
+</div>
+</body></html>

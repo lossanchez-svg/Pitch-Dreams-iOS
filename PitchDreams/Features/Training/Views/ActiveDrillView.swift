@@ -84,6 +84,7 @@ struct ActiveDrillView: View {
             await viewModel.loadProfile()
         }
         .onAppear {
+            UIApplication.shared.isIdleTimerDisabled = true
             // When the coach starts speaking, set a discard window that extends
             // 3 seconds past when it finishes. This covers the full recognition
             // pipeline latency without touching the audio engine.
@@ -98,6 +99,7 @@ struct ActiveDrillView: View {
             }
         }
         .onDisappear {
+            UIApplication.shared.isIdleTimerDisabled = false
             viewModel.coachVoice.onWillSpeak = nil
             viewModel.coachVoice.onDidFinishSpeaking = nil
             viewModel.cleanup()
@@ -313,6 +315,7 @@ struct ActiveDrillView: View {
             Button {
                 viewModel.incrementReps()
                 repBounce.toggle()
+                UIImpactFeedbackGenerator(style: .soft).impactOccurred()
             } label: {
                 VStack(spacing: 12) {
                     ZStack {

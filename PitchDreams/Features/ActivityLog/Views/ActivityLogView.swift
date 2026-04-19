@@ -44,12 +44,13 @@ struct ActivityLogView: View {
                         .padding(.top, 8)
 
                     if viewModel.isLoading && viewModel.recentActivities.isEmpty {
-                        VStack {
-                            ProgressView()
-                                .tint(Color.dsSecondary)
+                        VStack(spacing: 12) {
+                            ForEach(0..<4, id: \.self) { _ in
+                                SkeletonCard()
+                            }
                         }
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, 40)
+                        .padding(.vertical, 8)
+                        .accessibilityLabel("Loading your activity history")
                     } else if viewModel.recentActivities.isEmpty {
                         VStack(spacing: 12) {
                             Image(systemName: "figure.run.circle")

@@ -7,6 +7,9 @@ final class FirstTouchViewModel: ObservableObject {
     @Published var isSaving = false
     @Published var saveSuccess = false
     @Published var errorMessage: String?
+    @Published var xpEarned: Int = 0
+    @Published var isNewPersonalBest = false
+    @Published var personalBestMetric: String?
 
     // Active drill state
     @Published var activeCount: Int = 0
@@ -14,6 +17,8 @@ final class FirstTouchViewModel: ObservableObject {
 
     let childId: String
     private let apiClient: APIClientProtocol
+    private let xpStore = XPStore()
+    private let pbStore = PersonalBestStore()
 
     init(childId: String, apiClient: APIClientProtocol = APIClient()) {
         self.childId = childId
@@ -105,6 +110,27 @@ final class FirstTouchViewModel: ObservableObject {
             } else {
                 MissionsViewModel.shared.recordEvent(.wallBallReps(min: 0), count: activeCount, childId: childId)
             }
+
+            // Award XP
+            let earned = XPCalculator.xpForSession(duration: 1, effortLevel: nil, activityType: "drill")
+            var totalEarned = earned
+
+            // Check personal best
+            let pbMetric = isJuggling ? "juggling_\(drillKey)" : "wall_ball_\(drillKey)"
+            let isPB = await pbStore.checkAndUpdate(metric: pbMetric, value: activeCount, childId: childId)
+            if isPB {
+                totalEarned += XPCalculator.xpForPersonalBest
+                isNewPersonalBest = true
+                personalBestMetric = label
+            }
+
+            let _ = await xpStore.addXP(totalEarned, childId: childId)
+            await xpStore.recordXPEntry(
+                XPEntry(amount: totalEarned, source: isPB ? "personal_best" : "first_touch", date: Date()),
+                childId: childId
+            )
+            xpEarned = totalEarned
+
             activeDrillKey = nil
         } catch {
             errorMessage = error.localizedDescription

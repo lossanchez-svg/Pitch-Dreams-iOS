@@ -9,35 +9,46 @@ struct SignupStepView: View {
     var body: some View {
         ScrollView {
             VStack(spacing: 20) {
-                VStack(spacing: 14) {
-                    TextField("Email", text: $viewModel.email)
-                        .textContentType(.emailAddress)
-                        .keyboardType(.emailAddress)
-                        .autocorrectionDisabled()
-                        .textInputAutocapitalization(.never)
-                        .focused($focusedField, equals: .email)
-                        .padding()
-                        .background(Color.dsSurfaceContainerHighest)
-                        .cornerRadius(10)
+                VStack(alignment: .leading, spacing: 14) {
+                    VStack(alignment: .leading, spacing: 4) {
+                        TextField("Email", text: $viewModel.email)
+                            .textContentType(.emailAddress)
+                            .keyboardType(.emailAddress)
+                            .autocorrectionDisabled()
+                            .textInputAutocapitalization(.never)
+                            .focused($focusedField, equals: .email)
+                            .padding()
+                            .background(Color.dsSurfaceContainerHighest)
+                            .cornerRadius(10)
+                        if let msg = viewModel.emailError {
+                            inlineError(msg)
+                        }
+                    }
 
-                    SecureField("Password (8+ characters)", text: $viewModel.password)
-                        .textContentType(.newPassword)
-                        .focused($focusedField, equals: .password)
-                        .padding()
-                        .background(Color.dsSurfaceContainerHighest)
-                        .cornerRadius(10)
+                    VStack(alignment: .leading, spacing: 4) {
+                        SecureField("Password (8+ characters)", text: $viewModel.password)
+                            .textContentType(.newPassword)
+                            .focused($focusedField, equals: .password)
+                            .padding()
+                            .background(Color.dsSurfaceContainerHighest)
+                            .cornerRadius(10)
+                        if let msg = viewModel.passwordError {
+                            inlineError(msg)
+                        } else if !viewModel.password.isEmpty {
+                            passwordStrengthMeter(viewModel.passwordStrength)
+                        }
+                    }
 
-                    SecureField("Confirm Password", text: $viewModel.confirmPassword)
-                        .textContentType(.newPassword)
-                        .focused($focusedField, equals: .confirmPassword)
-                        .padding()
-                        .background(Color.dsSurfaceContainerHighest)
-                        .cornerRadius(10)
-
-                    if !viewModel.confirmPassword.isEmpty && viewModel.password != viewModel.confirmPassword {
-                        Label("Passwords do not match", systemImage: "exclamationmark.circle")
-                            .font(.caption)
-                            .foregroundStyle(Color.dsError)
+                    VStack(alignment: .leading, spacing: 4) {
+                        SecureField("Confirm Password", text: $viewModel.confirmPassword)
+                            .textContentType(.newPassword)
+                            .focused($focusedField, equals: .confirmPassword)
+                            .padding()
+                            .background(Color.dsSurfaceContainerHighest)
+                            .cornerRadius(10)
+                        if let msg = viewModel.confirmPasswordError {
+                            inlineError(msg)
+                        }
                     }
                 }
 
@@ -65,6 +76,33 @@ struct SignupStepView: View {
             .padding(.horizontal, 24)
             .padding(.top, 16)
         }
+    }
+
+    // MARK: - Inline error / strength components
+
+    private func inlineError(_ msg: String) -> some View {
+        Label(msg, systemImage: "exclamationmark.circle")
+            .font(.caption)
+            .foregroundStyle(Color.dsError)
+            .padding(.horizontal, 4)
+    }
+
+    private func passwordStrengthMeter(_ score: Int) -> some View {
+        let labels = ["Weak", "Weak", "Good", "Strong"]
+        let colors: [Color] = [Color.dsError, Color.dsError, Color.dsTertiaryContainer, Color.dsSecondary]
+        return HStack(spacing: 6) {
+            HStack(spacing: 2) {
+                ForEach(0..<3, id: \.self) { i in
+                    Capsule()
+                        .fill(i < score ? colors[score] : Color.dsSurfaceContainerHighest)
+                        .frame(height: 4)
+                }
+            }
+            Text(labels[min(score, labels.count - 1)])
+                .font(.caption2.weight(.semibold))
+                .foregroundStyle(colors[min(score, colors.count - 1)])
+        }
+        .padding(.horizontal, 4)
     }
 }
 

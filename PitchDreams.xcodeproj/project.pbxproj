@@ -144,6 +144,7 @@
 		8E29FEF8C948677A0C0B985A /* LessonProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FF128AD7456758AB4A79EEA /* LessonProgressBar.swift */; };
 		8EAE7AC98CCBCD84D222B798 /* SessionSyncQueueTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16D1274F90BA12C645E86850 /* SessionSyncQueueTests.swift */; };
 		8F1603B0B4A9280054E10FAC /* VoiceCommandMatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FE45AA00D279535E786A4FF /* VoiceCommandMatcher.swift */; };
+		8FC3407378EC8FD0D647BA45 /* LessonQuiz.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16689218F9787C8EBD1B0167 /* LessonQuiz.swift */; };
 		920DEBFA708EFE3DCDE90672 /* XPCalculatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 401D3D445AEE50E6431BFE36 /* XPCalculatorTests.swift */; };
 		924247957C75C372486F1985 /* View+Loading.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6762B931C48BE0869FB3701 /* View+Loading.swift */; };
 		929CC4CB02291AE16D71E494 /* Activity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65457031842F65AA11A1A0C9 /* Activity.swift */; };
@@ -256,6 +257,7 @@
 		F42CAF98C9FE5234316292BA /* PlayerCardScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A62D82FFCA1D550D82097E9 /* PlayerCardScreen.swift */; };
 		F4388EA6E2C9417394822486 /* PitchDreamsApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE762806223B4B777D201D4C /* PitchDreamsApp.swift */; };
 		F4DBE1203B74BFD58D915EB4 /* MissionRegistryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13DEF2E694B233B410C6BB83 /* MissionRegistryTests.swift */; };
+		F578184A5FC2727815E8A360 /* LessonQuizView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB4597D6D54917785575F7A9 /* LessonQuizView.swift */; };
 		F66FDAE04A8E06BCA3760F90 /* AvatarAssetLoadTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 323D1BDC867E85A6B20BF8E6 /* AvatarAssetLoadTests.swift */; };
 		F6C1B5608F8B3831C111FC30 /* NetworkMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DF08B394472BE66408610D4 /* NetworkMonitor.swift */; };
 		F805241D7462473656516B50 /* DrillDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E263B4BEE1493BBC8A70A08 /* DrillDetailView.swift */; };
@@ -305,6 +307,7 @@
 		13E55ACE5FD130DB512F1C01 /* FullSessionHistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullSessionHistoryView.swift; sourceTree = "<group>"; };
 		142B29E8E77F7305488E3C88 /* ChipPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChipPickerView.swift; sourceTree = "<group>"; };
 		1568F1734AD4395DC547DA9A /* PaywallViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaywallViewModelTests.swift; sourceTree = "<group>"; };
+		16689218F9787C8EBD1B0167 /* LessonQuiz.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LessonQuiz.swift; sourceTree = "<group>"; };
 		16D1274F90BA12C645E86850 /* SessionSyncQueueTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionSyncQueueTests.swift; sourceTree = "<group>"; };
 		17E47017925A54D22BC22094 /* PitchDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PitchDetector.swift; sourceTree = "<group>"; };
 		1900F30604C4615B71498DB1 /* PaywallViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaywallViewModel.swift; sourceTree = "<group>"; };
@@ -514,6 +517,7 @@
 		D9B4EFD5BFB9A7EDCD975ABE /* ActiveTrainingViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActiveTrainingViewModelTests.swift; sourceTree = "<group>"; };
 		DA424702C6509A17AAAA49E0 /* TacticalLessonRegistry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TacticalLessonRegistry.swift; sourceTree = "<group>"; };
 		DB2A7241A8357ECC0137B0B2 /* CoachVoice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoachVoice.swift; sourceTree = "<group>"; };
+		DB4597D6D54917785575F7A9 /* LessonQuizView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LessonQuizView.swift; sourceTree = "<group>"; };
 		DC03A1C59166260EB69B2A7C /* ActivityLogViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityLogViewModel.swift; sourceTree = "<group>"; };
 		DC06CE82C91B2857B35D558A /* ChildLoginViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChildLoginViewModelTests.swift; sourceTree = "<group>"; };
 		DC670665B9CA30688AAA27B9 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
@@ -719,6 +723,7 @@
 				CB95ADF7A15FA44B042B786F /* LearnView.swift */,
 				6BD4217228F01A19820F6F8A /* LessonDetailView.swift */,
 				4664C97CD0EDCE2E967FC017 /* LessonPlayerView.swift */,
+				DB4597D6D54917785575F7A9 /* LessonQuizView.swift */,
 				9807C18EC82926CD51A51393 /* TacticalPitchView.swift */,
 				012C76BF746FBCD9CBF95DCC /* Components */,
 			);
@@ -1321,6 +1326,7 @@
 				B1543DF2E668283C486D57BD /* Drill.swift */,
 				0CFC972E7CCB7940D8FD9F66 /* Entitlement.swift */,
 				B086256CDF32335B42AC2710 /* Lesson.swift */,
+				16689218F9787C8EBD1B0167 /* LessonQuiz.swift */,
 				60E25817949E901A9E7C4E7F /* LessonRegistry.swift */,
 				9600207B83F331C88C78D196 /* Mission.swift */,
 				BBB47780524FE2180F45642B /* MysteryReward.swift */,
@@ -1738,6 +1744,8 @@
 				37DE49800988AAE499B2B22D /* LessonPlayerView.swift in Sources */,
 				EAC8574BC77EE4B4B3C73F8C /* LessonPlayerViewModel.swift in Sources */,
 				8E29FEF8C948677A0C0B985A /* LessonProgressBar.swift in Sources */,
+				8FC3407378EC8FD0D647BA45 /* LessonQuiz.swift in Sources */,
+				F578184A5FC2727815E8A360 /* LessonQuizView.swift in Sources */,
 				737516CBE865BB615C03B286 /* LessonRegistry.swift in Sources */,
 				471F6B97A98556FADF043526 /* Logger.swift in Sources */,
 				F314FCE45D8AA2153C37DB96 /* LoginChoiceView.swift in Sources */,

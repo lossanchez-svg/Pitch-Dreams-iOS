@@ -68,6 +68,9 @@ struct LessonPlayerView: View {
             viewModel.setVoice(voice)
             viewModel.onAppear()
             coachVM.speak(viewModel.currentNarrationText)
+            // F3 — propagate age so tap-to-explain bubbles pick the young
+            // variant automatically for kids ≤11.
+            interactiveVM.childAge = initialChildAge
         }
         .task {
             await loadChildContext()

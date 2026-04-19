@@ -7,10 +7,15 @@ final class InteractivePitchViewModel: ObservableObject {
     @Published var popoverText: String = ""
     @Published var popoverPosition: CGPoint = .zero
 
+    /// F3 — the child's age, if known. ≤11 unlocks `descriptionYoung`
+    /// fallback when an element has one authored.
+    var childAge: Int?
+
     private let voice: CoachVoiceProtocol?
 
-    init(voice: CoachVoiceProtocol? = nil) {
+    init(voice: CoachVoiceProtocol? = nil, childAge: Int? = nil) {
         self.voice = voice
+        self.childAge = childAge
     }
 
     /// Handle a tap on a pitch element. Builds a description and shows the popover.
@@ -44,7 +49,7 @@ final class InteractivePitchViewModel: ObservableObject {
     // MARK: - Description Builders
 
     func descriptionForPlayer(_ player: TacticalPlayer) -> String {
-        if let desc = player.description, !desc.isEmpty {
+        if let desc = player.preferredDescription(childAge: childAge), !desc.isEmpty {
             return desc
         }
         let role: String
@@ -63,7 +68,7 @@ final class InteractivePitchViewModel: ObservableObject {
     }
 
     func descriptionForArrow(_ arrow: TacticalArrow) -> String {
-        if let desc = arrow.description, !desc.isEmpty {
+        if let desc = arrow.preferredDescription(childAge: childAge), !desc.isEmpty {
             return desc
         }
         let action: String
@@ -80,7 +85,7 @@ final class InteractivePitchViewModel: ObservableObject {
     }
 
     func descriptionForZone(_ zone: TacticalZone) -> String {
-        if let desc = zone.description, !desc.isEmpty {
+        if let desc = zone.preferredDescription(childAge: childAge), !desc.isEmpty {
             return desc
         }
         let zoneType: String

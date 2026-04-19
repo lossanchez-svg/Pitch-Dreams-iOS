@@ -25,8 +25,16 @@ struct WeeklyRecapSheetView: View {
                 topBar
 
                 if viewModel.isLoading {
-                    Spacer()
-                    ProgressView().tint(Color.dsSecondary)
+                    // C11: skeleton stub shaped like the final recap card
+                    // so load time doesn't feel like a blank wait.
+                    VStack(spacing: 16) {
+                        SkeletonView(height: 200)
+                        HStack(spacing: 12) {
+                            SkeletonView(height: 80)
+                            SkeletonView(height: 80)
+                        }
+                    }
+                    .padding(20)
                     Spacer()
                 } else if let recap = viewModel.recap {
                     ScrollView {

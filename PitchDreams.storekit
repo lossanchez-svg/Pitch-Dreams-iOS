@@ -1,0 +1,184 @@
+{
+  "identifier" : "PITCHDREAMS-STOREKIT-LOCAL",
+  "nonRenewingSubscriptions" : [],
+  "products" : [],
+  "settings" : {
+    "_applicationInternalID" : "",
+    "_developerTeamID" : "",
+    "_failTransactionsEnabled" : false,
+    "_lastSynchronizedDate" : 0,
+    "_locale" : "en_US",
+    "_storefront" : "USA",
+    "_storeKitErrors" : [
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Load Products"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Purchase"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Verification"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "App Store Sync"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Subscription Status"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "App Transaction"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Manage Subscriptions Sheet"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Refund Request Sheet"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Offer Code Redeem Sheet"
+      }
+    ]
+  },
+  "subscriptionGroups" : [
+    {
+      "id" : "PD-PREMIUM-GROUP",
+      "localizations" : [
+        {
+          "description" : "PitchDreams Premium — parent insights, analytics, and reports.",
+          "displayName" : "Premium",
+          "locale" : "en_US"
+        }
+      ],
+      "name" : "Premium",
+      "subscriptions" : [
+        {
+          "adHocOffers" : [],
+          "codeOffers" : [],
+          "displayPrice" : "6.99",
+          "familyShareable" : false,
+          "groupNumber" : 1,
+          "internalID" : "PD-PREMIUM-MONTHLY",
+          "introductoryOffer" : null,
+          "localizations" : [
+            {
+              "description" : "Full parent dashboard with trends, weekly insights, and reports.",
+              "displayName" : "Premium · Monthly",
+              "locale" : "en_US"
+            }
+          ],
+          "productID" : "com.pitchdreams.premium.monthly",
+          "recurringSubscriptionPeriod" : "P1M",
+          "referenceName" : "Premium Monthly",
+          "subscriptionGroupID" : "PD-PREMIUM-GROUP",
+          "type" : "RecurringSubscription"
+        },
+        {
+          "adHocOffers" : [],
+          "codeOffers" : [],
+          "displayPrice" : "69.00",
+          "familyShareable" : false,
+          "groupNumber" : 1,
+          "internalID" : "PD-PREMIUM-YEARLY",
+          "introductoryOffer" : null,
+          "localizations" : [
+            {
+              "description" : "Full parent dashboard — save 17% with yearly billing.",
+              "displayName" : "Premium · Yearly",
+              "locale" : "en_US"
+            }
+          ],
+          "productID" : "com.pitchdreams.premium.yearly",
+          "recurringSubscriptionPeriod" : "P1Y",
+          "referenceName" : "Premium Yearly",
+          "subscriptionGroupID" : "PD-PREMIUM-GROUP",
+          "type" : "RecurringSubscription"
+        },
+        {
+          "adHocOffers" : [],
+          "codeOffers" : [],
+          "displayPrice" : "10.99",
+          "familyShareable" : false,
+          "groupNumber" : 1,
+          "internalID" : "PD-FAMILY-MONTHLY",
+          "introductoryOffer" : null,
+          "localizations" : [
+            {
+              "description" : "Everything in Premium, for up to 4 kids on one account.",
+              "displayName" : "Family · Monthly",
+              "locale" : "en_US"
+            }
+          ],
+          "productID" : "com.pitchdreams.family.monthly",
+          "recurringSubscriptionPeriod" : "P1M",
+          "referenceName" : "Family Monthly",
+          "subscriptionGroupID" : "PD-PREMIUM-GROUP",
+          "type" : "RecurringSubscription"
+        },
+        {
+          "adHocOffers" : [],
+          "codeOffers" : [],
+          "displayPrice" : "109.00",
+          "familyShareable" : false,
+          "groupNumber" : 1,
+          "internalID" : "PD-FAMILY-YEARLY",
+          "introductoryOffer" : null,
+          "localizations" : [
+            {
+              "description" : "Family plan — save 17% with yearly billing.",
+              "displayName" : "Family · Yearly",
+              "locale" : "en_US"
+            }
+          ],
+          "productID" : "com.pitchdreams.family.yearly",
+          "recurringSubscriptionPeriod" : "P1Y",
+          "referenceName" : "Family Yearly",
+          "subscriptionGroupID" : "PD-PREMIUM-GROUP",
+          "type" : "RecurringSubscription"
+        },
+        {
+          "adHocOffers" : [],
+          "codeOffers" : [],
+          "displayPrice" : "4.99",
+          "familyShareable" : false,
+          "groupNumber" : 1,
+          "internalID" : "PD-FOUNDERS",
+          "introductoryOffer" : null,
+          "localizations" : [
+            {
+              "description" : "Founders price — locked forever. First 500 subscribers only.",
+              "displayName" : "Founders · Monthly",
+              "locale" : "en_US"
+            }
+          ],
+          "productID" : "com.pitchdreams.founders.monthly",
+          "recurringSubscriptionPeriod" : "P1M",
+          "referenceName" : "Founders Monthly",
+          "subscriptionGroupID" : "PD-PREMIUM-GROUP",
+          "type" : "RecurringSubscription"
+        }
+      ]
+    }
+  ],
+  "version" : {
+    "major" : 4,
+    "minor" : 0
+  }
+}

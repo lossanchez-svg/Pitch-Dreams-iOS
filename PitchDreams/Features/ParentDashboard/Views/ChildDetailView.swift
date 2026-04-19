@@ -3,11 +3,20 @@ import SwiftUI
 struct ChildDetailView: View {
     let child: ChildSummary
     @StateObject private var viewModel: ChildDetailViewModel
+    @EnvironmentObject private var entitlementStore: EntitlementStore
+    @EnvironmentObject private var subscriptionManager: SubscriptionManager
     @State private var showExportAlert = false
     @State private var showDeleteAlert = false
     @State private var showAvatarPicker = false
     @State private var showPinSetup = false
     @State private var selectedAvatarId: String?
+
+    /// Streak-milestone paywall — pitched once per child when the kid first
+    /// crosses 7+ days. Key includes childId so each child can trigger the
+    /// pitch independently (parent may have paid for Family but added a new
+    /// kid who then hits their own milestone).
+    @AppStorage("streakMilestonePaywallSeenAt") private var streakMilestoneKeys: String = ""
+    @State private var showStreakMilestonePaywall = false
 
     private let apiClient: APIClientProtocol = APIClient()
 
@@ -15,6 +24,10 @@ struct ChildDetailView: View {
         self.child = child
         _viewModel = StateObject(wrappedValue: ChildDetailViewModel(childId: child.id))
     }
+
+    /// Streak threshold that triggers the parent pitch. Matches the plan's
+    /// "after streak milestone (7 days) — Full paywall moment" spec.
+    private static let streakPaywallThreshold = 7
 
     var body: some View {
         List {
@@ -125,6 +138,45 @@ struct ChildDetailView: View {
                 }
             }
 
+            // Premium parent surfaces. Free-tier parents see a locked
+            // preview via `.gated(by:)`, which presents the paywall on tap.
+            Section("Premium") {
+                NavigationLink {
+                    AdvancedAnalyticsView(childId: child.id, childName: child.nickname)
+                        .gated(by: .advancedAnalytics, context: .advancedAnalytics)
+                } label: {
+                    premiumRow(label: "Trends & Analytics", systemImage: "chart.line.uptrend.xyaxis")
+                }
+
+                NavigationLink {
+                    DevelopmentProfileExportView(child: child)
+                        .gated(by: .developmentProfilePDF, context: .developmentReport)
+                } label: {
+                    premiumRow(label: "Development Profile PDF", systemImage: "doc.richtext")
+                }
+
+                NavigationLink {
+                    WeeklyInsightsEmailSettingsView(child: child)
+                        .gated(by: .parentWeeklyInsightsEmail, context: .settingsBrowse)
+                } label: {
+                    premiumRow(label: "Weekly Insights Email", systemImage: "envelope.fill")
+                }
+
+                NavigationLink {
+                    FullSessionHistoryView(childId: child.id, childName: child.nickname)
+                        .gated(by: .unlimitedHistory, context: .historyHorizon)
+                } label: {
+                    premiumRow(label: "Full Training History", systemImage: "clock.arrow.circlepath")
+                }
+
+                NavigationLink {
+                    PrioritySupportView(child: child)
+                        .gated(by: .prioritySupport, context: .settingsBrowse)
+                } label: {
+                    premiumRow(label: "Priority Support", systemImage: "star.fill")
+                }
+            }
+
             // Actions section
             Section("Actions") {
                 NavigationLink {
@@ -158,6 +210,14 @@ struct ChildDetailView: View {
         }
         .task {
             await viewModel.loadData()
+            maybePresentStreakMilestonePaywall()
+        }
+        .sheet(isPresented: $showStreakMilestonePaywall) {
+            PaywallView(
+                manager: subscriptionManager,
+                entitlementStore: entitlementStore,
+                context: .streakMilestone
+            )
         }
         .alert("Export Data", isPresented: $showExportAlert) {
             Button("Export") { Task { await exportData() } }
@@ -196,6 +256,46 @@ struct ChildDetailView: View {
                 .foregroundStyle(Color.dsSecondary)
                 .frame(width: 60, height: 60)
                 .background(Color.dsSecondary.opacity(0.12))
+        }
+    }
+
+    // MARK: - Streak milestone paywall
+
+    /// Show the streak-milestone paywall once per child when they first
+    /// cross the 7-day threshold. Guards:
+    /// - Already seen for this child (sticky across launches)
+    /// - Parent is already paid — skip the pitch
+    /// - Streak hasn't reached the threshold yet
+    ///
+    /// Uses a comma-separated list of child ids in @AppStorage so sibling
+    /// milestones are tracked independently without needing N keys.
+    private func maybePresentStreakMilestonePaywall() {
+        guard !entitlementStore.isPaid else { return }
+        guard viewModel.currentStreak >= Self.streakPaywallThreshold else { return }
+        let seen = Set(streakMilestoneKeys.split(separator: ",").map(String.init))
+        guard !seen.contains(child.id) else { return }
+
+        var updated = seen
+        updated.insert(child.id)
+        streakMilestoneKeys = updated.sorted().joined(separator: ",")
+
+        // Delay so the detail page renders first — parent sees the streak
+        // stat land before the pitch, same pattern as the dashboard trigger.
+        Task { @MainActor in
+            try? await Task.sleep(for: .milliseconds(800))
+            showStreakMilestonePaywall = true
+        }
+    }
+
+    // MARK: - Premium row helper
+
+    private func premiumRow(label: String, systemImage: String) -> some View {
+        HStack(spacing: 8) {
+            Label(label, systemImage: systemImage)
+            Spacer()
+            Image(systemName: "sparkles")
+                .font(.system(size: 12))
+                .foregroundStyle(Color.dsAccentOrange)
         }
     }
 

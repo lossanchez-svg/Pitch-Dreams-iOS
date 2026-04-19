@@ -71,9 +71,7 @@ final class PaywallViewModel: ObservableObject {
         let showFounders = !entitlementStore.foundersCohort || isFoundersAvailable
         showFoundersBadge = showFounders
 
-        let visible = showFounders ? products : products.filter {
-            $0.tier != .foundersMonthly && $0.tier != .foundersYearly
-        }
+        let visible = showFounders ? products : products.filter { $0.tier != .founders }
 
         monthlyOptions = visible.filter { $0.period == .monthly }
         yearlyOptions = visible.filter { $0.period == .yearly }

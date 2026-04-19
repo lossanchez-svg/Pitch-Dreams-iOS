@@ -155,6 +155,13 @@ struct ChildDetailView: View {
                 } label: {
                     premiumRow(label: "Full Training History", systemImage: "clock.arrow.circlepath")
                 }
+
+                NavigationLink {
+                    PrioritySupportView(child: child)
+                        .gated(by: .prioritySupport, context: .settingsBrowse)
+                } label: {
+                    premiumRow(label: "Priority Support", systemImage: "star.fill")
+                }
             }
 
             // Actions section

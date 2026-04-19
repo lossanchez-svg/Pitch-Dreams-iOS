@@ -162,19 +162,19 @@ struct TacticalStep: Equatable {
     init(
         narration: String,
         narrationYoung: String? = nil,
-        diagram: TacticalDiagramState,
-        duration: TimeInterval,
         spotlightElementId: String? = nil,
         spotlightCaption: String? = nil,
-        spotlightCaptionYoung: String? = nil
+        spotlightCaptionYoung: String? = nil,
+        diagram: TacticalDiagramState,
+        duration: TimeInterval
     ) {
         self.narration = narration
         self.narrationYoung = narrationYoung
-        self.diagram = diagram
-        self.duration = duration
         self.spotlightElementId = spotlightElementId
         self.spotlightCaption = spotlightCaption
         self.spotlightCaptionYoung = spotlightCaptionYoung
+        self.diagram = diagram
+        self.duration = duration
     }
 
     /// Resolve the narration variant for a given child age.

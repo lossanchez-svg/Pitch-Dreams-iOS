@@ -5,6 +5,7 @@ final class ProgressViewModel: ObservableObject {
     @Published var streakData: StreakData?
     @Published var sessions: [SessionLog] = []
     @Published var trends: [WeeklyTrend]?
+    @Published var profile: ChildProfileDetail?
     @Published var isLoading = false
     @Published var errorMessage: String?
 
@@ -105,6 +106,10 @@ final class ProgressViewModel: ObservableObject {
     func loadData() async {
         isLoading = true
         errorMessage = nil
+
+        // Profile is best-effort — failing silently keeps the dashboard
+        // usable. Empty state uses this to render the avatar-based illo.
+        profile = try? await apiClient.request(APIRouter.getProfile(childId: childId))
 
         do {
             streakData = try await apiClient.request(APIRouter.getStreaks(childId: childId))

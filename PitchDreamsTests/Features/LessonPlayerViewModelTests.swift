@@ -241,11 +241,11 @@ final class LessonPlayerViewModelTests: XCTestCase {
     func testCurrentSpotlightCaption_respectsAge() {
         let step = TacticalStep(
             narration: "n",
-            diagram: TacticalDiagramState(),
-            duration: 3,
             spotlightElementId: "self",
             spotlightCaption: "Watch the midfielder first.",
-            spotlightCaptionYoung: "Look at the player in the middle!"
+            spotlightCaptionYoung: "Look at the player in the middle!",
+            diagram: TacticalDiagramState(),
+            duration: 3
         )
         let lesson = AnimatedTacticalLesson(
             id: "t", title: "Test", track: "scanning", description: "",

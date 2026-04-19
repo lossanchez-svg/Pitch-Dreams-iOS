@@ -2,10 +2,18 @@ import SwiftUI
 
 struct ParentDashboardView: View {
     @EnvironmentObject var authManager: AuthManager
+    @EnvironmentObject var entitlementStore: EntitlementStore
+    @EnvironmentObject var subscriptionManager: SubscriptionManager
     @State private var children: [ChildSummary] = []
     @State private var isLoading = true
     @State private var errorText: String?
     @State private var showAddChild = false
+
+    /// Track-D paywall trigger: show the paywall the first time a parent
+    /// lands on this dashboard. @AppStorage persists across launches so we
+    /// never re-pitch. Paid users skip the pitch entirely.
+    @AppStorage("parentDashboardPaywallSeen") private var parentDashboardPaywallSeen = false
+    @State private var showFirstVisitPaywall = false
 
     private let apiClient: APIClientProtocol = APIClient()
 
@@ -124,11 +132,46 @@ struct ParentDashboardView: View {
                 Task { await loadChildren() }
             }
         }
+        .sheet(isPresented: $showFirstVisitPaywall) {
+            PaywallView(
+                manager: subscriptionManager,
+                entitlementStore: entitlementStore,
+                context: .parentDashboard
+            )
+        }
         .refreshable {
             await loadChildren()
         }
         .task {
             await loadChildren()
+            maybePresentFirstVisitPaywall()
+        }
+    }
+
+    /// Show the parent-dashboard paywall exactly once per account.
+    /// Guard conditions (all must pass):
+    /// - Not already seen (sticky @AppStorage flag)
+    /// - User is not already paid — paid users don't need the pitch
+    /// - User has at least one child — without one there's nothing to pitch
+    /// - App is online — the paywall needs StoreKit product data
+    ///
+    /// Uses a short delay so the dashboard renders first; the parent sees
+    /// their kid's progress before the pitch arrives, making the emotional
+    /// moment land instead of feeling like a blocker.
+    private func maybePresentFirstVisitPaywall() {
+        guard !parentDashboardPaywallSeen else { return }
+        guard !entitlementStore.isPaid else {
+            // Mark seen so we don't pitch paid users later if they ever
+            // downgrade to free — they've already been through this moment.
+            parentDashboardPaywallSeen = true
+            return
+        }
+        guard !children.isEmpty else { return }
+
+        parentDashboardPaywallSeen = true
+        Task { @MainActor in
+            try? await Task.sleep(for: .milliseconds(800))
+            showFirstVisitPaywall = true
         }
     }
 

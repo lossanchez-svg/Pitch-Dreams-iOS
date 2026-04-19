@@ -148,6 +148,13 @@ struct ChildDetailView: View {
                 } label: {
                     premiumRow(label: "Weekly Insights Email", systemImage: "envelope.fill")
                 }
+
+                NavigationLink {
+                    FullSessionHistoryView(childId: child.id, childName: child.nickname)
+                        .gated(by: .unlimitedHistory, context: .historyHorizon)
+                } label: {
+                    premiumRow(label: "Full Training History", systemImage: "clock.arrow.circlepath")
+                }
             }
 
             // Actions section

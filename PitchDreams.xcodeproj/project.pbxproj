@@ -44,6 +44,7 @@
 		24EA6515495F4402C9605F57 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70D02BCD1734281F9F306858 /* User.swift */; };
 		259910A1045CB6EF79B02B5D /* QuickLogViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5360D8689E0F1A7D96006769 /* QuickLogViewModelTests.swift */; };
 		25B8E11B817667EA79D35C4F /* XPStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5487807FFBC7342AC3FECAEB /* XPStoreTests.swift */; };
+		276EDE57DC79BCB99FB7A703 /* FullSessionHistoryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEF7823EEDF4A34E895A40C8 /* FullSessionHistoryViewModel.swift */; };
 		28CF6A531C1796CCEA8F174A /* InteractivePitchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC99B0F55F6FA8865E0A1253 /* InteractivePitchViewModel.swift */; };
 		292641C32E3FE8210A3D6074 /* BallPhysicsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A73699F42A50FFFAD7063E69 /* BallPhysicsTests.swift */; };
 		2981BA8F86D9EC6827B770A5 /* MysteryBoxOddsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34BF163D0EAAF82FF50C1421 /* MysteryBoxOddsView.swift */; };
@@ -165,6 +166,7 @@
 		A08F361E69CEEDEC7C3BF0B5 /* SkillDiagramView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E1FB3F890E9C4DB6129BFCD /* SkillDiagramView.swift */; };
 		A17438E466124E1044E7C709 /* MysteryBoxRevealView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24358153EF02A2FA5B04DF4F /* MysteryBoxRevealView.swift */; };
 		A22B5D6F2C12CA4253A85DF2 /* SignatureMoveDrillPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3226EC0FEA13454D6F6840F7 /* SignatureMoveDrillPlayerView.swift */; };
+		A63D5BF6F67344B90A4ACC0C /* FullSessionHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13E55ACE5FD130DB512F1C01 /* FullSessionHistoryView.swift */; };
 		A734A88719E42A1E5F20AF7B /* NewActivityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9DC36F93995532A66BDF7FA /* NewActivityView.swift */; };
 		A735B68328ED46A377A3BAA7 /* AnimatedTacticalTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3327BA7EE2CB012553043FC9 /* AnimatedTacticalTypes.swift */; };
 		A77167E58911ACDC476F9BD5 /* MockCoachVoice.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42894954332436074FDB959 /* MockCoachVoice.swift */; };
@@ -296,6 +298,7 @@
 		121837DE0296D70A172A4AA2 /* SkillsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkillsViewModel.swift; sourceTree = "<group>"; };
 		13BF4F822A6E7D3D6B3253A8 /* PlayerCardEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerCardEditorView.swift; sourceTree = "<group>"; };
 		13DEF2E694B233B410C6BB83 /* MissionRegistryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MissionRegistryTests.swift; sourceTree = "<group>"; };
+		13E55ACE5FD130DB512F1C01 /* FullSessionHistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullSessionHistoryView.swift; sourceTree = "<group>"; };
 		142B29E8E77F7305488E3C88 /* ChipPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChipPickerView.swift; sourceTree = "<group>"; };
 		16D1274F90BA12C645E86850 /* SessionSyncQueueTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionSyncQueueTests.swift; sourceTree = "<group>"; };
 		17E47017925A54D22BC22094 /* PitchDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PitchDetector.swift; sourceTree = "<group>"; };
@@ -454,6 +457,7 @@
 		ACA8D43C962506A82767816B /* Trend.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Trend.swift; sourceTree = "<group>"; };
 		ADCE789A5091C8F7AE3FB282 /* PitchDreams.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = PitchDreams.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		ADDF00203559FD14E35F38D9 /* ProgressDashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressDashboardView.swift; sourceTree = "<group>"; };
+		AEF7823EEDF4A34E895A40C8 /* FullSessionHistoryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullSessionHistoryViewModel.swift; sourceTree = "<group>"; };
 		AF202DEAE7B13449D21447FA /* LessonRegistryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LessonRegistryTests.swift; sourceTree = "<group>"; };
 		AF4F4F122C94E6082AA7AB1E /* SkeletonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkeletonView.swift; sourceTree = "<group>"; };
 		AF5D3DDCFF6955B9566C8853 /* APIContractTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIContractTests.swift; sourceTree = "<group>"; };
@@ -901,6 +905,7 @@
 				5D7860BE9D829B777D8603F9 /* AdvancedAnalyticsViewModel.swift */,
 				C48E8658D0F60C52712A6B03 /* ChildDetailViewModel.swift */,
 				B12DB4A6BECB9EB801897CF3 /* DevelopmentProfileViewModel.swift */,
+				AEF7823EEDF4A34E895A40C8 /* FullSessionHistoryViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -1375,6 +1380,7 @@
 				57C6BFA02F61938478B529F2 /* ChildDetailView.swift */,
 				9B34559863B4FA1A38A3782E /* DevelopmentProfileExportView.swift */,
 				6F6283C5C44E4B8E3B5ECB39 /* DevelopmentProfileReportView.swift */,
+				13E55ACE5FD130DB512F1C01 /* FullSessionHistoryView.swift */,
 				4E664960E667F9B87AC14FB5 /* ParentDashboardView.swift */,
 				FB16019BB64331E4B6E149E4 /* PinSetupSheet.swift */,
 				25EF9206A4E545FBBBB30D03 /* WeeklyInsightsEmailSettingsView.swift */,
@@ -1706,6 +1712,8 @@
 				E8B4DA9546EBFA2E50397963 /* ForgotPasswordView.swift in Sources */,
 				99AE928FF5FAB1E5ED3830D2 /* ForgotPasswordViewModel.swift in Sources */,
 				367BDFE1E4DACA17181E849A /* FullCheckInSheet.swift in Sources */,
+				A63D5BF6F67344B90A4ACC0C /* FullSessionHistoryView.swift in Sources */,
+				276EDE57DC79BCB99FB7A703 /* FullSessionHistoryViewModel.swift in Sources */,
 				88E0570DFB95BE0B655CC1FA /* IRLPitchViewModel.swift in Sources */,
 				4341537E91878FD0DEBC2731 /* InputValidator.swift in Sources */,
 				28CF6A531C1796CCEA8F174A /* InteractivePitchViewModel.swift in Sources */,

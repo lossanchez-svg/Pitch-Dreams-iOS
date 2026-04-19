@@ -38,6 +38,10 @@ enum AnimatedTacticalLessonRegistry {
         steps: [
             TacticalStep(
                 narration: "You're a central midfielder about to receive a pass. Two center-backs hold the line ahead, and a midfielder screens in front of them. Before the ball arrives — scan.",
+                narrationYoung: "You're in the middle. A teammate is about to pass you the ball. Before it gets there — look around!",
+                spotlightElementId: "self",
+                spotlightCaption: "Watch yourself — the ball's on its way",
+                spotlightCaptionYoung: "The ball is coming to YOU!",
                 diagram: TacticalDiagramState(
                     players: [
                         TacticalPlayer(id: "self", x: 50, y: 55, type: .self_, label: "You", highlight: true),
@@ -57,6 +61,10 @@ enum AnimatedTacticalLessonRegistry {
             ),
             TacticalStep(
                 narration: "First scan: LEFT shoulder. Your left winger is unmarked with acres of space on the flank. Safe option noted.",
+                narrationYoung: "First look: LEFT. Your teammate on the left has lots of space. That's a safe pass.",
+                spotlightElementId: "tm-left",
+                spotlightCaption: "Check your left winger",
+                spotlightCaptionYoung: "Look LEFT — who's open?",
                 diagram: TacticalDiagramState(
                     players: [
                         TacticalPlayer(id: "self", x: 50, y: 55, type: .self_, label: "You", highlight: true),
@@ -79,6 +87,10 @@ enum AnimatedTacticalLessonRegistry {
             ),
             TacticalStep(
                 narration: "Second scan: RIGHT shoulder. The right center-back is stepping forward to press you — that's danger. But notice: he's leaving a gap in the defensive line.",
+                narrationYoung: "Second look: RIGHT. A defender is charging at you — watch out! But see, they're leaving a hole behind them.",
+                spotlightElementId: "opp-cb-r",
+                spotlightCaption: "Watch the defender stepping up",
+                spotlightCaptionYoung: "A defender is running at you!",
                 diagram: TacticalDiagramState(
                     players: [
                         TacticalPlayer(id: "self", x: 50, y: 55, type: .self_, label: "You", highlight: true),
@@ -102,6 +114,10 @@ enum AnimatedTacticalLessonRegistry {
             ),
             TacticalStep(
                 narration: "Third scan: Glance BEHIND. Your striker is level with the last defender — onside. And the gap left by the pressing CB? That's the channel for a through ball.",
+                narrationYoung: "Third look: BEHIND. Your striker is ready to sprint. That hole the defender left is an open road now.",
+                spotlightElementId: "tm-forward",
+                spotlightCaption: "Check your striker — is a run on?",
+                spotlightCaptionYoung: "Your striker is ready to RUN!",
                 diagram: TacticalDiagramState(
                     players: [
                         TacticalPlayer(id: "self", x: 50, y: 55, type: .self_, label: "You", highlight: true),
@@ -125,6 +141,10 @@ enum AnimatedTacticalLessonRegistry {
             ),
             TacticalStep(
                 narration: "3 scans done. You KNOW the picture. The right CB pressed, leaving a gap. Your ST times the run. Receive, turn left, thread it through the channel. That's how scanning wins games.",
+                narrationYoung: "3 looks done. You know where everyone is. Get the ball, turn, and slide it through the gap to your striker!",
+                spotlightElementId: "through-ball",
+                spotlightCaption: "The payoff — through-ball",
+                spotlightCaptionYoung: "Send the ball through the gap!",
                 diagram: TacticalDiagramState(
                     players: [
                         TacticalPlayer(id: "self", x: 50, y: 55, type: .self_, label: "You", highlight: true),
@@ -163,6 +183,10 @@ enum AnimatedTacticalLessonRegistry {
         steps: [
             TacticalStep(
                 narration: "You're a central midfielder. The ball is coming from your right-back. Two opponents are closing you down. Most players panic here — but you've already scanned. You know your three options BEFORE the ball arrives.",
+                narrationYoung: "You're about to get the ball. Two players are running to take it. Don't panic — you already looked around and know what to do.",
+                spotlightElementId: "self",
+                spotlightCaption: "Pressure's coming — you've already scanned",
+                spotlightCaptionYoung: "Stay calm — you know what to do!",
                 diagram: TacticalDiagramState(
                     players: [
                         TacticalPlayer(id: "self", x: 45, y: 55, type: .self_, label: "You", highlight: true),
@@ -184,6 +208,10 @@ enum AnimatedTacticalLessonRegistry {
             ),
             TacticalStep(
                 narration: "DECIDE phase. The ball is still traveling. You've already scanned and identified three options: A) Switch to the open left winger. B) Through ball to the striker's run. C) Safe lay-off to your CM partner.",
+                narrationYoung: "DECIDE. The ball is still flying. You have 3 choices: A) Pass far left. B) Pass forward to the striker. C) Easy pass sideways.",
+                spotlightElementId: "tm-lw",
+                spotlightCaption: "Three options — pick the best one",
+                spotlightCaptionYoung: "You have 3 choices — which is best?",
                 diagram: TacticalDiagramState(
                     players: [
                         TacticalPlayer(id: "self", x: 45, y: 55, type: .self_, label: "You", highlight: true),
@@ -211,6 +239,10 @@ enum AnimatedTacticalLessonRegistry {
             ),
             TacticalStep(
                 narration: "Look at the back line. The right CB has drifted wide, creating a gap between the two center-backs. Your striker is level with the left CB — he's ONSIDE and about to burst into that gap. Option B is the killer ball.",
+                narrationYoung: "Look at the defenders. One moved out wide and left a big hole in the middle. Your striker can run right through it!",
+                spotlightElementId: "gap",
+                spotlightCaption: "There's the killer gap",
+                spotlightCaptionYoung: "A huge hole opened up!",
                 diagram: TacticalDiagramState(
                     players: [
                         TacticalPlayer(id: "self", x: 45, y: 55, type: .self_, label: "You", highlight: true),
@@ -236,6 +268,10 @@ enum AnimatedTacticalLessonRegistry {
             ),
             TacticalStep(
                 narration: "RECEIVE phase. The ball arrives. Because you already decided, your first touch isn't random — it's deliberate. You let it run across your body to the left, opening your hips toward the target.",
+                narrationYoung: "The ball is here. Your first touch pushes it to the left. Now your body is pointing where you want to pass.",
+                spotlightElementId: "first-touch",
+                spotlightCaption: "First touch — on purpose, not random",
+                spotlightCaptionYoung: "First touch — put it where you want!",
                 diagram: TacticalDiagramState(
                     players: [
                         TacticalPlayer(id: "self", x: 44, y: 54, type: .self_, label: "You", highlight: true),
@@ -261,6 +297,10 @@ enum AnimatedTacticalLessonRegistry {
             ),
             TacticalStep(
                 narration: "EXECUTE. Second touch: the through ball. Weighted perfectly into the gap between the center-backs. Your striker is through on goal. The whole sequence took 2 seconds because you thought BEFORE the ball arrived.",
+                narrationYoung: "GO! Second touch: slide the ball through the hole. Your striker is clear — one-on-one with the goalie!",
+                spotlightElementId: "through-ball",
+                spotlightCaption: "Two touches, two seconds, goal set up",
+                spotlightCaptionYoung: "Slide it through — striker is IN!",
                 diagram: TacticalDiagramState(
                     players: [
                         TacticalPlayer(id: "self", x: 44, y: 54, type: .self_, label: "You", highlight: true),
@@ -301,6 +341,10 @@ enum AnimatedTacticalLessonRegistry {
         steps: [
             TacticalStep(
                 narration: "You're a midfielder who just received the ball. Two opponents are pressing you immediately. Every forward option is covered. Rushing now means a turnover. This is where patience wins.",
+                narrationYoung: "You have the ball. Two players are crashing in. Every forward pass is blocked. If you rush, you'll lose it.",
+                spotlightElementId: "pressure-zone",
+                spotlightCaption: "Every forward option is blocked",
+                spotlightCaptionYoung: "Too many defenders — don't rush!",
                 diagram: TacticalDiagramState(
                     players: [
                         TacticalPlayer(id: "self", x: 45, y: 50, type: .self_, label: "You", highlight: true),
@@ -323,6 +367,10 @@ enum AnimatedTacticalLessonRegistry {
             ),
             TacticalStep(
                 narration: "SHIELD. Put your body between the ball and the nearest opponent. Drop your shoulder, keep the ball on your far foot. You've just bought yourself 2 seconds. That's an eternity in football.",
+                narrationYoung: "SHIELD. Use your body to protect the ball. Keep it on the foot furthest from the defender. You just bought 2 seconds — a long time!",
+                spotlightElementId: "self",
+                spotlightCaption: "Shield the ball with your body",
+                spotlightCaptionYoung: "Protect the ball!",
                 diagram: TacticalDiagramState(
                     players: [
                         TacticalPlayer(id: "self", x: 43, y: 50, type: .self_, label: "You", highlight: true),
@@ -345,6 +393,10 @@ enum AnimatedTacticalLessonRegistry {
             ),
             TacticalStep(
                 narration: "While you hold, your teammates MOVE. The left winger drops deep. The striker drifts wide. The right winger makes a run in behind. Patience creates options that didn't exist 2 seconds ago.",
+                narrationYoung: "While you hold, your friends move. New passing options pop up that weren't there before. Waiting made them happen!",
+                spotlightElementId: "tm-rw",
+                spotlightCaption: "Teammates make new options appear",
+                spotlightCaptionYoung: "New passes are opening up!",
                 diagram: TacticalDiagramState(
                     players: [
                         TacticalPlayer(id: "self", x: 43, y: 50, type: .self_, label: "You", highlight: true),
@@ -373,6 +425,10 @@ enum AnimatedTacticalLessonRegistry {
             ),
             TacticalStep(
                 narration: "NOW. The RB is caught between covering the ST and tracking the RW's run — he can't do both. That hesitation is your TRIGGER. The moment you see it, release the ball.",
+                narrationYoung: "NOW. The defender is stuck. They can't guard both your players. The second they freeze — that's your moment. GO.",
+                spotlightElementId: "opp-rb",
+                spotlightCaption: "Defender frozen — your trigger",
+                spotlightCaptionYoung: "Defender is stuck — release it!",
                 diagram: TacticalDiagramState(
                     players: [
                         TacticalPlayer(id: "self", x: 43, y: 50, type: .self_, label: "You", highlight: true),
@@ -396,6 +452,10 @@ enum AnimatedTacticalLessonRegistry {
             ),
             TacticalStep(
                 narration: "The pass. Played into the space behind the RB, perfectly weighted for the RW's run. If you'd rushed 3 seconds ago, this option didn't exist. Patience in possession isn't slow — it's SMART.",
+                narrationYoung: "THE PASS. Right into the space behind the defender. 3 seconds ago this pass wasn't open. Patience isn't slow — it's smart!",
+                spotlightElementId: "release-pass",
+                spotlightCaption: "Release — perfect weight, perfect timing",
+                spotlightCaptionYoung: "Perfect pass into the space!",
                 diagram: TacticalDiagramState(
                     players: [
                         TacticalPlayer(id: "self", x: 43, y: 50, type: .self_, label: "You", highlight: true),
@@ -434,6 +494,10 @@ enum AnimatedTacticalLessonRegistry {
         steps: [
             TacticalStep(
                 narration: "You're a central midfielder with your back to the opponent's goal. The ball is coming. Most players just wait and receive — then panic because they don't know what's behind them.",
+                narrationYoung: "Your back is to the goal. The ball is coming. Most kids just wait — then panic because they don't know what's behind them.",
+                spotlightElementId: "blind-spot",
+                spotlightCaption: "What's behind you? You need to know",
+                spotlightCaptionYoung: "Danger behind — you can't see!",
                 diagram: TacticalDiagramState(
                     players: [
                         TacticalPlayer(id: "self", x: 50, y: 52, type: .self_, label: "You", highlight: true),
@@ -457,6 +521,10 @@ enum AnimatedTacticalLessonRegistry {
             ),
             TacticalStep(
                 narration: "FIRST CHECK: 3 seconds before the ball arrives, glance over your LEFT shoulder. You spot the CM closing from behind-left. Now you know: don't turn left.",
+                narrationYoung: "FIRST CHECK. Look over your LEFT shoulder. A defender is coming from behind — don't turn that way!",
+                spotlightElementId: "opp-press",
+                spotlightCaption: "Spotted — CM pressing from behind-left",
+                spotlightCaptionYoung: "Watch left — someone's chasing!",
                 diagram: TacticalDiagramState(
                     players: [
                         TacticalPlayer(id: "self", x: 50, y: 52, type: .self_, label: "You", highlight: true),
@@ -480,6 +548,10 @@ enum AnimatedTacticalLessonRegistry {
             ),
             TacticalStep(
                 narration: "SECOND CHECK: 1 second before the ball arrives, quick glance RIGHT. The other CM is closing too, but there's a gap between them. That gap is your escape route.",
+                narrationYoung: "SECOND CHECK. Look RIGHT. Another defender is coming — but look, there's a small gap between them. That's your way out!",
+                spotlightElementId: "gap",
+                spotlightCaption: "Gap between defenders — your escape",
+                spotlightCaptionYoung: "See the gap? That's your exit!",
                 diagram: TacticalDiagramState(
                     players: [
                         TacticalPlayer(id: "self", x: 50, y: 52, type: .self_, label: "You", highlight: true),
@@ -503,6 +575,10 @@ enum AnimatedTacticalLessonRegistry {
             ),
             TacticalStep(
                 narration: "Ball arrives. Because you checked TWICE, you know exactly where the gap is. First touch goes FORWARD through the gap between the two midfielders.",
+                narrationYoung: "The ball is here. Because you checked twice, you know the gap is there. First touch goes FORWARD — right through the middle!",
+                spotlightElementId: "touch-through",
+                spotlightCaption: "First touch forward through the gap",
+                spotlightCaptionYoung: "First touch — forward!",
                 diagram: TacticalDiagramState(
                     players: [
                         TacticalPlayer(id: "self", x: 50, y: 48, type: .self_, label: "You", highlight: true),
@@ -523,6 +599,10 @@ enum AnimatedTacticalLessonRegistry {
             ),
             TacticalStep(
                 narration: "Two shoulder checks. One smart touch. Now you're facing forward with the ball, past two midfielders. Check your shoulder every 4-6 seconds — it's the cheapest way to gain an advantage.",
+                narrationYoung: "Two looks. One smart touch. Now you're facing the right way, past two defenders. Look behind you every few seconds — it's free info!",
+                spotlightElementId: "to-st",
+                spotlightCaption: "Two checks, one smart touch, forward!",
+                spotlightCaptionYoung: "You did it — pass forward!",
                 diagram: TacticalDiagramState(
                     players: [
                         TacticalPlayer(id: "self", x: 50, y: 46, type: .self_, label: "You", highlight: true),
@@ -559,6 +639,10 @@ enum AnimatedTacticalLessonRegistry {
         steps: [
             TacticalStep(
                 narration: "The opponent has the ball. Your instinct says: CHASE! But pressing randomly wastes energy and opens gaps. Smart teams wait for a TRIGGER — a signal that tells you now is the time to press.",
+                narrationYoung: "They have the ball. You want to CHASE! But chasing too soon wastes your energy. Smart teams wait for a SIGNAL that says 'go now'.",
+                spotlightElementId: "self",
+                spotlightCaption: "Wait for the signal, don't chase blindly",
+                spotlightCaptionYoung: "Wait — don't chase yet!",
                 diagram: TacticalDiagramState(
                     players: [
                         TacticalPlayer(id: "self", x: 50, y: 48, type: .self_, label: "You", highlight: true),
@@ -576,6 +660,10 @@ enum AnimatedTacticalLessonRegistry {
             ),
             TacticalStep(
                 narration: "TRIGGER 1: Bad touch. The CB takes a heavy first touch and the ball bounces away. That's your signal! A bad touch means the opponent needs an extra second to control — that's your window to press.",
+                narrationYoung: "SIGNAL 1: Bad touch. The defender kicks it too hard and the ball bounces away. That's your moment — SPRINT at them!",
+                spotlightElementId: "bad-touch",
+                spotlightCaption: "Bad touch = trigger — press NOW",
+                spotlightCaptionYoung: "Bad touch — GO!",
                 diagram: TacticalDiagramState(
                     players: [
                         TacticalPlayer(id: "self", x: 50, y: 48, type: .self_, label: "You", highlight: true),
@@ -599,6 +687,10 @@ enum AnimatedTacticalLessonRegistry {
             ),
             TacticalStep(
                 narration: "TRIGGER 2: Backward pass. When an opponent passes BACKWARD to their CB, the ball is traveling, the receiver isn't set — press the receiver WHILE the ball is moving.",
+                narrationYoung: "SIGNAL 2: Backward pass. When they pass BACK toward their own goal, the ball is moving and the catcher isn't ready. Chase the catcher!",
+                spotlightElementId: "back-pass",
+                spotlightCaption: "Backward pass = trigger — chase the receiver",
+                spotlightCaptionYoung: "Backward pass — GO chase it!",
                 diagram: TacticalDiagramState(
                     players: [
                         TacticalPlayer(id: "self", x: 50, y: 44, type: .self_, label: "You", highlight: true),
@@ -623,6 +715,10 @@ enum AnimatedTacticalLessonRegistry {
             ),
             TacticalStep(
                 narration: "TRIGGER 3: Receiver facing their own goal. When an opponent receives with their back to you, they can't see what's coming. Press hard! Cut off the turn and you win the ball.",
+                narrationYoung: "SIGNAL 3: Back turned. When a defender catches the ball facing their own goal, they can't see you. Press hard — don't let them turn!",
+                spotlightElementId: "opp-cm",
+                spotlightCaption: "Back to you = blind — press the turn",
+                spotlightCaptionYoung: "They can't see you — CHARGE!",
                 diagram: TacticalDiagramState(
                     players: [
                         TacticalPlayer(id: "self", x: 48, y: 46, type: .self_, label: "You", highlight: true),
@@ -647,6 +743,10 @@ enum AnimatedTacticalLessonRegistry {
             ),
             TacticalStep(
                 narration: "Key rule: never press ALONE. When you go, your CM partner covers the space behind you. Press as a pair — one hunts the ball, one cuts the passing lane.",
+                narrationYoung: "Never press alone! When you charge, a friend covers behind you. Press as a PAIR — one hunts the ball, one blocks the pass.",
+                spotlightElementId: "tm-partner",
+                spotlightCaption: "Press in pairs — never alone",
+                spotlightCaptionYoung: "Bring a friend — press as 2!",
                 diagram: TacticalDiagramState(
                     players: [
                         TacticalPlayer(id: "self", x: 48, y: 36, type: .self_, label: "You", highlight: true),
@@ -685,6 +785,10 @@ enum AnimatedTacticalLessonRegistry {
         steps: [
             TacticalStep(
                 narration: "You have the ball in midfield. Your striker is making a run, but the CB is reading it perfectly. A direct pass? Intercepted. You need a THIRD MAN.",
+                narrationYoung: "You have the ball. Your striker is running, but the defender sees it coming. A direct pass? Stolen. You need a helper — a THIRD player.",
+                spotlightElementId: "opp-cb",
+                spotlightCaption: "Direct pass is covered — you need a helper",
+                spotlightCaptionYoung: "The defender is ready — need a helper!",
                 diagram: TacticalDiagramState(
                     players: [
                         TacticalPlayer(id: "self", x: 45, y: 55, type: .self_, label: "You", highlight: true),
@@ -708,6 +812,10 @@ enum AnimatedTacticalLessonRegistry {
             ),
             TacticalStep(
                 narration: "Instead, play a short pass to the attacking midfielder — the SECOND man. This pass is easy and safe. He's the link.",
+                narrationYoung: "Instead, pass short to your midfielder — they're the LINK. This pass is easy and safe.",
+                spotlightElementId: "tm-am",
+                spotlightCaption: "Safe pass to the link player",
+                spotlightCaptionYoung: "Pass to the helper first!",
                 diagram: TacticalDiagramState(
                     players: [
                         TacticalPlayer(id: "self", x: 45, y: 55, type: .self_, label: "You", highlight: true),
@@ -728,6 +836,10 @@ enum AnimatedTacticalLessonRegistry {
             ),
             TacticalStep(
                 narration: "While the ball travels to the AM, the striker changes direction. He PEELS behind the CB into the channel. The CB was watching the ball, not the runner. That's the third man principle.",
+                narrationYoung: "As the ball travels, the striker sneaks behind the defender. The defender was watching the ball — not the runner. Classic trick!",
+                spotlightElementId: "st-peel",
+                spotlightCaption: "Striker peels behind while CB watches ball",
+                spotlightCaptionYoung: "Sneaky — striker runs behind!",
                 diagram: TacticalDiagramState(
                     players: [
                         TacticalPlayer(id: "self", x: 45, y: 55, type: .self_),
@@ -751,6 +863,10 @@ enum AnimatedTacticalLessonRegistry {
             ),
             TacticalStep(
                 narration: "The AM plays FIRST TIME into the channel. One touch — that's all. The CB is still turned toward the AM when the ball is already past him. Two passes, three players, defense broken.",
+                narrationYoung: "The midfielder passes FIRST TIME — one touch! The defender is still watching them when the ball flies past. 2 passes, 3 players, defense beat!",
+                spotlightElementId: "through",
+                spotlightCaption: "One touch — defense broken",
+                spotlightCaptionYoung: "One touch — defense busted!",
                 diagram: TacticalDiagramState(
                     players: [
                         TacticalPlayer(id: "self", x: 45, y: 55, type: .self_),
@@ -774,6 +890,10 @@ enum AnimatedTacticalLessonRegistry {
             ),
             TacticalStep(
                 narration: "The Third Man: A passes to B, B plays to C's run. The magic is that C starts moving BEFORE the first pass. Defenders track the ball; the third man attacks the space they've abandoned.",
+                narrationYoung: "The trick: A passes to B, B passes to C. The magic? C starts running BEFORE the first pass. Defenders watch the ball — the third player attacks the empty space!",
+                spotlightElementId: "tm-st",
+                spotlightCaption: "A → B → C — third man wins",
+                spotlightCaptionYoung: "The third player is YOU... wait, they are!",
                 diagram: TacticalDiagramState(
                     players: [
                         TacticalPlayer(id: "self", x: 45, y: 55, type: .self_, label: "A"),
@@ -809,6 +929,10 @@ enum AnimatedTacticalLessonRegistry {
         steps: [
             TacticalStep(
                 narration: "Your team has been attacking down the right side. Three of your players are on the right, but so are FOUR of their defenders. The right side is crowded and locked. Time to look the other way.",
+                narrationYoung: "Your team keeps attacking on the right. But look — their defenders are all there too. That side is crowded. Time to look the OTHER way.",
+                spotlightElementId: "crowded",
+                spotlightCaption: "Right side is locked — too many defenders",
+                spotlightCaptionYoung: "Too crowded on the right!",
                 diagram: TacticalDiagramState(
                     players: [
                         TacticalPlayer(id: "self", x: 55, y: 52, type: .self_, label: "You", highlight: true),
@@ -832,6 +956,10 @@ enum AnimatedTacticalLessonRegistry {
             ),
             TacticalStep(
                 narration: "Look left. Your left winger is 1v1 against their right-back. Your left-back is completely free. That's where the space is — the WEAK SIDE.",
+                narrationYoung: "Look LEFT. Your winger is 1-on-1. Your left-back is totally open. THAT'S where the space is!",
+                spotlightElementId: "space-left",
+                spotlightCaption: "Weak side — huge space waiting",
+                spotlightCaptionYoung: "Empty space on the LEFT!",
                 diagram: TacticalDiagramState(
                     players: [
                         TacticalPlayer(id: "self", x: 55, y: 52, type: .self_, label: "You", highlight: true),
@@ -858,6 +986,10 @@ enum AnimatedTacticalLessonRegistry {
             ),
             TacticalStep(
                 narration: "SWITCH IT. A long diagonal ball to the left-back. The ball travels faster than defenders can shift across. By the time they reorganize, your LB has the ball in acres of space.",
+                narrationYoung: "SWITCH IT. A long pass across to the other side. The ball flies faster than defenders can run. Your teammate gets it with tons of space!",
+                spotlightElementId: "switch",
+                spotlightCaption: "Long diagonal — faster than defenders can shift",
+                spotlightCaptionYoung: "Long pass — ZOOM!",
                 diagram: TacticalDiagramState(
                     players: [
                         TacticalPlayer(id: "self", x: 55, y: 52, type: .self_, label: "You", highlight: true),
@@ -881,6 +1013,10 @@ enum AnimatedTacticalLessonRegistry {
             ),
             TacticalStep(
                 narration: "Your LB receives with time and space. He drives forward. Now it's 2v1 — your LW and LB against their lone RB. Switching the play creates overloads on the OTHER side.",
+                narrationYoung: "Your teammate gets the ball with lots of space. Now it's 2 of yours against 1 of theirs. Switching creates MORE of you than them!",
+                spotlightElementId: "two-v-one",
+                spotlightCaption: "2v1 on the weak side",
+                spotlightCaptionYoung: "2 versus 1 — easy win!",
                 diagram: TacticalDiagramState(
                     players: [
                         TacticalPlayer(id: "self", x: 50, y: 52, type: .self_),
@@ -907,6 +1043,10 @@ enum AnimatedTacticalLessonRegistry {
             ),
             TacticalStep(
                 narration: "The LB plays the LW in behind the RB. Cross into the box. One switch of play turned a dead attack into a goal-scoring chance. When you're stuck: don't force it. Switch it.",
+                narrationYoung: "Pass to the winger, cross to the striker — GOAL chance! One switch turned a stuck attack into a shot. Stuck? Don't force it — SWITCH it!",
+                spotlightElementId: "cross",
+                spotlightCaption: "Cross into the box — chance created",
+                spotlightCaptionYoung: "Cross the ball — SHOT!",
                 diagram: TacticalDiagramState(
                     players: [
                         TacticalPlayer(id: "self", x: 48, y: 48, type: .self_),
@@ -948,6 +1088,10 @@ enum AnimatedTacticalLessonRegistry {
         steps: [
             TacticalStep(
                 narration: "Every defender has a BLIND SIDE. They have to choose: watch the ball or watch their runner. The blind side is the area BEHIND the defender, on the opposite side from the ball.",
+                narrationYoung: "Every defender has a BLIND SIDE — a spot they can't see. They have to choose: watch the ball or watch YOU. The blind side is behind them.",
+                spotlightElementId: "blind",
+                spotlightCaption: "Blind side — where they can't see",
+                spotlightCaptionYoung: "That's the blind spot!",
                 diagram: TacticalDiagramState(
                     players: [
                         TacticalPlayer(id: "tm-rw", x: 78, y: 40, type: .teammate, label: "RW", highlight: true),
@@ -971,6 +1115,10 @@ enum AnimatedTacticalLessonRegistry {
             ),
             TacticalStep(
                 narration: "Start where the CB can see you. Stand still, right next to him. He checks you, then turns back to watch the ball. The moment his head turns... you move.",
+                narrationYoung: "Stand where the defender CAN see you. Stay still. They look at you, then look away at the ball. The SECOND their head turns... you MOVE.",
+                spotlightElementId: "opp-cb",
+                spotlightCaption: "Wait for their head to turn",
+                spotlightCaptionYoung: "Wait for them to look away!",
                 diagram: TacticalDiagramState(
                     players: [
                         TacticalPlayer(id: "tm-rw", x: 78, y: 40, type: .teammate, label: "RW"),
@@ -991,6 +1139,10 @@ enum AnimatedTacticalLessonRegistry {
             ),
             TacticalStep(
                 narration: "NOW. His head turns to track the ball carrier. You DART across his blind side. Move BEHIND him, toward the far post. By the time he looks back, you're gone.",
+                narrationYoung: "NOW! Their head turned away. You DART across where they can't see. Run BEHIND them toward the far post. When they look back — you're gone!",
+                spotlightElementId: "blind-run",
+                spotlightCaption: "Dart across the blind side — NOW",
+                spotlightCaptionYoung: "GO — sneak behind them!",
                 diagram: TacticalDiagramState(
                     players: [
                         TacticalPlayer(id: "tm-rw", x: 78, y: 38, type: .teammate, label: "RW", highlight: true),
@@ -1014,6 +1166,10 @@ enum AnimatedTacticalLessonRegistry {
             ),
             TacticalStep(
                 narration: "The RW crosses. The CB turns — you're not where he left you. You're arriving at the FAR POST, completely unmarked. You've created a free header.",
+                narrationYoung: "Your teammate crosses. The defender turns — but YOU'RE NOT THERE. You're at the far post, totally alone. Free header coming!",
+                spotlightElementId: "free-space",
+                spotlightCaption: "Far post — totally unmarked",
+                spotlightCaptionYoung: "Wide open at the far post!",
                 diagram: TacticalDiagramState(
                     players: [
                         TacticalPlayer(id: "tm-rw", x: 82, y: 28, type: .teammate, label: "RW"),
@@ -1037,6 +1193,10 @@ enum AnimatedTacticalLessonRegistry {
             ),
             TacticalStep(
                 narration: "Blind side rule: the ball goes one way, you go the OTHER. Defenders watch the ball — exploit it. Start visible, wait for the head to turn, dart behind. Be the player they never saw coming.",
+                narrationYoung: "BLIND SIDE RULE: ball goes one way, you go the OTHER. Defenders watch the ball — use it! Start where they see you, wait, then sneak behind them.",
+                spotlightElementId: "your-run",
+                spotlightCaption: "Ball one way, you the other — stay unseen",
+                spotlightCaptionYoung: "Be the one they never see coming!",
                 diagram: TacticalDiagramState(
                     players: [
                         TacticalPlayer(id: "tm-rw", x: 82, y: 28, type: .teammate, label: "RW"),
@@ -1071,6 +1231,10 @@ enum AnimatedTacticalLessonRegistry {
         steps: [
             TacticalStep(
                 narration: "Your centre-back has the ball deep in your own half. The opponents have set up a mid-block. There's no space in behind, no urgency. This is a WAIT moment. Smart teams slow down here.",
+                narrationYoung: "Your defender has the ball at the back. The other team is in a wall. There's no space to run into — no rush. This is a WAIT moment. Slow down.",
+                spotlightElementId: "mid-block",
+                spotlightCaption: "No space yet — this is a slow moment",
+                spotlightCaptionYoung: "No rush — slow it down!",
                 diagram: TacticalDiagramState(
                     players: [
                         TacticalPlayer(id: "self-cb", x: 40, y: 75, type: .self_, label: "CB", highlight: true),
@@ -1098,6 +1262,10 @@ enum AnimatedTacticalLessonRegistry {
             ),
             TacticalStep(
                 narration: "Patient passing has forced a reaction. Their left winger charges out to press your right-back. That's the TRIGGER. The moment a defender breaks their line, space opens behind them.",
+                narrationYoung: "Patient passing worked. Their winger charges at you — they broke the wall! That's the SIGNAL. When a defender leaves their spot, space opens up behind them.",
+                spotlightElementId: "gap",
+                spotlightCaption: "Defender broke the line — gap opens",
+                spotlightCaptionYoung: "They moved — a GAP opened!",
                 diagram: TacticalDiagramState(
                     players: [
                         TacticalPlayer(id: "self-rb", x: 85, y: 63, type: .self_, label: "RB", highlight: true),
@@ -1124,6 +1292,10 @@ enum AnimatedTacticalLessonRegistry {
             ),
             TacticalStep(
                 narration: "ACCELERATE. One touch to your winger, he lays it back first time, and you're driving forward into the space their winger left behind. Two passes in 3 seconds — that's the tempo shift.",
+                narrationYoung: "SPEED UP! One pass to your winger, they bounce it back first time, you blast into the open space. 2 passes in 3 seconds — BOOM, tempo shift!",
+                spotlightElementId: "rb-drive",
+                spotlightCaption: "Accelerate — two passes in 3 seconds",
+                spotlightCaptionYoung: "GO FAST — BLAST into the space!",
                 diagram: TacticalDiagramState(
                     players: [
                         TacticalPlayer(id: "self-rb", x: 80, y: 45, type: .self_, label: "RB", highlight: true),
@@ -1151,6 +1323,10 @@ enum AnimatedTacticalLessonRegistry {
             ),
             TacticalStep(
                 narration: "Not every attack ends in a goal. The opponents recover. Instead of forcing a cross into a packed box, the smart play is to SLOW DOWN again. Recycle possession and wait for the next trigger.",
+                narrationYoung: "Not every attack scores. The defenders caught up. Don't force a bad pass into the crowd — SLOW DOWN again. Pass it back and wait for the next opening.",
+                spotlightElementId: "packed-box",
+                spotlightCaption: "Packed box — reset and wait",
+                spotlightCaptionYoung: "Crowded — pass it back!",
                 diagram: TacticalDiagramState(
                     players: [
                         TacticalPlayer(id: "self-rb", x: 78, y: 30, type: .self_, label: "RB", highlight: true),
@@ -1176,6 +1352,10 @@ enum AnimatedTacticalLessonRegistry {
             ),
             TacticalStep(
                 narration: "Your team resets and builds again. The centre-back steps up to intercept but MISSES. Your striker is one-on-one. THIS is a NOW moment — no hesitation. That is controlling the tempo.",
+                narrationYoung: "Your team resets and tries again. A defender lunges — and MISSES! Your striker is 1-on-1 with the keeper. THIS is a GO moment — no waiting. That's controlling the tempo.",
+                spotlightElementId: "through-ball",
+                spotlightCaption: "GO moment — no hesitation",
+                spotlightCaptionYoung: "NOW — strike!",
                 diagram: TacticalDiagramState(
                     players: [
                         TacticalPlayer(id: "self-cm", x: 50, y: 42, type: .self_, label: "CM", highlight: true),
@@ -1214,6 +1394,10 @@ enum AnimatedTacticalLessonRegistry {
         steps: [
             TacticalStep(
                 narration: "It's the 89th minute. Your team just won a free kick on the edge of the box. The score is level. Your coach points at you — you're taking it. Your heart is pounding. This is where breathing changes EVERYTHING.",
+                narrationYoung: "It's the last minute. Your team has a free kick. The game is tied. The coach points at YOU — you're taking it. Heart racing? That's where breathing helps.",
+                spotlightElementId: "pressure-zone",
+                spotlightCaption: "Heart pounding — here's where breathing matters",
+                spotlightCaptionYoung: "Big moment — deep breath!",
                 diagram: TacticalDiagramState(
                     players: [
                         TacticalPlayer(id: "self", x: 50, y: 40, type: .self_, label: "You", highlight: true),
@@ -1235,6 +1419,10 @@ enum AnimatedTacticalLessonRegistry {
             ),
             TacticalStep(
                 narration: "Before you step up, BREATHE. In through your nose for 4 counts. Hold for 4 counts. Out through your mouth for 4 counts. This is called box breathing. The best footballers in the world use it before every big moment.",
+                narrationYoung: "Before you step up, BREATHE. In your nose — 1, 2, 3, 4. Hold — 1, 2, 3, 4. Out your mouth — 1, 2, 3, 4. Pro players use this before every big moment!",
+                spotlightElementId: "calm-zone",
+                spotlightCaption: "Box breathing — 4 in, 4 hold, 4 out",
+                spotlightCaptionYoung: "In 4, hold 4, out 4!",
                 diagram: TacticalDiagramState(
                     players: [
                         TacticalPlayer(id: "self", x: 50, y: 40, type: .self_, label: "You", highlight: true),
@@ -1253,6 +1441,10 @@ enum AnimatedTacticalLessonRegistry {
             ),
             TacticalStep(
                 narration: "When you panic, your body floods with adrenaline. Your vision narrows. Your muscles tighten. But 3 deep breaths REVERSE all of that. Your heart rate drops. Your vision widens. Breathing is a superpower.",
+                narrationYoung: "When you panic, you can only see what's right in front of you. Your muscles get tight. But 3 deep breaths fix all that — your heart slows, you see the whole field. Breathing is a SUPERPOWER.",
+                spotlightElementId: "wide-vision",
+                spotlightCaption: "Breathing widens your vision",
+                spotlightCaptionYoung: "Breathe — see EVERYTHING!",
                 diagram: TacticalDiagramState(
                     players: [
                         TacticalPlayer(id: "self", x: 50, y: 50, type: .self_, label: "You", highlight: true),
@@ -1276,6 +1468,10 @@ enum AnimatedTacticalLessonRegistry {
             ),
             TacticalStep(
                 narration: "It's not just for set pieces. In open play, whenever the ball goes out or there's a break, take one deep breath. Before a goal kick — breathe. Between sprints — breathe.",
+                narrationYoung: "It's not just for free kicks. Any time the ball goes out or there's a break — take one deep breath. Before a goal kick, between sprints. Breathe often!",
+                spotlightElementId: "recovery",
+                spotlightCaption: "Every break — one breath",
+                spotlightCaptionYoung: "Every break — breathe!",
                 diagram: TacticalDiagramState(
                     players: [
                         TacticalPlayer(id: "self", x: 55, y: 55, type: .self_, label: "You", highlight: true),
@@ -1294,6 +1490,10 @@ enum AnimatedTacticalLessonRegistry {
             ),
             TacticalStep(
                 narration: "Back to the free kick. You've taken three deep breaths. Your heart is steady. You can see the gap between the wall and the post. Calm mind, calm body, clinical execution.",
+                narrationYoung: "Back to the free kick. 3 deep breaths. Heart steady. You can see the gap between the wall and the post. Calm mind, calm body — GOAL!",
+                spotlightElementId: "target",
+                spotlightCaption: "Calm mind — see the gap — strike",
+                spotlightCaptionYoung: "Calm — aim — SCORE!",
                 diagram: TacticalDiagramState(
                     players: [
                         TacticalPlayer(id: "self", x: 50, y: 40, type: .self_, label: "You", highlight: true),

@@ -58,6 +58,7 @@ struct ActiveDrillView: View {
                             .background(Color.dsSurfaceContainer)
                             .clipShape(Circle())
                     }
+                    .accessibilityLabel(speechRecognizer.isListening ? "Turn voice commands off" : "Turn voice commands on")
 
                     Button {
                         dismiss()
@@ -68,6 +69,7 @@ struct ActiveDrillView: View {
                             .background(Color.dsSurfaceContainer)
                             .clipShape(Circle())
                     }
+                    .accessibilityLabel("Exit training session")
                 }
             }
         }
@@ -310,6 +312,8 @@ struct ActiveDrillView: View {
                         .foregroundStyle(Color.dsOnSurfaceVariant)
                 }
             }
+            .accessibilityLabel(viewModel.isTimerRunning ? "Pause drill timer" : "Start drill timer")
+            .accessibilityHint("Double tap to toggle")
 
             // +1 REP (center, larger)
             Button {
@@ -345,6 +349,8 @@ struct ActiveDrillView: View {
                         .foregroundStyle(Color.dsOnSurface)
                 }
             }
+            .accessibilityLabel("Add one rep")
+            .accessibilityHint("Current count: \(viewModel.repCount) reps")
 
             // Done
             Button {
@@ -365,6 +371,8 @@ struct ActiveDrillView: View {
                         .foregroundStyle(Color.dsOnSurfaceVariant)
                 }
             }
+            .accessibilityLabel("Finish drill")
+            .accessibilityHint("Complete this drill and move to the next one")
         }
     }
 

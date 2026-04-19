@@ -100,6 +100,7 @@ struct PaywallView: View {
                     .background(Color.dsSurfaceContainerHigh)
                     .clipShape(Circle())
             }
+            .accessibilityLabel("Close paywall")
         }
         .padding(.top, 8)
     }
@@ -210,6 +211,10 @@ struct PaywallView: View {
             .clipShape(RoundedRectangle(cornerRadius: CornerRadius.md))
         }
         .buttonStyle(.plain)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("\(product.tier.displayName), \(product.displayPrice)\(isFeatured ? ", best value" : "")")
+        .accessibilityAddTraits(selected ? [.isButton, .isSelected] : .isButton)
+        .accessibilityHint(selected ? "Currently selected" : "Double tap to select this plan")
     }
 
     private var ctaButton: some View {

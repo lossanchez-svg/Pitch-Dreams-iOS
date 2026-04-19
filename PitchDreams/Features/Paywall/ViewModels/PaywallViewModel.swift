@@ -68,29 +68,38 @@ final class PaywallViewModel: ObservableObject {
         // window. Track-D open question #2 answers "N" — until then we expose
         // them unconditionally so you can validate the purchase flow; wire
         // this to a `foundersAvailable` check once the backend reports it.
-        let showFounders = !entitlementStore.foundersCohort || isFoundersAvailable
+        let showFounders = !entitlementStore.foundersCohort || Self.isFoundersAvailable
         showFoundersBadge = showFounders
 
-        let visible = showFounders ? products : products.filter { $0.tier != .founders }
-
-        monthlyOptions = visible.filter { $0.period == .monthly }
-        yearlyOptions = visible.filter { $0.period == .yearly }
-
-        // Default selection: yearly premium if available (best value positioning).
+        let result = Self.partitioned(products: products, showFounders: showFounders)
+        monthlyOptions = result.monthly
+        yearlyOptions = result.yearly
         if selectedProduct == nil {
-            selectedProduct = yearlyOptions.first { $0.tier == .premiumYearly }
-                ?? yearlyOptions.first
-                ?? monthlyOptions.first
+            selectedProduct = result.defaultSelection
         }
+    }
+
+    /// Pure partitioning logic — split out as a static for unit testing.
+    /// Given a product catalog and a founders visibility decision, returns
+    /// the monthly / yearly groupings plus the preselected product (yearly
+    /// premium if available, else any yearly, else any monthly, else nil).
+    static func partitioned(
+        products: [SubscriptionProduct],
+        showFounders: Bool
+    ) -> (monthly: [SubscriptionProduct], yearly: [SubscriptionProduct], defaultSelection: SubscriptionProduct?) {
+        let visible = showFounders ? products : products.filter { $0.tier != .founders }
+        let monthly = visible.filter { $0.period == .monthly }
+        let yearly = visible.filter { $0.period == .yearly }
+        let defaultSelection = yearly.first { $0.tier == .premiumYearly }
+            ?? yearly.first
+            ?? monthly.first
+        return (monthly: monthly, yearly: yearly, defaultSelection: defaultSelection)
     }
 
     /// Placeholder until the backend exposes the founders-remaining count.
     /// When wired, this becomes a server check ("has the founders bucket
     /// been exhausted?") to prevent giving founders pricing past the cap.
-    private var isFoundersAvailable: Bool {
-        // TODO: replace with server-reported remaining founders slots
-        true
-    }
+    static let isFoundersAvailable: Bool = true
 }
 
 /// Where the paywall was surfaced from. Used to pick headline copy and

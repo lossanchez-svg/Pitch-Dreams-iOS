@@ -125,21 +125,21 @@ struct ChildDetailView: View {
                 }
             }
 
-            // Advanced Analytics (premium) — free-tier parents see a
-            // locked preview via `.gated(by:)`, which presents the paywall
-            // on tap.
-            Section("Advanced Analytics") {
+            // Premium parent surfaces. Free-tier parents see a locked
+            // preview via `.gated(by:)`, which presents the paywall on tap.
+            Section("Premium") {
                 NavigationLink {
                     AdvancedAnalyticsView(childId: child.id, childName: child.nickname)
                         .gated(by: .advancedAnalytics, context: .advancedAnalytics)
                 } label: {
-                    HStack(spacing: 8) {
-                        Label("Trends & Analytics", systemImage: "chart.line.uptrend.xyaxis")
-                        Spacer()
-                        Image(systemName: "sparkles")
-                            .font(.system(size: 12))
-                            .foregroundStyle(Color.dsAccentOrange)
-                    }
+                    premiumRow(label: "Trends & Analytics", systemImage: "chart.line.uptrend.xyaxis")
+                }
+
+                NavigationLink {
+                    DevelopmentProfileExportView(child: child)
+                        .gated(by: .developmentProfilePDF, context: .developmentReport)
+                } label: {
+                    premiumRow(label: "Development Profile PDF", systemImage: "doc.richtext")
                 }
             }
 
@@ -214,6 +214,18 @@ struct ChildDetailView: View {
                 .foregroundStyle(Color.dsSecondary)
                 .frame(width: 60, height: 60)
                 .background(Color.dsSecondary.opacity(0.12))
+        }
+    }
+
+    // MARK: - Premium row helper
+
+    private func premiumRow(label: String, systemImage: String) -> some View {
+        HStack(spacing: 8) {
+            Label(label, systemImage: systemImage)
+            Spacer()
+            Image(systemName: "sparkles")
+                .font(.system(size: 12))
+                .foregroundStyle(Color.dsAccentOrange)
         }
     }
 

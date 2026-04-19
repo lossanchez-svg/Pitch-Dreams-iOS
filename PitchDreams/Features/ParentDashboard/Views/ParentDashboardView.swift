@@ -15,6 +15,10 @@ struct ParentDashboardView: View {
     @AppStorage("parentDashboardPaywallSeen") private var parentDashboardPaywallSeen = false
     @State private var showFirstVisitPaywall = false
 
+    /// Family-tier paywall, triggered when a parent with ≥1 child tries
+    /// to add another without the Family entitlement.
+    @State private var showFamilyPaywall = false
+
     private let apiClient: APIClientProtocol = APIClient()
 
     var body: some View {
@@ -88,7 +92,7 @@ struct ParentDashboardView: View {
                     // Actions
                     HStack(spacing: 16) {
                         Button {
-                            showAddChild = true
+                            handleAddChildTap()
                         } label: {
                             actionButton(
                                 icon: "plus.circle.fill",
@@ -114,6 +118,12 @@ struct ParentDashboardView: View {
                     }
                     .padding(.horizontal, 24)
                     .padding(.top, 32)
+
+                    if atFamilyCap {
+                        familyCapIndicator
+                            .padding(.horizontal, 24)
+                            .padding(.top, 12)
+                    }
 
                     Spacer(minLength: 80)
                 }
@@ -146,6 +156,13 @@ struct ParentDashboardView: View {
                 context: .parentDashboard
             )
         }
+        .sheet(isPresented: $showFamilyPaywall) {
+            PaywallView(
+                manager: subscriptionManager,
+                entitlementStore: entitlementStore,
+                context: .addSecondChild
+            )
+        }
         .refreshable {
             await loadChildren()
         }
@@ -153,6 +170,64 @@ struct ParentDashboardView: View {
             await loadChildren()
             maybePresentFirstVisitPaywall()
         }
+    }
+
+    // MARK: - Family cap gating
+
+    /// Whether the parent has hit the "1 child without Family tier" cap.
+    /// Free + Premium + Founders tiers all get exactly one child slot;
+    /// Family + Club unlock multi-child. Legacy users who already have
+    /// 2+ children from before the paywall existed keep those kids — we
+    /// never remove children, we only gate future additions.
+    private var atFamilyCap: Bool {
+        !children.isEmpty && !entitlementStore.has(.familyMultiChild)
+    }
+
+    /// Route the Add Child button based on entitlement + current count.
+    /// First child is always free so new users aren't paywalled during
+    /// setup; subsequent children require the Family tier.
+    private func handleAddChildTap() {
+        if children.isEmpty || entitlementStore.has(.familyMultiChild) {
+            showAddChild = true
+        } else {
+            showFamilyPaywall = true
+        }
+    }
+
+    /// Small indicator shown below the action row when the parent is at
+    /// the cap. Tapping it opens the paywall explicitly so parents who
+    /// understand the cap but haven't clicked "Add Child" can still
+    /// discover the upgrade path.
+    private var familyCapIndicator: some View {
+        Button {
+            showFamilyPaywall = true
+        } label: {
+            HStack(spacing: 10) {
+                Image(systemName: "person.2.badge.plus")
+                    .font(.system(size: 14))
+                    .foregroundStyle(Color.dsAccentOrange)
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("Add more kids with the Family plan")
+                        .font(.system(size: 13, weight: .heavy, design: .rounded))
+                        .foregroundStyle(Color.dsOnSurface)
+                    Text("One dashboard for up to 4 kids • \(PricingReference.familyMonthly)")
+                        .font(.system(size: 11))
+                        .foregroundStyle(Color.dsOnSurfaceVariant)
+                }
+                Spacer()
+                Image(systemName: "chevron.right")
+                    .font(.system(size: 12, weight: .bold))
+                    .foregroundStyle(Color.dsOnSurfaceVariant)
+            }
+            .padding(14)
+            .background(Color.dsSurfaceContainerLow)
+            .overlay(
+                RoundedRectangle(cornerRadius: CornerRadius.md)
+                    .stroke(Color.dsAccentOrange.opacity(0.25), lineWidth: 1)
+            )
+            .clipShape(RoundedRectangle(cornerRadius: CornerRadius.md))
+        }
+        .buttonStyle(.plain)
     }
 
     /// Show the parent-dashboard paywall exactly once per account.

@@ -7,7 +7,13 @@ import SwiftUI
 struct PaywallView: View {
     @StateObject private var viewModel: PaywallViewModel
     @EnvironmentObject private var networkMonitor: NetworkMonitor
+    @EnvironmentObject private var entitlementStore: EntitlementStore
     @Environment(\.dismiss) private var dismiss
+
+    /// When a purchase succeeds we swap the paywall content for a
+    /// celebration screen instead of silently dismissing. Dismiss happens
+    /// on the user's explicit tap in WelcomeToPremiumView.
+    @State private var welcomeTier: SubscriptionTier?
 
     init(
         manager: SubscriptionManager,
@@ -34,20 +40,25 @@ struct PaywallView: View {
         ZStack {
             Color.dsBackground.ignoresSafeArea()
 
-            ScrollView {
-                VStack(spacing: 24) {
-                    closeBar
-                    hero
-                    if isOfflineAndEmpty {
-                        offlineBanner
+            if let tier = welcomeTier {
+                WelcomeToPremiumView(tier: tier) { dismiss() }
+                    .transition(.opacity.combined(with: .move(edge: .bottom)))
+            } else {
+                ScrollView {
+                    VStack(spacing: 24) {
+                        closeBar
+                        hero
+                        if isOfflineAndEmpty {
+                            offlineBanner
+                        }
+                        benefits
+                        planPicker
+                        ctaButton
+                        footer
                     }
-                    benefits
-                    planPicker
-                    ctaButton
-                    footer
+                    .padding(.horizontal, 20)
+                    .padding(.bottom, 40)
                 }
-                .padding(.horizontal, 20)
-                .padding(.bottom, 40)
             }
         }
         .task { await viewModel.onAppear() }
@@ -100,6 +111,7 @@ struct PaywallView: View {
                     .background(Color.dsSurfaceContainerHigh)
                     .clipShape(Circle())
             }
+            .accessibilityLabel("Close paywall")
         }
         .padding(.top, 8)
     }
@@ -210,13 +222,26 @@ struct PaywallView: View {
             .clipShape(RoundedRectangle(cornerRadius: CornerRadius.md))
         }
         .buttonStyle(.plain)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("\(product.tier.displayName), \(product.displayPrice)\(isFeatured ? ", best value" : "")")
+        .accessibilityAddTraits(selected ? [.isButton, .isSelected] : .isButton)
+        .accessibilityHint(selected ? "Currently selected" : "Double tap to select this plan")
     }
 
     private var ctaButton: some View {
         Button {
             Task {
                 let ok = await viewModel.purchaseSelected()
-                if ok { dismiss() }
+                if ok {
+                    // Present the welcome screen — the user will dismiss
+                    // from there. EntitlementStore is the source of truth
+                    // for which tier they actually landed on (in case
+                    // StoreKit picked a different-than-selected product,
+                    // e.g. founders cohort got auto-applied).
+                    withAnimation(.spring(response: 0.5, dampingFraction: 0.8)) {
+                        welcomeTier = entitlementStore.activeTier
+                    }
+                }
             }
         } label: {
             HStack(spacing: 8) {

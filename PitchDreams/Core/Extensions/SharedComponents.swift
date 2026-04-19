@@ -44,23 +44,60 @@ struct SectionHeaderView: View {
 
 // MARK: - Empty State
 
-/// Consistent empty state for screens with no data yet.
+/// Consistent empty state for screens with no data yet. Supports two modes:
+/// - SF Symbol fallback (default): renders an icon in a circle
+/// - Avatar illustration (preferred): when `avatarId` is provided, renders
+///   the kid's own avatar so empty states feel personal instead of sterile.
+///   This is Track B6's "avatar-based empty state" pattern.
 struct EmptyStateView: View {
     let icon: String
     let title: String
     let subtitle: String
+    var avatarId: String?
+    var totalXP: Int = 0
+    var avatarTagline: String?
+
+    init(icon: String, title: String, subtitle: String) {
+        self.icon = icon
+        self.title = title
+        self.subtitle = subtitle
+    }
+
+    /// Avatar-based empty state. Falls back to the SF Symbol icon if the
+    /// avatar asset can't be resolved, so this variant is always safe.
+    init(
+        avatarId: String?,
+        totalXP: Int = 0,
+        icon: String,
+        title: String,
+        subtitle: String,
+        avatarTagline: String? = nil
+    ) {
+        self.icon = icon
+        self.title = title
+        self.subtitle = subtitle
+        self.avatarId = avatarId
+        self.totalXP = totalXP
+        self.avatarTagline = avatarTagline
+    }
+
+    private var avatarAssetName: String? {
+        guard let avatarId else { return nil }
+        let name = Avatar.assetName(for: avatarId, totalXP: totalXP)
+        return UIImage(named: name) != nil ? name : nil
+    }
 
     var body: some View {
         VStack(spacing: 16) {
             Spacer(minLength: 40)
 
-            ZStack {
-                Circle()
-                    .fill(Color.dsSurfaceContainer)
-                    .frame(width: 100, height: 100)
-                Image(systemName: icon)
-                    .font(.system(size: 40))
-                    .foregroundStyle(Color.dsOnSurfaceVariant)
+            illustration
+
+            if let avatarTagline {
+                Text(avatarTagline)
+                    .font(.system(size: 11, weight: .heavy, design: .rounded))
+                    .tracking(2)
+                    .foregroundStyle(Color.dsAccentOrange)
             }
 
             Text(title)
@@ -71,8 +108,41 @@ struct EmptyStateView: View {
                 .font(.system(size: 14))
                 .foregroundStyle(Color.dsOnSurfaceVariant)
                 .multilineTextAlignment(.center)
+                .padding(.horizontal, 20)
 
             Spacer(minLength: 40)
+        }
+    }
+
+    @ViewBuilder
+    private var illustration: some View {
+        if let assetName = avatarAssetName {
+            // Avatar illustration — kid sees their OWN avatar empathizing
+            // with the empty state. Subtle cyan glow reads as "ready to go".
+            ZStack {
+                Circle()
+                    .fill(Color.dsSecondary.opacity(0.15))
+                    .frame(width: 130, height: 130)
+                    .blur(radius: 12)
+
+                Image(assetName)
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: 110, height: 110)
+                    .clipShape(Circle())
+                    .overlay(
+                        Circle().stroke(Color.dsSecondary.opacity(0.4), lineWidth: 2)
+                    )
+            }
+        } else {
+            ZStack {
+                Circle()
+                    .fill(Color.dsSurfaceContainer)
+                    .frame(width: 100, height: 100)
+                Image(systemName: icon)
+                    .font(.system(size: 40))
+                    .foregroundStyle(Color.dsOnSurfaceVariant)
+            }
         }
     }
 }

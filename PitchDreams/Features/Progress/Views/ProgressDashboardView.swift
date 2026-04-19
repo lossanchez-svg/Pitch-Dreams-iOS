@@ -298,7 +298,14 @@ struct ProgressDashboardView: View {
     // MARK: - Empty State
 
     private var emptyState: some View {
-        EmptyStateView(icon: "chart.line.uptrend.xyaxis", title: "No Progress Yet", subtitle: "Complete training sessions to start tracking your progress and see your stats here.")
+        EmptyStateView(
+            avatarId: viewModel.profile?.avatarId,
+            totalXP: 0,
+            icon: "chart.line.uptrend.xyaxis",
+            title: "Your story starts today.",
+            subtitle: "Complete your first training session and we'll start tracking progress here.",
+            avatarTagline: "READY WHEN YOU ARE"
+        )
     }
 
     // MARK: - Helpers

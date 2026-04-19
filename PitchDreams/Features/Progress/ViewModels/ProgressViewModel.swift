@@ -5,6 +5,7 @@ final class ProgressViewModel: ObservableObject {
     @Published var streakData: StreakData?
     @Published var sessions: [SessionLog] = []
     @Published var trends: [WeeklyTrend]?
+    @Published var profile: ChildProfileDetail?
     @Published var isLoading = false
     @Published var errorMessage: String?
 
@@ -124,6 +125,12 @@ final class ProgressViewModel: ObservableObject {
         } catch {
             trends = nil
         }
+
+        // Profile is best-effort and fetched last so tests that mock the
+        // other three endpoints in order aren't disturbed. Empty state
+        // uses this to render the avatar-based illustration when the
+        // kid hasn't trained yet.
+        profile = try? await apiClient.request(APIRouter.getProfile(childId: childId))
 
         isLoading = false
     }

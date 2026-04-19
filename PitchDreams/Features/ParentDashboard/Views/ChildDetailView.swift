@@ -201,8 +201,16 @@ struct ChildDetailView: View {
         .navigationTitle(child.nickname)
         .navigationBarTitleDisplayMode(.inline)
         .overlay {
+            // C11: swap opaque spinner for a skeleton list that matches the
+            // final layout so the perceived load feels shorter and the
+            // subsequent transition doesn't jump.
             if viewModel.isLoading && viewModel.sessions.isEmpty {
-                ProgressView()
+                VStack(spacing: 12) {
+                    ForEach(0..<3, id: \.self) { _ in
+                        SkeletonCard()
+                    }
+                }
+                .padding()
             }
         }
         .refreshable {

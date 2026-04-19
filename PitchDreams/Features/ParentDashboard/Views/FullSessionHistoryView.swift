@@ -36,7 +36,11 @@ struct FullSessionHistoryView: View {
                 ForEach(viewModel.groupedByMonth, id: \.monthStart) { group in
                     Section(Self.monthFormatter.string(from: group.monthStart)) {
                         ForEach(group.sessions) { session in
-                            sessionRow(session)
+                            NavigationLink {
+                                SessionDetailView(session: session)
+                            } label: {
+                                sessionRow(session)
+                            }
                         }
                     }
                 }

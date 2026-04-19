@@ -13,6 +13,12 @@ struct LessonPlayerView: View {
     @State private var childProfile: ChildProfileDetail?
     @State private var childTotalXP: Int = 0
 
+    /// F7 — whether we're currently showing the end-of-lesson quiz.
+    /// Set to true on .onChange(isCompleted) if the lesson has a quiz,
+    /// flipped back to false when the quiz completes or the parent
+    /// requests a step replay.
+    @State private var showingQuiz: Bool = false
+
     private let trackColor: Color
     private let injectedVoice: CoachVoiceProtocol?
     private let childId: String?
@@ -57,7 +63,30 @@ struct LessonPlayerView: View {
             .padding(.top, 4)
 
             if viewModel.isCompleted {
-                completionView
+                if showingQuiz, let quiz = viewModel.lesson.finalQuiz {
+                    LessonQuizView(
+                        quiz: quiz,
+                        childAge: initialChildAge,
+                        onReplayStep: { step in
+                            viewModel.goToStep(step)
+                            showingQuiz = false
+                        },
+                        onComplete: {
+                            showingQuiz = false
+                            // Quiz done → fall through to completionView.
+                        },
+                        onCorrectAnswer: {
+                            // +15 XP per correct answer lands on the
+                            // same XPStore the rest of the app uses.
+                            if let childId {
+                                Task { _ = await XPStore().addXP(15, childId: childId) }
+                            }
+                        }
+                    )
+                    .transition(.opacity)
+                } else {
+                    completionView
+                }
             } else {
                 stepContent
             }
@@ -84,6 +113,13 @@ struct LessonPlayerView: View {
         .onChange(of: viewModel.isCompleted) { _ in
             if viewModel.isCompleted {
                 coachVM.setMood(.celebrating, duration: 5)
+                // F7 — present the quiz if this lesson has one. Gate on
+                // finalQuiz being non-nil keeps lessons without authored
+                // quizzes going straight to the completion screen as
+                // before.
+                if viewModel.lesson.finalQuiz != nil {
+                    showingQuiz = true
+                }
             }
         }
         .gesture(

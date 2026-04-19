@@ -116,11 +116,64 @@ extension AnimatedTacticalLesson {
 
 /// Registry of lesson-to-quiz mappings. Kept separate from the lesson
 /// registry so quizzes can ship on a different cadence than lessons.
-/// Empty at launch — questions get authored as F7 content lands.
+/// First authored quiz: "3-Point Scan" — establishes the pattern; other
+/// lesson quizzes land one-at-a-time afterwards.
 enum LessonQuizRegistry {
-    private static let quizzes: [String: LessonQuiz] = [:]
+    private static let quizzes: [String: LessonQuiz] = [
+        "3point-scan": threePointScanQuiz
+    ]
 
     static func quiz(for lessonId: String) -> LessonQuiz? {
         quizzes[lessonId]
     }
+
+    // MARK: - 3-Point Scan (first authored)
+
+    private static let threePointScanQuiz = LessonQuiz(questions: [
+        QuizQuestion(
+            id: "scan-q1",
+            question: "How many times should you scan before receiving the ball?",
+            questionYoung: "How many times should you look around before the ball gets to you?",
+            type: .multipleChoice(
+                options: [
+                    QuizOption(id: "a", label: "Once", labelYoung: "1 time", iconSymbolName: "1.circle"),
+                    QuizOption(id: "b", label: "Twice", labelYoung: "2 times", iconSymbolName: "2.circle"),
+                    QuizOption(id: "c", label: "Three times or more", labelYoung: "3 times or more", iconSymbolName: "3.circle"),
+                    QuizOption(id: "d", label: "Never", labelYoung: "0 times", iconSymbolName: "xmark.circle"),
+                ],
+                correctOptionId: "c"
+            ),
+            suggestedReplayStepIndex: 0
+        ),
+        QuizQuestion(
+            id: "scan-q2",
+            question: "What's the danger signal when a center-back steps forward to press?",
+            questionYoung: "What happens when a defender runs out to steal the ball from you?",
+            type: .multipleChoice(
+                options: [
+                    QuizOption(id: "a", label: "They close you down — pass backward", labelYoung: "They come close — pass back", iconSymbolName: "arrow.uturn.backward.circle"),
+                    QuizOption(id: "b", label: "They leave a gap behind them you can exploit", labelYoung: "They leave a hole behind them", iconSymbolName: "arrow.up.forward.circle"),
+                    QuizOption(id: "c", label: "Nothing changes — hold your position", labelYoung: "Nothing happens — stay where you are", iconSymbolName: "equal.circle"),
+                    QuizOption(id: "d", label: "You lose the ball automatically", labelYoung: "You lose the ball every time", iconSymbolName: "exclamationmark.circle"),
+                ],
+                correctOptionId: "b"
+            ),
+            suggestedReplayStepIndex: 2
+        ),
+        QuizQuestion(
+            id: "scan-q3",
+            question: "When should you start scanning: after the ball arrives or before?",
+            questionYoung: "When should you look around: after you have the ball or before?",
+            type: .multipleChoice(
+                options: [
+                    QuizOption(id: "a", label: "After you receive — you need the ball first", labelYoung: "After you have the ball", iconSymbolName: "arrow.forward.circle"),
+                    QuizOption(id: "b", label: "Only when the coach tells you to", labelYoung: "When someone tells me to", iconSymbolName: "person.wave.2"),
+                    QuizOption(id: "c", label: "Before — so your first touch has a plan", labelYoung: "Before — so you already know what to do", iconSymbolName: "arrow.backward.circle"),
+                    QuizOption(id: "d", label: "Doesn't matter — just react", labelYoung: "Doesn't matter — just play", iconSymbolName: "questionmark.circle"),
+                ],
+                correctOptionId: "c"
+            ),
+            suggestedReplayStepIndex: 0
+        )
+    ])
 }

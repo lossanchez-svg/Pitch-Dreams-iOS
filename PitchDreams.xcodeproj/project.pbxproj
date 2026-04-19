@@ -126,6 +126,7 @@
 		7CB893405CB71A65EF6318C9 /* WeeklyRecapViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1941FDC01AE2FDA494E7AD86 /* WeeklyRecapViewModelTests.swift */; };
 		7D1CCC97CCA61983C2CABAE8 /* OnboardingViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C5474F82F2A43FDE0650934 /* OnboardingViewModelTests.swift */; };
 		7D93EC78198D1F3C46EEFCB0 /* LearnViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEF881BD96AC8BADDA0EC795 /* LearnViewModelTests.swift */; };
+		7DD095269ECF9F489ECFC801 /* WelcomeToPremiumView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5227A0BA0650B93A01E69B45 /* WelcomeToPremiumView.swift */; };
 		7F4F7AD7E908D4BB4DEBAB2D /* StreakMilestoneModal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95BB1FA4C299F4CA31E895AF /* StreakMilestoneModal.swift */; };
 		80231F8FD6F5103D8304A74D /* SkillsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 121837DE0296D70A172A4AA2 /* SkillsViewModel.swift */; };
 		8334CD8061C657EC67961CF8 /* KeychainService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B97711913DDDFF1FB84A062C /* KeychainService.swift */; };
@@ -171,6 +172,7 @@
 		A17438E466124E1044E7C709 /* MysteryBoxRevealView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24358153EF02A2FA5B04DF4F /* MysteryBoxRevealView.swift */; };
 		A22B5D6F2C12CA4253A85DF2 /* SignatureMoveDrillPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3226EC0FEA13454D6F6840F7 /* SignatureMoveDrillPlayerView.swift */; };
 		A63D5BF6F67344B90A4ACC0C /* FullSessionHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13E55ACE5FD130DB512F1C01 /* FullSessionHistoryView.swift */; };
+		A7173A912813EF518CE72694 /* LessonQuizTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A5A2FF5FAE81F83F6F71FC3 /* LessonQuizTests.swift */; };
 		A734A88719E42A1E5F20AF7B /* NewActivityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9DC36F93995532A66BDF7FA /* NewActivityView.swift */; };
 		A735B68328ED46A377A3BAA7 /* AnimatedTacticalTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3327BA7EE2CB012553043FC9 /* AnimatedTacticalTypes.swift */; };
 		A77167E58911ACDC476F9BD5 /* MockCoachVoice.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42894954332436074FDB959 /* MockCoachVoice.swift */; };
@@ -360,6 +362,7 @@
 		4188D74D88F055640DDDE514 /* PitchStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PitchStore.swift; sourceTree = "<group>"; };
 		4664C97CD0EDCE2E967FC017 /* LessonPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LessonPlayerView.swift; sourceTree = "<group>"; };
 		481915AE6ED8220FAD63C274 /* MockKeychainService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockKeychainService.swift; sourceTree = "<group>"; };
+		4A5A2FF5FAE81F83F6F71FC3 /* LessonQuizTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LessonQuizTests.swift; sourceTree = "<group>"; };
 		4B4898AC3F86F2C2D77C8565 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		4BC100653CB247610196D5D7 /* Session.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Session.swift; sourceTree = "<group>"; };
 		4BE8FF1164FABA36C38B9E90 /* ConsistencyRingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConsistencyRingView.swift; sourceTree = "<group>"; };
@@ -370,6 +373,7 @@
 		4EF11628DFC4C280AFE64EF8 /* XPStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XPStore.swift; sourceTree = "<group>"; };
 		4FB34840A263C9E27A101C4A /* TrainingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrainingViewModel.swift; sourceTree = "<group>"; };
 		508FF29448A9769CF238A8D7 /* ParticleFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParticleFieldView.swift; sourceTree = "<group>"; };
+		5227A0BA0650B93A01E69B45 /* WelcomeToPremiumView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeToPremiumView.swift; sourceTree = "<group>"; };
 		528D338C57FDF31E1DF0206D /* AuthenticatedUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticatedUser.swift; sourceTree = "<group>"; };
 		530A972AEC110004D406073A /* ParentControlsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParentControlsView.swift; sourceTree = "<group>"; };
 		535BE0BBBF1BA9E4E09709BC /* PlayerCardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerCardViewModel.swift; sourceTree = "<group>"; };
@@ -752,6 +756,7 @@
 			children = (
 				60D0F27759FE657465C28C8F /* AnimatedTacticalLessonRegistryTests.swift */,
 				E8B4F2D45C9020B802295632 /* AnimatedTacticalTypesTests.swift */,
+				4A5A2FF5FAE81F83F6F71FC3 /* LessonQuizTests.swift */,
 				81ADFFE04859A29B644F3318 /* SkillAnimationTypeTests.swift */,
 			);
 			path = Models;
@@ -1428,6 +1433,7 @@
 			children = (
 				8F20823C0C8B144EBEE5025B /* PaywallView.swift */,
 				A4B9D9016055DCF15EC068C9 /* PremiumTeaserCard.swift */,
+				5227A0BA0650B93A01E69B45 /* WelcomeToPremiumView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -1626,6 +1632,7 @@
 				BEB5A912C7859F979FA75E57 /* InteractivePitchViewModelTests.swift in Sources */,
 				7D93EC78198D1F3C46EEFCB0 /* LearnViewModelTests.swift in Sources */,
 				159A108E1696B69205D6BE9E /* LessonPlayerViewModelTests.swift in Sources */,
+				A7173A912813EF518CE72694 /* LessonQuizTests.swift in Sources */,
 				9F38B2718E4A73E05C874257 /* LessonRegistryTests.swift in Sources */,
 				F4DBE1203B74BFD58D915EB4 /* MissionRegistryTests.swift in Sources */,
 				D2FA132F0128AD5FAC587A72 /* MissionsViewModelTests.swift in Sources */,
@@ -1863,6 +1870,7 @@
 				D9010EC098856FB8AABAAF9F /* WeeklyRecapCardView.swift in Sources */,
 				65D592BBC6CB0F3DB142D3A6 /* WeeklyRecapSheetView.swift in Sources */,
 				E2EF8A8F2BD0FB275026307F /* WeeklyRecapViewModel.swift in Sources */,
+				7DD095269ECF9F489ECFC801 /* WelcomeToPremiumView.swift in Sources */,
 				2A07C88C39900800EEB0E05D /* XPBarView.swift in Sources */,
 				407CEB6F3EA4F62292DFE2EA /* XPEarnedToast.swift in Sources */,
 				14A6BACDDEBDF0425E0C4526 /* XPLevel.swift in Sources */,

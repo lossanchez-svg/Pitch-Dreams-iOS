@@ -6,6 +6,7 @@ import SwiftUI
 /// copy, hero art, and benefit icons without touching the plumbing.
 struct PaywallView: View {
     @StateObject private var viewModel: PaywallViewModel
+    @EnvironmentObject private var networkMonitor: NetworkMonitor
     @Environment(\.dismiss) private var dismiss
 
     init(
@@ -20,6 +21,15 @@ struct PaywallView: View {
         ))
     }
 
+    /// When true, we couldn't fetch the product catalog because the device is
+    /// offline — show a banner + disable the CTA. Price panels still render
+    /// (as "—") so the layout doesn't collapse.
+    private var isOfflineAndEmpty: Bool {
+        !networkMonitor.status.isOnline &&
+        viewModel.monthlyOptions.isEmpty &&
+        viewModel.yearlyOptions.isEmpty
+    }
+
     var body: some View {
         ZStack {
             Color.dsBackground.ignoresSafeArea()
@@ -28,6 +38,9 @@ struct PaywallView: View {
                 VStack(spacing: 24) {
                     closeBar
                     hero
+                    if isOfflineAndEmpty {
+                        offlineBanner
+                    }
                     benefits
                     planPicker
                     ctaButton
@@ -38,9 +51,41 @@ struct PaywallView: View {
             }
         }
         .task { await viewModel.onAppear() }
+        .onChange(of: networkMonitor.reconnectedAt) { newValue in
+            // Retry product load when connectivity returns so the paywall
+            // self-heals without the parent needing to reopen.
+            guard newValue != nil else { return }
+            Task { await viewModel.onAppear() }
+        }
     }
 
     // MARK: - Sections
+
+    // MARK: - Offline banner
+
+    private var offlineBanner: some View {
+        HStack(spacing: 10) {
+            Image(systemName: "wifi.slash")
+                .font(.system(size: 14))
+                .foregroundStyle(Color.dsAccentOrange)
+            VStack(alignment: .leading, spacing: 2) {
+                Text("You're offline")
+                    .font(.system(size: 13, weight: .heavy, design: .rounded))
+                    .foregroundStyle(Color.dsOnSurface)
+                Text("We'll load plans as soon as you're back online.")
+                    .font(.system(size: 11))
+                    .foregroundStyle(Color.dsOnSurfaceVariant)
+            }
+            Spacer(minLength: 0)
+        }
+        .padding(12)
+        .background(Color.dsSurfaceContainerLow)
+        .overlay(
+            RoundedRectangle(cornerRadius: CornerRadius.md)
+                .stroke(Color.dsAccentOrange.opacity(0.3), lineWidth: 1)
+        )
+        .clipShape(RoundedRectangle(cornerRadius: CornerRadius.md))
+    }
 
     private var closeBar: some View {
         HStack {

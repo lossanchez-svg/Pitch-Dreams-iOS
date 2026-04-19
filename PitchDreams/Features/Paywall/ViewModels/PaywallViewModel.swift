@@ -83,7 +83,10 @@ final class PaywallViewModel: ObservableObject {
     /// Given a product catalog and a founders visibility decision, returns
     /// the monthly / yearly groupings plus the preselected product (yearly
     /// premium if available, else any yearly, else any monthly, else nil).
-    static func partitioned(
+    ///
+    /// Marked `nonisolated` so tests (and anything else off the main actor)
+    /// can call it without an actor hop. Pure function — no shared state.
+    nonisolated static func partitioned(
         products: [SubscriptionProduct],
         showFounders: Bool
     ) -> (monthly: [SubscriptionProduct], yearly: [SubscriptionProduct], defaultSelection: SubscriptionProduct?) {
@@ -99,7 +102,7 @@ final class PaywallViewModel: ObservableObject {
     /// Placeholder until the backend exposes the founders-remaining count.
     /// When wired, this becomes a server check ("has the founders bucket
     /// been exhausted?") to prevent giving founders pricing past the cap.
-    static let isFoundersAvailable: Bool = true
+    nonisolated static let isFoundersAvailable: Bool = true
 }
 
 /// Where the paywall was surfaced from. Used to pick headline copy and

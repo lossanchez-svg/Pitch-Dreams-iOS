@@ -251,4 +251,57 @@ final class TechniqueAnimationTests: XCTestCase {
             XCTAssertFalse(k.voiceover?.isEmpty ?? true)
         }
     }
+
+    // MARK: - Regular drill animations
+
+    func testRegistryResolvesRegularDrillAnimations() {
+        XCTAssertNotNil(TechniqueAnimationRegistry.animation(for: "diagram_toe_taps"))
+        XCTAssertNotNil(TechniqueAnimationRegistry.animation(for: "diagram_sole_rolls"))
+        XCTAssertNotNil(TechniqueAnimationRegistry.animation(for: "diagram_wall_passes"))
+    }
+
+    func testAllAuthoredAnimationsAreHealthy() {
+        // Cross-cutting invariants every authored animation must satisfy:
+        // unique asset ids, non-empty keyframes, monotonic timings, captions
+        // and voiceovers on every keyframe, positive loop pause.
+        let anims = TechniqueAnimationRegistry.all
+        XCTAssertFalse(anims.isEmpty)
+
+        let assetIds = anims.map(\.assetId)
+        XCTAssertEqual(Set(assetIds).count, assetIds.count,
+                       "Asset ids must be unique across the registry")
+
+        for anim in anims {
+            XCTAssertFalse(anim.keyframes.isEmpty, "\(anim.assetId) has no keyframes")
+            XCTAssertGreaterThan(anim.duration, 0, "\(anim.assetId) has zero duration")
+            XCTAssertGreaterThanOrEqual(anim.loopPauseSeconds, 0, "\(anim.assetId) negative loop pause")
+
+            for i in 1..<anim.keyframes.count {
+                XCTAssertGreaterThan(
+                    anim.keyframes[i].time, anim.keyframes[i - 1].time,
+                    "\(anim.assetId) keyframe \(i) time must exceed predecessor"
+                )
+            }
+            for (i, k) in anim.keyframes.enumerated() {
+                XCTAssertNotNil(k.caption, "\(anim.assetId) keyframe \(i) missing caption")
+                XCTAssertNotNil(k.voiceover, "\(anim.assetId) keyframe \(i) missing voiceover")
+                XCTAssertFalse(k.caption?.isEmpty ?? true)
+                XCTAssertFalse(k.voiceover?.isEmpty ?? true)
+            }
+        }
+    }
+
+    func testEveryTaggedDrillResolvesToAnAnimation() {
+        // DrillDefinition.diagramAnimationAsset is the contract surface that
+        // lets ActiveDrillView render authored animations. A tag that doesn't
+        // resolve would mean a drill reference a missing registry entry.
+        for drill in DrillRegistry.all {
+            if let assetId = drill.diagramAnimationAsset {
+                XCTAssertNotNil(
+                    TechniqueAnimationRegistry.animation(for: assetId),
+                    "Drill \(drill.id) references missing animation asset \(assetId)"
+                )
+            }
+        }
+    }
 }

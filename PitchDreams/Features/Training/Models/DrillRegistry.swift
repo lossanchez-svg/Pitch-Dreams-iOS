@@ -14,6 +14,10 @@ struct DrillDefinition: Identifiable {
     /// `.advancedDrills` feature entitlement. Reserved for difficulty
     /// == "advanced" entries; beginner/intermediate stay free under Model 1.
     var requiresPremium: Bool = false
+    /// Asset id matching an entry in `TechniqueAnimationRegistry`.
+    /// When non-nil, `ActiveDrillView` renders the authored keyframe
+    /// animation above the timer ring.
+    var diagramAnimationAsset: String? = nil
 }
 
 enum DrillRegistry {
@@ -28,7 +32,8 @@ enum DrillRegistry {
             reps: 50,
             coachTip: "Keep your eyes up, not on the ball. Light touches only.",
             difficulty: "beginner",
-            spaceType: "small_indoor"
+            spaceType: "small_indoor",
+            diagramAnimationAsset: "diagram_toe_taps"
         ),
         DrillDefinition(
             id: "bm-sole-rolls",
@@ -39,7 +44,8 @@ enum DrillRegistry {
             reps: 30,
             coachTip: "Stay on the balls of your feet. Keep your body low and centered.",
             difficulty: "beginner",
-            spaceType: "small_indoor"
+            spaceType: "small_indoor",
+            diagramAnimationAsset: "diagram_sole_rolls"
         ),
         DrillDefinition(
             id: "bm-foundation",
@@ -63,7 +69,8 @@ enum DrillRegistry {
             reps: 40,
             coachTip: "Lock your ankle and follow through. Cushion the return with a soft touch.",
             difficulty: "beginner",
-            spaceType: "large_indoor"
+            spaceType: "large_indoor",
+            diagramAnimationAsset: "diagram_wall_passes"
         ),
         DrillDefinition(
             id: "pass-triangle",

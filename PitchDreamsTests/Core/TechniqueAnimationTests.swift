@@ -304,4 +304,21 @@ final class TechniqueAnimationTests: XCTestCase {
             }
         }
     }
+
+    func testEverySignatureMoveDrillDiagramResolves() {
+        // Sister invariant for MoveDrill.diagramAnimationAsset. Catches
+        // typos between the signature-move authoring files and the
+        // animation registry at test time.
+        for move in SignatureMoveRegistry.launchMoves {
+            for stage in move.stages {
+                for drill in stage.drills {
+                    guard let assetId = drill.diagramAnimationAsset else { continue }
+                    XCTAssertNotNil(
+                        TechniqueAnimationRegistry.animation(for: assetId),
+                        "\(move.id) drill \(drill.id) references missing animation asset \(assetId)"
+                    )
+                }
+            }
+        }
+    }
 }

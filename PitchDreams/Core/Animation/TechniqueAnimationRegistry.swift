@@ -11,7 +11,17 @@ enum TechniqueAnimationRegistry {
     }
 
     static let all: [TechniqueAnimation] = [
+        // Scissor — Stage 1 (groundwork)
+        .scissorBreakdown,
         .scissorSwingNoBall,
+        // Scissor — Stage 2 (technique)
+        .scissorStillBall,
+        .scissorWalking,
+        .scissorConeEscape,
+        // Scissor — Stage 3 (mastery)
+        .scissorDouble,
+        .scissorSpeedConeCorridor,
+        // Regular drills
         .toeTaps,
         .soleRolls,
         .wallPasses,
@@ -183,6 +193,332 @@ extension TechniqueAnimation {
                 caption: "Switch to the other foot.",
                 voiceover: "Switch feet.",
                 easeIn: .easeInOut
+            )
+        ],
+        loops: true,
+        loopPauseSeconds: 0.3,
+        riveAssetName: nil
+    )
+
+    // MARK: Scissor — Stage 1 (groundwork)
+
+    /// Scissor Breakdown — slow, analytical replay framing (as if pausing
+    /// pro footage). Same motion as scissorSwingNoBall but stretched out
+    /// with observation-style captions ("notice the lean", "see the
+    /// plant") to match the "Watch the Masters" drill type.
+    static let scissorBreakdown = TechniqueAnimation(
+        assetId: "diagram_scissor_breakdown",
+        viewAngle: .profile,
+        keyframes: [
+            TechniqueKeyframe(
+                time: 0.0,
+                ball: NormPoint(x: 0.50, y: 0.78),
+                leftFoot:  FootState(side: .left,  position: NormPoint(x: 0.42, y: 0.92), surface: .none, isActive: false),
+                rightFoot: FootState(side: .right, position: NormPoint(x: 0.58, y: 0.92), surface: .none, isActive: false),
+                avatarPose: .neutral,
+                caption: "Watch the whole body, not just the foot.",
+                voiceover: "Watch the whole body, not just the foot.",
+                easeIn: .linear
+            ),
+            TechniqueKeyframe(
+                time: 1.0,
+                ball: NormPoint(x: 0.50, y: 0.78),
+                leftFoot:  FootState(side: .left,  position: NormPoint(x: 0.42, y: 0.92), surface: .none,    isActive: true),
+                rightFoot: FootState(side: .right, position: NormPoint(x: 0.78, y: 0.60), surface: .outside, isActive: true),
+                avatarPose: .leanLeft,
+                caption: "Right foot sweeps OUTSIDE the ball.",
+                voiceover: "See how the right foot sweeps outside the ball.",
+                easeIn: .easeOut
+            ),
+            TechniqueKeyframe(
+                time: 2.0,
+                ball: NormPoint(x: 0.50, y: 0.78),
+                leftFoot:  FootState(side: .left,  position: NormPoint(x: 0.42, y: 0.92), surface: .inside, isActive: true),
+                rightFoot: FootState(side: .right, position: NormPoint(x: 0.62, y: 0.90), surface: .none,   isActive: false),
+                avatarPose: .plantLeft,
+                caption: "Plant close — shoulders lean with the fake.",
+                voiceover: "Plant close. Shoulders lean with the fake.",
+                easeIn: .easeInOut
+            ),
+            TechniqueKeyframe(
+                time: 3.0,
+                ball: NormPoint(x: 0.50, y: 0.78),
+                leftFoot:  FootState(side: .left,  position: NormPoint(x: 0.28, y: 0.86), surface: .inside, isActive: true),
+                rightFoot: FootState(side: .right, position: NormPoint(x: 0.55, y: 0.82), surface: .none,   isActive: false),
+                avatarPose: .explodeLeft,
+                caption: "Explosion OPPOSITE — that's the escape.",
+                voiceover: "Explosion opposite. That is the escape.",
+                easeIn: .easeInOut
+            )
+        ],
+        loops: true,
+        loopPauseSeconds: 0.8,
+        riveAssetName: nil
+    )
+
+    // MARK: Scissor — Stage 2 (technique, with ball)
+
+    /// Still Ball Scissor — the canonical move. Ball stationary, right
+    /// foot sweeps outside, plant close, LEFT foot pushes the ball with
+    /// inside. The "escape push with the other foot" is the missing piece
+    /// most kids skip, so it gets its own keyframe and voiceover.
+    static let scissorStillBall = TechniqueAnimation(
+        assetId: "diagram_scissor_still",
+        viewAngle: .profile,
+        keyframes: [
+            TechniqueKeyframe(
+                time: 0.0,
+                ball: NormPoint(x: 0.50, y: 0.78),
+                leftFoot:  FootState(side: .left,  position: NormPoint(x: 0.42, y: 0.92), surface: .none, isActive: false),
+                rightFoot: FootState(side: .right, position: NormPoint(x: 0.58, y: 0.92), surface: .none, isActive: false),
+                avatarPose: .neutral,
+                caption: "Ball in front. Stay close to it.",
+                voiceover: "Ball in front. Stay close.",
+                easeIn: .linear
+            ),
+            TechniqueKeyframe(
+                time: 0.7,
+                ball: NormPoint(x: 0.50, y: 0.78),
+                leftFoot:  FootState(side: .left,  position: NormPoint(x: 0.40, y: 0.92), surface: .none,    isActive: false),
+                rightFoot: FootState(side: .right, position: NormPoint(x: 0.78, y: 0.60), surface: .outside, isActive: true),
+                avatarPose: .leanLeft,
+                caption: "Sweep OUTSIDE — don't touch the ball.",
+                voiceover: "Sweep outside. Don't touch the ball.",
+                easeIn: .easeOut
+            ),
+            TechniqueKeyframe(
+                time: 1.3,
+                ball: NormPoint(x: 0.50, y: 0.78),
+                leftFoot:  FootState(side: .left,  position: NormPoint(x: 0.40, y: 0.92), surface: .none,   isActive: false),
+                rightFoot: FootState(side: .right, position: NormPoint(x: 0.62, y: 0.90), surface: .inside, isActive: true),
+                avatarPose: .plantLeft,
+                caption: "Plant right foot close to the ball.",
+                voiceover: "Plant close.",
+                easeIn: .easeOut
+            ),
+            TechniqueKeyframe(
+                time: 2.0,
+                ball: NormPoint(x: 0.22, y: 0.80),
+                leftFoot:  FootState(side: .left,  position: NormPoint(x: 0.30, y: 0.84), surface: .inside, isActive: true),
+                rightFoot: FootState(side: .right, position: NormPoint(x: 0.58, y: 0.88), surface: .none,   isActive: false),
+                avatarPose: .explodeLeft,
+                caption: "LEFT foot inside — push the ball away.",
+                voiceover: "Left foot pushes the ball away.",
+                easeIn: .spring
+            )
+        ],
+        loops: true,
+        loopPauseSeconds: 0.5,
+        riveAssetName: nil
+    )
+
+    /// Walking Scissor — walking with ball, scissor every ~3 touches.
+    /// Shown as: ball drifts forward → scissor interrupts → direction
+    /// change pushes ball sideways → resumes forward.
+    static let scissorWalking = TechniqueAnimation(
+        assetId: "diagram_scissor_path",
+        viewAngle: .profile,
+        keyframes: [
+            TechniqueKeyframe(
+                time: 0.0,
+                ball: NormPoint(x: 0.22, y: 0.82),
+                leftFoot:  FootState(side: .left,  position: NormPoint(x: 0.18, y: 0.92), surface: .inside, isActive: true),
+                rightFoot: FootState(side: .right, position: NormPoint(x: 0.28, y: 0.90), surface: .none,   isActive: false),
+                avatarPose: .plantRight,
+                caption: "Walk — small inside touches.",
+                voiceover: "Walk with small inside touches.",
+                easeIn: .easeOut
+            ),
+            TechniqueKeyframe(
+                time: 0.8,
+                ball: NormPoint(x: 0.45, y: 0.82),
+                leftFoot:  FootState(side: .left,  position: NormPoint(x: 0.40, y: 0.92), surface: .none,    isActive: false),
+                rightFoot: FootState(side: .right, position: NormPoint(x: 0.70, y: 0.62), surface: .outside, isActive: true),
+                avatarPose: .leanLeft,
+                caption: "Scissor mid-walk — sweep outside.",
+                voiceover: "Scissor mid-walk.",
+                easeIn: .easeOut
+            ),
+            TechniqueKeyframe(
+                time: 1.5,
+                ball: NormPoint(x: 0.48, y: 0.82),
+                leftFoot:  FootState(side: .left,  position: NormPoint(x: 0.40, y: 0.92), surface: .none,   isActive: false),
+                rightFoot: FootState(side: .right, position: NormPoint(x: 0.52, y: 0.90), surface: .inside, isActive: true),
+                avatarPose: .plantLeft,
+                caption: "Plant — ready to change direction.",
+                voiceover: "Plant. Change direction.",
+                easeIn: .easeInOut
+            ),
+            TechniqueKeyframe(
+                time: 2.2,
+                ball: NormPoint(x: 0.28, y: 0.76),
+                leftFoot:  FootState(side: .left,  position: NormPoint(x: 0.34, y: 0.82), surface: .inside, isActive: true),
+                rightFoot: FootState(side: .right, position: NormPoint(x: 0.52, y: 0.88), surface: .none,   isActive: false),
+                avatarPose: .explodeLeft,
+                caption: "Push 30° off-line — stay connected.",
+                voiceover: "Push off-line. Stay connected to the ball.",
+                easeIn: .spring
+            )
+        ],
+        loops: true,
+        loopPauseSeconds: 0.4,
+        riveAssetName: nil
+    )
+
+    /// Cone Escape — approach implied cone, scissor right before it,
+    /// explode past. Cone position read from the lean direction in the
+    /// final keyframe (left of frame = "past the cone on the left").
+    static let scissorConeEscape = TechniqueAnimation(
+        assetId: "diagram_scissor_cone_escape",
+        viewAngle: .profile,
+        keyframes: [
+            TechniqueKeyframe(
+                time: 0.0,
+                ball: NormPoint(x: 0.30, y: 0.82),
+                leftFoot:  FootState(side: .left,  position: NormPoint(x: 0.26, y: 0.92), surface: .inside, isActive: true),
+                rightFoot: FootState(side: .right, position: NormPoint(x: 0.34, y: 0.90), surface: .none,   isActive: false),
+                avatarPose: .plantRight,
+                caption: "Jog toward the cone.",
+                voiceover: "Jog toward the cone.",
+                easeIn: .easeOut
+            ),
+            TechniqueKeyframe(
+                time: 0.7,
+                ball: NormPoint(x: 0.55, y: 0.82),
+                leftFoot:  FootState(side: .left,  position: NormPoint(x: 0.48, y: 0.92), surface: .none,    isActive: false),
+                rightFoot: FootState(side: .right, position: NormPoint(x: 0.80, y: 0.60), surface: .outside, isActive: true),
+                avatarPose: .leanLeft,
+                caption: "Scissor RIGHT BEFORE the cone.",
+                voiceover: "Scissor right before the cone.",
+                easeIn: .easeOut
+            ),
+            TechniqueKeyframe(
+                time: 1.3,
+                ball: NormPoint(x: 0.55, y: 0.82),
+                leftFoot:  FootState(side: .left,  position: NormPoint(x: 0.48, y: 0.92), surface: .none,   isActive: false),
+                rightFoot: FootState(side: .right, position: NormPoint(x: 0.60, y: 0.90), surface: .inside, isActive: true),
+                avatarPose: .plantLeft,
+                caption: "Plant. Coil for the burst.",
+                voiceover: "Plant and coil.",
+                easeIn: .easeInOut
+            ),
+            TechniqueKeyframe(
+                time: 2.0,
+                ball: NormPoint(x: 0.20, y: 0.74),
+                leftFoot:  FootState(side: .left,  position: NormPoint(x: 0.28, y: 0.80), surface: .inside, isActive: true),
+                rightFoot: FootState(side: .right, position: NormPoint(x: 0.50, y: 0.88), surface: .none,   isActive: false),
+                avatarPose: .explodeLeft,
+                caption: "BURST past the cone — don't slow down.",
+                voiceover: "Burst past. Don't slow down.",
+                easeIn: .spring
+            )
+        ],
+        loops: true,
+        loopPauseSeconds: 0.5,
+        riveAssetName: nil
+    )
+
+    // MARK: Scissor — Stage 3 (mastery)
+
+    /// Double Scissor — two scissors in sequence (right foot → left foot)
+    /// before the ball is pushed. Faster tempo than single-scissor drills
+    /// so the rhythm reads as "one-two" rather than two separate moves.
+    static let scissorDouble = TechniqueAnimation(
+        assetId: "diagram_scissor_double",
+        viewAngle: .profile,
+        keyframes: [
+            TechniqueKeyframe(
+                time: 0.0,
+                ball: NormPoint(x: 0.50, y: 0.80),
+                leftFoot:  FootState(side: .left,  position: NormPoint(x: 0.42, y: 0.92), surface: .none, isActive: false),
+                rightFoot: FootState(side: .right, position: NormPoint(x: 0.58, y: 0.92), surface: .none, isActive: false),
+                avatarPose: .crouched,
+                caption: "Low stance. Stay balanced.",
+                voiceover: "Stay low.",
+                easeIn: .linear
+            ),
+            TechniqueKeyframe(
+                time: 0.5,
+                ball: NormPoint(x: 0.50, y: 0.80),
+                leftFoot:  FootState(side: .left,  position: NormPoint(x: 0.40, y: 0.92), surface: .none,    isActive: false),
+                rightFoot: FootState(side: .right, position: NormPoint(x: 0.78, y: 0.62), surface: .outside, isActive: true),
+                avatarPose: .leanLeft,
+                caption: "Scissor ONE — right foot.",
+                voiceover: "One!",
+                easeIn: .easeOut
+            ),
+            TechniqueKeyframe(
+                time: 1.0,
+                ball: NormPoint(x: 0.50, y: 0.80),
+                leftFoot:  FootState(side: .left,  position: NormPoint(x: 0.22, y: 0.62), surface: .outside, isActive: true),
+                rightFoot: FootState(side: .right, position: NormPoint(x: 0.58, y: 0.90), surface: .none,    isActive: false),
+                avatarPose: .leanRight,
+                caption: "Scissor TWO — left foot.",
+                voiceover: "Two!",
+                easeIn: .easeOut
+            ),
+            TechniqueKeyframe(
+                time: 1.6,
+                ball: NormPoint(x: 0.78, y: 0.76),
+                leftFoot:  FootState(side: .left,  position: NormPoint(x: 0.46, y: 0.90), surface: .none,   isActive: false),
+                rightFoot: FootState(side: .right, position: NormPoint(x: 0.68, y: 0.82), surface: .inside, isActive: true),
+                avatarPose: .explodeRight,
+                caption: "NOW push — right foot inside.",
+                voiceover: "Now push!",
+                easeIn: .spring
+            )
+        ],
+        loops: true,
+        loopPauseSeconds: 0.4,
+        riveAssetName: nil
+    )
+
+    /// Speed Cone Corridor — scissor past cone 1, burst, scissor past
+    /// cone 2. Fastest Scissor animation — tempo reads as "scissor-burst,
+    /// scissor-burst" to match the 10-runs-in-90s drill target.
+    static let scissorSpeedConeCorridor = TechniqueAnimation(
+        assetId: "diagram_scissor_cone_path",
+        viewAngle: .profile,
+        keyframes: [
+            TechniqueKeyframe(
+                time: 0.0,
+                ball: NormPoint(x: 0.22, y: 0.82),
+                leftFoot:  FootState(side: .left,  position: NormPoint(x: 0.18, y: 0.92), surface: .none,    isActive: false),
+                rightFoot: FootState(side: .right, position: NormPoint(x: 0.70, y: 0.62), surface: .outside, isActive: true),
+                avatarPose: .leanLeft,
+                caption: "Scissor cone 1.",
+                voiceover: "Cone one.",
+                easeIn: .easeOut
+            ),
+            TechniqueKeyframe(
+                time: 0.5,
+                ball: NormPoint(x: 0.38, y: 0.76),
+                leftFoot:  FootState(side: .left,  position: NormPoint(x: 0.32, y: 0.84), surface: .inside, isActive: true),
+                rightFoot: FootState(side: .right, position: NormPoint(x: 0.48, y: 0.90), surface: .none,   isActive: false),
+                avatarPose: .explodeLeft,
+                caption: "Burst past.",
+                voiceover: "Burst.",
+                easeIn: .spring
+            ),
+            TechniqueKeyframe(
+                time: 1.0,
+                ball: NormPoint(x: 0.60, y: 0.82),
+                leftFoot:  FootState(side: .left,  position: NormPoint(x: 0.20, y: 0.62), surface: .outside, isActive: true),
+                rightFoot: FootState(side: .right, position: NormPoint(x: 0.58, y: 0.90), surface: .none,    isActive: false),
+                avatarPose: .leanRight,
+                caption: "Scissor cone 2 — alternate feet.",
+                voiceover: "Cone two.",
+                easeIn: .easeOut
+            ),
+            TechniqueKeyframe(
+                time: 1.5,
+                ball: NormPoint(x: 0.80, y: 0.74),
+                leftFoot:  FootState(side: .left,  position: NormPoint(x: 0.52, y: 0.88), surface: .none,   isActive: false),
+                rightFoot: FootState(side: .right, position: NormPoint(x: 0.68, y: 0.82), surface: .inside, isActive: true),
+                avatarPose: .explodeRight,
+                caption: "Clean beats fast — but both is the goal.",
+                voiceover: "Clean beats fast.",
+                easeIn: .spring
             )
         ],
         loops: true,

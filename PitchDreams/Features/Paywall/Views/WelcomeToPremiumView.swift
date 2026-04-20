@@ -120,7 +120,8 @@ struct WelcomeToPremiumView: View {
             "Trends & month-over-month analytics",
             "Weekly insights email",
             "Development Profile PDF reports",
-            "Full training history — no 30-day cap"
+            "Full training history — no 30-day cap",
+            "Expanded skill library — advanced drills"
         ]
         if tier == .familyMonthly || tier == .familyYearly {
             lines.append("Up to 4 kids on one dashboard")

@@ -56,7 +56,8 @@ enum DrillRegistry {
             reps: 20,
             coachTip: "Master the pattern slowly first. Speed comes from confidence.",
             difficulty: "intermediate",
-            spaceType: "small_indoor"
+            spaceType: "small_indoor",
+            diagramAnimationAsset: "diagram_foundation_touches"
         ),
 
         // Passing
@@ -81,7 +82,8 @@ enum DrillRegistry {
             reps: 20,
             coachTip: "Open your body to the next target before the ball arrives.",
             difficulty: "intermediate",
-            spaceType: "outdoor"
+            spaceType: "outdoor",
+            diagramAnimationAsset: "diagram_triangle_passing"
         ),
 
         // Shooting
@@ -131,7 +133,8 @@ enum DrillRegistry {
             reps: 10,
             coachTip: "Close control between cones, then explode out of the last one.",
             difficulty: "beginner",
-            spaceType: "outdoor"
+            spaceType: "outdoor",
+            diagramAnimationAsset: "diagram_cone_weave"
         ),
         DrillDefinition(
             id: "drib-1v1-moves",

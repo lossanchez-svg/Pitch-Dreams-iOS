@@ -176,18 +176,36 @@ struct ActiveDrillView: View {
                 }
                 .padding(.top, 8)
 
-                Spacer()
+                // Technique animation (when the drill has one authored).
+                // Appears between title and timer, eats one spacer, shrinks
+                // the timer ring so small phones still fit.
+                if let assetId = viewModel.currentDrill?.diagramAnimationAsset,
+                   let anim = TechniqueAnimationRegistry.animation(for: assetId) {
+                    TechniqueAnimationView(
+                        animation: anim,
+                        coachVoice: viewModel.coachVoice,
+                        voiceoverEnabled: true
+                    )
+                    .frame(height: 180)
+                    .padding(.horizontal, Spacing.xl)
+                    .padding(.top, 12)
+                }
 
-                // Timer ring + avatar
+                Spacer(minLength: 0)
+
+                // Timer ring + avatar. Hide the avatar peek when an authored
+                // animation is on-screen — the kinematic figure already
+                // carries the "someone training" affordance.
                 ZStack {
                     timerRing
 
-                    // Avatar breaking the right edge
-                    avatarPeek
-                        .offset(x: 120, y: 30)
+                    if viewModel.currentDrill?.diagramAnimationAsset == nil {
+                        avatarPeek
+                            .offset(x: 120, y: 30)
+                    }
                 }
 
-                Spacer()
+                Spacer(minLength: 0)
 
                 // Action row
                 actionButtons
@@ -204,7 +222,10 @@ struct ActiveDrillView: View {
     // MARK: - Timer Ring
 
     private var timerRing: some View {
-        let ringSize: CGFloat = 260
+        // Shrink when an authored animation is on-screen so small phones
+        // (iPhone SE) still fit both elements above the action row.
+        let hasAnimation = viewModel.currentDrill?.diagramAnimationAsset != nil
+        let ringSize: CGFloat = hasAnimation ? 200 : 260
 
         return ZStack {
             // Background ring

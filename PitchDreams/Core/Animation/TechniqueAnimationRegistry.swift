@@ -14,7 +14,10 @@ enum TechniqueAnimationRegistry {
         .scissorSwingNoBall,
         .toeTaps,
         .soleRolls,
-        .wallPasses
+        .wallPasses,
+        .foundationTouches,
+        .coneWeave,
+        .trianglePassing
     ]
 }
 
@@ -184,6 +187,175 @@ extension TechniqueAnimation {
         ],
         loops: true,
         loopPauseSeconds: 0.3,
+        riveAssetName: nil
+    )
+
+    /// Foundation Touches — inside → outside → sole sequence on the right
+    /// foot, with a neutral reset hinting at "now the other foot." The
+    /// ball drifts slightly with each touch surface to read the motion.
+    static let foundationTouches = TechniqueAnimation(
+        assetId: "diagram_foundation_touches",
+        viewAngle: .profile,
+        keyframes: [
+            TechniqueKeyframe(
+                time: 0.0,
+                ball: NormPoint(x: 0.50, y: 0.80),
+                leftFoot:  FootState(side: .left,  position: NormPoint(x: 0.40, y: 0.92), surface: .none, isActive: false),
+                rightFoot: FootState(side: .right, position: NormPoint(x: 0.60, y: 0.92), surface: .none, isActive: false),
+                avatarPose: .crouched,
+                caption: "Inside — outside — sole.",
+                voiceover: "Inside, outside, sole.",
+                easeIn: .linear
+            ),
+            TechniqueKeyframe(
+                time: 0.5,
+                ball: NormPoint(x: 0.56, y: 0.80),
+                leftFoot:  FootState(side: .left,  position: NormPoint(x: 0.40, y: 0.92), surface: .none,   isActive: false),
+                rightFoot: FootState(side: .right, position: NormPoint(x: 0.52, y: 0.82), surface: .inside, isActive: true),
+                avatarPose: .plantLeft,
+                caption: "Inside of the right foot.",
+                voiceover: "Inside.",
+                easeIn: .easeOut
+            ),
+            TechniqueKeyframe(
+                time: 1.0,
+                ball: NormPoint(x: 0.48, y: 0.80),
+                leftFoot:  FootState(side: .left,  position: NormPoint(x: 0.40, y: 0.92), surface: .none,    isActive: false),
+                rightFoot: FootState(side: .right, position: NormPoint(x: 0.58, y: 0.82), surface: .outside, isActive: true),
+                avatarPose: .plantLeft,
+                caption: "Outside of the right foot.",
+                voiceover: "Outside.",
+                easeIn: .easeOut
+            ),
+            TechniqueKeyframe(
+                time: 1.5,
+                ball: NormPoint(x: 0.50, y: 0.80),
+                leftFoot:  FootState(side: .left,  position: NormPoint(x: 0.40, y: 0.92), surface: .none, isActive: false),
+                rightFoot: FootState(side: .right, position: NormPoint(x: 0.50, y: 0.78), surface: .sole, isActive: true),
+                avatarPose: .plantLeft,
+                caption: "Sole on top.",
+                voiceover: "Sole.",
+                easeIn: .easeOut
+            ),
+            TechniqueKeyframe(
+                time: 2.0,
+                ball: NormPoint(x: 0.50, y: 0.80),
+                leftFoot:  FootState(side: .left,  position: NormPoint(x: 0.40, y: 0.92), surface: .none, isActive: false),
+                rightFoot: FootState(side: .right, position: NormPoint(x: 0.60, y: 0.92), surface: .none, isActive: false),
+                avatarPose: .crouched,
+                caption: "Now switch to the other foot.",
+                voiceover: "Now the other foot.",
+                easeIn: .easeInOut
+            )
+        ],
+        loops: true,
+        loopPauseSeconds: 0.4,
+        riveAssetName: nil
+    )
+
+    /// Cone Weave — ball zig-zags rightward as feet alternate inside/
+    /// outside touches, finishing with a lean-right explode past the last
+    /// (off-screen) cone.
+    static let coneWeave = TechniqueAnimation(
+        assetId: "diagram_cone_weave",
+        viewAngle: .profile,
+        keyframes: [
+            TechniqueKeyframe(
+                time: 0.0,
+                ball: NormPoint(x: 0.22, y: 0.82),
+                leftFoot:  FootState(side: .left,  position: NormPoint(x: 0.32, y: 0.92), surface: .none, isActive: false),
+                rightFoot: FootState(side: .right, position: NormPoint(x: 0.24, y: 0.82), surface: .inside, isActive: true),
+                avatarPose: .plantLeft,
+                caption: "Inside touch — push right.",
+                voiceover: "Inside touch. Push right.",
+                easeIn: .easeOut
+            ),
+            TechniqueKeyframe(
+                time: 0.7,
+                ball: NormPoint(x: 0.42, y: 0.82),
+                leftFoot:  FootState(side: .left,  position: NormPoint(x: 0.40, y: 0.82), surface: .outside, isActive: true),
+                rightFoot: FootState(side: .right, position: NormPoint(x: 0.50, y: 0.92), surface: .none,    isActive: false),
+                avatarPose: .plantRight,
+                caption: "Outside of the left foot.",
+                voiceover: "Outside of the left.",
+                easeIn: .easeOut
+            ),
+            TechniqueKeyframe(
+                time: 1.4,
+                ball: NormPoint(x: 0.62, y: 0.82),
+                leftFoot:  FootState(side: .left,  position: NormPoint(x: 0.52, y: 0.92), surface: .none,   isActive: false),
+                rightFoot: FootState(side: .right, position: NormPoint(x: 0.60, y: 0.82), surface: .inside, isActive: true),
+                avatarPose: .plantLeft,
+                caption: "Back to inside right.",
+                voiceover: "Inside right.",
+                easeIn: .easeOut
+            ),
+            TechniqueKeyframe(
+                time: 2.1,
+                ball: NormPoint(x: 0.82, y: 0.78),
+                leftFoot:  FootState(side: .left,  position: NormPoint(x: 0.60, y: 0.88), surface: .none, isActive: false),
+                rightFoot: FootState(side: .right, position: NormPoint(x: 0.70, y: 0.80), surface: .laces, isActive: true),
+                avatarPose: .explodeRight,
+                caption: "Explode past the last cone.",
+                voiceover: "Explode past the last cone.",
+                easeIn: .spring
+            )
+        ],
+        loops: true,
+        loopPauseSeconds: 0.5,
+        riveAssetName: nil
+    )
+
+    /// Triangle Passing — ball travels between three implied cone
+    /// positions. Body opens to the next target before the ball arrives;
+    /// each pass uses the inside of the foot.
+    static let trianglePassing = TechniqueAnimation(
+        assetId: "diagram_triangle_passing",
+        viewAngle: .profile,
+        keyframes: [
+            TechniqueKeyframe(
+                time: 0.0,
+                ball: NormPoint(x: 0.30, y: 0.84),
+                leftFoot:  FootState(side: .left,  position: NormPoint(x: 0.26, y: 0.92), surface: .none,   isActive: false),
+                rightFoot: FootState(side: .right, position: NormPoint(x: 0.36, y: 0.90), surface: .inside, isActive: false),
+                avatarPose: .plantLeft,
+                caption: "Plant beside the ball.",
+                voiceover: "Plant beside the ball.",
+                easeIn: .linear
+            ),
+            TechniqueKeyframe(
+                time: 0.6,
+                ball: NormPoint(x: 0.82, y: 0.74),
+                leftFoot:  FootState(side: .left,  position: NormPoint(x: 0.26, y: 0.92), surface: .none,    isActive: false),
+                rightFoot: FootState(side: .right, position: NormPoint(x: 0.40, y: 0.82), surface: .inside,  isActive: true),
+                avatarPose: .leanRight,
+                caption: "Pass to cone 1 — inside of the foot.",
+                voiceover: "Pass with the inside of the foot.",
+                easeIn: .easeOut
+            ),
+            TechniqueKeyframe(
+                time: 1.2,
+                ball: NormPoint(x: 0.52, y: 0.82),
+                leftFoot:  FootState(side: .left,  position: NormPoint(x: 0.38, y: 0.92), surface: .none, isActive: false),
+                rightFoot: FootState(side: .right, position: NormPoint(x: 0.50, y: 0.90), surface: .none, isActive: false),
+                avatarPose: .neutral,
+                caption: "Open your body to cone 2.",
+                voiceover: "Open your body to the next cone.",
+                easeIn: .easeInOut
+            ),
+            TechniqueKeyframe(
+                time: 1.8,
+                ball: NormPoint(x: 0.20, y: 0.74),
+                leftFoot:  FootState(side: .left,  position: NormPoint(x: 0.60, y: 0.82), surface: .inside, isActive: true),
+                rightFoot: FootState(side: .right, position: NormPoint(x: 0.56, y: 0.92), surface: .none,   isActive: false),
+                avatarPose: .leanLeft,
+                caption: "Pass to cone 2. First touch sets the next.",
+                voiceover: "Pass to cone two.",
+                easeIn: .easeOut
+            )
+        ],
+        loops: true,
+        loopPauseSeconds: 0.5,
         riveAssetName: nil
     )
 

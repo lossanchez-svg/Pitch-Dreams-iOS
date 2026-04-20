@@ -304,4 +304,30 @@ final class TechniqueAnimationTests: XCTestCase {
             }
         }
     }
+
+    func testEverySignatureMoveDrillDiagramResolves() {
+        // Sister invariant for MoveDrill.diagramAnimationAsset. Catches
+        // typos between the signature-move authoring files and the
+        // animation registry at test time.
+        //
+        // Scoped to fully-visualized moves only: Body Feint and La Croqueta
+        // MoveDrills reference asset ids (diagram_bodyfeint_*, diagram_croqueta_*)
+        // as authored-content placeholders awaiting keyframe work. Add a
+        // move id to `fullyAnimatedMoveIds` once every drill in the move
+        // has a registered animation — the test then enforces integrity
+        // for that move automatically.
+        let fullyAnimatedMoveIds: Set<String> = ["move-scissor"]
+
+        for move in SignatureMoveRegistry.launchMoves where fullyAnimatedMoveIds.contains(move.id) {
+            for stage in move.stages {
+                for drill in stage.drills {
+                    guard let assetId = drill.diagramAnimationAsset else { continue }
+                    XCTAssertNotNil(
+                        TechniqueAnimationRegistry.animation(for: assetId),
+                        "\(move.id) drill \(drill.id) references missing animation asset \(assetId)"
+                    )
+                }
+            }
+        }
+    }
 }

@@ -305,6 +305,7 @@ struct PaywallView: View {
         case .developmentReport:    return "A Report Coaches Actually Read."
         case .addSecondChild:       return "Track All Your Kids\nIn One Place."
         case .settingsBrowse:       return "Unlock the Parent Dashboard."
+        case .advancedDrills:       return "Expand Their\nSkill Library."
         }
     }
 
@@ -317,6 +318,7 @@ struct PaywallView: View {
         case .developmentReport:    return "A seasonal development PDF perfect for coaches, grandparents, or college applications."
         case .addSecondChild:       return "Family plan covers up to 4 kids with one parent dashboard and a gentle sibling league."
         case .settingsBrowse:       return "Kids train free forever. Parents unlock the insights — analytics, reports, multi-kid support."
+        case .advancedDrills:       return "Premium unlocks harder variations across shooting, dribbling, and 1v1s — a richer path as they grow."
         }
     }
 

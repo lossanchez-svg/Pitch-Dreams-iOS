@@ -131,4 +131,9 @@ enum PaywallContext: String, Equatable {
 
     /// Surfaced from Settings as a browse-the-tiers view.
     case settingsBrowse
+
+    /// Parent opens the "advanced drills" footer from the child's space-
+    /// selection screen. Framed as expanding the kid's development path —
+    /// kid never sees the paywall itself.
+    case advancedDrills
 }

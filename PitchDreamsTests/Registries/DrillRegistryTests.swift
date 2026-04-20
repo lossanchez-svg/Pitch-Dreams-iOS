@@ -56,4 +56,66 @@ final class DrillRegistryTests: XCTestCase {
             XCTAssertFalse(category.isEmpty)
         }
     }
+
+    // MARK: - Premium gating
+
+    func testOnlyAdvancedDrillsAreMarkedRequiresPremium() {
+        // Under Model 1, the only drills gated are the advanced-difficulty
+        // entries. Beginner and intermediate stay free forever.
+        for drill in DrillRegistry.all where drill.requiresPremium {
+            XCTAssertEqual(drill.difficulty, "advanced",
+                           "Non-advanced drill \(drill.id) should not require premium")
+        }
+    }
+
+    func testAtLeastFourAdvancedDrillsAreGated() {
+        // Guardrail: premium tier must feel meaningfully richer — if this
+        // drops below 4 the upsell value collapses, so flag it in tests.
+        let gated = DrillRegistry.all.filter { $0.requiresPremium }
+        XCTAssertGreaterThanOrEqual(gated.count, 4,
+                                    "Premium tier should include at least 4 advanced drills")
+    }
+
+    func testFreeUsersDoNotSeePremiumDrillsInSpaceFilter() {
+        for space in ["small_indoor", "large_indoor", "outdoor"] {
+            let free = DrillRegistry.drills(for: space, hasPremium: false)
+            for drill in free {
+                XCTAssertFalse(drill.requiresPremium,
+                               "Free tier surfaced gated drill \(drill.id) for space \(space)")
+            }
+        }
+    }
+
+    func testPremiumUsersSeeAllSpaceDrills() {
+        for space in ["small_indoor", "large_indoor", "outdoor"] {
+            let all = DrillRegistry.drills(for: space)
+            let premium = DrillRegistry.drills(for: space, hasPremium: true)
+            XCTAssertEqual(all.count, premium.count,
+                           "Premium view of \(space) should include every drill")
+        }
+    }
+
+    func testFreeAndPremiumListsPartitionTheSpace() {
+        for space in ["small_indoor", "large_indoor", "outdoor"] {
+            let free = DrillRegistry.drills(for: space, hasPremium: false)
+            let gated = DrillRegistry.premiumDrills(for: space)
+            let combined = Set(free.map(\.id)).union(gated.map(\.id))
+            let all = Set(DrillRegistry.drills(for: space).map(\.id))
+            XCTAssertEqual(combined, all,
+                           "Free + premium drills should fully cover space \(space)")
+            XCTAssertTrue(Set(free.map(\.id)).isDisjoint(with: gated.map(\.id)),
+                          "A drill can't be both free and premium in space \(space)")
+        }
+    }
+
+    func testEveryNonEmptySpaceHasFreeDrills() {
+        // Model 1 safety: a free kid must not land on an empty drill list
+        // for any space they can select. Every space ships with at least
+        // one beginner/intermediate drill.
+        for space in ["small_indoor", "large_indoor", "outdoor"] {
+            let free = DrillRegistry.drills(for: space, hasPremium: false)
+            XCTAssertFalse(free.isEmpty,
+                           "Space \(space) must have at least one free drill")
+        }
+    }
 }

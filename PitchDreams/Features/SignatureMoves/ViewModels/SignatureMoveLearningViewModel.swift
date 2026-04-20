@@ -40,6 +40,10 @@ final class SignatureMoveLearningViewModel: ObservableObject {
     private let store: SignatureMoveStore
     private let xpStore: XPStore
     private let voice: CoachVoiceProtocol
+    /// Exposed for surfaces that need to route their own speech through the
+    /// same voice instance (e.g. `TechniqueAnimationView` voiceovers) so two
+    /// parallel speakers don't fight over `AVSpeechSynthesizer`.
+    var coachVoice: CoachVoiceProtocol { voice }
     private var cueTimer: Timer?
     private var mistakeTimer: Timer?
     private var elapsedTimer: Timer?

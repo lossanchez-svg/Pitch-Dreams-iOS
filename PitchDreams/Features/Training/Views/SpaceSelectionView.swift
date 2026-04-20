@@ -5,6 +5,9 @@ struct SpaceSelectionView: View {
     @StateObject private var speechRecognizer = SpeechRecognizer()
     @State private var lastVoiceCommand: String?
     @State private var selectedSpaceId: String?
+    @State private var paywallSpaceId: String?
+    @EnvironmentObject private var entitlementStore: EntitlementStore
+    @EnvironmentObject private var subscriptionManager: SubscriptionManager
 
     private let spaces: [(id: String, title: String, subtitle: String, icon: String)] = [
         ("small_indoor", "Small Indoor", "Bedroom, hallway, or small room", "house.fill"),
@@ -37,49 +40,58 @@ struct SpaceSelectionView: View {
                     .padding(.top, 16)
 
                     ForEach(spaces, id: \.id) { space in
-                        let drills = DrillRegistry.drills(for: space.id)
-                        NavigationLink {
-                            ActiveDrillView(
-                                childId: childId,
-                                drills: drills,
-                                spaceType: space.id
-                            )
-                        } label: {
-                            HStack(spacing: 16) {
-                                ZStack {
-                                    RoundedRectangle(cornerRadius: 12)
-                                        .fill(Color.dsAccentOrange.opacity(0.12))
-                                        .frame(width: 48, height: 48)
-                                    Image(systemName: space.icon)
-                                        .font(.system(size: 20))
-                                        .foregroundStyle(Color.dsAccentOrange)
-                                }
+                        let hasPremium = entitlementStore.has(.advancedDrills)
+                        let drills = DrillRegistry.drills(for: space.id, hasPremium: hasPremium)
+                        let premiumCount = DrillRegistry.premiumDrills(for: space.id).count
 
-                                VStack(alignment: .leading, spacing: 4) {
-                                    Text(space.title)
-                                        .font(.system(size: 16, weight: .bold))
-                                        .foregroundStyle(Color.dsOnSurface)
-                                    Text(space.subtitle)
-                                        .font(.system(size: 13))
+                        VStack(spacing: 8) {
+                            NavigationLink {
+                                ActiveDrillView(
+                                    childId: childId,
+                                    drills: drills,
+                                    spaceType: space.id
+                                )
+                            } label: {
+                                HStack(spacing: 16) {
+                                    ZStack {
+                                        RoundedRectangle(cornerRadius: 12)
+                                            .fill(Color.dsAccentOrange.opacity(0.12))
+                                            .frame(width: 48, height: 48)
+                                        Image(systemName: space.icon)
+                                            .font(.system(size: 20))
+                                            .foregroundStyle(Color.dsAccentOrange)
+                                    }
+
+                                    VStack(alignment: .leading, spacing: 4) {
+                                        Text(space.title)
+                                            .font(.system(size: 16, weight: .bold))
+                                            .foregroundStyle(Color.dsOnSurface)
+                                        Text(space.subtitle)
+                                            .font(.system(size: 13))
+                                            .foregroundStyle(Color.dsOnSurfaceVariant)
+                                        Text("\(drills.count) drills available")
+                                            .font(.system(size: 11, weight: .medium))
+                                            .foregroundStyle(Color.dsSecondary)
+                                    }
+
+                                    Spacer()
+
+                                    Image(systemName: "chevron.right")
                                         .foregroundStyle(Color.dsOnSurfaceVariant)
-                                    Text("\(drills.count) drills available")
-                                        .font(.system(size: 11, weight: .medium))
-                                        .foregroundStyle(Color.dsSecondary)
                                 }
-
-                                Spacer()
-
-                                Image(systemName: "chevron.right")
-                                    .foregroundStyle(Color.dsOnSurfaceVariant)
+                                .padding(Spacing.lg)
+                                .background(Color.dsSurfaceContainer)
+                                .clipShape(RoundedRectangle(cornerRadius: CornerRadius.lg))
+                                .ghostBorder()
                             }
-                            .padding(Spacing.lg)
-                            .background(Color.dsSurfaceContainer)
-                            .clipShape(RoundedRectangle(cornerRadius: CornerRadius.lg))
-                            .ghostBorder()
+                            .buttonStyle(.plain)
+                            .disabled(drills.isEmpty)
+                            .opacity(drills.isEmpty ? 0.4 : 1)
+
+                            if !hasPremium && premiumCount > 0 {
+                                advancedDrillsFooter(count: premiumCount, spaceId: space.id)
+                            }
                         }
-                        .buttonStyle(.plain)
-                        .disabled(drills.isEmpty)
-                        .opacity(drills.isEmpty ? 0.4 : 1)
                     }
                 }
                 .padding(Spacing.xl)
@@ -113,10 +125,23 @@ struct SpaceSelectionView: View {
             if let spaceId = selectedSpaceId {
                 ActiveDrillView(
                     childId: childId,
-                    drills: DrillRegistry.drills(for: spaceId),
+                    drills: DrillRegistry.drills(
+                        for: spaceId,
+                        hasPremium: entitlementStore.has(.advancedDrills)
+                    ),
                     spaceType: spaceId
                 )
             }
+        }
+        .sheet(isPresented: Binding(
+            get: { paywallSpaceId != nil },
+            set: { if !$0 { paywallSpaceId = nil } }
+        )) {
+            PaywallView(
+                manager: subscriptionManager,
+                entitlementStore: entitlementStore,
+                context: .advancedDrills
+            )
         }
     }
 
@@ -146,5 +171,37 @@ struct SpaceSelectionView: View {
         let drills = DrillRegistry.drills(for: spaceId)
         guard !drills.isEmpty else { return }
         selectedSpaceId = spaceId
+    }
+
+    // MARK: - Advanced drills footer (Model 1 parent-unlock framing)
+
+    private func advancedDrillsFooter(count: Int, spaceId: String) -> some View {
+        Button {
+            UIImpactFeedbackGenerator(style: .light).impactOccurred()
+            paywallSpaceId = spaceId
+        } label: {
+            HStack(spacing: 10) {
+                Image(systemName: "lock.fill")
+                    .font(.system(size: 12, weight: .heavy))
+                    .foregroundStyle(Color.dsAccentOrange)
+                Text("\(count) advanced \(count == 1 ? "drill" : "drills") • Ask your family to unlock")
+                    .font(.system(size: 12, weight: .semibold))
+                    .foregroundStyle(Color.dsOnSurfaceVariant)
+                Spacer(minLength: 0)
+                Image(systemName: "chevron.right")
+                    .font(.system(size: 11, weight: .semibold))
+                    .foregroundStyle(Color.dsOnSurfaceVariant)
+            }
+            .padding(.horizontal, 14)
+            .padding(.vertical, 10)
+            .background(Color.dsSurfaceContainerLow)
+            .clipShape(RoundedRectangle(cornerRadius: CornerRadius.md))
+            .overlay(
+                RoundedRectangle(cornerRadius: CornerRadius.md)
+                    .stroke(Color.dsAccentOrange.opacity(0.25), style: StrokeStyle(lineWidth: 1, dash: [4, 3]))
+            )
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel("\(count) advanced drills locked. Tap to open the family unlock screen.")
     }
 }

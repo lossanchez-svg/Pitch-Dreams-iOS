@@ -209,12 +209,23 @@ private struct MimicDrillContent: View {
                 .padding(.horizontal, Spacing.xl)
             }
 
-            // Large figure-motion art — SF Symbol at huge scale
-            Image(systemName: drill.type.iconSymbol)
-                .font(.system(size: 160, weight: .regular))
-                .foregroundStyle(Color(hex: "#8B5CF6"))
-                .symbolRenderingMode(.hierarchical)
-                .frame(height: 240)
+            // Authored technique animation if the drill's diagram slot resolves;
+            // otherwise fall back to the large figure-motion placeholder.
+            if let assetId = drill.diagramAnimationAsset,
+               let anim = TechniqueAnimationRegistry.animation(for: assetId) {
+                TechniqueAnimationView(
+                    animation: anim,
+                    coachVoice: viewModel.coachVoice,
+                    voiceoverEnabled: true
+                )
+                .padding(.horizontal, Spacing.xl)
+            } else {
+                Image(systemName: drill.type.iconSymbol)
+                    .font(.system(size: 160, weight: .regular))
+                    .foregroundStyle(Color(hex: "#8B5CF6"))
+                    .symbolRenderingMode(.hierarchical)
+                    .frame(height: 240)
+            }
 
             // Tap-to-count rep counter
             repCounterButton

@@ -44,6 +44,9 @@ final class EntitlementStoreTests: XCTestCase {
         XCTAssertTrue(store.has(.parentWeeklyInsightsEmail))
         XCTAssertTrue(store.has(.developmentProfilePDF))
         XCTAssertTrue(store.has(.prioritySupport))
+        // advancedDrills is a parent-facing unlock (Model 1 framing) but lives
+        // in the premium tier — verify it comes along.
+        XCTAssertTrue(store.has(.advancedDrills))
         // Premium does NOT include family/club features.
         XCTAssertFalse(store.has(.familyMultiChild))
         XCTAssertFalse(store.has(.siblingLeague))

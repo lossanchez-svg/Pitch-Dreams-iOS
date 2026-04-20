@@ -10,6 +10,10 @@ struct DrillDefinition: Identifiable {
     let coachTip: String
     let difficulty: String  // beginner, intermediate, advanced
     let spaceType: String   // small_indoor, large_indoor, outdoor
+    /// When true, this drill is only surfaced to accounts with the
+    /// `.advancedDrills` feature entitlement. Reserved for difficulty
+    /// == "advanced" entries; beginner/intermediate stay free under Model 1.
+    var requiresPremium: Bool = false
 }
 
 enum DrillRegistry {
@@ -94,7 +98,20 @@ enum DrillRegistry {
             reps: 10,
             coachTip: "Watch the ball all the way onto your foot. Lock your ankle.",
             difficulty: "advanced",
-            spaceType: "outdoor"
+            spaceType: "outdoor",
+            requiresPremium: true
+        ),
+        DrillDefinition(
+            id: "shoot-weak-foot",
+            name: "Weak Foot Finishing",
+            category: "Shooting",
+            description: "10 placed finishes with your weaker foot from the edge of the box. Equal reps each corner. No excuses.",
+            duration: 180,
+            reps: 10,
+            coachTip: "Plant foot beside the ball, eyes on the target, follow through across your body.",
+            difficulty: "advanced",
+            spaceType: "outdoor",
+            requiresPremium: true
         ),
 
         // Dribbling
@@ -120,6 +137,30 @@ enum DrillRegistry {
             difficulty: "intermediate",
             spaceType: "large_indoor"
         ),
+        DrillDefinition(
+            id: "drib-1v1-combo",
+            name: "Combo Moves",
+            category: "Dribbling",
+            description: "Chain two moves — scissor into cut, stepover into La Croqueta — against a cone. Sell the first, explode off the second.",
+            duration: 150,
+            reps: 12,
+            coachTip: "The second move only works if the first was believed. Commit to the fake.",
+            difficulty: "advanced",
+            spaceType: "large_indoor",
+            requiresPremium: true
+        ),
+        DrillDefinition(
+            id: "drib-speed-corridor",
+            name: "Speed Dribble Corridor",
+            category: "Dribbling",
+            description: "Two parallel cone lines 1.5m apart, 15m long. Dribble through at top speed without touching a cone. Alternate feet each touch.",
+            duration: 120,
+            reps: 8,
+            coachTip: "Eyes up as much as possible. Close touches under pressure beat long touches at jog pace.",
+            difficulty: "advanced",
+            spaceType: "outdoor",
+            requiresPremium: true
+        ),
 
         // First Touch
         DrillDefinition(
@@ -137,6 +178,22 @@ enum DrillRegistry {
 
     static func drills(for spaceType: String) -> [DrillDefinition] {
         all.filter { $0.spaceType == spaceType }
+    }
+
+    /// Drills for a given space that the caller is entitled to. When
+    /// `hasPremium` is false, advanced/premium-gated drills are filtered
+    /// out — kids on the free tier simply don't see them in the active
+    /// training flow, honoring the "no paywall mid-training" rule.
+    static func drills(for spaceType: String, hasPremium: Bool) -> [DrillDefinition] {
+        let byspace = drills(for: spaceType)
+        return hasPremium ? byspace : byspace.filter { !$0.requiresPremium }
+    }
+
+    /// Premium-gated drills for a given space. Used by the space-selection
+    /// "N more with Premium" footer to tease the locked catalog to parents
+    /// without exposing it in the kid's drill rotation.
+    static func premiumDrills(for spaceType: String) -> [DrillDefinition] {
+        drills(for: spaceType).filter { $0.requiresPremium }
     }
 
     static func drills(forCategory category: String) -> [DrillDefinition] {

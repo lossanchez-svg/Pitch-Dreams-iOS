@@ -161,10 +161,13 @@ struct TechniqueAnimationView: View {
                           y: kin.centerOfMass.y * size.height)
 
         // Torso vector (from hip upward, rotated by torsoTilt).
-        let torsoLen: CGFloat = size.height * 0.22
+        // All trig uses Double explicitly — mixing CGFloat * Double with sin/
+        // cos overloads was ambiguous on iOS 26 SDK (ambiguous-use error).
+        let torsoTilt = kin.torsoTilt
+        let torsoLen: Double = Double(size.height) * 0.22
         let torsoEnd = CGPoint(
-            x: hip.x + sin(kin.torsoTilt) * torsoLen,
-            y: hip.y - cos(kin.torsoTilt) * torsoLen
+            x: hip.x + CGFloat(sin(torsoTilt) * torsoLen),
+            y: hip.y - CGFloat(cos(torsoTilt) * torsoLen)
         )
 
         // Torso stroke.
@@ -174,25 +177,26 @@ struct TechniqueAnimationView: View {
         context.stroke(torso, with: .color(Color.dsOnSurface.opacity(0.92)), style: StrokeStyle(lineWidth: 10, lineCap: .round))
 
         // Shoulders — perpendicular to torso, offset by shoulderTilt.
-        let shoulderHalfWidth: CGFloat = size.width * 0.055
-        let perpAngle = kin.torsoTilt + kin.shoulderTilt * 0.3
-        let shoulderDx = cos(perpAngle) * shoulderHalfWidth
-        let shoulderDy = sin(perpAngle) * shoulderHalfWidth
+        let shoulderHalfWidth: Double = Double(size.width) * 0.055
+        let perpAngle = torsoTilt + kin.shoulderTilt * 0.3
+        let shoulderDx = CGFloat(cos(perpAngle) * shoulderHalfWidth)
+        let shoulderDy = CGFloat(sin(perpAngle) * shoulderHalfWidth)
         var shoulders = Path()
         shoulders.move(to: CGPoint(x: torsoEnd.x - shoulderDx, y: torsoEnd.y - shoulderDy))
         shoulders.addLine(to: CGPoint(x: torsoEnd.x + shoulderDx, y: torsoEnd.y + shoulderDy))
         context.stroke(shoulders, with: .color(Color.dsOnSurface.opacity(0.85)), style: StrokeStyle(lineWidth: 6, lineCap: .round))
 
         // Head — above torso, slight lean offset.
-        let headRadius: CGFloat = size.height * 0.045
+        let headRadius: Double = Double(size.height) * 0.045
         let headCenter = CGPoint(
-            x: torsoEnd.x + sin(kin.torsoTilt) * headRadius * 0.8,
-            y: torsoEnd.y - cos(kin.torsoTilt) * headRadius * 1.4
+            x: torsoEnd.x + CGFloat(sin(torsoTilt) * headRadius * 0.8),
+            y: torsoEnd.y - CGFloat(cos(torsoTilt) * headRadius * 1.4)
         )
+        let headR = CGFloat(headRadius)
         context.fill(
             Path(ellipseIn: CGRect(
-                x: headCenter.x - headRadius, y: headCenter.y - headRadius,
-                width: headRadius * 2, height: headRadius * 2
+                x: headCenter.x - headR, y: headCenter.y - headR,
+                width: headR * 2, height: headR * 2
             )),
             with: .color(Color.dsOnSurface.opacity(0.92))
         )
@@ -259,13 +263,6 @@ struct TechniqueAnimationView: View {
                 with: .color(surfaceColor(foot.surface)),
                 style: StrokeStyle(lineWidth: 3)
             )
-            // Surface label above the ring.
-            if foot.surface != .none {
-                let label = Text(foot.surface.rawValue.uppercased())
-                    .font(.system(size: 8, weight: .heavy, design: .rounded))
-                    .foregroundStyle(surfaceColor(foot.surface))
-                context.draw(label, at: CGPoint(x: p.x, y: p.y - ringRadius - 8))
-            }
         }
     }
 

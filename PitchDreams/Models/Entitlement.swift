@@ -41,6 +41,16 @@ enum Feature: String, CaseIterable, Codable {
     /// Priority support channel.
     case prioritySupport
 
+    /// Expanded skill library — unlocks the advanced drill catalog
+    /// (harder variants of shooting, dribbling, and 1v1 moves).
+    ///
+    /// Model 1 framing: parent-value unlock ("richer development path
+    /// for your kid"), never presented to the child mid-session. The
+    /// kid sees locked drills on the space-selection screen with
+    /// "Ask your family to unlock" copy — the paywall itself is
+    /// parent-facing when opened.
+    case advancedDrills
+
     // MARK: - Family tier additions (PAID)
 
     /// Up to 4 children on one account with a unified parent dashboard.
@@ -84,7 +94,8 @@ enum SubscriptionTier: String, CaseIterable, Codable {
                 .restDayIntelligence,
                 .parentWeeklyInsightsEmail,
                 .developmentProfilePDF,
-                .prioritySupport
+                .prioritySupport,
+                .advancedDrills
             ]
         case .familyMonthly, .familyYearly:
             // Family = Premium + multi-child + sibling league

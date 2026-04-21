@@ -21,6 +21,13 @@ enum TechniqueAnimationRegistry {
         // Scissor — Stage 3 (mastery)
         .scissorDouble,
         .scissorSpeedConeCorridor,
+        // Body Feint — Stage 1 (groundwork)
+        .bodyFeintBreakdown,
+        .bodyFeintMirror,
+        // Body Feint — Stage 2 (technique)
+        .bodyFeintStillBall,
+        .bodyFeintWalking,
+        .bodyFeintConeEscape,
         // Regular drills
         .toeTaps,
         .soleRolls,
@@ -523,6 +530,289 @@ extension TechniqueAnimation {
         ],
         loops: true,
         loopPauseSeconds: 0.3,
+        riveAssetName: nil
+    )
+
+    // MARK: Body Feint — Stage 1 (groundwork)
+
+    /// Body Feint Breakdown — slow analytical replay framing. Same basic
+    /// lean-hold-explode pattern as bodyFeintMirror but stretched, with
+    /// observation-style captions for the "watch Messi" drill.
+    ///
+    /// Distinctive Body Feint visual contract: the ball stays stationary
+    /// through the fake keyframes — feet DON'T move around it. Only on the
+    /// escape keyframe does anything touch the ball.
+    static let bodyFeintBreakdown = TechniqueAnimation(
+        assetId: "diagram_bodyfeint_breakdown",
+        viewAngle: .profile,
+        keyframes: [
+            TechniqueKeyframe(
+                time: 0.0,
+                ball: NormPoint(x: 0.50, y: 0.80),
+                leftFoot:  FootState(side: .left,  position: NormPoint(x: 0.42, y: 0.92), surface: .none, isActive: false),
+                rightFoot: FootState(side: .right, position: NormPoint(x: 0.58, y: 0.92), surface: .none, isActive: false),
+                avatarPose: .neutral,
+                caption: "Watch the shoulders and hips — no ball touch.",
+                voiceover: "Watch the shoulders and hips. No ball touch.",
+                easeIn: .linear
+            ),
+            TechniqueKeyframe(
+                time: 1.2,
+                ball: NormPoint(x: 0.50, y: 0.80),
+                leftFoot:  FootState(side: .left,  position: NormPoint(x: 0.42, y: 0.92), surface: .none, isActive: false),
+                rightFoot: FootState(side: .right, position: NormPoint(x: 0.58, y: 0.92), surface: .none, isActive: false),
+                avatarPose: .leanRight,
+                caption: "Drop right shoulder — hips lean right.",
+                voiceover: "Drop the right shoulder. Hips lean right.",
+                easeIn: .easeOut
+            ),
+            TechniqueKeyframe(
+                time: 2.2,
+                ball: NormPoint(x: 0.50, y: 0.80),
+                leftFoot:  FootState(side: .left,  position: NormPoint(x: 0.42, y: 0.92), surface: .none, isActive: false),
+                rightFoot: FootState(side: .right, position: NormPoint(x: 0.58, y: 0.92), surface: .none, isActive: false),
+                avatarPose: .leanRight,
+                caption: "Hold the lie — defender commits.",
+                voiceover: "Hold the lie. Defender commits.",
+                easeIn: .easeInOut
+            ),
+            TechniqueKeyframe(
+                time: 3.0,
+                ball: NormPoint(x: 0.26, y: 0.78),
+                leftFoot:  FootState(side: .left,  position: NormPoint(x: 0.30, y: 0.84), surface: .inside, isActive: true),
+                rightFoot: FootState(side: .right, position: NormPoint(x: 0.54, y: 0.88), surface: .none,   isActive: false),
+                avatarPose: .explodeLeft,
+                caption: "Ball goes LEFT — the fake is paid off.",
+                voiceover: "Ball goes left. The fake is paid off.",
+                easeIn: .spring
+            )
+        ],
+        loops: true,
+        loopPauseSeconds: 0.8,
+        riveAssetName: nil
+    )
+
+    /// Mirror Practice — no ball. Alternates lean-right-then-explode-left
+    /// with lean-left-then-explode-right so the kid sees both directions.
+    static let bodyFeintMirror = TechniqueAnimation(
+        assetId: "diagram_bodyfeint_bodypos",
+        viewAngle: .profile,
+        keyframes: [
+            TechniqueKeyframe(
+                time: 0.0,
+                ball: NormPoint(x: 0.50, y: 0.80),
+                leftFoot:  FootState(side: .left,  position: NormPoint(x: 0.42, y: 0.92), surface: .none, isActive: false),
+                rightFoot: FootState(side: .right, position: NormPoint(x: 0.58, y: 0.92), surface: .none, isActive: false),
+                avatarPose: .neutral,
+                caption: "Mirror practice — no ball.",
+                voiceover: "No ball. Just the body.",
+                easeIn: .linear
+            ),
+            TechniqueKeyframe(
+                time: 0.6,
+                ball: NormPoint(x: 0.50, y: 0.80),
+                leftFoot:  FootState(side: .left,  position: NormPoint(x: 0.42, y: 0.92), surface: .none, isActive: false),
+                rightFoot: FootState(side: .right, position: NormPoint(x: 0.58, y: 0.92), surface: .none, isActive: false),
+                avatarPose: .leanRight,
+                caption: "BIG lean right — shoulders and hips.",
+                voiceover: "Big lean right.",
+                easeIn: .easeOut
+            ),
+            TechniqueKeyframe(
+                time: 1.1,
+                ball: NormPoint(x: 0.50, y: 0.80),
+                leftFoot:  FootState(side: .left,  position: NormPoint(x: 0.42, y: 0.92), surface: .none, isActive: false),
+                rightFoot: FootState(side: .right, position: NormPoint(x: 0.58, y: 0.92), surface: .none, isActive: false),
+                avatarPose: .explodeLeft,
+                caption: "Explode LEFT off the plant.",
+                voiceover: "Explode left.",
+                easeIn: .spring
+            ),
+            TechniqueKeyframe(
+                time: 1.6,
+                ball: NormPoint(x: 0.50, y: 0.80),
+                leftFoot:  FootState(side: .left,  position: NormPoint(x: 0.42, y: 0.92), surface: .none, isActive: false),
+                rightFoot: FootState(side: .right, position: NormPoint(x: 0.58, y: 0.92), surface: .none, isActive: false),
+                avatarPose: .leanLeft,
+                caption: "Now the other side — lean LEFT.",
+                voiceover: "Now the other side.",
+                easeIn: .easeOut
+            ),
+            TechniqueKeyframe(
+                time: 2.1,
+                ball: NormPoint(x: 0.50, y: 0.80),
+                leftFoot:  FootState(side: .left,  position: NormPoint(x: 0.42, y: 0.92), surface: .none, isActive: false),
+                rightFoot: FootState(side: .right, position: NormPoint(x: 0.58, y: 0.92), surface: .none, isActive: false),
+                avatarPose: .explodeRight,
+                caption: "Explode RIGHT. Alternate each rep.",
+                voiceover: "Explode right.",
+                easeIn: .spring
+            )
+        ],
+        loops: true,
+        loopPauseSeconds: 0.4,
+        riveAssetName: nil
+    )
+
+    // MARK: Body Feint — Stage 2 (technique, with ball)
+
+    /// Stationary Feint + Push — the canonical move with a ball. Lean
+    /// sells the fake without touching the ball, then the opposite foot
+    /// pushes the ball the OTHER way.
+    static let bodyFeintStillBall = TechniqueAnimation(
+        assetId: "diagram_bodyfeint_still",
+        viewAngle: .profile,
+        keyframes: [
+            TechniqueKeyframe(
+                time: 0.0,
+                ball: NormPoint(x: 0.50, y: 0.80),
+                leftFoot:  FootState(side: .left,  position: NormPoint(x: 0.42, y: 0.92), surface: .none, isActive: false),
+                rightFoot: FootState(side: .right, position: NormPoint(x: 0.58, y: 0.92), surface: .none, isActive: false),
+                avatarPose: .neutral,
+                caption: "Ball stays still throughout the fake.",
+                voiceover: "Ball stays still through the fake.",
+                easeIn: .linear
+            ),
+            TechniqueKeyframe(
+                time: 0.7,
+                ball: NormPoint(x: 0.50, y: 0.80),
+                leftFoot:  FootState(side: .left,  position: NormPoint(x: 0.42, y: 0.92), surface: .none, isActive: false),
+                rightFoot: FootState(side: .right, position: NormPoint(x: 0.58, y: 0.92), surface: .none, isActive: false),
+                avatarPose: .leanRight,
+                caption: "Lean right — NO ball touch.",
+                voiceover: "Lean right. No ball touch.",
+                easeIn: .easeOut
+            ),
+            TechniqueKeyframe(
+                time: 1.3,
+                ball: NormPoint(x: 0.50, y: 0.80),
+                leftFoot:  FootState(side: .left,  position: NormPoint(x: 0.42, y: 0.92), surface: .none, isActive: false),
+                rightFoot: FootState(side: .right, position: NormPoint(x: 0.58, y: 0.92), surface: .none, isActive: false),
+                avatarPose: .leanRight,
+                caption: "Hold the lean — sell the lie.",
+                voiceover: "Sell the lie.",
+                easeIn: .easeInOut
+            ),
+            TechniqueKeyframe(
+                time: 2.2,
+                ball: NormPoint(x: 0.22, y: 0.78),
+                leftFoot:  FootState(side: .left,  position: NormPoint(x: 0.28, y: 0.84), surface: .inside, isActive: true),
+                rightFoot: FootState(side: .right, position: NormPoint(x: 0.54, y: 0.88), surface: .none,   isActive: false),
+                avatarPose: .explodeLeft,
+                caption: "Push LEFT with inside-left — sharp.",
+                voiceover: "Push left with the inside of the left foot.",
+                easeIn: .spring
+            )
+        ],
+        loops: true,
+        loopPauseSeconds: 0.5,
+        riveAssetName: nil
+    )
+
+    /// Walking Feint + Cut — walking forward with ball, every few touches
+    /// plant → fake with body → cut 45° opposite with outside of foot.
+    /// Ball drifts forward during walking keyframes, then sharply left
+    /// on the cut.
+    static let bodyFeintWalking = TechniqueAnimation(
+        assetId: "diagram_bodyfeint_path",
+        viewAngle: .profile,
+        keyframes: [
+            TechniqueKeyframe(
+                time: 0.0,
+                ball: NormPoint(x: 0.22, y: 0.82),
+                leftFoot:  FootState(side: .left,  position: NormPoint(x: 0.18, y: 0.92), surface: .inside, isActive: true),
+                rightFoot: FootState(side: .right, position: NormPoint(x: 0.28, y: 0.90), surface: .none,   isActive: false),
+                avatarPose: .plantRight,
+                caption: "Walking touches — eyes forward.",
+                voiceover: "Walking. Eyes forward.",
+                easeIn: .easeOut
+            ),
+            TechniqueKeyframe(
+                time: 0.8,
+                ball: NormPoint(x: 0.50, y: 0.82),
+                leftFoot:  FootState(side: .left,  position: NormPoint(x: 0.44, y: 0.92), surface: .none,   isActive: false),
+                rightFoot: FootState(side: .right, position: NormPoint(x: 0.58, y: 0.90), surface: .inside, isActive: true),
+                avatarPose: .plantLeft,
+                caption: "Plant — prepare the fake.",
+                voiceover: "Plant and prepare.",
+                easeIn: .easeInOut
+            ),
+            TechniqueKeyframe(
+                time: 1.5,
+                ball: NormPoint(x: 0.52, y: 0.82),
+                leftFoot:  FootState(side: .left,  position: NormPoint(x: 0.44, y: 0.92), surface: .none, isActive: false),
+                rightFoot: FootState(side: .right, position: NormPoint(x: 0.58, y: 0.90), surface: .none, isActive: false),
+                avatarPose: .leanRight,
+                caption: "Fake RIGHT — ball doesn't move.",
+                voiceover: "Fake right. Ball doesn't move.",
+                easeIn: .easeOut
+            ),
+            TechniqueKeyframe(
+                time: 2.3,
+                ball: NormPoint(x: 0.22, y: 0.72),
+                leftFoot:  FootState(side: .left,  position: NormPoint(x: 0.32, y: 0.82), surface: .outside, isActive: true),
+                rightFoot: FootState(side: .right, position: NormPoint(x: 0.54, y: 0.88), surface: .none,    isActive: false),
+                avatarPose: .explodeLeft,
+                caption: "Cut 45° with outside-left — sharp angle.",
+                voiceover: "Cut sharp with the outside of the left foot.",
+                easeIn: .spring
+            )
+        ],
+        loops: true,
+        loopPauseSeconds: 0.4,
+        riveAssetName: nil
+    )
+
+    /// Cone Body Feint — approach a cone, fake LATE (right before the
+    /// cone), cut past on the opposite side. Late fake is the key teaching
+    /// beat — defenders adjust to early fakes.
+    static let bodyFeintConeEscape = TechniqueAnimation(
+        assetId: "diagram_bodyfeint_cone",
+        viewAngle: .profile,
+        keyframes: [
+            TechniqueKeyframe(
+                time: 0.0,
+                ball: NormPoint(x: 0.30, y: 0.82),
+                leftFoot:  FootState(side: .left,  position: NormPoint(x: 0.26, y: 0.92), surface: .inside, isActive: true),
+                rightFoot: FootState(side: .right, position: NormPoint(x: 0.34, y: 0.90), surface: .none,   isActive: false),
+                avatarPose: .plantRight,
+                caption: "Jog toward the cone — ball close.",
+                voiceover: "Jog. Ball close.",
+                easeIn: .easeOut
+            ),
+            TechniqueKeyframe(
+                time: 0.7,
+                ball: NormPoint(x: 0.58, y: 0.82),
+                leftFoot:  FootState(side: .left,  position: NormPoint(x: 0.50, y: 0.92), surface: .none, isActive: false),
+                rightFoot: FootState(side: .right, position: NormPoint(x: 0.62, y: 0.90), surface: .none, isActive: false),
+                avatarPose: .leanRight,
+                caption: "LATE fake — right before the cone.",
+                voiceover: "Late fake. Right before the cone.",
+                easeIn: .easeOut
+            ),
+            TechniqueKeyframe(
+                time: 1.3,
+                ball: NormPoint(x: 0.58, y: 0.82),
+                leftFoot:  FootState(side: .left,  position: NormPoint(x: 0.50, y: 0.92), surface: .none, isActive: false),
+                rightFoot: FootState(side: .right, position: NormPoint(x: 0.62, y: 0.90), surface: .none, isActive: false),
+                avatarPose: .leanRight,
+                caption: "Lean deep — don't stand tall.",
+                voiceover: "Lean deep.",
+                easeIn: .easeInOut
+            ),
+            TechniqueKeyframe(
+                time: 2.2,
+                ball: NormPoint(x: 0.22, y: 0.72),
+                leftFoot:  FootState(side: .left,  position: NormPoint(x: 0.30, y: 0.80), surface: .outside, isActive: true),
+                rightFoot: FootState(side: .right, position: NormPoint(x: 0.52, y: 0.88), surface: .none,    isActive: false),
+                avatarPose: .explodeLeft,
+                caption: "Explode past on the OTHER side.",
+                voiceover: "Explode past on the other side.",
+                easeIn: .spring
+            )
+        ],
+        loops: true,
+        loopPauseSeconds: 0.5,
         riveAssetName: nil
     )
 

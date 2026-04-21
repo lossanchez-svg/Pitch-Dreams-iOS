@@ -305,6 +305,42 @@ final class TechniqueAnimationTests: XCTestCase {
         }
     }
 
+    // MARK: - Rive hero integration
+
+    func testScissorHeroRegistryEntryExists() {
+        // SignatureMoves+Scissor.swift pins heroDemoAsset to
+        // "demo_scissor_hero". Overview view resolves that via the
+        // registry. Missing registry entry would leave the overview
+        // rendering the placeholder forever.
+        let hero = TechniqueAnimationRegistry.animation(for: "demo_scissor_hero")
+        XCTAssertNotNil(hero, "Scissor heroDemoAsset must resolve to a registry entry")
+    }
+
+    func testScissorHeroHasRiveAssetPlusCanvasFallback() {
+        // Contract: any registry entry with a riveAssetName must also have
+        // authored keyframes, because RiveTechniqueView.init returns nil
+        // when the .riv file is missing from the bundle — the Canvas path
+        // must be able to render in its place so the UI never breaks.
+        guard let hero = TechniqueAnimationRegistry.animation(for: "demo_scissor_hero") else {
+            XCTFail("Missing scissorHero")
+            return
+        }
+        XCTAssertEqual(hero.riveAssetName, "scissor_hero")
+        XCTAssertFalse(hero.keyframes.isEmpty, "Rive-preferred entries must still ship Canvas fallback keyframes")
+    }
+
+    func testEveryRiveBackedAnimationHasCanvasFallback() {
+        // Generalized version of the Scissor-specific test: anywhere in
+        // the registry. When a new Rive-backed hero lands (Body Feint,
+        // La Croqueta, etc.), this guard auto-extends.
+        for anim in TechniqueAnimationRegistry.all where anim.riveAssetName != nil {
+            XCTAssertFalse(
+                anim.keyframes.isEmpty,
+                "\(anim.assetId) has riveAssetName but no keyframe fallback"
+            )
+        }
+    }
+
     func testEveryFirstTouchDrillKeyResolves() {
         // FirstTouch drill keys live in FirstTouchViewModel (not in
         // DrillRegistry), and map to animations via a switch in the

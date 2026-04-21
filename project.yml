@@ -9,12 +9,22 @@ settings:
   base:
     SWIFT_VERSION: "5.9"
 
+packages:
+  # Rive runtime for playback of .riv hero-quality animations. Free tier
+  # suffices under $1M ARR (per rive.app pricing as of 2026). Version
+  # pinned to a major so dot-version updates flow automatically.
+  RiveRuntime:
+    url: https://github.com/rive-app/rive-ios
+    from: "6.0.0"
+
 targets:
   PitchDreams:
     type: application
     platform: iOS
     sources:
       - PitchDreams
+    dependencies:
+      - package: RiveRuntime
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.pitchdreams.training

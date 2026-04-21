@@ -14,7 +14,13 @@ Companion iOS app for [pitchdreams.soccer](https://pitchdreams.soccer) — a you
 - **Voice:** Speech framework (SFSpeechRecognizer) + AVSpeechSynthesizer
 - **Testing:** XCTest with 158+ unit tests + end-to-end flow tests
 - **CI:** GitHub Actions (build + test)
-- **Dependencies:** Zero third-party — all Apple frameworks
+- **Dependencies:** Apple frameworks + `RiveRuntime` (SPM, pinned `from: "6.0.0"`) for Rive-native hero animations with Canvas keyframe fallback
+
+### Third-party dependency policy
+
+Historically: zero third-party deps. Current baseline: `RiveRuntime` only, added to enable hero-quality Rive animations (`SignatureMove.heroDemoAsset` → `TechniqueAnimation.riveAssetName` → `RiveTechniqueView`). Every `TechniqueAnimation` with a `riveAssetName` must also have authored `keyframes` so the Canvas path renders correctly when the `.riv` file is absent.
+
+Adding a new third-party dep should be a deliberate PR discussion with a clear reason the Apple-only path can't reach — not a casual "easier with a library" addition.
 
 ## Architecture
 

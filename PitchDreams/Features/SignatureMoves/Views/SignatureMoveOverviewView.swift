@@ -90,7 +90,30 @@ struct SignatureMoveOverviewView: View {
 
     // MARK: - Hero player
 
+    /// Resolves the move's `heroDemoAsset` slot via the animation registry.
+    /// When a `.riv` file is bundled for the resolved animation, render
+    /// Rive-native; otherwise fall through to the play-button placeholder
+    /// the app has shipped historically.
+    @ViewBuilder
     private var heroPlayer: some View {
+        if let heroAssetId = viewModel.move.heroDemoAsset,
+           let anim = TechniqueAnimationRegistry.animation(for: heroAssetId),
+           let riveAsset = anim.riveAssetName,
+           let riveView = RiveTechniqueView(assetName: riveAsset) {
+            riveView
+                .frame(height: 220)
+                .clipShape(RoundedRectangle(cornerRadius: CornerRadius.lg))
+                .overlay(
+                    RoundedRectangle(cornerRadius: CornerRadius.lg)
+                        .stroke(Color.white.opacity(0.06), lineWidth: 1)
+                )
+                .accessibilityLabel("Hero demo animation for \(viewModel.move.name)")
+        } else {
+            heroPlayerPlaceholder
+        }
+    }
+
+    private var heroPlayerPlaceholder: some View {
         ZStack {
             RoundedRectangle(cornerRadius: CornerRadius.lg)
                 .fill(

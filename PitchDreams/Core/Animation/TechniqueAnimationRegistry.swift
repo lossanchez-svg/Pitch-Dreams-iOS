@@ -28,6 +28,15 @@ enum TechniqueAnimationRegistry {
         .bodyFeintStillBall,
         .bodyFeintWalking,
         .bodyFeintConeEscape,
+        // La Croqueta — Stage 1 (groundwork)
+        .croquetaBreakdown,
+        .croquetaInsideTaps,
+        // La Croqueta — Stage 2 (technique)
+        .croquetaStillBall,
+        .croquetaLinear,
+        .croquetaConeGate,
+        // La Croqueta — Stage 3 (mastery)
+        .croquetaSpeedGateRun,
         // Regular drills
         .toeTaps,
         .soleRolls,
@@ -813,6 +822,336 @@ extension TechniqueAnimation {
         ],
         loops: true,
         loopPauseSeconds: 0.5,
+        riveAssetName: nil
+    )
+
+    // MARK: La Croqueta — Stage 1 (groundwork)
+
+    /// La Croqueta Breakdown — slow analytical "watch Iniesta" replay.
+    /// Teaches the three core mechanics: feet close, ball low, one-motion
+    /// inside-inside transfer that happens in a single defender stride.
+    ///
+    /// Distinctive Croqueta visual contract: ball y stays at ≈0.86
+    /// (literally "on the ground") through the transfer, moves only ~15%
+    /// of frame width between the two feet, and never leaves the
+    /// inside-foot-to-inside-foot track.
+    static let croquetaBreakdown = TechniqueAnimation(
+        assetId: "diagram_croqueta_breakdown",
+        viewAngle: .profile,
+        keyframes: [
+            TechniqueKeyframe(
+                time: 0.0,
+                ball: NormPoint(x: 0.56, y: 0.86),
+                leftFoot:  FootState(side: .left,  position: NormPoint(x: 0.44, y: 0.90), surface: .none,   isActive: false),
+                rightFoot: FootState(side: .right, position: NormPoint(x: 0.58, y: 0.88), surface: .inside, isActive: true),
+                avatarPose: .crouched,
+                caption: "Ball at inside of right — feet close.",
+                voiceover: "Ball at the inside of the right foot. Feet close.",
+                easeIn: .linear
+            ),
+            TechniqueKeyframe(
+                time: 1.0,
+                ball: NormPoint(x: 0.50, y: 0.86),
+                leftFoot:  FootState(side: .left,  position: NormPoint(x: 0.44, y: 0.90), surface: .none,    isActive: false),
+                rightFoot: FootState(side: .right, position: NormPoint(x: 0.58, y: 0.88), surface: .inside,  isActive: true),
+                avatarPose: .crouched,
+                caption: "Push with the inside — stay LOW.",
+                voiceover: "Push with the inside. Stay low.",
+                easeIn: .easeOut
+            ),
+            TechniqueKeyframe(
+                time: 2.0,
+                ball: NormPoint(x: 0.44, y: 0.86),
+                leftFoot:  FootState(side: .left,  position: NormPoint(x: 0.42, y: 0.88), surface: .inside, isActive: true),
+                rightFoot: FootState(side: .right, position: NormPoint(x: 0.58, y: 0.90), surface: .none,   isActive: false),
+                avatarPose: .crouched,
+                caption: "Inside of left catches it — same motion.",
+                voiceover: "Inside of the left catches it.",
+                easeIn: .easeInOut
+            ),
+            TechniqueKeyframe(
+                time: 2.8,
+                ball: NormPoint(x: 0.28, y: 0.84),
+                leftFoot:  FootState(side: .left,  position: NormPoint(x: 0.36, y: 0.88), surface: .inside, isActive: true),
+                rightFoot: FootState(side: .right, position: NormPoint(x: 0.58, y: 0.90), surface: .none,   isActive: false),
+                avatarPose: .explodeLeft,
+                caption: "Happens in ONE defender stride.",
+                voiceover: "Happens in one defender stride.",
+                easeIn: .easeOut
+            )
+        ],
+        loops: true,
+        loopPauseSeconds: 0.8,
+        riveAssetName: nil
+    )
+
+    /// Inside-Inside Taps — no ball. Mirrors the rhythm of the actual
+    /// move. Feet stay close and the "active" highlight bounces between
+    /// them in quick one-two pattern.
+    static let croquetaInsideTaps = TechniqueAnimation(
+        assetId: "diagram_croqueta_feet",
+        viewAngle: .profile,
+        keyframes: [
+            TechniqueKeyframe(
+                time: 0.0,
+                ball: NormPoint(x: 0.50, y: 0.95),
+                leftFoot:  FootState(side: .left,  position: NormPoint(x: 0.44, y: 0.90), surface: .none, isActive: false),
+                rightFoot: FootState(side: .right, position: NormPoint(x: 0.56, y: 0.90), surface: .none, isActive: false),
+                avatarPose: .crouched,
+                caption: "No ball — just the rhythm.",
+                voiceover: "No ball. Just the rhythm.",
+                easeIn: .linear
+            ),
+            TechniqueKeyframe(
+                time: 0.35,
+                ball: NormPoint(x: 0.50, y: 0.95),
+                leftFoot:  FootState(side: .left,  position: NormPoint(x: 0.44, y: 0.90), surface: .none,   isActive: false),
+                rightFoot: FootState(side: .right, position: NormPoint(x: 0.52, y: 0.88), surface: .inside, isActive: true),
+                avatarPose: .crouched,
+                caption: "Right inside tap.",
+                voiceover: "Right.",
+                easeIn: .easeOut
+            ),
+            TechniqueKeyframe(
+                time: 0.7,
+                ball: NormPoint(x: 0.50, y: 0.95),
+                leftFoot:  FootState(side: .left,  position: NormPoint(x: 0.48, y: 0.88), surface: .inside, isActive: true),
+                rightFoot: FootState(side: .right, position: NormPoint(x: 0.56, y: 0.90), surface: .none,   isActive: false),
+                avatarPose: .crouched,
+                caption: "Left inside tap.",
+                voiceover: "Left.",
+                easeIn: .easeOut
+            ),
+            TechniqueKeyframe(
+                time: 1.05,
+                ball: NormPoint(x: 0.50, y: 0.95),
+                leftFoot:  FootState(side: .left,  position: NormPoint(x: 0.44, y: 0.90), surface: .none,   isActive: false),
+                rightFoot: FootState(side: .right, position: NormPoint(x: 0.52, y: 0.88), surface: .inside, isActive: true),
+                avatarPose: .crouched,
+                caption: "Keep the rhythm — close, quick.",
+                voiceover: "Close. Quick.",
+                easeIn: .easeOut
+            )
+        ],
+        loops: true,
+        loopPauseSeconds: 0.2,
+        riveAssetName: nil
+    )
+
+    // MARK: La Croqueta — Stage 2 (technique, with ball)
+
+    /// Still Ball Push — canonical. Ball starts between feet, transfers
+    /// right→left via inside surfaces, then a reset pause before looping.
+    /// 30cm transfer distance is encoded as a ~12% horizontal ball move.
+    static let croquetaStillBall = TechniqueAnimation(
+        assetId: "diagram_croqueta_still",
+        viewAngle: .profile,
+        keyframes: [
+            TechniqueKeyframe(
+                time: 0.0,
+                ball: NormPoint(x: 0.56, y: 0.86),
+                leftFoot:  FootState(side: .left,  position: NormPoint(x: 0.44, y: 0.90), surface: .none,   isActive: false),
+                rightFoot: FootState(side: .right, position: NormPoint(x: 0.58, y: 0.88), surface: .inside, isActive: true),
+                avatarPose: .crouched,
+                caption: "Ball at inside of right foot.",
+                voiceover: "Ball at inside of right.",
+                easeIn: .linear
+            ),
+            TechniqueKeyframe(
+                time: 0.5,
+                ball: NormPoint(x: 0.50, y: 0.86),
+                leftFoot:  FootState(side: .left,  position: NormPoint(x: 0.44, y: 0.90), surface: .none,   isActive: false),
+                rightFoot: FootState(side: .right, position: NormPoint(x: 0.56, y: 0.88), surface: .inside, isActive: true),
+                avatarPose: .crouched,
+                caption: "Firm push — 30cm, not a kick.",
+                voiceover: "Firm push. Thirty centimeters.",
+                easeIn: .easeOut
+            ),
+            TechniqueKeyframe(
+                time: 1.0,
+                ball: NormPoint(x: 0.44, y: 0.86),
+                leftFoot:  FootState(side: .left,  position: NormPoint(x: 0.42, y: 0.88), surface: .inside, isActive: true),
+                rightFoot: FootState(side: .right, position: NormPoint(x: 0.58, y: 0.90), surface: .none,   isActive: false),
+                avatarPose: .crouched,
+                caption: "Inside of left stops it — LOW.",
+                voiceover: "Inside of left stops it.",
+                easeIn: .easeOut
+            ),
+            TechniqueKeyframe(
+                time: 2.0,
+                ball: NormPoint(x: 0.56, y: 0.86),
+                leftFoot:  FootState(side: .left,  position: NormPoint(x: 0.44, y: 0.90), surface: .none,   isActive: false),
+                rightFoot: FootState(side: .right, position: NormPoint(x: 0.58, y: 0.88), surface: .inside, isActive: true),
+                avatarPose: .crouched,
+                caption: "Reset. Now do it the other way.",
+                voiceover: "Reset. Other direction next.",
+                easeIn: .easeInOut
+            )
+        ],
+        loops: true,
+        loopPauseSeconds: 0.3,
+        riveAssetName: nil
+    )
+
+    /// Linear Croqueta — jogging forward, croqueta happens mid-stride
+    /// without breaking rhythm. Ball drifts forward during jog keyframes,
+    /// transfers horizontally on the croqueta keyframe, keeps moving
+    /// forward after.
+    static let croquetaLinear = TechniqueAnimation(
+        assetId: "diagram_croqueta_path",
+        viewAngle: .profile,
+        keyframes: [
+            TechniqueKeyframe(
+                time: 0.0,
+                ball: NormPoint(x: 0.22, y: 0.86),
+                leftFoot:  FootState(side: .left,  position: NormPoint(x: 0.18, y: 0.90), surface: .none,   isActive: false),
+                rightFoot: FootState(side: .right, position: NormPoint(x: 0.26, y: 0.88), surface: .inside, isActive: true),
+                avatarPose: .plantLeft,
+                caption: "Jogging — right-inside touches.",
+                voiceover: "Jogging. Right inside touches.",
+                easeIn: .easeOut
+            ),
+            TechniqueKeyframe(
+                time: 0.7,
+                ball: NormPoint(x: 0.48, y: 0.86),
+                leftFoot:  FootState(side: .left,  position: NormPoint(x: 0.44, y: 0.90), surface: .none,   isActive: false),
+                rightFoot: FootState(side: .right, position: NormPoint(x: 0.52, y: 0.88), surface: .inside, isActive: true),
+                avatarPose: .crouched,
+                caption: "Mid-stride — push inside.",
+                voiceover: "Mid-stride. Push inside.",
+                easeIn: .easeOut
+            ),
+            TechniqueKeyframe(
+                time: 1.2,
+                ball: NormPoint(x: 0.42, y: 0.86),
+                leftFoot:  FootState(side: .left,  position: NormPoint(x: 0.40, y: 0.88), surface: .inside, isActive: true),
+                rightFoot: FootState(side: .right, position: NormPoint(x: 0.54, y: 0.90), surface: .none,   isActive: false),
+                avatarPose: .crouched,
+                caption: "Left inside catches — stride unbroken.",
+                voiceover: "Left inside catches. Stride unbroken.",
+                easeIn: .easeOut
+            ),
+            TechniqueKeyframe(
+                time: 2.0,
+                ball: NormPoint(x: 0.70, y: 0.84),
+                leftFoot:  FootState(side: .left,  position: NormPoint(x: 0.54, y: 0.88), surface: .inside, isActive: true),
+                rightFoot: FootState(side: .right, position: NormPoint(x: 0.66, y: 0.90), surface: .none,   isActive: false),
+                avatarPose: .explodeRight,
+                caption: "Keep running — the move was invisible.",
+                voiceover: "Keep running. The move was invisible.",
+                easeIn: .spring
+            )
+        ],
+        loops: true,
+        loopPauseSeconds: 0.4,
+        riveAssetName: nil
+    )
+
+    /// Cone Gate — approach a 1m cone gate, croqueta slips the ball
+    /// through, player bursts past. Ball passes through the implied gate
+    /// on the transfer keyframe.
+    static let croquetaConeGate = TechniqueAnimation(
+        assetId: "diagram_croqueta_gate",
+        viewAngle: .profile,
+        keyframes: [
+            TechniqueKeyframe(
+                time: 0.0,
+                ball: NormPoint(x: 0.28, y: 0.86),
+                leftFoot:  FootState(side: .left,  position: NormPoint(x: 0.24, y: 0.90), surface: .none,   isActive: false),
+                rightFoot: FootState(side: .right, position: NormPoint(x: 0.32, y: 0.88), surface: .inside, isActive: true),
+                avatarPose: .plantLeft,
+                caption: "Approach the gate at pace.",
+                voiceover: "Approach the gate.",
+                easeIn: .easeOut
+            ),
+            TechniqueKeyframe(
+                time: 0.6,
+                ball: NormPoint(x: 0.52, y: 0.86),
+                leftFoot:  FootState(side: .left,  position: NormPoint(x: 0.46, y: 0.88), surface: .inside, isActive: true),
+                rightFoot: FootState(side: .right, position: NormPoint(x: 0.56, y: 0.90), surface: .none,   isActive: false),
+                avatarPose: .crouched,
+                caption: "Croqueta through the gate — tight.",
+                voiceover: "Croqueta through the gate.",
+                easeIn: .easeOut
+            ),
+            TechniqueKeyframe(
+                time: 1.2,
+                ball: NormPoint(x: 0.60, y: 0.86),
+                leftFoot:  FootState(side: .left,  position: NormPoint(x: 0.54, y: 0.90), surface: .none,   isActive: false),
+                rightFoot: FootState(side: .right, position: NormPoint(x: 0.62, y: 0.88), surface: .inside, isActive: true),
+                avatarPose: .crouched,
+                caption: "Ball on the other side — keep low.",
+                voiceover: "Ball on the other side.",
+                easeIn: .easeOut
+            ),
+            TechniqueKeyframe(
+                time: 2.0,
+                ball: NormPoint(x: 0.82, y: 0.82),
+                leftFoot:  FootState(side: .left,  position: NormPoint(x: 0.66, y: 0.88), surface: .none,   isActive: false),
+                rightFoot: FootState(side: .right, position: NormPoint(x: 0.74, y: 0.86), surface: .inside, isActive: true),
+                avatarPose: .explodeRight,
+                caption: "Burst past — don't slow down.",
+                voiceover: "Burst past.",
+                easeIn: .spring
+            )
+        ],
+        loops: true,
+        loopPauseSeconds: 0.4,
+        riveAssetName: nil
+    )
+
+    // MARK: La Croqueta — Stage 3 (mastery)
+
+    /// Speed Gate Run — fastest Croqueta. Scissor-style short loop where
+    /// two rapid croquetas chain into a single run through imagined gates.
+    /// Tempo chosen so viewers feel "gate-gate-gate" pacing.
+    static let croquetaSpeedGateRun = TechniqueAnimation(
+        assetId: "diagram_croqueta_speed_path",
+        viewAngle: .profile,
+        keyframes: [
+            TechniqueKeyframe(
+                time: 0.0,
+                ball: NormPoint(x: 0.22, y: 0.86),
+                leftFoot:  FootState(side: .left,  position: NormPoint(x: 0.18, y: 0.90), surface: .none,   isActive: false),
+                rightFoot: FootState(side: .right, position: NormPoint(x: 0.26, y: 0.88), surface: .inside, isActive: true),
+                avatarPose: .crouched,
+                caption: "Gate 1 — croqueta through.",
+                voiceover: "Gate one.",
+                easeIn: .easeOut
+            ),
+            TechniqueKeyframe(
+                time: 0.4,
+                ball: NormPoint(x: 0.38, y: 0.86),
+                leftFoot:  FootState(side: .left,  position: NormPoint(x: 0.34, y: 0.88), surface: .inside, isActive: true),
+                rightFoot: FootState(side: .right, position: NormPoint(x: 0.44, y: 0.90), surface: .none,   isActive: false),
+                avatarPose: .crouched,
+                caption: "Through 1. Rhythm.",
+                voiceover: "Through.",
+                easeIn: .easeOut
+            ),
+            TechniqueKeyframe(
+                time: 0.9,
+                ball: NormPoint(x: 0.62, y: 0.86),
+                leftFoot:  FootState(side: .left,  position: NormPoint(x: 0.56, y: 0.90), surface: .none,   isActive: false),
+                rightFoot: FootState(side: .right, position: NormPoint(x: 0.64, y: 0.88), surface: .inside, isActive: true),
+                avatarPose: .crouched,
+                caption: "Gate 2 — clean beats fast.",
+                voiceover: "Gate two. Clean beats fast.",
+                easeIn: .easeOut
+            ),
+            TechniqueKeyframe(
+                time: 1.4,
+                ball: NormPoint(x: 0.82, y: 0.84),
+                leftFoot:  FootState(side: .left,  position: NormPoint(x: 0.64, y: 0.88), surface: .inside, isActive: true),
+                rightFoot: FootState(side: .right, position: NormPoint(x: 0.74, y: 0.90), surface: .none,   isActive: false),
+                avatarPose: .explodeRight,
+                caption: "Through 2 — keep rhythm to 3.",
+                voiceover: "Keep rhythm.",
+                easeIn: .spring
+            )
+        ],
+        loops: true,
+        loopPauseSeconds: 0.3,
         riveAssetName: nil
     )
 

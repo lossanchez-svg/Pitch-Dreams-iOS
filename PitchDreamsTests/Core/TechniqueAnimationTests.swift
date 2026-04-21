@@ -316,7 +316,11 @@ final class TechniqueAnimationTests: XCTestCase {
         // move id to `fullyAnimatedMoveIds` once every drill in the move
         // has a registered animation — the test then enforces integrity
         // for that move automatically.
-        let fullyAnimatedMoveIds: Set<String> = ["move-scissor", "move-body-feint"]
+        let fullyAnimatedMoveIds: Set<String> = [
+            "move-scissor",
+            "move-body-feint",
+            "move-la-croqueta"
+        ]
 
         for move in SignatureMoveRegistry.launchMoves where fullyAnimatedMoveIds.contains(move.id) {
             for stage in move.stages {

@@ -269,11 +269,25 @@ struct FirstTouchView: View {
     // MARK: - Active Drill
 
     private var activeDrillView: some View {
-        VStack(spacing: 32) {
+        VStack(spacing: 24) {
             Spacer()
 
             Text(viewModel.activeDrillKey?.replacingOccurrences(of: "_", with: " ").capitalized ?? "")
                 .font(.title2.weight(.semibold))
+
+            // Authored technique animation when the drill key resolves to
+            // a registered animation. FirstTouch drills live outside
+            // DrillDefinition, so the mapping is via drill-key lookup.
+            if let key = viewModel.activeDrillKey,
+               let anim = TechniqueAnimationRegistry.animation(forFirstTouchDrillKey: key) {
+                TechniqueAnimationView(
+                    animation: anim,
+                    coachVoice: CoachVoice(),
+                    voiceoverEnabled: false
+                )
+                .frame(height: 140)
+                .padding(.horizontal, 20)
+            }
 
             // Timer display when challenge is active
             if timerActive {

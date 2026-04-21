@@ -10,6 +10,31 @@ enum TechniqueAnimationRegistry {
         all.first { $0.assetId == assetId }
     }
 
+    /// Maps a `FirstTouchViewModel` drill key (e.g. "juggling_both_feet",
+    /// "wall_ball_volley") to the animation that should appear above the
+    /// tap counter. FirstTouch drills live outside `DrillDefinition`, so
+    /// the mapping is expressed here instead of via a field on a shared
+    /// model. Returns nil if no animation is authored for the key yet.
+    static func animation(forFirstTouchDrillKey key: String) -> TechniqueAnimation? {
+        let assetId: String?
+        switch key {
+        case "juggling_both_feet",
+             "juggling_right_only",
+             "juggling_left_only",
+             "juggling_thigh":
+            assetId = "diagram_juggling"
+        case "wall_ball_pass":
+            assetId = "diagram_wall_passes"
+        case "wall_ball_one_touch":
+            assetId = "diagram_wall_ball_oneTouch"
+        case "wall_ball_volley":
+            assetId = "diagram_wall_ball_volley"
+        default:
+            assetId = nil
+        }
+        return assetId.flatMap { animation(for: $0) }
+    }
+
     static let all: [TechniqueAnimation] = [
         // Scissor — Stage 1 (groundwork)
         .scissorBreakdown,
@@ -37,6 +62,15 @@ enum TechniqueAnimationRegistry {
         .croquetaConeGate,
         // La Croqueta — Stage 3 (mastery)
         .croquetaSpeedGateRun,
+        // First Touch
+        .juggling,
+        .wallBallOneTouch,
+        .wallBallVolley,
+        // Advanced drills (premium-gated)
+        .dropVolleys,
+        .weakFootFinishing,
+        .comboMoves,
+        .speedDribbleCorridor,
         // Regular drills
         .toeTaps,
         .soleRolls,
@@ -1152,6 +1186,384 @@ extension TechniqueAnimation {
         ],
         loops: true,
         loopPauseSeconds: 0.3,
+        riveAssetName: nil
+    )
+
+    // MARK: First Touch
+
+    /// Juggling — ball floats near center, alternating feet tap it up.
+    /// Ball y oscillates between ~0.55 (rising) and ~0.75 (at foot for
+    /// contact) so the viewer reads vertical rhythm, not foot movement.
+    static let juggling = TechniqueAnimation(
+        assetId: "diagram_juggling",
+        viewAngle: .profile,
+        keyframes: [
+            TechniqueKeyframe(
+                time: 0.0,
+                ball: NormPoint(x: 0.50, y: 0.55),
+                leftFoot:  FootState(side: .left,  position: NormPoint(x: 0.42, y: 0.92), surface: .none, isActive: false),
+                rightFoot: FootState(side: .right, position: NormPoint(x: 0.58, y: 0.92), surface: .none, isActive: false),
+                avatarPose: .neutral,
+                caption: "Eyes on the ball — light touches.",
+                voiceover: "Eyes on the ball. Light touches.",
+                easeIn: .easeInOut
+            ),
+            TechniqueKeyframe(
+                time: 0.4,
+                ball: NormPoint(x: 0.50, y: 0.75),
+                leftFoot:  FootState(side: .left,  position: NormPoint(x: 0.42, y: 0.92), surface: .none,  isActive: false),
+                rightFoot: FootState(side: .right, position: NormPoint(x: 0.50, y: 0.75), surface: .laces, isActive: true),
+                avatarPose: .plantLeft,
+                caption: "Right foot — laces up.",
+                voiceover: "Right.",
+                easeIn: .easeOut
+            ),
+            TechniqueKeyframe(
+                time: 0.8,
+                ball: NormPoint(x: 0.50, y: 0.55),
+                leftFoot:  FootState(side: .left,  position: NormPoint(x: 0.42, y: 0.92), surface: .none, isActive: false),
+                rightFoot: FootState(side: .right, position: NormPoint(x: 0.58, y: 0.92), surface: .none, isActive: false),
+                avatarPose: .neutral,
+                caption: "Ball rises — reset.",
+                voiceover: "Up.",
+                easeIn: .easeOut
+            ),
+            TechniqueKeyframe(
+                time: 1.2,
+                ball: NormPoint(x: 0.50, y: 0.75),
+                leftFoot:  FootState(side: .left,  position: NormPoint(x: 0.50, y: 0.75), surface: .laces, isActive: true),
+                rightFoot: FootState(side: .right, position: NormPoint(x: 0.58, y: 0.92), surface: .none,  isActive: false),
+                avatarPose: .plantRight,
+                caption: "Left foot — laces up.",
+                voiceover: "Left.",
+                easeIn: .easeOut
+            )
+        ],
+        loops: true,
+        loopPauseSeconds: 0.2,
+        riveAssetName: nil
+    )
+
+    /// Wall Ball One Touch — no control step: ball arrives, foot strikes
+    /// back in one motion. Shorter loop + faster tempo than the basic
+    /// Wall Passes animation so the "one touch" rule reads through pacing.
+    static let wallBallOneTouch = TechniqueAnimation(
+        assetId: "diagram_wall_ball_oneTouch",
+        viewAngle: .profile,
+        keyframes: [
+            TechniqueKeyframe(
+                time: 0.0,
+                ball: NormPoint(x: 0.80, y: 0.82),
+                leftFoot:  FootState(side: .left,  position: NormPoint(x: 0.28, y: 0.92), surface: .inside, isActive: false),
+                rightFoot: FootState(side: .right, position: NormPoint(x: 0.40, y: 0.90), surface: .none,   isActive: false),
+                avatarPose: .crouched,
+                caption: "Ball returning — no control step.",
+                voiceover: "Ball returning.",
+                easeIn: .linear
+            ),
+            TechniqueKeyframe(
+                time: 0.5,
+                ball: NormPoint(x: 0.42, y: 0.82),
+                leftFoot:  FootState(side: .left,  position: NormPoint(x: 0.28, y: 0.92), surface: .inside, isActive: true),
+                rightFoot: FootState(side: .right, position: NormPoint(x: 0.40, y: 0.90), surface: .none,   isActive: false),
+                avatarPose: .leanRight,
+                caption: "Meet and strike in one motion.",
+                voiceover: "Meet and strike.",
+                easeIn: .easeOut
+            ),
+            TechniqueKeyframe(
+                time: 1.1,
+                ball: NormPoint(x: 0.82, y: 0.74),
+                leftFoot:  FootState(side: .left,  position: NormPoint(x: 0.40, y: 0.84), surface: .inside, isActive: true),
+                rightFoot: FootState(side: .right, position: NormPoint(x: 0.36, y: 0.90), surface: .none,   isActive: false),
+                avatarPose: .leanRight,
+                caption: "Back to the wall — firm pace.",
+                voiceover: "Back to the wall.",
+                easeIn: .spring
+            )
+        ],
+        loops: true,
+        loopPauseSeconds: 0.3,
+        riveAssetName: nil
+    )
+
+    /// Wall Ball Volley — ball falls from above (dropped), foot meets it
+    /// with laces mid-height, rises toward wall. Teaches ankle-lock and
+    /// timing the contact point.
+    static let wallBallVolley = TechniqueAnimation(
+        assetId: "diagram_wall_ball_volley",
+        viewAngle: .profile,
+        keyframes: [
+            TechniqueKeyframe(
+                time: 0.0,
+                ball: NormPoint(x: 0.36, y: 0.20),
+                leftFoot:  FootState(side: .left,  position: NormPoint(x: 0.32, y: 0.92), surface: .none, isActive: false),
+                rightFoot: FootState(side: .right, position: NormPoint(x: 0.44, y: 0.92), surface: .none, isActive: false),
+                avatarPose: .neutral,
+                caption: "Drop the ball from your hands.",
+                voiceover: "Drop the ball.",
+                easeIn: .linear
+            ),
+            TechniqueKeyframe(
+                time: 0.6,
+                ball: NormPoint(x: 0.36, y: 0.68),
+                leftFoot:  FootState(side: .left,  position: NormPoint(x: 0.32, y: 0.92), surface: .none, isActive: false),
+                rightFoot: FootState(side: .right, position: NormPoint(x: 0.44, y: 0.92), surface: .none, isActive: false),
+                avatarPose: .crouched,
+                caption: "Watch the ball onto your foot.",
+                voiceover: "Watch the ball.",
+                easeIn: .easeIn
+            ),
+            TechniqueKeyframe(
+                time: 0.9,
+                ball: NormPoint(x: 0.42, y: 0.74),
+                leftFoot:  FootState(side: .left,  position: NormPoint(x: 0.32, y: 0.92), surface: .none,  isActive: false),
+                rightFoot: FootState(side: .right, position: NormPoint(x: 0.44, y: 0.74), surface: .laces, isActive: true),
+                avatarPose: .plantLeft,
+                caption: "Ankle LOCKED — laces contact.",
+                voiceover: "Ankle locked. Laces.",
+                easeIn: .easeOut
+            ),
+            TechniqueKeyframe(
+                time: 1.5,
+                ball: NormPoint(x: 0.86, y: 0.40),
+                leftFoot:  FootState(side: .left,  position: NormPoint(x: 0.32, y: 0.92), surface: .none,  isActive: false),
+                rightFoot: FootState(side: .right, position: NormPoint(x: 0.52, y: 0.80), surface: .laces, isActive: true),
+                avatarPose: .leanRight,
+                caption: "Follow through — eyes at the target.",
+                voiceover: "Follow through.",
+                easeIn: .spring
+            )
+        ],
+        loops: true,
+        loopPauseSeconds: 0.5,
+        riveAssetName: nil
+    )
+
+    // MARK: Advanced drills (premium-gated)
+
+    /// Drop Volleys — drop ball from hands, volley at goal. Shares the
+    /// fall→contact→follow-through rhythm with the wall-ball volley but
+    /// scaled for a goal-side setup (more lateral distance on the strike).
+    static let dropVolleys = TechniqueAnimation(
+        assetId: "diagram_shoot_volleys",
+        viewAngle: .profile,
+        keyframes: [
+            TechniqueKeyframe(
+                time: 0.0,
+                ball: NormPoint(x: 0.36, y: 0.20),
+                leftFoot:  FootState(side: .left,  position: NormPoint(x: 0.32, y: 0.92), surface: .none, isActive: false),
+                rightFoot: FootState(side: .right, position: NormPoint(x: 0.44, y: 0.92), surface: .none, isActive: false),
+                avatarPose: .neutral,
+                caption: "Drop — don't toss — from your hands.",
+                voiceover: "Drop. Don't toss.",
+                easeIn: .linear
+            ),
+            TechniqueKeyframe(
+                time: 0.7,
+                ball: NormPoint(x: 0.38, y: 0.70),
+                leftFoot:  FootState(side: .left,  position: NormPoint(x: 0.30, y: 0.92), surface: .none, isActive: false),
+                rightFoot: FootState(side: .right, position: NormPoint(x: 0.46, y: 0.90), surface: .none, isActive: false),
+                avatarPose: .crouched,
+                caption: "Watch the ball onto the foot.",
+                voiceover: "Watch the ball onto the foot.",
+                easeIn: .easeIn
+            ),
+            TechniqueKeyframe(
+                time: 1.0,
+                ball: NormPoint(x: 0.46, y: 0.76),
+                leftFoot:  FootState(side: .left,  position: NormPoint(x: 0.30, y: 0.92), surface: .none,  isActive: false),
+                rightFoot: FootState(side: .right, position: NormPoint(x: 0.50, y: 0.76), surface: .laces, isActive: true),
+                avatarPose: .plantLeft,
+                caption: "LOCK the ankle — clean laces contact.",
+                voiceover: "Lock the ankle.",
+                easeIn: .easeOut
+            ),
+            TechniqueKeyframe(
+                time: 1.6,
+                ball: NormPoint(x: 0.92, y: 0.50),
+                leftFoot:  FootState(side: .left,  position: NormPoint(x: 0.32, y: 0.92), surface: .none,  isActive: false),
+                rightFoot: FootState(side: .right, position: NormPoint(x: 0.60, y: 0.78), surface: .laces, isActive: true),
+                avatarPose: .explodeRight,
+                caption: "Follow through — strike at goal.",
+                voiceover: "Follow through.",
+                easeIn: .spring
+            )
+        ],
+        loops: true,
+        loopPauseSeconds: 0.6,
+        riveAssetName: nil
+    )
+
+    /// Weak Foot Finishing — placed finish from the edge of the box.
+    /// Ball stationary at planted-foot side; weak foot swings and strikes
+    /// with inside-placement (not power). Teaches the discipline of
+    /// accuracy over force on the non-dominant side.
+    static let weakFootFinishing = TechniqueAnimation(
+        assetId: "diagram_shoot_weak_foot",
+        viewAngle: .profile,
+        keyframes: [
+            TechniqueKeyframe(
+                time: 0.0,
+                ball: NormPoint(x: 0.48, y: 0.86),
+                leftFoot:  FootState(side: .left,  position: NormPoint(x: 0.32, y: 0.92), surface: .none,  isActive: false),
+                rightFoot: FootState(side: .right, position: NormPoint(x: 0.58, y: 0.90), surface: .inside, isActive: false),
+                avatarPose: .crouched,
+                caption: "Plant foot BESIDE the ball.",
+                voiceover: "Plant beside the ball.",
+                easeIn: .linear
+            ),
+            TechniqueKeyframe(
+                time: 0.7,
+                ball: NormPoint(x: 0.48, y: 0.86),
+                leftFoot:  FootState(side: .left,  position: NormPoint(x: 0.24, y: 0.80), surface: .none,   isActive: false),
+                rightFoot: FootState(side: .right, position: NormPoint(x: 0.58, y: 0.90), surface: .inside, isActive: false),
+                avatarPose: .leanRight,
+                caption: "Weak foot draws back — eyes on target.",
+                voiceover: "Draw back. Eyes on target.",
+                easeIn: .easeOut
+            ),
+            TechniqueKeyframe(
+                time: 1.2,
+                ball: NormPoint(x: 0.52, y: 0.86),
+                leftFoot:  FootState(side: .left,  position: NormPoint(x: 0.48, y: 0.86), surface: .inside, isActive: true),
+                rightFoot: FootState(side: .right, position: NormPoint(x: 0.58, y: 0.90), surface: .none,   isActive: false),
+                avatarPose: .leanLeft,
+                caption: "PLACE with inside — accuracy, not power.",
+                voiceover: "Place with the inside.",
+                easeIn: .easeOut
+            ),
+            TechniqueKeyframe(
+                time: 1.8,
+                ball: NormPoint(x: 0.92, y: 0.76),
+                leftFoot:  FootState(side: .left,  position: NormPoint(x: 0.56, y: 0.84), surface: .inside, isActive: true),
+                rightFoot: FootState(side: .right, position: NormPoint(x: 0.60, y: 0.88), surface: .none,   isActive: false),
+                avatarPose: .leanLeft,
+                caption: "Follow through across your body.",
+                voiceover: "Follow through across the body.",
+                easeIn: .easeOut
+            )
+        ],
+        loops: true,
+        loopPauseSeconds: 0.6,
+        riveAssetName: nil
+    )
+
+    /// Combo Moves — chain a scissor into an opposite-direction cut. The
+    /// first move must be sold or the second has nothing to break from.
+    /// Five keyframes so viewers feel the two moves as a single sequence,
+    /// not two separate drills.
+    static let comboMoves = TechniqueAnimation(
+        assetId: "diagram_drib_1v1_combo",
+        viewAngle: .profile,
+        keyframes: [
+            TechniqueKeyframe(
+                time: 0.0,
+                ball: NormPoint(x: 0.50, y: 0.82),
+                leftFoot:  FootState(side: .left,  position: NormPoint(x: 0.42, y: 0.92), surface: .none, isActive: false),
+                rightFoot: FootState(side: .right, position: NormPoint(x: 0.58, y: 0.92), surface: .none, isActive: false),
+                avatarPose: .crouched,
+                caption: "Two moves, one sequence.",
+                voiceover: "Two moves. One sequence.",
+                easeIn: .linear
+            ),
+            TechniqueKeyframe(
+                time: 0.6,
+                ball: NormPoint(x: 0.50, y: 0.82),
+                leftFoot:  FootState(side: .left,  position: NormPoint(x: 0.40, y: 0.92), surface: .none,    isActive: false),
+                rightFoot: FootState(side: .right, position: NormPoint(x: 0.78, y: 0.60), surface: .outside, isActive: true),
+                avatarPose: .leanLeft,
+                caption: "Scissor — commit to the fake.",
+                voiceover: "Scissor. Commit.",
+                easeIn: .easeOut
+            ),
+            TechniqueKeyframe(
+                time: 1.1,
+                ball: NormPoint(x: 0.50, y: 0.82),
+                leftFoot:  FootState(side: .left,  position: NormPoint(x: 0.40, y: 0.92), surface: .none,   isActive: false),
+                rightFoot: FootState(side: .right, position: NormPoint(x: 0.60, y: 0.90), surface: .inside, isActive: true),
+                avatarPose: .plantLeft,
+                caption: "Plant — now break the OTHER way.",
+                voiceover: "Plant. Break the other way.",
+                easeIn: .easeInOut
+            ),
+            TechniqueKeyframe(
+                time: 1.6,
+                ball: NormPoint(x: 0.28, y: 0.78),
+                leftFoot:  FootState(side: .left,  position: NormPoint(x: 0.34, y: 0.84), surface: .outside, isActive: true),
+                rightFoot: FootState(side: .right, position: NormPoint(x: 0.56, y: 0.90), surface: .none,    isActive: false),
+                avatarPose: .explodeLeft,
+                caption: "Cut sharp — outside-left.",
+                voiceover: "Cut sharp.",
+                easeIn: .spring
+            ),
+            TechniqueKeyframe(
+                time: 2.2,
+                ball: NormPoint(x: 0.12, y: 0.72),
+                leftFoot:  FootState(side: .left,  position: NormPoint(x: 0.20, y: 0.80), surface: .inside, isActive: true),
+                rightFoot: FootState(side: .right, position: NormPoint(x: 0.48, y: 0.90), surface: .none,   isActive: false),
+                avatarPose: .explodeLeft,
+                caption: "Both moves strong — no relaxing.",
+                voiceover: "Both moves strong.",
+                easeIn: .spring
+            )
+        ],
+        loops: true,
+        loopPauseSeconds: 0.5,
+        riveAssetName: nil
+    )
+
+    /// Speed Dribble Corridor — ball weaves at top speed between implied
+    /// parallel cone lines 1.5m apart (encoded as limited y oscillation
+    /// on ball between 0.80 and 0.88). Feet alternate quickly; no side
+    /// moves — just close touches at pace.
+    static let speedDribbleCorridor = TechniqueAnimation(
+        assetId: "diagram_drib_speed_corridor",
+        viewAngle: .profile,
+        keyframes: [
+            TechniqueKeyframe(
+                time: 0.0,
+                ball: NormPoint(x: 0.20, y: 0.84),
+                leftFoot:  FootState(side: .left,  position: NormPoint(x: 0.18, y: 0.92), surface: .none,   isActive: false),
+                rightFoot: FootState(side: .right, position: NormPoint(x: 0.22, y: 0.84), surface: .inside, isActive: true),
+                avatarPose: .explodeRight,
+                caption: "Close touches at pace.",
+                voiceover: "Close touches at pace.",
+                easeIn: .easeOut
+            ),
+            TechniqueKeyframe(
+                time: 0.4,
+                ball: NormPoint(x: 0.38, y: 0.88),
+                leftFoot:  FootState(side: .left,  position: NormPoint(x: 0.36, y: 0.86), surface: .inside, isActive: true),
+                rightFoot: FootState(side: .right, position: NormPoint(x: 0.42, y: 0.92), surface: .none,   isActive: false),
+                avatarPose: .explodeRight,
+                caption: "Stay INSIDE the corridor.",
+                voiceover: "Stay inside the corridor.",
+                easeIn: .easeOut
+            ),
+            TechniqueKeyframe(
+                time: 0.8,
+                ball: NormPoint(x: 0.56, y: 0.80),
+                leftFoot:  FootState(side: .left,  position: NormPoint(x: 0.50, y: 0.92), surface: .none,   isActive: false),
+                rightFoot: FootState(side: .right, position: NormPoint(x: 0.58, y: 0.82), surface: .inside, isActive: true),
+                avatarPose: .explodeRight,
+                caption: "Alternate feet each touch.",
+                voiceover: "Alternate feet.",
+                easeIn: .easeOut
+            ),
+            TechniqueKeyframe(
+                time: 1.2,
+                ball: NormPoint(x: 0.78, y: 0.86),
+                leftFoot:  FootState(side: .left,  position: NormPoint(x: 0.70, y: 0.86), surface: .inside, isActive: true),
+                rightFoot: FootState(side: .right, position: NormPoint(x: 0.76, y: 0.92), surface: .none,   isActive: false),
+                avatarPose: .explodeRight,
+                caption: "Eyes UP when you can.",
+                voiceover: "Eyes up when you can.",
+                easeIn: .easeOut
+            )
+        ],
+        loops: true,
+        loopPauseSeconds: 0.2,
         riveAssetName: nil
     )
 

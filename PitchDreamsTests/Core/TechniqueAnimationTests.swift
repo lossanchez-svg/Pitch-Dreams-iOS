@@ -305,6 +305,22 @@ final class TechniqueAnimationTests: XCTestCase {
         }
     }
 
+    func testEveryFirstTouchDrillKeyResolves() {
+        // FirstTouch drill keys live in FirstTouchViewModel (not in
+        // DrillRegistry), and map to animations via a switch in the
+        // registry. Enforce that every shipping drill key resolves to a
+        // real registry entry — catches typos between the view-model's
+        // keys and the switch's cases.
+        let shippingKeys = FirstTouchViewModel.jugglingDrills.map(\.0)
+            + FirstTouchViewModel.wallBallDrills.map(\.0)
+        for key in shippingKeys {
+            XCTAssertNotNil(
+                TechniqueAnimationRegistry.animation(forFirstTouchDrillKey: key),
+                "FirstTouch drill key '\(key)' does not resolve to an animation"
+            )
+        }
+    }
+
     func testEverySignatureMoveDrillDiagramResolves() {
         // Sister invariant for MoveDrill.diagramAnimationAsset. Catches
         // typos between the signature-move authoring files and the

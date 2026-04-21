@@ -108,7 +108,8 @@ enum DrillRegistry {
             coachTip: "Watch the ball all the way onto your foot. Lock your ankle.",
             difficulty: "advanced",
             spaceType: "outdoor",
-            requiresPremium: true
+            requiresPremium: true,
+            diagramAnimationAsset: "diagram_shoot_volleys"
         ),
         DrillDefinition(
             id: "shoot-weak-foot",
@@ -120,7 +121,8 @@ enum DrillRegistry {
             coachTip: "Plant foot beside the ball, eyes on the target, follow through across your body.",
             difficulty: "advanced",
             spaceType: "outdoor",
-            requiresPremium: true
+            requiresPremium: true,
+            diagramAnimationAsset: "diagram_shoot_weak_foot"
         ),
 
         // Dribbling
@@ -157,7 +159,8 @@ enum DrillRegistry {
             coachTip: "The second move only works if the first was believed. Commit to the fake.",
             difficulty: "advanced",
             spaceType: "large_indoor",
-            requiresPremium: true
+            requiresPremium: true,
+            diagramAnimationAsset: "diagram_drib_1v1_combo"
         ),
         DrillDefinition(
             id: "drib-speed-corridor",
@@ -169,7 +172,8 @@ enum DrillRegistry {
             coachTip: "Eyes up as much as possible. Close touches under pressure beat long touches at jog pace.",
             difficulty: "advanced",
             spaceType: "outdoor",
-            requiresPremium: true
+            requiresPremium: true,
+            diagramAnimationAsset: "diagram_drib_speed_corridor"
         ),
 
         // First Touch

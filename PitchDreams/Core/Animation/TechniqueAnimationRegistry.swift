@@ -36,6 +36,8 @@ enum TechniqueAnimationRegistry {
     }
 
     static let all: [TechniqueAnimation] = [
+        // Signature-move hero demos (Rive-preferred, Canvas fallback)
+        .scissorHero,
         // Scissor — Stage 1 (groundwork)
         .scissorBreakdown,
         .scissorSwingNoBall,
@@ -248,6 +250,25 @@ extension TechniqueAnimation {
         loops: true,
         loopPauseSeconds: 0.3,
         riveAssetName: nil
+    )
+
+    // MARK: Hero demos (Rive-preferred)
+
+    /// Scissor hero demo. The `riveAssetName` resolves to `scissor_hero.riv`
+    /// in `Bundle.main` when one is shipped; until then the keyframe
+    /// fallback (same content as `scissorStillBall`) renders via
+    /// `TechniqueAnimationView`'s Canvas path, so the overview screen
+    /// never shows a broken state.
+    ///
+    /// First real `.riv` file lands in a follow-up PR once authored in the
+    /// Rive editor and dropped into `PitchDreams/Resources/`.
+    static let scissorHero = TechniqueAnimation(
+        assetId: "demo_scissor_hero",
+        viewAngle: .profile,
+        keyframes: scissorStillBall.keyframes,
+        loops: true,
+        loopPauseSeconds: 0.5,
+        riveAssetName: "scissor_hero"
     )
 
     // MARK: Scissor — Stage 1 (groundwork)

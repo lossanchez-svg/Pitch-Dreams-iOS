@@ -24,6 +24,9 @@ struct ProgressDashboardView: View {
                         emptyState
                     } else {
                         heroGlow
+                        if viewModel.isOnBestEverStreak {
+                            personalBestBanner
+                        }
                         statsGrid
                         streakSection
                         recentSessionsSection
@@ -88,8 +91,34 @@ struct ProgressDashboardView: View {
             StatCardView(title: "This Month", value: "\(viewModel.thisMonthSessions)", unit: "sessions", icon: "calendar", color: .dsSecondary)
             StatCardView(title: "Total Sessions", value: "\(viewModel.totalSessions)", unit: "sessions", icon: "figure.run", color: .dsSecondary)
             StatCardView(title: "Training Time", value: viewModel.formattedTotalTime, icon: "clock.fill", color: .dsSecondary)
-            StatCardView(title: "Avg RPE", value: viewModel.averageEffort > 0 ? String(format: "%.1f", viewModel.averageEffort) : "--", unit: "/ 10", icon: "bolt.fill", color: .dsAccentOrange)
         }
+    }
+
+    // MARK: - Personal Best Banner
+
+    private var personalBestBanner: some View {
+        HStack(spacing: 12) {
+            Image(systemName: "flame.fill")
+                .font(.system(size: 22))
+                .foregroundStyle(Color.dsAccentOrange)
+            VStack(alignment: .leading, spacing: 2) {
+                Text("NEW PERSONAL BEST")
+                    .font(.system(size: 11, weight: .heavy, design: .rounded))
+                    .tracking(1.5)
+                    .foregroundStyle(Color.dsAccentOrange)
+                Text("\(viewModel.currentStreak)-day streak — your best ever. Keep it alive!")
+                    .font(.system(size: 13, weight: .semibold))
+                    .foregroundStyle(Color.dsOnSurface)
+            }
+            Spacer()
+        }
+        .padding(Spacing.lg)
+        .background(Color.dsAccentOrange.opacity(0.12))
+        .clipShape(RoundedRectangle(cornerRadius: CornerRadius.lg))
+        .overlay(
+            RoundedRectangle(cornerRadius: CornerRadius.lg)
+                .stroke(Color.dsAccentOrange.opacity(0.3), lineWidth: 1)
+        )
     }
 
     // MARK: - Streak Section

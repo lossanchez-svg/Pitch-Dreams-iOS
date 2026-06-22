@@ -6,8 +6,6 @@ struct FullCheckInSheet: View {
     @Binding var isPresented: Bool
 
     @State private var energy: Int = 3
-    @State private var soreness: Soreness = .none
-    @State private var focus: Int = 3
     @State private var selectedMood: MoodEmoji = .okay
     @State private var timeAvail: Int = 20
     @State private var painFlag = false
@@ -44,55 +42,6 @@ struct FullCheckInSheet: View {
                                 .tint(Color.dsAccentOrange)
 
                                 levelBar(value: energy, max: 5, color: Color.dsAccentOrange)
-                            }
-                        }
-
-                        // Soreness
-                        sectionCard(title: "SORENESS") {
-                            HStack(spacing: 8) {
-                                ForEach(Soreness.allCases, id: \.self) { level in
-                                    Button {
-                                        soreness = level
-                                    } label: {
-                                        Text(sorenessLabel(level))
-                                            .font(.system(size: 12, weight: .bold))
-                                            .tracking(0.5)
-                                            .foregroundStyle(soreness == level ? Color.dsSecondary : Color.dsOnSurfaceVariant)
-                                            .frame(maxWidth: .infinity)
-                                            .padding(.vertical, 10)
-                                            .background(soreness == level ? Color.dsSecondary.opacity(0.15) : Color.dsSurfaceContainerHighest)
-                                            .clipShape(Capsule())
-                                            .overlay(
-                                                Capsule().stroke(
-                                                    soreness == level ? Color.dsSecondary.opacity(0.3) : .clear,
-                                                    lineWidth: 1
-                                                )
-                                            )
-                                    }
-                                    .buttonStyle(.plain)
-                                }
-                            }
-                        }
-
-                        // Focus
-                        sectionCard(title: "FOCUS LEVEL") {
-                            VStack(spacing: 12) {
-                                HStack {
-                                    Text("Focus")
-                                        .font(.system(size: 15, weight: .medium))
-                                        .foregroundStyle(Color.dsOnSurface)
-                                    Spacer()
-                                    Text("\(focus) / 5")
-                                        .font(.system(size: 14, weight: .bold, design: .rounded))
-                                        .foregroundStyle(Color.dsOnSurfaceVariant)
-                                }
-
-                                Stepper(value: $focus, in: 1...5) {
-                                    EmptyView()
-                                }
-                                .tint(Color.dsSecondary)
-
-                                levelBar(value: focus, max: 5, color: Color.dsSecondary)
                             }
                         }
 
@@ -176,8 +125,6 @@ struct FullCheckInSheet: View {
                             Task {
                                 await viewModel.fullCheckIn(
                                     energy: energy,
-                                    soreness: soreness.rawValue,
-                                    focus: focus,
                                     mood: selectedMood.rawValue,
                                     timeAvail: timeAvail,
                                     painFlag: painFlag
@@ -258,15 +205,6 @@ struct FullCheckInSheet: View {
     }
 
     // MARK: - Helpers
-
-    private func sorenessLabel(_ soreness: Soreness) -> String {
-        switch soreness {
-        case .none: return "None"
-        case .light: return "Light"
-        case .medium: return "Medium"
-        case .high: return "High"
-        }
-    }
 
     private func moodDisplayLabel(_ mood: MoodEmoji) -> String {
         switch mood {

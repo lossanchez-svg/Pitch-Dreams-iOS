@@ -101,7 +101,7 @@ struct TrainingSessionView: View {
             SpaceSelectionView(childId: childId)
         }
         .navigationDestination(isPresented: $navigateToActivityLog) {
-            ActivityLogView(childId: childId)
+            QuickLogView(childId: childId)
         }
     }
 
@@ -295,7 +295,7 @@ struct TrainingSessionView: View {
             }
 
             NavigationLink {
-                ActivityLogView(childId: childId)
+                QuickLogView(childId: childId)
             } label: {
                 HStack {
                     Image(systemName: "doc.text.fill")

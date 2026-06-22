@@ -90,7 +90,13 @@ final class ProgressViewModel: ObservableObject {
     }
 
     var recentSessions: [SessionLog] {
-        Array(sessions.prefix(10))
+        Array(sessions.prefix(5))
+    }
+
+    /// True when the kid's current run is also their best-ever run — a real
+    /// "you beat your record" moment, drawn straight from existing streak data.
+    var isOnBestEverStreak: Bool {
+        currentStreak >= 2 && currentStreak >= maxStreak
     }
 
     var freezesAvailable: Int {

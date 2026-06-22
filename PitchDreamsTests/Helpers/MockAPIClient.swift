@@ -5,6 +5,7 @@ final class MockAPIClient: APIClientProtocol, @unchecked Sendable {
     var responses: [Any] = []
     var errors: [Error?] = []
     var calledEndpoints: [String] = []
+    var capturedEndpoints: [APIEndpoint] = []
     private var callIndex = 0
     private let lock = NSLock()
 
@@ -21,6 +22,7 @@ final class MockAPIClient: APIClientProtocol, @unchecked Sendable {
     func request<T: Decodable>(_ endpoint: APIEndpoint) async throws -> T {
         lock.lock()
         calledEndpoints.append(endpoint.path)
+        capturedEndpoints.append(endpoint)
         guard callIndex < responses.count else {
             let idx = callIndex
             lock.unlock()
@@ -40,6 +42,7 @@ final class MockAPIClient: APIClientProtocol, @unchecked Sendable {
     func requestVoid(_ endpoint: APIEndpoint) async throws {
         lock.lock()
         calledEndpoints.append(endpoint.path)
+        capturedEndpoints.append(endpoint)
         guard callIndex < errors.count else {
             lock.unlock()
             return
@@ -56,6 +59,7 @@ final class MockAPIClient: APIClientProtocol, @unchecked Sendable {
         responses.removeAll()
         errors.removeAll()
         calledEndpoints.removeAll()
+        capturedEndpoints.removeAll()
         callIndex = 0
         lock.unlock()
     }

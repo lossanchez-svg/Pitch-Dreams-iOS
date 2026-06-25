@@ -64,10 +64,12 @@ final class TrainingViewModel: ObservableObject {
         isCheckingIn = false
     }
 
+    /// Full check-in trimmed to the inputs that actually shape the session:
+    /// energy, mood, time available, and a safety pain flag. Soreness and focus
+    /// are no longer asked of the kid (too abstract for the age group) — they
+    /// default here so the server's `SessionMode` calculation still has values.
     func fullCheckIn(
         energy: Int,
-        soreness: String,
-        focus: Int,
         mood: String,
         timeAvail: Int,
         painFlag: Bool
@@ -77,8 +79,8 @@ final class TrainingViewModel: ObservableObject {
         do {
             let body = CreateCheckInBody(
                 energy: energy,
-                soreness: soreness,
-                focus: focus,
+                soreness: Soreness.none.rawValue,
+                focus: energy,
                 mood: mood,
                 timeAvail: timeAvail,
                 painFlag: painFlag

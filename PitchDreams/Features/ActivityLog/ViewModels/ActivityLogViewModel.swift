@@ -129,10 +129,18 @@ final class ActivityLogViewModel: ObservableObject {
         errorMessage = nil
         saveSuccess = false
         do {
+            let trimmedOpponent = opponent.trimmingCharacters(in: .whitespacesAndNewlines)
+            let trimmedNotes = notes.trimmingCharacters(in: .whitespacesAndNewlines)
             let body = CreateActivityBody(
                 activityType: activityType,
                 durationMinutes: durationMinutes,
                 gameIQImpact: gameIQImpact,
+                intensityRPE: intensityRPE,
+                opponentName: (isGameType && !trimmedOpponent.isEmpty) ? trimmedOpponent : nil,
+                notes: trimmedNotes.isEmpty ? nil : trimmedNotes,
+                facilityId: selectedFacilityId,
+                coachId: selectedCoachId,
+                programId: selectedProgramId,
                 focusTagIds: selectedFocusTags.isEmpty ? nil : Array(selectedFocusTags),
                 highlightIds: selectedHighlights.isEmpty ? nil : Array(selectedHighlights),
                 nextFocusIds: selectedNextFocus.isEmpty ? nil : Array(selectedNextFocus)

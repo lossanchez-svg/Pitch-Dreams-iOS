@@ -5,6 +5,7 @@ struct ChildTabNavigation: View {
     @EnvironmentObject var authManager: AuthManager
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @State private var selectedTab: ChildTab = .home
+    @State private var showFullActivityLog = false
 
     var body: some View {
         if horizontalSizeClass == .regular {
@@ -64,7 +65,7 @@ struct ChildTabNavigation: View {
                     }
                 case .log:
                     NavigationStack {
-                        ActivityLogView(childId: childId)
+                        QuickLogView(childId: childId)
                     }
                 case .skills:
                     NavigationStack {
@@ -83,6 +84,11 @@ struct ChildTabNavigation: View {
 
             // Custom glassmorphic tab bar
             customTabBar
+        }
+        .sheet(isPresented: $showFullActivityLog) {
+            NavigationStack {
+                ActivityLogView(childId: childId)
+            }
         }
     }
 
@@ -165,6 +171,15 @@ struct ChildTabNavigation: View {
                 UIImpactFeedbackGenerator(style: .light).impactOccurred()
             } label: {
                 Label("Learn", systemImage: "book.fill")
+            }
+
+            Divider()
+
+            Button {
+                showFullActivityLog = true
+                UIImpactFeedbackGenerator(style: .light).impactOccurred()
+            } label: {
+                Label("Full Activity Log", systemImage: "doc.text.fill")
             }
 
             Divider()

@@ -45,6 +45,37 @@ final class TrainingViewModelTests: XCTestCase {
         XCTAssertTrue(mockAPI.calledEndpoints.contains("/children/test-child/check-ins/quick"))
     }
 
+    // MARK: - Full Check-In (trimmed: energy + mood + time + pain)
+
+    func testFullCheckInUpdatesState() async {
+        mockAPI.enqueue(TestFixtures.makeCheckInResponse(mode: "NORMAL", explanation: "Let's go."))
+
+        await viewModel.fullCheckIn(energy: 4, mood: "FOCUSED", timeAvail: 20, painFlag: false)
+
+        XCTAssertNotNil(viewModel.checkInState)
+        XCTAssertEqual(viewModel.sessionMode, "NORMAL")
+        XCTAssertNil(viewModel.errorMessage)
+        XCTAssertFalse(viewModel.isCheckingIn)
+    }
+
+    func testFullCheckInCallsCorrectEndpoint() async {
+        mockAPI.enqueue(TestFixtures.makeCheckInResponse())
+
+        await viewModel.fullCheckIn(energy: 3, mood: "OKAY", timeAvail: 30, painFlag: true)
+
+        XCTAssertTrue(mockAPI.calledEndpoints.contains("/children/test-child/check-ins"))
+    }
+
+    func testFullCheckInError() async {
+        mockAPI.enqueueError(APIError.server("Server down"))
+
+        await viewModel.fullCheckIn(energy: 2, mood: "TIRED", timeAvail: 10, painFlag: false)
+
+        XCTAssertNotNil(viewModel.errorMessage)
+        XCTAssertNil(viewModel.checkInState)
+        XCTAssertFalse(viewModel.isCheckingIn)
+    }
+
     // MARK: - Load Today Check-In
 
     func testLoadTodayCheckInNilHandling() async {

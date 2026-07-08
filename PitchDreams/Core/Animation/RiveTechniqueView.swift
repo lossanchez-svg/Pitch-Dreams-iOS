@@ -5,8 +5,8 @@ import RiveRuntime
 ///
 /// Design:
 /// - Fails the initializer (`init?`) when the named .riv file isn't in the
-///   bundle — callers use the nil path to fall back to the Canvas keyframe
-///   renderer in `TechniqueAnimationView`.
+///   bundle — callers use the nil path to fall back to the next tier
+///   (placeholder on hero surfaces; never used on drill surfaces).
 /// - The actual Rive runtime only loads when a .riv exists, so shipping
 ///   the SDK dependency without any .riv files costs nothing visually.
 /// - Caption and TTS are NOT piped through here. The keyframe engine's
@@ -14,15 +14,10 @@ import RiveRuntime
 ///   for captions). When a .riv ships with embedded caption events, a
 ///   follow-up PR will bridge those into the existing caption strip.
 ///
-/// See `TechniqueAnimationView` for the fallback decision:
-/// ```
-/// if let assetName = animation.riveAssetName,
-///    let rive = RiveTechniqueView(assetName: assetName) {
-///     rive  // Rive-native render
-/// } else {
-///     canvasBody  // keyframe Canvas render
-/// }
-/// ```
+/// Status: no .riv files currently ship. MP4 clips via `VideoTechniqueView`
+/// are the preferred hero format — Rive remains a second-tier fallback for
+/// the unlikely case an animator authors one. See `SignatureMoveOverviewView`
+/// for the full video → Rive → placeholder resolution chain.
 struct RiveTechniqueView: View {
     let assetName: String
     private let viewModel: RiveViewModel

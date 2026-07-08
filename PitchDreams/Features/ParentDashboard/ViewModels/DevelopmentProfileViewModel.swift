@@ -40,7 +40,7 @@ final class DevelopmentProfileViewModel: ObservableObject {
     var childName: String { child.nickname }
     private let apiClient: APIClientProtocol
 
-    init(child: ChildSummary, apiClient: APIClientProtocol = APIClient()) {
+    init(child: ChildSummary, apiClient: APIClientProtocol = APIClient.shared) {
         self.child = child
         self.apiClient = apiClient
     }

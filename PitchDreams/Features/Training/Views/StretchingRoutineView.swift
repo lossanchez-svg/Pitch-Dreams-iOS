@@ -245,7 +245,7 @@ final class StretchingRoutineViewModel: ObservableObject {
 
     init(
         childId: String,
-        apiClient: APIClientProtocol = APIClient(),
+        apiClient: APIClientProtocol = APIClient.shared,
         xpStore: XPStore = XPStore()
     ) {
         self.childId = childId

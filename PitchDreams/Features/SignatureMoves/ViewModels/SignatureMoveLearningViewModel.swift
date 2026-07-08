@@ -11,6 +11,12 @@ import Combine
 @MainActor
 final class SignatureMoveLearningViewModel: ObservableObject {
 
+    /// Launch gate for the record-yourself capstone. The current recording
+    /// screen is a visual mock (no AVCaptureSession) — presenting it would
+    /// pretend to film the kid, which is both dishonest and an App Store
+    /// completeness rejection. Flip to true once real capture is wired.
+    static let isRecordingAvailable = false
+
     // MARK: - Flow step
 
     enum FlowStep: Equatable {
@@ -178,8 +184,11 @@ final class SignatureMoveLearningViewModel: ObservableObject {
                 XPEntry(amount: xp, source: "move_stage", date: Date()),
                 childId: childId
             )
-            // If the final stage requires recording, route through the capstone.
-            if stage == 3, stageDef?.masteryCriteria.requiresVideoRecording == true {
+            // If the final stage requires recording, route through the capstone
+            // — but only when real capture is available (see isRecordingAvailable).
+            if stage == 3,
+               stageDef?.masteryCriteria.requiresVideoRecording == true,
+               Self.isRecordingAvailable {
                 currentStep = .recordSelf(stage: stage)
             } else {
                 currentStep = .stageComplete(stage: stage, xpAwarded: xp)

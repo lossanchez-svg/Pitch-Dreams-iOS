@@ -52,7 +52,7 @@ final class MysteryBoxViewModel: ObservableObject {
             .map(\.move.id)
         let context = MysteryBoxContext(
             lockedMoveIds: lockedIds,
-            availableCosmeticIds: ["color_red", "color_blue", "crest_shield", "celebration_wave"],
+            availableCosmeticIds: MysteryBoxEngine.launchCosmeticIds,
             streakShieldsMaxed: false
         )
         let reward = MysteryBoxEngine.generateReward(context: context)

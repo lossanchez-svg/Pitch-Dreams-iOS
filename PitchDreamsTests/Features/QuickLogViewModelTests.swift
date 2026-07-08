@@ -22,12 +22,23 @@ final class QuickLogViewModelTests: XCTestCase {
     }
 
     func testSaveError() async {
-        mockAPI.enqueueError(APIError.server("Failed"))
+        // Only a server-side rejection (4xx) surfaces as an error now;
+        // network/5xx failures queue for retry instead.
+        mockAPI.enqueueError(APIError.validation("Failed"))
 
         await viewModel.save()
 
         XCTAssertFalse(viewModel.saveSuccess)
         XCTAssertNotNil(viewModel.errorMessage)
+    }
+
+    func testSaveServerErrorQueuesAsSuccess() async {
+        mockAPI.enqueueError(APIError.server("temporarily down"))
+
+        await viewModel.save()
+
+        XCTAssertTrue(viewModel.saveSuccess, "Transient failures queue and read as success")
+        XCTAssertNil(viewModel.errorMessage)
     }
 
     func testTypeDisplayNames() {

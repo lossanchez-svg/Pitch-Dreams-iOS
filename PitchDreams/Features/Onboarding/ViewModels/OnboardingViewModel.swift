@@ -10,6 +10,9 @@ final class OnboardingViewModel: ObservableObject {
     @Published var password = ""
     @Published var confirmPassword = ""
     @Published var agreedToTerms = false
+    /// Neutral age gate: accounts are parent-owned, so the account creator
+    /// must assert an adult birth year before the terms consent means anything.
+    @Published var birthYear: Int? = nil
 
     // MARK: - Step 1: Child Profile
     @Published var nickname = ""
@@ -42,7 +45,7 @@ final class OnboardingViewModel: ObservableObject {
     private let apiClient: APIClientProtocol
     private let authManager: AuthManager
 
-    init(authManager: AuthManager, apiClient: APIClientProtocol = APIClient()) {
+    init(authManager: AuthManager, apiClient: APIClientProtocol = APIClient.shared) {
         self.authManager = authManager
         self.apiClient = apiClient
     }
@@ -64,12 +67,33 @@ final class OnboardingViewModel: ObservableObject {
     /// "PINs don't match" when confirm is populated but mismatches.
     var confirmPinError: String? { InputValidator.pinsMatch(pin, confirmPin) }
 
+    /// Years selectable in the birth-year gate (a full neutral range — the
+    /// gate must not hint which answers pass).
+    static var selectableBirthYears: [Int] {
+        let currentYear = Calendar.current.component(.year, from: Date())
+        return Array((currentYear - 100)...currentYear).reversed()
+    }
+
+    /// True once a birth year is chosen that makes the account creator an adult.
+    var isAdultBirthYear: Bool {
+        guard let birthYear else { return false }
+        let currentYear = Calendar.current.component(.year, from: Date())
+        return currentYear - birthYear >= 18
+    }
+
+    /// Inline error shown when a non-adult birth year is selected.
+    var birthYearError: String? {
+        guard birthYear != nil, !isAdultBirthYear else { return nil }
+        return "PitchDreams accounts are created by a parent or guardian."
+    }
+
     // MARK: - Validation gates (used by Continue buttons)
 
     var isSignupValid: Bool {
         !email.isEmpty && emailError == nil &&
         !password.isEmpty && passwordError == nil &&
         password == confirmPassword &&
+        isAdultBirthYear &&
         agreedToTerms
     }
 

@@ -9,7 +9,7 @@ final class ForgotPasswordViewModel: ObservableObject {
 
     private let apiClient: APIClientProtocol
 
-    init(apiClient: APIClientProtocol = APIClient()) {
+    init(apiClient: APIClientProtocol = APIClient.shared) {
         self.apiClient = apiClient
     }
 

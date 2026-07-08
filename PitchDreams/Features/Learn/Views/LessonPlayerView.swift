@@ -339,7 +339,7 @@ struct LessonPlayerView: View {
     /// falls back to the default (abstract dots) — lessons are still usable.
     private func loadChildContext() async {
         guard let childId else { return }
-        let apiClient: APIClientProtocol = APIClient()
+        let apiClient: APIClientProtocol = APIClient.shared
         if let profile: ChildProfileDetail = try? await apiClient.request(APIRouter.getProfile(childId: childId)) {
             childProfile = profile
         }

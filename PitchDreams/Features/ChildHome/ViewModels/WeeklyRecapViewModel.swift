@@ -9,7 +9,7 @@ final class WeeklyRecapViewModel: ObservableObject {
     private let apiClient: APIClientProtocol
     private let xpStore: XPStore
 
-    init(childId: String, apiClient: APIClientProtocol = APIClient(), xpStore: XPStore = XPStore()) {
+    init(childId: String, apiClient: APIClientProtocol = APIClient.shared, xpStore: XPStore = XPStore()) {
         self.childId = childId
         self.apiClient = apiClient
         self.xpStore = xpStore

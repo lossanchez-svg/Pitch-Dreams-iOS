@@ -241,6 +241,8 @@ struct ParentControlsView: View {
     let childId: String
     let childName: String
 
+    @EnvironmentObject private var authManager: AuthManager
+
     @State private var selectedTab = 0
 
     // Permissions
@@ -267,7 +269,7 @@ struct ParentControlsView: View {
     @State private var isPerformingAction = false
     @State private var actionMessage: String?
 
-    private let apiClient: APIClientProtocol = APIClient()
+    private let apiClient: APIClientProtocol = APIClient.shared
 
     var body: some View {
         Form {
@@ -462,13 +464,13 @@ struct ParentControlsView: View {
     @ViewBuilder
     private var dataPrivacyTab: some View {
         Section {
-            Link(destination: URL(string: "https://pitchdreams.soccer/privacy")!) {
+            Link(destination: Constants.Legal.privacyPolicy) {
                 Label("Privacy Policy", systemImage: "hand.raised.fill")
             }
-            Link(destination: URL(string: "https://pitchdreams.soccer/terms")!) {
+            Link(destination: Constants.Legal.termsOfService) {
                 Label("Terms of Service", systemImage: "doc.text.fill")
             }
-            Link(destination: URL(string: "https://pitchdreams.soccer/kids-privacy")!) {
+            Link(destination: Constants.Legal.kidsPrivacy) {
                 Label("Kids Privacy (COPPA)", systemImage: "figure.child")
             }
         } header: {
@@ -641,7 +643,9 @@ struct ParentControlsView: View {
         isPerformingAction = true
         do {
             try await apiClient.requestVoid(APIRouter.deleteParentAccount)
-            // AuthManager should handle logout via 401 or explicit call
+            // Tear down the local session immediately — don't rely on a
+            // later 401 to notice the account is gone.
+            authManager.logout()
         } catch {
             actionMessage = "Error: Could not delete account."
         }
@@ -656,7 +660,7 @@ private struct ExportDataView: View {
     let childName: String
     @State private var isExporting = false
     @State private var exportResult: String?
-    private let apiClient: APIClientProtocol = APIClient()
+    private let apiClient: APIClientProtocol = APIClient.shared
 
     var body: some View {
         VStack(spacing: 24) {

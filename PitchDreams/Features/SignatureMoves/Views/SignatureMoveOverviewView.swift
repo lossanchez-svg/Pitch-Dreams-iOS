@@ -95,10 +95,12 @@ struct SignatureMoveOverviewView: View {
     ///
     ///   1. MP4 hero clip (`videoAssetName` + file in bundle)
     ///   2. Rive animation (`riveAssetName` + file in bundle)
-    ///   3. Play-button placeholder
+    ///   3. Keyframe animation (always authored — see dependency policy)
+    ///   4. Play-button placeholder (only when no animation is registered)
     ///
     /// Each `init?` returns nil when the asset is missing, so the fall-through
-    /// is automatic — no runtime feature flag needed.
+    /// is automatic — no runtime feature flag needed. Tier 3 means a kid never
+    /// sees a dead play button on a move that has an authored animation.
     @ViewBuilder
     private var heroPlayer: some View {
         if let heroAssetId = viewModel.move.heroDemoAsset,
@@ -110,7 +112,8 @@ struct SignatureMoveOverviewView: View {
                       let riveView = RiveTechniqueView(assetName: riveAsset) {
                 heroFrame(riveView, label: "Hero demo animation for \(viewModel.move.name)")
             } else {
-                heroPlayerPlaceholder
+                TechniqueAnimationView(animation: anim, voiceoverEnabled: false)
+                    .accessibilityLabel("Animated demo of \(viewModel.move.name)")
             }
         } else {
             heroPlayerPlaceholder

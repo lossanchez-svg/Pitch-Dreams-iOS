@@ -12,7 +12,7 @@ struct AvatarChangeSheet: View {
     @Environment(\.dismiss) private var dismiss
 
     private let avatarOptions: [Avatar] = [.wolf, .lion, .eagle, .fox, .shark, .panther, .bear, .default]
-    private let apiClient: APIClientProtocol = APIClient()
+    private let apiClient: APIClientProtocol = APIClient.shared
 
     private var selectedAvatar: Avatar {
         avatarOptions[selectedIndex]

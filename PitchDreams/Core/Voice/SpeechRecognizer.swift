@@ -6,6 +6,9 @@ final class SpeechRecognizer: ObservableObject {
     @Published var isListening = false
     @Published var transcript = ""
     @Published var error: String?
+    /// True when speech/mic permission was refused — the only fix is the
+    /// Settings app, so the UI should offer a deep link instead of a retry.
+    @Published var permissionDenied = false
 
     /// Tracks whether user wants continuous listening (vs internal restart cycles)
     private var wantsListening = false
@@ -28,6 +31,7 @@ final class SpeechRecognizer: ObservableObject {
         }
         guard speechStatus == .authorized else {
             error = "Speech recognition not authorized"
+            permissionDenied = (speechStatus == .denied || speechStatus == .restricted)
             return false
         }
 
@@ -43,8 +47,10 @@ final class SpeechRecognizer: ObservableObject {
         }
         guard micGranted else {
             error = "Microphone access not granted"
+            permissionDenied = true
             return false
         }
+        permissionDenied = false
         return true
     }
 

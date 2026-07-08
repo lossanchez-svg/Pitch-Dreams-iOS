@@ -54,6 +54,25 @@ struct LoginChoiceView: View {
                             .foregroundStyle(Color.dsOnSurfaceVariant)
                     }
 
+                    if authManager.sessionExpired {
+                        HStack(spacing: 8) {
+                            Image(systemName: "clock.arrow.circlepath")
+                                .font(.system(size: 14))
+                            Text("You've been signed out to keep your account safe. Log back in to keep training!")
+                                .font(.system(size: 13, weight: .medium, design: .rounded))
+                        }
+                        .foregroundStyle(Color.dsTertiary)
+                        .padding(.horizontal, Spacing.md)
+                        .padding(.vertical, Spacing.sm)
+                        .background(Color.dsSurfaceContainer)
+                        .clipShape(RoundedRectangle(cornerRadius: CornerRadius.md))
+                        .overlay(
+                            RoundedRectangle(cornerRadius: CornerRadius.md)
+                                .stroke(Color.dsTertiary.opacity(0.3), lineWidth: 1)
+                        )
+                        .padding(.horizontal, 32)
+                    }
+
                     Spacer()
 
                     VStack(spacing: 14) {

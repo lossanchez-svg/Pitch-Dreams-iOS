@@ -112,8 +112,8 @@ final class RegressionTests: XCTestCase {
         let mock = MockAPIClient()
         let vm = TrainingViewModel(childId: "test", apiClient: mock)
 
-        // First call fails
-        mock.enqueueError(APIError.server("Failed"))
+        // First call fails with a payload rejection (network/5xx would queue)
+        mock.enqueueError(APIError.validation("Failed"))
         await vm.quickCheckIn(mood: "FOCUSED")
         XCTAssertNotNil(vm.errorMessage)
 

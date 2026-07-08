@@ -22,7 +22,7 @@ final class ChildHomeViewModel: ObservableObject {
     private let apiClient: APIClientProtocol
     let xpStore: XPStore
 
-    init(childId: String, apiClient: APIClientProtocol = APIClient(), xpStore: XPStore = XPStore()) {
+    init(childId: String, apiClient: APIClientProtocol = APIClient.shared, xpStore: XPStore = XPStore()) {
         self.childId = childId
         self.apiClient = apiClient
         self.xpStore = xpStore
@@ -53,16 +53,26 @@ final class ChildHomeViewModel: ObservableObject {
         errorMessage = nil
 
         // Load each independently — don't let one failure block others
+        var profileFailed = false
+        var streakFailed = false
         do {
             profile = try await apiClient.request(APIRouter.getProfile(childId: childId))
         } catch {
+            profileFailed = true
             Log.api.error("Profile load failed: \(error)")
         }
 
         do {
             streakData = try await apiClient.request(APIRouter.getStreaks(childId: childId))
         } catch {
+            streakFailed = true
             Log.api.error("Streak load failed: \(error)")
+        }
+
+        // Both core loads failing means the screen has nothing real to show —
+        // tell the kid instead of quietly rendering an empty dashboard.
+        if profileFailed && streakFailed && profile == nil {
+            errorMessage = "Can't reach the server right now. Pull down to try again!"
         }
 
         // todayCheckIn returns null when no check-in exists — that's normal
@@ -95,6 +105,19 @@ final class ChildHomeViewModel: ObservableObject {
             }
         } catch {
             // Not critical
+        }
+
+        // Evening streak-protection nudge: only when there's a streak worth
+        // protecting and nothing has been logged yet today. Logging a session
+        // cancels it (see QuickLog / ActiveTraining save paths).
+        if hasCheckedInToday {
+            TrainingReminderManager.cancelStreakAtRiskReminder(childId: childId)
+        } else {
+            await TrainingReminderManager.scheduleStreakAtRiskReminder(
+                childId: childId,
+                childNickname: profile?.nickname,
+                streak: streakCount
+            )
         }
     }
 

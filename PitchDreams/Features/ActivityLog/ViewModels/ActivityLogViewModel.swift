@@ -46,7 +46,7 @@ final class ActivityLogViewModel: ObservableObject {
         ["OFFICIAL_GAME", "FUTSAL_GAME", "INDOOR_LEAGUE_GAME"].contains(activityType)
     }
 
-    init(childId: String, apiClient: APIClientProtocol = APIClient()) {
+    init(childId: String, apiClient: APIClientProtocol = APIClient.shared) {
         self.childId = childId
         self.apiClient = apiClient
     }
@@ -125,6 +125,7 @@ final class ActivityLogViewModel: ObservableObject {
     // MARK: - Save
 
     func saveActivity() async {
+        guard !isSaving else { return }
         isSaving = true
         errorMessage = nil
         saveSuccess = false
@@ -145,9 +146,16 @@ final class ActivityLogViewModel: ObservableObject {
                 highlightIds: selectedHighlights.isEmpty ? nil : Array(selectedHighlights),
                 nextFocusIds: selectedNextFocus.isEmpty ? nil : Array(selectedNextFocus)
             )
-            let _: ActivityCreateResult = try await apiClient.request(
-                APIRouter.createActivity(childId: childId, body: body)
-            )
+            do {
+                let _: ActivityCreateResult = try await apiClient.request(
+                    APIRouter.createActivity(childId: childId, body: body)
+                )
+            } catch APIError.network, APIError.server {
+                // Offline or transient backend failure — queue for background
+                // retry so a logged game is never lost to a dead spot.
+                await SessionSyncQueue.shared.enqueueActivity(childId: childId, body: body)
+                Log.api.info("Activity queued for retry for child \(self.childId)")
+            }
             saveSuccess = true
             resetForm()
             await loadRecent()

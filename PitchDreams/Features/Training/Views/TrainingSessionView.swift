@@ -108,7 +108,7 @@ struct TrainingSessionView: View {
     // MARK: - Voice
 
     private func loadVoiceSetting() async {
-        let apiClient: APIClientProtocol = APIClient()
+        let apiClient: APIClientProtocol = APIClient.shared
         if let profile: ChildProfileDetail = try? await apiClient.request(APIRouter.getProfile(childId: childId)) {
             voiceEnabled = profile.voiceEnabled
         }

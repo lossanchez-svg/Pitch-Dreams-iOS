@@ -6,6 +6,10 @@ import Foundation
 /// weights re-normalized so the user still gets SOMETHING.
 enum MysteryBoxEngine {
 
+    /// The cosmetics shipping at launch. Single source of truth so the
+    /// opening flow and the parent-facing odds screen can't drift apart.
+    static let launchCosmeticIds = ["color_red", "color_blue", "crest_shield", "celebration_wave"]
+
     /// Produce a reward for today's box. Caller is responsible for
     /// persisting it via `MysteryBoxStore.recordOpen`.
     static func generateReward(

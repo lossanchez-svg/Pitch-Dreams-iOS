@@ -11,7 +11,7 @@ struct FirstSessionGuideView: View {
     @State private var isSaving = false
 
     private let tapTarget = 30
-    private let apiClient: APIClientProtocol = APIClient()
+    private let apiClient: APIClientProtocol = APIClient.shared
 
     var body: some View {
         ZStack {

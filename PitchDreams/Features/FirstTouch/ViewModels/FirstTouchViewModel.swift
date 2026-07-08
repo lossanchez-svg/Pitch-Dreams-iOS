@@ -20,7 +20,7 @@ final class FirstTouchViewModel: ObservableObject {
     private let xpStore = XPStore()
     private let pbStore = PersonalBestStore()
 
-    init(childId: String, apiClient: APIClientProtocol = APIClient()) {
+    init(childId: String, apiClient: APIClientProtocol = APIClient.shared) {
         self.childId = childId
         self.apiClient = apiClient
     }

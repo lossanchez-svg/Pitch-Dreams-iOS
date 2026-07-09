@@ -75,15 +75,49 @@ final class SessionSyncQueueTests: XCTestCase {
         XCTAssertEqual(pending, 1)
     }
 
-    func testFlush_serverError_dropsEntry() async {
+    func testFlush_serverError_keepsEntryForRetry() async {
+        // Regression: a transient 5xx used to be treated as permanent failure
+        // and permanently dropped an offline-queued session.
         let body = QuickSessionBody(type: "solo", duration: 30, effort: 4)
         _ = await queue.enqueueQuickSession(childId: childId, body: body)
 
-        mockAPI.enqueueError(APIError.server("bad payload"))
+        mockAPI.enqueueError(APIError.server("temporarily overloaded"))
+
+        let outcome = await queue.flush()
+        XCTAssertEqual(outcome, .partial(remaining: 1))
+        let pending = await queue.pendingCount()
+        XCTAssertEqual(pending, 1)
+    }
+
+    func testFlush_validationError_dropsEntry() async {
+        // A 4xx means the server rejected the payload itself — retrying is
+        // pointless, so the entry is dropped.
+        let body = QuickSessionBody(type: "solo", duration: 30, effort: 4)
+        _ = await queue.enqueueQuickSession(childId: childId, body: body)
+
+        mockAPI.enqueueError(APIError.validation("bad payload"))
 
         let outcome = await queue.flush()
         XCTAssertEqual(outcome, .drained)
         let pending = await queue.pendingCount()
+        XCTAssertEqual(pending, 0)
+    }
+
+    func testFlush_serverError_dropsAfterMaxAttempts() async {
+        let body = QuickSessionBody(type: "solo", duration: 30, effort: 4)
+        _ = await queue.enqueueQuickSession(childId: childId, body: body)
+
+        // maxAttempts is 6: six failing flushes retain the entry while
+        // incrementing attempts; the seventh gives up.
+        for _ in 0..<6 {
+            mockAPI.enqueueError(APIError.server("still down"))
+            _ = await queue.flush()
+        }
+        var pending = await queue.pendingCount()
+        XCTAssertEqual(pending, 1)
+
+        _ = await queue.flush()
+        pending = await queue.pendingCount()
         XCTAssertEqual(pending, 0)
     }
 
@@ -108,6 +142,39 @@ final class SessionSyncQueueTests: XCTestCase {
         // First call succeeds, second fails with network — should retain 1.
         mockAPI.enqueue(SessionSaveResult(sessionId: "s-a"))
         mockAPI.enqueueError(APIError.network(URLError(.timedOut)))
+
+        let outcome = await queue.flush()
+        XCTAssertEqual(outcome, .partial(remaining: 1))
+    }
+
+    // MARK: - Activity + check-in kinds
+
+    func testEnqueueActivity_flushDeliversViaRequestVoid() async {
+        let body = CreateActivityBody(
+            activityType: "OFFICIAL_GAME", durationMinutes: 60, gameIQImpact: "MEDIUM",
+            intensityRPE: 7, opponentName: "Rovers", notes: nil,
+            facilityId: nil, coachId: nil, programId: nil,
+            focusTagIds: nil, highlightIds: nil, nextFocusIds: nil
+        )
+        _ = await queue.enqueueActivity(childId: childId, body: body)
+
+        // requestVoid path: enqueue a nil-error slot so the mock succeeds.
+        mockAPI.enqueue(0)
+
+        let outcome = await queue.flush()
+        XCTAssertEqual(outcome, .drained)
+        XCTAssertTrue(mockAPI.calledEndpoints.contains(where: { $0.contains("activities") }))
+    }
+
+    func testEnqueueActivity_networkErrorKeptForRetry() async {
+        let body = CreateActivityBody(
+            activityType: "OFFICIAL_GAME", durationMinutes: 60, gameIQImpact: "MEDIUM",
+            intensityRPE: 7, opponentName: nil, notes: nil,
+            facilityId: nil, coachId: nil, programId: nil,
+            focusTagIds: nil, highlightIds: nil, nextFocusIds: nil
+        )
+        _ = await queue.enqueueActivity(childId: childId, body: body)
+        mockAPI.enqueueError(APIError.network(URLError(.notConnectedToInternet)))
 
         let outcome = await queue.flush()
         XCTAssertEqual(outcome, .partial(remaining: 1))

@@ -44,7 +44,9 @@ struct WeeklyInsightsEmailSettingsView: View {
             } header: {
                 Text("Email preferences for \(child.nickname)")
             } footer: {
-                Text("Insights are sent to the parent account email. You can pause any time.")
+                // Honest until the server-side send ships: capture the
+                // preference, never promise a delivery that won't happen.
+                Text("Email delivery is launching soon. Your preference is saved now and will apply automatically the day it goes live — no action needed.")
             }
 
             Section("What's in the email") {
@@ -68,7 +70,7 @@ struct WeeklyInsightsEmailSettingsView: View {
                 }
             } footer: {
                 if showSavedToast {
-                    Text("Saved — first email arrives on the next scheduled delivery.")
+                    Text("Preference saved.")
                         .foregroundStyle(Color.dsSecondary)
                         .transition(.opacity)
                 }

@@ -52,6 +52,29 @@ struct SignupStepView: View {
                     }
                 }
 
+                VStack(alignment: .leading, spacing: 4) {
+                    HStack {
+                        Text("Your birth year")
+                            .font(.callout)
+                            .foregroundStyle(Color.dsOnSurface)
+                        Spacer()
+                        Picker("Your birth year", selection: $viewModel.birthYear) {
+                            Text("Select").tag(Int?.none)
+                            ForEach(OnboardingViewModel.selectableBirthYears, id: \.self) { year in
+                                Text(String(year)).tag(Int?.some(year))
+                            }
+                        }
+                        .pickerStyle(.menu)
+                    }
+                    .padding(.horizontal)
+                    .padding(.vertical, 8)
+                    .background(Color.dsSurfaceContainerHighest)
+                    .cornerRadius(10)
+                    if let msg = viewModel.birthYearError {
+                        inlineError(msg)
+                    }
+                }
+
                 Toggle(isOn: $viewModel.agreedToTerms) {
                     Text("I agree to the [Terms of Service](https://pitchdreams.soccer/terms) & [Privacy Policy](https://pitchdreams.soccer/privacy)")
                         .font(.callout)

@@ -215,6 +215,29 @@ struct TechniqueAnimation: Codable, Equatable {
     let loops: Bool
     let loopPauseSeconds: TimeInterval
     let riveAssetName: String?
+    /// Basename of an MP4 in `Bundle.main` (no extension). When present AND
+    /// the file exists, `SignatureMoveOverviewView` plays it in preference to
+    /// the Rive and placeholder tiers. Defaults to nil so existing registry
+    /// call sites don't need to change.
+    let videoAssetName: String?
+
+    init(
+        assetId: String,
+        viewAngle: ViewAngle,
+        keyframes: [TechniqueKeyframe],
+        loops: Bool,
+        loopPauseSeconds: TimeInterval,
+        riveAssetName: String?,
+        videoAssetName: String? = nil
+    ) {
+        self.assetId = assetId
+        self.viewAngle = viewAngle
+        self.keyframes = keyframes
+        self.loops = loops
+        self.loopPauseSeconds = loopPauseSeconds
+        self.riveAssetName = riveAssetName
+        self.videoAssetName = videoAssetName
+    }
 
     var duration: TimeInterval {
         keyframes.last?.time ?? 0

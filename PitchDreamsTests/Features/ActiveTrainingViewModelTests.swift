@@ -191,7 +191,9 @@ final class ActiveTrainingViewModelTests: XCTestCase {
     }
 
     func testSaveSessionError() async {
-        mockAPI.enqueueError(APIError.server("Save failed"))
+        // A 4xx means the server rejected the payload — this is the only
+        // save failure that should surface as an error (network/5xx queue).
+        mockAPI.enqueueError(APIError.validation("Save failed"))
 
         viewModel.startDrill()
         await viewModel.saveSession()
@@ -200,6 +202,19 @@ final class ActiveTrainingViewModelTests: XCTestCase {
         XCTAssertNotNil(viewModel.errorMessage)
         XCTAssertFalse(viewModel.isLoading)
         XCTAssertNotEqual(viewModel.phase, .complete)
+    }
+
+    func testSaveSessionServerErrorQueuesAndCompletes() async {
+        // Transient 5xx: session is queued for background retry and the kid
+        // still gets the success moment.
+        mockAPI.enqueueError(APIError.server("temporarily down"))
+
+        viewModel.startDrill()
+        await viewModel.saveSession()
+
+        XCTAssertTrue(viewModel.sessionSaved)
+        XCTAssertNil(viewModel.errorMessage)
+        XCTAssertEqual(viewModel.phase, .complete)
     }
 
     func testSaveSessionCallsCorrectEndpoints() async {

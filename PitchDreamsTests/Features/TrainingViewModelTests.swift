@@ -28,12 +28,25 @@ final class TrainingViewModelTests: XCTestCase {
     }
 
     func testQuickCheckInError() async {
-        mockAPI.enqueueError(APIError.server("Server down"))
+        // Only a server-side rejection (4xx) surfaces as an error now;
+        // network/5xx failures queue the check-in and compute a local mode.
+        mockAPI.enqueueError(APIError.validation("Bad input"))
 
         await viewModel.quickCheckIn(mood: "FOCUSED")
 
         XCTAssertNotNil(viewModel.errorMessage)
         XCTAssertNil(viewModel.checkInState)
+        XCTAssertFalse(viewModel.isCheckingIn)
+    }
+
+    func testQuickCheckInServerErrorQueuesWithLocalMode() async {
+        mockAPI.enqueueError(APIError.server("temporarily down"))
+
+        await viewModel.quickCheckIn(mood: "FOCUSED")
+
+        XCTAssertNil(viewModel.errorMessage)
+        XCTAssertNotNil(viewModel.checkInState, "Offline check-in still produces a session mode")
+        XCTAssertEqual(viewModel.sessionMode, SessionMode.normal.rawValue)
         XCTAssertFalse(viewModel.isCheckingIn)
     }
 
@@ -67,13 +80,30 @@ final class TrainingViewModelTests: XCTestCase {
     }
 
     func testFullCheckInError() async {
-        mockAPI.enqueueError(APIError.server("Server down"))
+        mockAPI.enqueueError(APIError.validation("Bad input"))
 
         await viewModel.fullCheckIn(energy: 2, mood: "TIRED", timeAvail: 10, painFlag: false)
 
         XCTAssertNotNil(viewModel.errorMessage)
         XCTAssertNil(viewModel.checkInState)
         XCTAssertFalse(viewModel.isCheckingIn)
+    }
+
+    func testFullCheckInServerErrorQueuesWithLocalMode() async {
+        mockAPI.enqueueError(APIError.server("temporarily down"))
+
+        // Low energy offline → conservative LOW_BATTERY mode locally.
+        await viewModel.fullCheckIn(energy: 2, mood: "TIRED", timeAvail: 10, painFlag: false)
+
+        XCTAssertNil(viewModel.errorMessage)
+        XCTAssertEqual(viewModel.sessionMode, SessionMode.lowBattery.rawValue)
+    }
+
+    func testOfflineCheckInPainAlwaysWinsRecovery() {
+        let response = TrainingViewModel.offlineCheckInResponse(
+            childId: "test-child", energy: 5, mood: "EXCITED", timeAvail: 30, painFlag: true
+        )
+        XCTAssertEqual(response.modeResult.mode, SessionMode.recovery.rawValue)
     }
 
     // MARK: - Load Today Check-In

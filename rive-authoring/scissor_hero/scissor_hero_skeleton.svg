@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Scissor Hero artboard skeleton. Import into Rive as the starting layout for
+  `scissor_hero.riv`. Every joint and limb has an id matching the bone the
+  driver script will animate (see spec.md §4, §6).
+
+  Pose shown: beat 0 (neutral stance). 1000 × 1500 portrait artboard,
+  y = 1380 is the ground plane. Player faces screen-right; escape direction is
+  screen-left.
+
+  Stroke-only so the rigger can replace each primitive with proper art while
+  keeping the bone ids. Delete the guide layer once the rig is bound.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1500" width="1000" height="1500">
+  <defs>
+    <style>
+      .bone { fill: none; stroke: #1f2937; stroke-width: 6; stroke-linecap: round; }
+      .joint { fill: #fff; stroke: #1f2937; stroke-width: 4; }
+      .ball { fill: #f8fafc; stroke: #1f2937; stroke-width: 4; }
+      .ball-pent { fill: #1f2937; }
+      .guide { fill: none; stroke: #cbd5e1; stroke-width: 2; stroke-dasharray: 8 8; }
+      .guide-label { font: 14px -apple-system, sans-serif; fill: #64748b; }
+      .glow { fill: #fbbf24; fill-opacity: 0; }
+    </style>
+  </defs>
+
+  <!-- Guide layer — delete after rigging. Ground plane y=1380, center x=500. -->
+  <g id="guides">
+    <line class="guide" x1="0" y1="1380" x2="1000" y2="1380" />
+    <line class="guide" x1="500" y1="0"   x2="500" y2="1500" />
+    <text class="guide-label" x="14"  y="1372">ground (y=1380)</text>
+    <text class="guide-label" x="508" y="24">center</text>
+  </g>
+
+  <!-- Decoration glows (driven by *FootActive booleans). -->
+  <circle id="foot_glow_left"  class="glow" cx="420" cy="1380" r="42" />
+  <circle id="foot_glow_right" class="glow" cx="580" cy="1380" r="42" />
+
+  <!-- Ball. centerOfMass is at (500, 1170) = (0.5, 0.78); ball sits at same. -->
+  <g id="ball">
+    <circle class="ball" cx="500" cy="1170" r="48" />
+    <polygon class="ball-pent" points="500,1140 522,1158 514,1184 486,1184 478,1158" />
+  </g>
+  <ellipse id="ball_shadow" cx="500" cy="1385" rx="44" ry="6" fill="#000" fill-opacity="0.18" />
+
+  <!-- Skeleton. Origin of `root` = centerOfMass at (500, 1170). -->
+  <g id="root" transform="translate(500 1170)">
+
+    <!-- Torso: root → neck → head. Rotated by torsoTilt about root. -->
+    <g id="torso">
+      <line class="bone" x1="0" y1="0" x2="0" y2="-160" />
+      <circle class="joint" cx="0" cy="0" r="8" />
+
+      <g id="neck" transform="translate(0 -160)">
+        <line class="bone" x1="0" y1="0" x2="0" y2="-40" />
+        <circle class="joint" cx="0" cy="0" r="6" />
+
+        <g id="head" transform="translate(0 -40)">
+          <circle class="joint" cx="0" cy="-32" r="36" />
+        </g>
+      </g>
+
+      <!-- Shoulders: inherits torso rotation, then rotates by shoulderTilt. -->
+      <g id="shoulders" transform="translate(0 -140)">
+        <line class="bone" x1="-56" y1="0" x2="56" y2="0" />
+
+        <g id="left_arm" transform="translate(-56 0)">
+          <line class="bone" x1="0" y1="0" x2="14" y2="90" />
+          <circle class="joint" cx="0" cy="0" r="6" />
+          <g id="left_hand" transform="translate(14 90)">
+            <line class="bone" x1="0" y1="0" x2="6" y2="80" />
+            <circle class="joint" cx="0" cy="0" r="6" />
+            <circle class="joint" cx="6" cy="80" r="8" />
+          </g>
+        </g>
+
+        <g id="right_arm" transform="translate(56 0)">
+          <line class="bone" x1="0" y1="0" x2="-14" y2="90" />
+          <circle class="joint" cx="0" cy="0" r="6" />
+          <g id="right_hand" transform="translate(-14 90)">
+            <line class="bone" x1="0" y1="0" x2="-6" y2="80" />
+            <circle class="joint" cx="0" cy="0" r="6" />
+            <circle class="joint" cx="-6" cy="80" r="8" />
+          </g>
+        </g>
+      </g>
+    </g>
+
+    <!-- Left leg. Hip at (-50, 10); foot world = (420, 1380) = (0.42, 0.92). -->
+    <g id="left_hip" transform="translate(-50 10)">
+      <line class="bone" x1="0" y1="0" x2="-30" y2="100" />
+      <circle class="joint" cx="0" cy="0" r="7" />
+      <g id="left_knee" transform="translate(-30 100)">
+        <line class="bone" x1="0" y1="0" x2="0" y2="100" />
+        <circle class="joint" cx="0" cy="0" r="6" />
+        <g id="left_ankle" transform="translate(0 100)">
+          <circle class="joint" cx="0" cy="0" r="6" />
+          <g id="left_foot" transform="translate(0 0)">
+            <!-- Shoe silhouette pointing screen-right (facing direction). -->
+            <path class="bone" d="M -8 0 L 28 0 L 34 8 L -8 8 Z" fill="#1f2937" />
+          </g>
+        </g>
+      </g>
+    </g>
+
+    <!-- Right leg. Hip at (50, 10); foot world = (580, 1380) = (0.58, 0.92). -->
+    <g id="right_hip" transform="translate(50 10)">
+      <line class="bone" x1="0" y1="0" x2="30" y2="100" />
+      <circle class="joint" cx="0" cy="0" r="7" />
+      <g id="right_knee" transform="translate(30 100)">
+        <line class="bone" x1="0" y1="0" x2="0" y2="100" />
+        <circle class="joint" cx="0" cy="0" r="6" />
+        <g id="right_ankle" transform="translate(0 100)">
+          <circle class="joint" cx="0" cy="0" r="6" />
+          <g id="right_foot" transform="translate(0 0)">
+            <path class="bone" d="M -8 0 L 28 0 L 34 8 L -8 8 Z" fill="#1f2937" />
+          </g>
+        </g>
+      </g>
+    </g>
+
+  </g>
+
+  <!-- Invisible driver_node. The Node script is attached here at import. -->
+  <g id="driver_node" transform="translate(0 0)" opacity="0" />
+</svg>

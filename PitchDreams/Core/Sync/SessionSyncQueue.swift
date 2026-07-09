@@ -1,7 +1,8 @@
 import Foundation
 
-/// Queues session-save requests that failed due to transient network errors
-/// and retries them on app foreground + when connectivity returns.
+/// Queues session, activity, and check-in writes that failed due to transient
+/// errors (offline, timeouts, server 5xx) and retries them on app foreground +
+/// when connectivity returns.
 ///
 /// The queue is the "no-data-lost" guarantee behind the optimistic UI on
 /// session-save screens: the ViewModel shows success as soon as the request
@@ -17,6 +18,9 @@ actor SessionSyncQueue {
     enum Kind: String, Codable {
         case session
         case quickSession
+        case activity
+        case checkIn
+        case quickCheckIn
     }
 
     /// One pending request. Self-contained so the queue can rebuild the
@@ -53,7 +57,7 @@ actor SessionSyncQueue {
 
     init(
         defaults: UserDefaults = .standard,
-        apiClient: APIClientProtocol = APIClient()
+        apiClient: APIClientProtocol = APIClient.shared
     ) {
         self.defaults = defaults
         self.apiClient = apiClient
@@ -73,15 +77,33 @@ actor SessionSyncQueue {
         enqueue(kind: .quickSession, childId: childId, body: body)
     }
 
+    /// Enqueue an activity log (games, team training, classes) for later retry.
+    @discardableResult
+    func enqueueActivity(childId: String, body: CreateActivityBody) -> Entry {
+        enqueue(kind: .activity, childId: childId, body: body)
+    }
+
+    /// Enqueue a full check-in for later retry.
+    @discardableResult
+    func enqueueCheckIn(childId: String, body: CreateCheckInBody) -> Entry {
+        enqueue(kind: .checkIn, childId: childId, body: body)
+    }
+
+    /// Enqueue a quick (mood-only) check-in for later retry.
+    @discardableResult
+    func enqueueQuickCheckIn(childId: String, body: QuickCheckInBody) -> Entry {
+        enqueue(kind: .quickCheckIn, childId: childId, body: body)
+    }
+
     /// Current pending count. Useful for a "syncing…" badge in the UI.
     func pendingCount() -> Int {
         load().count
     }
 
     /// Attempt to flush all pending entries. Call on app foreground and when
-    /// the network reconnects. Entries that fail with a network error are
-    /// retained for the next attempt; entries that fail persistently (4xx,
-    /// decoding, repeated attempts past `maxAttempts`) are dropped so the
+    /// the network reconnects. Entries that fail transiently (network, 5xx)
+    /// are retained for the next attempt; entries the server rejects (4xx,
+    /// undecodable payloads) or that exhaust `maxAttempts` are dropped so the
     /// queue can't grow forever.
     @discardableResult
     func flush() async -> FlushOutcome {
@@ -149,9 +171,30 @@ actor SessionSyncQueue {
                 let _: SessionSaveResult = try await apiClient.request(
                     APIRouter.createQuickSession(childId: entry.childId, body: body)
                 )
+            case .activity:
+                let body = try JSONDecoder().decode(CreateActivityBody.self, from: entry.bodyData)
+                try await apiClient.requestVoid(
+                    APIRouter.createActivity(childId: entry.childId, body: body)
+                )
+            case .checkIn:
+                let body = try JSONDecoder().decode(CreateCheckInBody.self, from: entry.bodyData)
+                try await apiClient.requestVoid(
+                    APIRouter.createCheckIn(childId: entry.childId, body: body)
+                )
+            case .quickCheckIn:
+                let body = try JSONDecoder().decode(QuickCheckInBody.self, from: entry.bodyData)
+                try await apiClient.requestVoid(
+                    APIRouter.createQuickCheckIn(childId: entry.childId, body: body)
+                )
             }
             return .delivered
         } catch APIError.network {
+            var updated = entry
+            updated.attempts += 1
+            return .retryLater(updated)
+        } catch APIError.server {
+            // Transient backend failure (5xx) — the payload itself is fine.
+            // Retry later; maxAttempts caps runaway growth.
             var updated = entry
             updated.attempts += 1
             return .retryLater(updated)
@@ -161,7 +204,7 @@ actor SessionSyncQueue {
             updated.attempts += 1
             return .retryLater(updated)
         } catch {
-            // 4xx / 5xx / decoding — the server has rejected this payload.
+            // 4xx / decoding — the server has rejected this payload.
             // Dropping is safer than retrying a request the server won't accept.
             Log.api.error("SessionSyncQueue dropping unrecoverable entry \(entry.id) kind=\(entry.kind.rawValue): \(error)")
             return .permanentFailure

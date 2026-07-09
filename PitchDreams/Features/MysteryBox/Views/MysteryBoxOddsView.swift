@@ -12,7 +12,7 @@ struct MysteryBoxOddsView: View {
     private var odds: [(type: MysteryRewardType, rate: Double)] {
         let context = MysteryBoxContext(
             lockedMoveIds: SignatureMoveRegistry.launchMoves.map(\.id),
-            availableCosmeticIds: ["placeholder"],
+            availableCosmeticIds: MysteryBoxEngine.launchCosmeticIds,
             streakShieldsMaxed: false
         )
         return MysteryBoxEngine.publicOdds(context: context)

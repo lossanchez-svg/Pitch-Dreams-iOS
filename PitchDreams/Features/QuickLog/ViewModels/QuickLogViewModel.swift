@@ -14,7 +14,7 @@ final class QuickLogViewModel: ObservableObject {
     private let apiClient: APIClientProtocol
     private let xpStore = XPStore()
 
-    init(childId: String, apiClient: APIClientProtocol = APIClient()) {
+    init(childId: String, apiClient: APIClientProtocol = APIClient.shared) {
         self.childId = childId
         self.apiClient = apiClient
     }
@@ -43,6 +43,7 @@ final class QuickLogViewModel: ObservableObject {
     // MARK: - Save
 
     func save() async {
+        guard !isSaving else { return }
         isSaving = true
         errorMessage = nil
         saveSuccess = false
@@ -56,9 +57,9 @@ final class QuickLogViewModel: ObservableObject {
             let _: SessionSaveResult = try await apiClient.request(
                 APIRouter.createQuickSession(childId: childId, body: body)
             )
-        } catch APIError.network {
-            // Offline — enqueue for background retry and treat as success so
-            // the user's momentum isn't interrupted.
+        } catch APIError.network, APIError.server {
+            // Offline or transient backend failure — enqueue for background
+            // retry and treat as success so the user's momentum isn't interrupted.
             await SessionSyncQueue.shared.enqueueQuickSession(childId: childId, body: body)
             Log.api.info("Quick session queued for retry for child \(self.childId)")
         } catch {
@@ -69,6 +70,7 @@ final class QuickLogViewModel: ObservableObject {
 
         saveSuccess = true
         MissionsViewModel.shared.recordEvent(.sessionLogged, childId: childId)
+        TrainingReminderManager.cancelStreakAtRiskReminder(childId: childId)
 
         // Award XP
         let earned = XPCalculator.xpForSession(

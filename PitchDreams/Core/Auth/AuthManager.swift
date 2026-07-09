@@ -10,6 +10,9 @@ enum AuthState: Equatable {
 final class AuthManager: ObservableObject {
     @Published var state: AuthState = .loading
 
+    /// Set when a 401 forces logout so the login screen can explain why.
+    @Published var sessionExpired = false
+
     private let apiClient: APIClientProtocol
     private let keychain: KeychainServiceProtocol
     private let decoder = JSONDecoder()
@@ -20,11 +23,13 @@ final class AuthManager: ObservableObject {
         return nil
     }
 
-    init(apiClient: APIClientProtocol = APIClient(), keychain: KeychainServiceProtocol = KeychainService()) {
+    init(apiClient: APIClientProtocol = APIClient.shared, keychain: KeychainServiceProtocol = KeychainService()) {
         self.apiClient = apiClient
         self.keychain = keychain
 
-        // Wire up 401 auto-logout (only works with concrete APIClient)
+        // Wire up 401 auto-logout on the injected client. Production always
+        // injects APIClient.shared (the default), which every ViewModel also
+        // uses — so a 401 from any screen lands here.
         if let concreteClient = apiClient as? APIClient {
             concreteClient.onUnauthorized = { [weak self] in
                 Task { @MainActor in
@@ -68,6 +73,7 @@ final class AuthManager: ObservableObject {
             APIRouter.parentLogin(email: email, password: password)
         )
         try persistSession(token: response.token, user: response.user)
+        sessionExpired = false
         state = .authenticated(response.user)
         Log.auth.info("Parent logged in: \(response.user.id)")
     }
@@ -77,6 +83,7 @@ final class AuthManager: ObservableObject {
             APIRouter.childLogin(parentEmail: parentEmail, nickname: nickname, pin: pin)
         )
         try persistSession(token: response.token, user: response.user)
+        sessionExpired = false
         state = .authenticated(response.user)
 
         // Set activeChildId so CoachPersonality.current reads the right per-child setting
@@ -94,6 +101,11 @@ final class AuthManager: ObservableObject {
     }
 
     func handleUnauthorized() {
+        // Only flag expiry when there was a session to lose; a 401 from a bad
+        // login attempt shouldn't show the "session expired" banner.
+        if case .authenticated = state {
+            sessionExpired = true
+        }
         clearSession()
         state = .unauthenticated
         Log.auth.warning("Session expired — logged out")

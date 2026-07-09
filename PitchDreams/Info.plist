@@ -16,6 +16,10 @@
 	<string>$(PRODUCT_BUNDLE_PACKAGE_TYPE)</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
+	<key>UIUserInterfaceStyle</key>
+	<string>Dark</string>
 	<key>UILaunchScreen</key>
 	<dict>
 		<key>UIColorName</key>

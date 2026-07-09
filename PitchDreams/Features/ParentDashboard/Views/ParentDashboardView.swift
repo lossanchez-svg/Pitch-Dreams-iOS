@@ -19,7 +19,7 @@ struct ParentDashboardView: View {
     /// to add another without the Family entitlement.
     @State private var showFamilyPaywall = false
 
-    private let apiClient: APIClientProtocol = APIClient()
+    private let apiClient: APIClientProtocol = APIClient.shared
 
     var body: some View {
         ZStack {
@@ -57,11 +57,28 @@ struct ParentDashboardView: View {
                         }
                         .padding(.horizontal, 24)
                         .padding(.top, 24)
-                    } else if let errorText {
-                        Text("Error: \(errorText)")
-                            .foregroundStyle(Color.dsError)
-                            .font(.caption)
-                            .padding(24)
+                    } else if errorText != nil {
+                        VStack(spacing: 12) {
+                            Image(systemName: "wifi.exclamationmark")
+                                .font(.system(size: 32))
+                                .foregroundStyle(Color.dsOnSurfaceVariant)
+                            Text("Couldn't load your players")
+                                .font(.system(size: 16, weight: .bold))
+                                .foregroundStyle(Color.dsOnSurface)
+                            Button {
+                                Task { await loadChildren() }
+                            } label: {
+                                Text("Try Again")
+                                    .font(.system(size: 13, weight: .bold))
+                                    .foregroundStyle(Color.parentGold)
+                                    .padding(.horizontal, 20)
+                                    .padding(.vertical, 10)
+                                    .background(Color.dsSurfaceContainer)
+                                    .clipShape(Capsule())
+                            }
+                        }
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 40)
                     } else if children.isEmpty {
                         VStack(spacing: 12) {
                             Image(systemName: "person.2.fill")
@@ -70,9 +87,10 @@ struct ParentDashboardView: View {
                             Text("No children added yet")
                                 .font(.system(size: 16, weight: .bold))
                                 .foregroundStyle(Color.dsOnSurface)
-                            Text("Add a child at pitchdreams.soccer")
+                            Text("Tap \"Add Child\" below to create your player's profile.")
                                 .font(.system(size: 14))
                                 .foregroundStyle(Color.dsOnSurfaceVariant)
+                                .multilineTextAlignment(.center)
                         }
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 60)
@@ -288,12 +306,6 @@ struct ParentDashboardView: View {
 
             // Stats section
             VStack(spacing: 12) {
-                // Quick stat pills
-                HStack(spacing: 12) {
-                    statPill(icon: "flame.fill", label: "Consistent", color: .dsAccentOrange)
-                    statPill(icon: "calendar", label: "This Week", color: .dsSecondary)
-                }
-
                 // Info
                 HStack {
                     Text("Age \(child.age)")
@@ -346,21 +358,6 @@ struct ParentDashboardView: View {
         }
     }
 
-    private func statPill(icon: String, label: String, color: Color) -> some View {
-        HStack(spacing: 6) {
-            Image(systemName: icon)
-                .font(.system(size: 12))
-                .foregroundStyle(color)
-            Text(label)
-                .font(.system(size: 11, weight: .bold))
-                .foregroundStyle(Color.dsOnSurfaceVariant)
-        }
-        .padding(.horizontal, 12)
-        .padding(.vertical, 6)
-        .background(Color.dsSurfaceContainerHigh)
-        .clipShape(Capsule())
-    }
-
     // MARK: - Action Buttons
 
     private func actionButton(icon: String, label: String, color: Color) -> some View {
@@ -389,7 +386,7 @@ struct ParentDashboardView: View {
         do {
             children = try await apiClient.request(APIRouter.listChildren)
         } catch {
-            errorText = "\(error)"
+            errorText = "load_failed"
             Log.api.error("Failed to load children: \(error)")
         }
         isLoading = false

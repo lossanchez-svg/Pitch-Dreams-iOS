@@ -18,7 +18,7 @@ struct ChildDetailView: View {
     @AppStorage("streakMilestonePaywallSeenAt") private var streakMilestoneKeys: String = ""
     @State private var showStreakMilestonePaywall = false
 
-    private let apiClient: APIClientProtocol = APIClient()
+    private let apiClient: APIClientProtocol = APIClient.shared
 
     init(child: ChildSummary) {
         self.child = child

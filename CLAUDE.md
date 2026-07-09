@@ -123,6 +123,8 @@ Test account: `pitchdreams.soccer@gmail.com` / `Skyway7six#` / Child: `Tester1` 
 
 Multi-device tests auto-run in background after each `git commit` via `.git/hooks/post-commit`. Results logged to `/tmp/pd-multidevice-test.log`.
 
+Guards against simulator storms: `--quick` runs each of the 5 devices once (newest compatible installed runtime only); the script holds `/tmp/pd-multidevice-test.lock` so concurrent runs skip (not queue) and shuts down its simulators on exit; the hook additionally skips if a run is in progress or started within the last 10 minutes.
+
 **CI tiers:** Tier 1 (single device, every PR) → Tier 2 (5 devices, every PR) → Tier 3 (9 devices, nightly + manual dispatch)
 
 ## Project Generation

@@ -58,7 +58,21 @@ final class OnboardingViewModelTests: XCTestCase {
         XCTAssertFalse(viewModel.isSignupValid) // Terms not agreed
 
         viewModel.agreedToTerms = true
+        XCTAssertFalse(viewModel.isSignupValid) // Adult birth year not chosen
+
+        viewModel.birthYear = 1990
         XCTAssertTrue(viewModel.isSignupValid)
+    }
+
+    func testSignupValidationRejectsUnderageBirthYear() {
+        viewModel.email = "test@example.com"
+        viewModel.password = "Password123"
+        viewModel.confirmPassword = "Password123"
+        viewModel.agreedToTerms = true
+        viewModel.birthYear = Calendar.current.component(.year, from: Date()) - 12
+
+        XCTAssertFalse(viewModel.isSignupValid)
+        XCTAssertNotNil(viewModel.birthYearError)
     }
 
     func testSignupValidationPasswordLength() {
@@ -151,6 +165,7 @@ final class OnboardingViewModelTests: XCTestCase {
         viewModel.password = "Password123"
         viewModel.confirmPassword = "Password123"
         viewModel.agreedToTerms = true
+        viewModel.birthYear = 1990
 
         mockAPI.enqueue(TestFixtures.makeSignupResponse(parentId: "parent-new"))
 
@@ -165,6 +180,7 @@ final class OnboardingViewModelTests: XCTestCase {
         viewModel.password = "Password123"
         viewModel.confirmPassword = "Password123"
         viewModel.agreedToTerms = true
+        viewModel.birthYear = 1990
 
         mockAPI.enqueueError(APIError.conflict("Email in use"))
 

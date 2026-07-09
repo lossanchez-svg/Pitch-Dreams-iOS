@@ -341,6 +341,31 @@ final class TechniqueAnimationTests: XCTestCase {
         }
     }
 
+    func testScissorHeroHasVideoAssetPlusCanvasFallback() {
+        // MP4 is the preferred tier. When scissor_hero.mp4 is dropped into
+        // Resources/, SignatureMoveOverviewView plays it ahead of the Rive
+        // and placeholder tiers. Missing keyframes would leave the drill
+        // surfaces broken even while the hero video works — keep both.
+        guard let hero = TechniqueAnimationRegistry.animation(for: "demo_scissor_hero") else {
+            XCTFail("Missing scissorHero")
+            return
+        }
+        XCTAssertEqual(hero.videoAssetName, "scissor_hero")
+        XCTAssertFalse(hero.keyframes.isEmpty, "Video-preferred entries must still ship Canvas fallback keyframes")
+    }
+
+    func testEveryVideoBackedAnimationHasCanvasFallback() {
+        // Same contract as the Rive version: video-backed entries must still
+        // ship keyframes so the drill surfaces render when the MP4 is missing
+        // (e.g. during content iteration before a hero clip is generated).
+        for anim in TechniqueAnimationRegistry.all where anim.videoAssetName != nil {
+            XCTAssertFalse(
+                anim.keyframes.isEmpty,
+                "\(anim.assetId) has videoAssetName but no keyframe fallback"
+            )
+        }
+    }
+
     func testEveryFirstTouchDrillKeyResolves() {
         // FirstTouch drill keys live in FirstTouchViewModel (not in
         // DrillRegistry), and map to animations via a switch in the

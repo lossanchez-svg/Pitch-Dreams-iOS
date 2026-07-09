@@ -90,27 +90,45 @@ struct SignatureMoveOverviewView: View {
 
     // MARK: - Hero player
 
-    /// Resolves the move's `heroDemoAsset` slot via the animation registry.
-    /// When a `.riv` file is bundled for the resolved animation, render
-    /// Rive-native; otherwise fall through to the play-button placeholder
-    /// the app has shipped historically.
+    /// Resolves the move's `heroDemoAsset` slot via the animation registry
+    /// and renders the highest-quality tier that's actually bundled:
+    ///
+    ///   1. MP4 hero clip (`videoAssetName` + file in bundle)
+    ///   2. Rive animation (`riveAssetName` + file in bundle)
+    ///   3. Keyframe animation (always authored — see dependency policy)
+    ///   4. Play-button placeholder (only when no animation is registered)
+    ///
+    /// Each `init?` returns nil when the asset is missing, so the fall-through
+    /// is automatic — no runtime feature flag needed. Tier 3 means a kid never
+    /// sees a dead play button on a move that has an authored animation.
     @ViewBuilder
     private var heroPlayer: some View {
         if let heroAssetId = viewModel.move.heroDemoAsset,
-           let anim = TechniqueAnimationRegistry.animation(for: heroAssetId),
-           let riveAsset = anim.riveAssetName,
-           let riveView = RiveTechniqueView(assetName: riveAsset) {
-            riveView
-                .frame(height: 220)
-                .clipShape(RoundedRectangle(cornerRadius: CornerRadius.lg))
-                .overlay(
-                    RoundedRectangle(cornerRadius: CornerRadius.lg)
-                        .stroke(Color.white.opacity(0.06), lineWidth: 1)
-                )
-                .accessibilityLabel("Hero demo animation for \(viewModel.move.name)")
+           let anim = TechniqueAnimationRegistry.animation(for: heroAssetId) {
+            if let videoAsset = anim.videoAssetName,
+               let videoView = VideoTechniqueView(assetName: videoAsset) {
+                heroFrame(videoView, label: "Hero demo video for \(viewModel.move.name)")
+            } else if let riveAsset = anim.riveAssetName,
+                      let riveView = RiveTechniqueView(assetName: riveAsset) {
+                heroFrame(riveView, label: "Hero demo animation for \(viewModel.move.name)")
+            } else {
+                TechniqueAnimationView(animation: anim, voiceoverEnabled: false)
+                    .accessibilityLabel("Animated demo of \(viewModel.move.name)")
+            }
         } else {
             heroPlayerPlaceholder
         }
+    }
+
+    private func heroFrame<Content: View>(_ content: Content, label: String) -> some View {
+        content
+            .frame(height: 220)
+            .clipShape(RoundedRectangle(cornerRadius: CornerRadius.lg))
+            .overlay(
+                RoundedRectangle(cornerRadius: CornerRadius.lg)
+                    .stroke(Color.white.opacity(0.06), lineWidth: 1)
+            )
+            .accessibilityLabel(label)
     }
 
     private var heroPlayerPlaceholder: some View {

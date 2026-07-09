@@ -281,8 +281,8 @@ struct PaywallView: View {
                 .multilineTextAlignment(.center)
 
             HStack(spacing: 16) {
-                Button("Terms") { /* TODO: link to live ToS */ }
-                Button("Privacy") { /* TODO: link to live Privacy Policy */ }
+                Link("Terms", destination: Constants.Legal.termsOfService)
+                Link("Privacy", destination: Constants.Legal.privacyPolicy)
             }
             .font(.system(size: 11, weight: .medium))
             .foregroundStyle(Color.dsOnSurfaceVariant)

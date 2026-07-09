@@ -254,21 +254,26 @@ extension TechniqueAnimation {
 
     // MARK: Hero demos (Rive-preferred)
 
-    /// Scissor hero demo. The `riveAssetName` resolves to `scissor_hero.riv`
-    /// in `Bundle.main` when one is shipped; until then the keyframe
-    /// fallback (same content as `scissorStillBall`) renders via
-    /// `TechniqueAnimationView`'s Canvas path, so the overview screen
-    /// never shows a broken state.
+    /// Scissor hero demo. Three-tier fallback in `SignatureMoveOverviewView`:
     ///
-    /// First real `.riv` file lands in a follow-up PR once authored in the
-    /// Rive editor and dropped into `PitchDreams/Resources/`.
+    ///   1. `scissor_hero.mp4` (preferred) — AI-generated studio-quality clip
+    ///   2. `scissor_hero.riv` — Rive animation (never authored; kept for the
+    ///      unlikely case someone wants to revisit the Rive path)
+    ///   3. Play-button placeholder
+    ///
+    /// Canvas keyframe fallback from `scissorStillBall` is retained for the
+    /// drill surfaces (`TechniqueAnimationView`) where the figure-plus-arrows
+    /// diagram teaches better than video.
+    ///
+    /// Authoring pipeline for the MP4 lives in `video-authoring/`.
     static let scissorHero = TechniqueAnimation(
         assetId: "demo_scissor_hero",
         viewAngle: .profile,
         keyframes: scissorStillBall.keyframes,
         loops: true,
         loopPauseSeconds: 0.5,
-        riveAssetName: "scissor_hero"
+        riveAssetName: "scissor_hero",
+        videoAssetName: "scissor_hero"
     )
 
     // MARK: Scissor — Stage 1 (groundwork)

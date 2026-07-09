@@ -21,6 +21,44 @@ SCHEME="PitchDreams"
 RESULTS_DIR="/tmp/pd-test-results-$$"
 SIM_PREFIX="PD-Test"
 MAX_PARALLEL=4
+LOCK_DIR="/tmp/pd-multidevice-test.lock"
+LOCK_HELD=false
+BOOTED_UDIDS=()
+
+# Only one test run at a time: concurrent invocations (e.g. from the post-commit
+# hook) skip instead of stacking simulator boots.
+acquire_lock() {
+  if mkdir "$LOCK_DIR" 2>/dev/null; then
+    echo $$ > "$LOCK_DIR/pid"
+    LOCK_HELD=true
+    return 0
+  fi
+  # Reclaim a stale lock left behind by a dead process
+  local pid
+  pid=$(cat "$LOCK_DIR/pid" 2>/dev/null || true)
+  if [[ -z "$pid" ]] || ! kill -0 "$pid" 2>/dev/null; then
+    rm -rf "$LOCK_DIR"
+    if mkdir "$LOCK_DIR" 2>/dev/null; then
+      echo $$ > "$LOCK_DIR/pid"
+      LOCK_HELD=true
+      return 0
+    fi
+  fi
+  return 1
+}
+
+# Always shut down the simulators we booted and release the lock, even if the
+# build fails or the run is interrupted.
+cleanup_on_exit() {
+  local udid
+  for udid in ${BOOTED_UDIDS[@]+"${BOOTED_UDIDS[@]}"}; do
+    xcrun simctl shutdown "$udid" 2>/dev/null || true
+  done
+  if [[ "$LOCK_HELD" == "true" ]]; then
+    rm -rf "$LOCK_DIR"
+  fi
+}
+trap cleanup_on_exit EXIT
 
 # ─── Colors ──────────────────────────────────────────────────────────────────
 RED='\033[0;31m'
@@ -100,6 +138,19 @@ runtime_version_for_major() {
     fi
   done <<< "$INSTALLED_RUNTIMES"
   return 1
+}
+
+version_gt() {
+  # true if version $1 > $2 (numeric major.minor comparison)
+  local a_major="${1%%.*}" b_major="${2%%.*}"
+  local a_minor=0 b_minor=0
+  [[ "$1" == *.* ]] && { a_minor="${1#*.}"; a_minor="${a_minor%%.*}"; }
+  [[ "$2" == *.* ]] && { b_minor="${2#*.}"; b_minor="${b_minor%%.*}"; }
+  if (( a_major != b_major )); then
+    (( a_major > b_major ))
+  else
+    (( a_minor > b_minor ))
+  fi
 }
 
 sim_name() {
@@ -224,13 +275,20 @@ build_test_matrix() {
     fi
 
     if [[ "$mode" == "quick" ]]; then
-      # Quick mode: only use installed runtimes
+      # Quick mode: one combo per device — the newest installed runtime it supports.
+      # (Crossing every device with every installed runtime is what --full is for.)
+      local best_ver="" best_rid=""
       while IFS='|' read -r ver rid; do
         local major="${ver%%.*}"
-        if (( major >= min_ios )); then
-          TEST_COMBOS+=("$def|$ver|$rid")
+        (( major >= min_ios )) || continue
+        if [[ -z "$best_ver" ]] || version_gt "$ver" "$best_ver"; then
+          best_ver="$ver"
+          best_rid="$rid"
         fi
       done <<< "$INSTALLED_RUNTIMES"
+      if [[ -n "$best_rid" ]]; then
+        TEST_COMBOS+=("$def|$best_ver|$best_rid")
+      fi
     else
       # Full mode: try all target iOS versions
       for target_ver in "${TARGET_IOS_VERSIONS[@]}"; do
@@ -394,6 +452,7 @@ cmd_test() {
   echo -e "${CYAN}Booting simulators...${RESET}"
   for udid in "${SIM_UDIDS[@]}"; do
     boot_sim "$udid"
+    BOOTED_UDIDS+=("$udid")
   done
   echo "  All simulators booted."
   echo ""
@@ -551,6 +610,11 @@ if [[ "$DO_INSTALL" == "true" ]]; then
   cmd_install_runtimes
   # Refresh runtimes cache
   INSTALLED_RUNTIMES=$(get_installed_runtimes)
+fi
+
+if ! acquire_lock; then
+  echo "Another test-all-devices.sh run is already in progress (lock: $LOCK_DIR) — skipping."
+  exit 0
 fi
 
 cmd_test "$MODE"

@@ -312,7 +312,6 @@ jobs:
             -only-testing:PitchDreamsTests/APIContractTests \
             CODE_SIGNING_ALLOWED=NO \
             -resultBundlePath APITestResults.xcresult
-        continue-on-error: true
 
       - name: Upload API Test Results
         uses: actions/upload-artifact@v4

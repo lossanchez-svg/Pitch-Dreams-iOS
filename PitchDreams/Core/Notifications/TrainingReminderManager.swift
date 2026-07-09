@@ -123,6 +123,47 @@ enum TrainingReminderManager {
         center.removePendingNotificationRequests(withIdentifiers: [identifier(childId: childId)])
     }
 
+    // MARK: - Streak-at-risk (evening one-shot)
+
+    /// One-shot 19:30 nudge on days the kid hasn't trained yet and has a
+    /// streak worth protecting (3+ days). Scheduled from the home screen
+    /// when it loads, cancelled the moment a session is logged. Only fires
+    /// if notifications are already authorized — this path never prompts.
+    static func scheduleStreakAtRiskReminder(childId: String, childNickname: String?, streak: Int) async {
+        guard streak >= 3 else { return }
+        let status = await authorizationStatus()
+        guard status == .authorized || status == .provisional || status == .ephemeral else { return }
+
+        // Only schedule if 19:30 is still ahead of us today.
+        var fireComponents = Calendar.current.dateComponents([.year, .month, .day], from: Date())
+        fireComponents.hour = 19
+        fireComponents.minute = 30
+        guard let fireDate = Calendar.current.date(from: fireComponents), fireDate > Date() else { return }
+
+        let name = childNickname?.isEmpty == false ? childNickname! : "Player"
+        let content = UNMutableNotificationContent()
+        content.title = "Your \(streak)-day streak needs you, \(name)."
+        content.body = "10 minutes tonight keeps it alive."
+        content.sound = .default
+
+        let trigger = UNCalendarNotificationTrigger(dateMatching: fireComponents, repeats: false)
+        let request = UNNotificationRequest(
+            identifier: streakRiskIdentifier(childId: childId),
+            content: content,
+            trigger: trigger
+        )
+        let center = UNUserNotificationCenter.current()
+        center.removePendingNotificationRequests(withIdentifiers: [streakRiskIdentifier(childId: childId)])
+        try? await center.add(request)
+    }
+
+    /// Cancel the evening nudge — call when a session is logged so the kid
+    /// isn't nagged about a streak they already extended today.
+    static func cancelStreakAtRiskReminder(childId: String) {
+        let center = UNUserNotificationCenter.current()
+        center.removePendingNotificationRequests(withIdentifiers: [streakRiskIdentifier(childId: childId)])
+    }
+
     // MARK: - Private
 
     private struct StoredPrefs: Codable {
@@ -133,6 +174,10 @@ enum TrainingReminderManager {
 
     private static func identifier(childId: String) -> String {
         "training_reminder_\(childId)"
+    }
+
+    private static func streakRiskIdentifier(childId: String) -> String {
+        "streak_risk_\(childId)"
     }
 
     private static func prefsKey(childId: String) -> String {

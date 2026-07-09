@@ -30,7 +30,7 @@ final class PlayerCardViewModel: ObservableObject {
 
     init(
         childId: String,
-        apiClient: APIClientProtocol = APIClient(),
+        apiClient: APIClientProtocol = APIClient.shared,
         store: PlayerCardStore = PlayerCardStore(),
         xpStore: XPStore = XPStore(),
         moveStore: SignatureMoveStore = SignatureMoveStore(),

@@ -308,7 +308,7 @@ struct AddChildView: View {
         viewModel.isLoading = true
         viewModel.errorMessage = nil
         do {
-            let apiClient: APIClientProtocol = APIClient()
+            let apiClient: APIClientProtocol = APIClient.shared
             try await apiClient.requestVoid(APIRouter.setChildPin(childId: cid, pin: viewModel.pin))
             onChildAdded()
             dismiss()

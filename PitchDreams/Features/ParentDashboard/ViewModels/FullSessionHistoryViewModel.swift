@@ -33,7 +33,7 @@ final class FullSessionHistoryViewModel: ObservableObject {
     let childId: String
     private let apiClient: APIClientProtocol
 
-    init(childId: String, apiClient: APIClientProtocol = APIClient()) {
+    init(childId: String, apiClient: APIClientProtocol = APIClient.shared) {
         self.childId = childId
         self.apiClient = apiClient
     }

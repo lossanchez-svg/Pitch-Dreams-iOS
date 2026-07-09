@@ -12,7 +12,7 @@ struct PinSetupSheet: View {
     @State private var errorMessage: String?
     @State private var didSave = false
 
-    private let apiClient: APIClientProtocol = APIClient()
+    private let apiClient: APIClientProtocol = APIClient.shared
 
     private var isValid: Bool {
         pin.count >= 4 && pin.count <= 6 && pin == confirmPin && pin.allSatisfy(\.isNumber)

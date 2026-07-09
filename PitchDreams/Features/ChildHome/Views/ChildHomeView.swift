@@ -33,6 +33,7 @@ struct ChildHomeView: View {
 
     @StateObject private var pitchVM: IRLPitchViewModel
     @State private var showPitchSheet = false
+    @State private var showEvidenceBank = false
 
     init(childId: String) {
         self.childId = childId
@@ -159,6 +160,11 @@ struct ChildHomeView: View {
                             .padding(.horizontal, Spacing.xl)
                             .padding(.top, Spacing.lg)
 
+                        // Confidence Evidence Bank entry
+                        evidenceBankCard
+                            .padding(.horizontal, Spacing.xl)
+                            .padding(.top, Spacing.lg)
+
                         // Next Evolution + Start Training
                         nextEvolutionCard
                             .padding(.horizontal, Spacing.xl)
@@ -229,6 +235,9 @@ struct ChildHomeView: View {
         .toolbarBackground(.visible, for: .navigationBar)
         .refreshable {
             await viewModel.loadData()
+        }
+        .sheet(isPresented: $showEvidenceBank) {
+            EvidenceBankView(childId: childId)
         }
         .task {
             await viewModel.loadData()
@@ -649,10 +658,11 @@ struct ChildHomeView: View {
             .clipShape(RoundedRectangle(cornerRadius: CornerRadius.lg))
             .ghostBorder()
 
-            // Skill Level
+            // Total XP — real, server-backed number (a fake letter grade
+            // used to live here; kids notice a static "A+").
             VStack(alignment: .leading, spacing: 8) {
                 HStack {
-                    Image(systemName: "chart.bar.fill")
+                    Image(systemName: "bolt.fill")
                         .font(.system(size: 14))
                         .foregroundStyle(Color.dsSecondary)
                     Spacer()
@@ -661,15 +671,17 @@ struct ChildHomeView: View {
                         .foregroundStyle(Color.dsSecondary.opacity(0.1))
                 }
 
-                Text("SKILL\nLEVEL")
+                Text("TOTAL\nXP")
                     .font(.system(size: 10, weight: .bold))
                     .tracking(1)
                     .foregroundStyle(Color.dsOnSurfaceVariant)
                     .lineSpacing(2)
 
-                Text(skillGrade)
+                Text("\(viewModel.totalXP)")
                     .font(.system(size: 36, weight: .heavy, design: .rounded))
                     .foregroundStyle(Color.dsOnSurface)
+                    .minimumScaleFactor(0.5)
+                    .lineLimit(1)
             }
             .padding(Spacing.lg)
             .frame(maxWidth: .infinity, alignment: .leading)
@@ -679,14 +691,46 @@ struct ChildHomeView: View {
         }
     }
 
-    private var skillGrade: String {
-        let streak = viewModel.streakCount
-        if streak >= 30 { return "A+" }
-        if streak >= 14 { return "A" }
-        if streak >= 7 { return "B+" }
-        if streak >= 3 { return "B" }
-        if streak >= 1 { return "C" }
-        return "C-"
+    // MARK: - Evidence Bank Card
+
+    /// Entry point for the Confidence Evidence Bank — proof the kid can
+    /// read before a match. See PLAYER_DEVELOPMENT_PLAN.md Phase B1a.
+    private var evidenceBankCard: some View {
+        Button {
+            showEvidenceBank = true
+        } label: {
+            HStack(spacing: Spacing.lg) {
+                Image(systemName: "shield.checkered")
+                    .font(.system(size: 26))
+                    .foregroundStyle(Color.dsTertiary)
+                    .frame(width: 44, height: 44)
+                    .background(Color.dsTertiary.opacity(0.12))
+                    .clipShape(Circle())
+
+                VStack(alignment: .leading, spacing: 3) {
+                    Text("THE PROOF")
+                        .font(.system(size: 10, weight: .heavy, design: .rounded))
+                        .tracking(2)
+                        .foregroundStyle(Color.dsTertiary)
+                    Text("Big game coming up? See your evidence.")
+                        .font(.system(size: 14, weight: .bold, design: .rounded))
+                        .foregroundStyle(Color.dsOnSurface)
+                        .multilineTextAlignment(.leading)
+                }
+
+                Spacer()
+
+                Image(systemName: "chevron.right")
+                    .font(.system(size: 12, weight: .bold))
+                    .foregroundStyle(Color.dsOnSurfaceVariant)
+            }
+            .padding(Spacing.lg)
+            .background(Color.dsSurfaceContainerLow)
+            .clipShape(RoundedRectangle(cornerRadius: CornerRadius.lg))
+            .ghostBorder()
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel("Open your confidence evidence")
     }
 
     // MARK: - Next Evolution Card
@@ -1102,6 +1146,8 @@ struct ChildHomeView: View {
 
     // MARK: - Skeleton
 
+    /// Mirrors the real layout: greeting, avatar hero, rank bar, bento stat
+    /// pair, weekly goals, missions — so loading previews the actual screen.
     private var skeletonContent: some View {
         VStack(spacing: 20) {
             VStack(alignment: .leading, spacing: 4) {
@@ -1110,18 +1156,20 @@ struct ChildHomeView: View {
             }
             .frame(maxWidth: .infinity, alignment: .leading)
 
-            SkeletonStreakRing()
-            SkeletonQuickActions()
-            SkeletonCard()
+            // Avatar hero + rank bar
+            SkeletonView(width: 160, height: 160)
+                .clipShape(Circle())
+            SkeletonView(width: 240, height: 44)
 
-            VStack(alignment: .leading, spacing: 12) {
-                SkeletonView(width: 80, height: 18)
+            // Bento stats (streak days + total XP)
+            HStack(spacing: 12) {
                 SkeletonCard()
-                HStack(spacing: 12) {
-                    SkeletonCard()
-                    SkeletonCard()
-                }
+                SkeletonCard()
             }
+
+            // Weekly goals + missions cards
+            SkeletonCard()
+            SkeletonCard()
         }
     }
 
@@ -1232,7 +1280,7 @@ struct ChildHomeView: View {
 
     private func recordMilestone(_ milestone: Int) {
         Task {
-            let apiClient: APIClientProtocol = APIClient()
+            let apiClient: APIClientProtocol = APIClient.shared
             let body = MilestoneBody(milestone: milestone)
             let _: MilestoneResult? = try? await apiClient.request(
                 APIRouter.recordMilestone(childId: childId, body: body)

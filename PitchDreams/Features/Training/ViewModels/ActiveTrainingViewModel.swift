@@ -89,7 +89,7 @@ final class ActiveTrainingViewModel: ObservableObject {
         return max(1, Int(Date().timeIntervalSince(start) / 60))
     }
 
-    init(childId: String, drills: [DrillDefinition], spaceType: String, apiClient: APIClientProtocol = APIClient()) {
+    init(childId: String, drills: [DrillDefinition], spaceType: String, apiClient: APIClientProtocol = APIClient.shared) {
         self.childId = childId
         self.spaceType = spaceType
         self.apiClient = apiClient
@@ -256,9 +256,10 @@ final class ActiveTrainingViewModel: ObservableObject {
             let _: SessionSaveResult = try await apiClient.request(
                 APIRouter.createSession(childId: childId, body: body)
             )
-        } catch APIError.network {
-            // Offline or weak connection — queue for background retry and
-            // proceed with the success UI so the kid doesn't lose the moment.
+        } catch APIError.network, APIError.server {
+            // Offline, weak connection, or transient backend failure — queue
+            // for background retry and proceed with the success UI so the kid
+            // doesn't lose the moment.
             await SessionSyncQueue.shared.enqueueSession(childId: childId, body: body)
             queuedForRetry = true
             Log.api.info("Session save queued for retry for child \(self.childId)")
@@ -290,6 +291,7 @@ final class ActiveTrainingViewModel: ObservableObject {
         }
         sessionSaved = true
         MissionsViewModel.shared.recordEvent(.sessionLogged, childId: childId)
+        TrainingReminderManager.cancelStreakAtRiskReminder(childId: childId)
 
         // Award XP
         let earned = XPCalculator.xpForSession(

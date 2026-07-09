@@ -15,9 +15,11 @@ struct StreakMilestoneModal: View {
         VStack(spacing: 28) {
             Spacer()
 
-            // Flame animation
-            Text("🔥")
+            // Flame animation — same SF Symbol flame as ConsistencyRingView
+            // so the streak icon reads as one visual language everywhere.
+            Image(systemName: "flame.fill")
                 .font(.system(size: 72))
+                .foregroundStyle(DSGradient.orangeAccent)
                 .scaleEffect(flameScale)
                 .onAppear {
                     withAnimation(.spring(response: 0.5, dampingFraction: 0.5)) {
@@ -36,8 +38,10 @@ struct StreakMilestoneModal: View {
                 .font(.system(size: 72, weight: .bold, design: .rounded))
                 .foregroundStyle(Color.dsAccentOrange)
 
-            Text("Day Streak!")
-                .font(.title.bold())
+            Text("DAY STREAK!")
+                .font(.system(size: 24, weight: .black, design: .rounded))
+                .tracking(2)
+                .foregroundStyle(Color.dsOnSurface)
                 .accessibilityLabel("\(milestone) day streak reached!")
 
             if freezeAwarded {
@@ -70,13 +74,15 @@ struct StreakMilestoneModal: View {
             Button {
                 onDismiss()
             } label: {
-                Text("Keep Going!")
-                    .font(.title3.weight(.semibold))
+                Text("KEEP GOING!")
+                    .font(.system(size: 14, weight: .black, design: .rounded))
+                    .tracking(2)
                     .frame(maxWidth: .infinity)
-                    .padding()
+                    .padding(.vertical, 18)
                     .background(DSGradient.orangeAccent)
-                    .foregroundStyle(.white)
-                    .clipShape(RoundedRectangle(cornerRadius: 16))
+                    .foregroundStyle(Color.dsCTALabel)
+                    .clipShape(RoundedRectangle(cornerRadius: CornerRadius.lg))
+                    .dsPrimaryShadow()
             }
             .padding(.horizontal, 32)
             .padding(.bottom, 48)

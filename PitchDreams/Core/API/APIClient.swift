@@ -6,6 +6,10 @@ protocol APIClientProtocol: Sendable {
 }
 
 final class APIClient: APIClientProtocol, @unchecked Sendable {
+    /// The app-wide client. All production call sites must use this instance so
+    /// `onUnauthorized` (wired by AuthManager) fires no matter which screen hits a 401.
+    static let shared = APIClient()
+
     private let session: URLSession
     private let baseURL: URL
     private let interceptor: TokenInterceptor
@@ -15,8 +19,18 @@ final class APIClient: APIClientProtocol, @unchecked Sendable {
     /// Called on 401 — AuthManager sets this to trigger logout
     var onUnauthorized: (@Sendable () -> Void)?
 
+    /// Fail fast on dead connections so saves fall through to the offline sync
+    /// queue instead of hanging on a disabled button.
+    private static func makeSession() -> URLSession {
+        let config = URLSessionConfiguration.default
+        config.timeoutIntervalForRequest = 15
+        config.timeoutIntervalForResource = 60
+        config.waitsForConnectivity = false
+        return URLSession(configuration: config)
+    }
+
     init(
-        session: URLSession = .shared,
+        session: URLSession = APIClient.makeSession(),
         baseURL: URL = Constants.baseURL,
         interceptor: TokenInterceptor = TokenInterceptor()
     ) {

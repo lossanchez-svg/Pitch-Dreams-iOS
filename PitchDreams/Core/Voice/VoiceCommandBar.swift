@@ -5,12 +5,18 @@ struct VoiceCommandBar: View {
     @Binding var lastCommand: String?
 
     @State private var showCommand = false
+    @State private var showPermissionAlert = false
 
     var body: some View {
         HStack(spacing: 12) {
             // Mic button
             Button {
-                Task { await speechRecognizer.toggleListening() }
+                Task {
+                    await speechRecognizer.toggleListening()
+                    if speechRecognizer.permissionDenied {
+                        showPermissionAlert = true
+                    }
+                }
             } label: {
                 Image(systemName: speechRecognizer.isListening ? "mic.fill" : "mic")
                     .font(.title3)
@@ -44,6 +50,12 @@ struct VoiceCommandBar: View {
                 Text("Listening...")
                     .font(.subheadline.italic())
                     .foregroundStyle(.secondary)
+            } else if let errorText = speechRecognizer.error {
+                Text(errorText)
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                    .lineLimit(1)
+                    .truncationMode(.tail)
             }
 
             Spacer()
@@ -51,6 +63,16 @@ struct VoiceCommandBar: View {
         .padding(.horizontal, 16)
         .padding(.vertical, 10)
         .background(.ultraThinMaterial)
+        .alert("Voice needs permission", isPresented: $showPermissionAlert) {
+            Button("Open Settings") {
+                if let url = URL(string: UIApplication.openSettingsURLString) {
+                    UIApplication.shared.open(url)
+                }
+            }
+            Button("Not Now", role: .cancel) {}
+        } message: {
+            Text("To use voice commands, allow Microphone and Speech Recognition for PitchDreams in Settings.")
+        }
         .onChange(of: lastCommand) { newValue in
             guard newValue != nil else { return }
             withAnimation(.easeIn(duration: 0.2)) {

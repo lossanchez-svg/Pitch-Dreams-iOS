@@ -25,6 +25,9 @@ struct LearnView: View {
                         // Hero progress card
                         progressSummary
 
+                        // Game Moments — train the decision, not just the concept
+                        gameMomentsCard
+
                         // Lessons by track
                         ForEach(viewModel.lessonsByTrack, id: \.track) { group in
                             VStack(alignment: .leading, spacing: Spacing.md) {
@@ -156,6 +159,49 @@ struct LearnView: View {
     private var completionProgress: Double {
         guard viewModel.totalCount > 0 else { return 0 }
         return Double(viewModel.completedCount) / Double(viewModel.totalCount)
+    }
+
+    // MARK: - Game Moments
+
+    private var gameMomentsCard: some View {
+        NavigationLink {
+            GameMomentsView(childId: childId)
+        } label: {
+            HStack(spacing: 14) {
+                ZStack {
+                    RoundedRectangle(cornerRadius: 12)
+                        .fill(Color.dsSecondary.opacity(0.15))
+                        .frame(width: 44, height: 44)
+                    Image(systemName: "brain.head.profile")
+                        .font(.system(size: 20))
+                        .foregroundStyle(Color.dsSecondary)
+                }
+
+                VStack(alignment: .leading, spacing: 3) {
+                    Text("GAME MOMENTS")
+                        .font(.system(size: 10, weight: .heavy, design: .rounded))
+                        .tracking(2)
+                        .foregroundStyle(Color.dsSecondary)
+                    Text("Read the pitch. Decide in 3 seconds.")
+                        .font(.system(size: 15, weight: .bold, design: .rounded))
+                        .foregroundStyle(Color.dsOnSurface)
+                }
+
+                Spacer()
+
+                Image(systemName: "chevron.right")
+                    .font(.system(size: 13, weight: .bold))
+                    .foregroundStyle(Color.dsOnSurfaceVariant)
+            }
+            .padding(Spacing.lg)
+            .background(Color.dsSecondary.opacity(0.08))
+            .clipShape(RoundedRectangle(cornerRadius: CornerRadius.lg))
+            .overlay(
+                RoundedRectangle(cornerRadius: CornerRadius.lg)
+                    .stroke(Color.dsSecondary.opacity(0.25), lineWidth: 1)
+            )
+        }
+        .buttonStyle(.plain)
     }
 
     // MARK: - Lesson Card

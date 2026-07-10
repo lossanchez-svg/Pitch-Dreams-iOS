@@ -6,6 +6,7 @@ import SwiftUI
 struct EvidenceBankView: View {
     @StateObject private var viewModel: ConfidenceViewModel
     @Environment(\.dismiss) private var dismiss
+    @State private var showResetRoutine = false
 
     init(childId: String) {
         _viewModel = StateObject(wrappedValue: ConfidenceViewModel(childId: childId))
@@ -43,6 +44,8 @@ struct EvidenceBankView: View {
                         .padding(.horizontal, Spacing.xl)
 
                         closer
+
+                        resetRoutineCard
                     }
 
                     Spacer(minLength: 24)
@@ -67,6 +70,49 @@ struct EvidenceBankView: View {
             }
         }
         .task { await viewModel.load() }
+        .sheet(isPresented: $showResetRoutine) {
+            ResetRoutineView()
+        }
+    }
+
+    /// Entry to the 5-second mistake reset — the other half of not playing
+    /// scared: proof for before the match, the reset for during it.
+    private var resetRoutineCard: some View {
+        Button {
+            showResetRoutine = true
+        } label: {
+            HStack(spacing: 14) {
+                Image(systemName: "arrow.counterclockwise.circle.fill")
+                    .font(.system(size: 24))
+                    .foregroundStyle(Color.dsSecondary)
+
+                VStack(alignment: .leading, spacing: 3) {
+                    Text("WHEN IT GOES WRONG")
+                        .font(.system(size: 10, weight: .heavy, design: .rounded))
+                        .tracking(2)
+                        .foregroundStyle(Color.dsSecondary)
+                    Text("Practice the 5-second reset")
+                        .font(.system(size: 15, weight: .bold, design: .rounded))
+                        .foregroundStyle(Color.dsOnSurface)
+                }
+
+                Spacer()
+
+                Image(systemName: "chevron.right")
+                    .font(.system(size: 13, weight: .bold))
+                    .foregroundStyle(Color.dsOnSurfaceVariant)
+            }
+            .padding(Spacing.lg)
+            .background(Color.dsSecondary.opacity(0.08))
+            .clipShape(RoundedRectangle(cornerRadius: CornerRadius.lg))
+            .overlay(
+                RoundedRectangle(cornerRadius: CornerRadius.lg)
+                    .stroke(Color.dsSecondary.opacity(0.25), lineWidth: 1)
+            )
+        }
+        .buttonStyle(.plain)
+        .padding(.horizontal, Spacing.xl)
+        .padding(.top, 8)
     }
 
     private var header: some View {

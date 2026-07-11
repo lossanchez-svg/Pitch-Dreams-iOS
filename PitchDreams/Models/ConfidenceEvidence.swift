@@ -45,6 +45,8 @@ struct ConfidenceSnapshot: Equatable {
     var totalSessions: Int = 0
     /// True when totalSessions hit the fetch cap, so copy can say "30+".
     var sessionCountIsFloor: Bool = false
+    /// Matches where the kid banked a brave play (Match Mode, Phase B3).
+    var bravePlaysLogged: Int = 0
 
     static func == (lhs: ConfidenceSnapshot, rhs: ConfidenceSnapshot) -> Bool {
         lhs.masteredMoveNames == rhs.masteredMoveNames &&
@@ -53,7 +55,8 @@ struct ConfidenceSnapshot: Equatable {
         lhs.personalBests.map(\.value) == rhs.personalBests.map(\.value) &&
         lhs.currentStreak == rhs.currentStreak &&
         lhs.totalSessions == rhs.totalSessions &&
-        lhs.sessionCountIsFloor == rhs.sessionCountIsFloor
+        lhs.sessionCountIsFloor == rhs.sessionCountIsFloor &&
+        lhs.bravePlaysLogged == rhs.bravePlaysLogged
     }
 
     /// Render the snapshot as narrative lines. Never returns an empty list —
@@ -90,6 +93,13 @@ struct ConfidenceSnapshot: Equatable {
                 kind: .volume,
                 text: "\(count) sessions logged. Every one of them is still in your feet."
             ))
+        }
+
+        if bravePlaysLogged >= 1 {
+            let text = bravePlaysLogged == 1
+                ? "You tried something brave in a real match. That's how it starts."
+                : "\(bravePlaysLogged) matches where you tried something brave. You don't play scared."
+            lines.append(EvidenceLine(kind: .courage, text: text))
         }
 
         if lines.isEmpty {

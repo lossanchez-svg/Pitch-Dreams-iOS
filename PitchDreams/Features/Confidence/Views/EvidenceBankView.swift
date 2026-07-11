@@ -7,6 +7,7 @@ struct EvidenceBankView: View {
     @StateObject private var viewModel: ConfidenceViewModel
     @Environment(\.dismiss) private var dismiss
     @State private var showResetRoutine = false
+    @State private var showMatchPrep = false
 
     init(childId: String) {
         _viewModel = StateObject(wrappedValue: ConfidenceViewModel(childId: childId))
@@ -45,6 +46,8 @@ struct EvidenceBankView: View {
 
                         closer
 
+                        matchPrepCard
+
                         resetRoutineCard
                     }
 
@@ -73,6 +76,48 @@ struct EvidenceBankView: View {
         .sheet(isPresented: $showResetRoutine) {
             ResetRoutineView()
         }
+        .sheet(isPresented: $showMatchPrep) {
+            MatchPrepView(childId: viewModel.childId)
+        }
+    }
+
+    /// Entry to the 90-second pre-match routine (Match Mode, Phase B3).
+    private var matchPrepCard: some View {
+        Button {
+            showMatchPrep = true
+        } label: {
+            HStack(spacing: 14) {
+                Image(systemName: "figure.soccer")
+                    .font(.system(size: 24))
+                    .foregroundStyle(Color.dsTertiary)
+
+                VStack(alignment: .leading, spacing: 3) {
+                    Text("GAME TODAY?")
+                        .font(.system(size: 10, weight: .heavy, design: .rounded))
+                        .tracking(2)
+                        .foregroundStyle(Color.dsTertiary)
+                    Text("Do your 90-second match prep")
+                        .font(.system(size: 15, weight: .bold, design: .rounded))
+                        .foregroundStyle(Color.dsOnSurface)
+                }
+
+                Spacer()
+
+                Image(systemName: "chevron.right")
+                    .font(.system(size: 13, weight: .bold))
+                    .foregroundStyle(Color.dsOnSurfaceVariant)
+            }
+            .padding(Spacing.lg)
+            .background(Color.dsTertiary.opacity(0.08))
+            .clipShape(RoundedRectangle(cornerRadius: CornerRadius.lg))
+            .overlay(
+                RoundedRectangle(cornerRadius: CornerRadius.lg)
+                    .stroke(Color.dsTertiary.opacity(0.25), lineWidth: 1)
+            )
+        }
+        .buttonStyle(.plain)
+        .padding(.horizontal, Spacing.xl)
+        .padding(.top, 8)
     }
 
     /// Entry to the 5-second mistake reset — the other half of not playing

@@ -9,6 +9,9 @@ final class QuickLogViewModel: ObservableObject {
     @Published var saveSuccess = false
     @Published var errorMessage: String?
     @Published var xpEarned: Int = 0
+    /// Type of the session that was just saved — survives the form reset so
+    /// the view can offer a match reflection after a game is logged.
+    @Published var lastSavedType: String?
 
     let childId: String
     private let apiClient: APIClientProtocol
@@ -69,6 +72,7 @@ final class QuickLogViewModel: ObservableObject {
         }
 
         saveSuccess = true
+        lastSavedType = selectedType
         MissionsViewModel.shared.recordEvent(.sessionLogged, childId: childId)
         TrainingReminderManager.cancelStreakAtRiskReminder(childId: childId)
 

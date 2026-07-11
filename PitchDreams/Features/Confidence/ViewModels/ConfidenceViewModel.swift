@@ -12,6 +12,7 @@ final class ConfidenceViewModel: ObservableObject {
     private let apiClient: APIClientProtocol
     private let moveStore: SignatureMoveStore
     private let pbStore: PersonalBestStore
+    private let matchStore: MatchStore
 
     /// Sessions fetched to count volume; hitting this cap means "N+" copy.
     static let sessionFetchLimit = 100
@@ -27,12 +28,14 @@ final class ConfidenceViewModel: ObservableObject {
         childId: String,
         apiClient: APIClientProtocol = APIClient.shared,
         moveStore: SignatureMoveStore = SignatureMoveStore(),
-        pbStore: PersonalBestStore = PersonalBestStore()
+        pbStore: PersonalBestStore = PersonalBestStore(),
+        matchStore: MatchStore = MatchStore()
     ) {
         self.childId = childId
         self.apiClient = apiClient
         self.moveStore = moveStore
         self.pbStore = pbStore
+        self.matchStore = matchStore
     }
 
     func load() async {
@@ -57,6 +60,9 @@ final class ConfidenceViewModel: ObservableObject {
             }
         }
         next.personalBests = bests
+
+        // Courage flywheel: brave plays banked in Match Mode reflections.
+        next.bravePlaysLogged = await matchStore.bravePlays(childId: childId)
 
         // Session volume + live streak from the session history; failures just
         // omit the line — the Evidence Bank degrades, it never errors at the

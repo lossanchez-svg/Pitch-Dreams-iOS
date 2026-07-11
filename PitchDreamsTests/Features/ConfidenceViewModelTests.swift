@@ -25,7 +25,8 @@ final class ConfidenceViewModelTests: XCTestCase {
             childId: childId,
             apiClient: mockAPI,
             moveStore: SignatureMoveStore(defaults: defaults),
-            pbStore: PersonalBestStore(defaults: defaults)
+            pbStore: PersonalBestStore(defaults: defaults),
+            matchStore: MatchStore(defaults: defaults)
         )
     }
 
@@ -144,6 +145,39 @@ final class ConfidenceViewModelTests: XCTestCase {
 
         let after = defaults.data(forKey: "move_progress_\(childId)_\(move.id)")
         XCTAssertEqual(before, after, "Evidence bank must be read-only")
+    }
+
+    // MARK: - Courage flywheel (Match Mode, B3)
+
+    func testBravePlaysProduceCourageLine() async {
+        let store = MatchStore(defaults: defaults)
+        await store.recordReflection(
+            MatchReflection(braveThingTried: "Took my defender on 1v1", effortLevel: 4, decisionImProudOf: nil, reflectedAt: Date()),
+            childId: childId
+        )
+        await store.recordReflection(
+            MatchReflection(braveThingTried: "Tried my signature move", effortLevel: 3, decisionImProudOf: nil, reflectedAt: Date()),
+            childId: childId
+        )
+        mockAPI.enqueue([SessionLog]())
+
+        let vm = makeViewModel()
+        await vm.load()
+
+        XCTAssertEqual(vm.snapshot.bravePlaysLogged, 2)
+        XCTAssertTrue(vm.snapshot.evidenceLines.contains(where: {
+            $0.kind == .courage && $0.text.contains("2")
+        }))
+    }
+
+    func testNoBravePlaysMeansNoCourageLine() async {
+        mockAPI.enqueue([SessionLog]())
+
+        let vm = makeViewModel()
+        await vm.load()
+
+        XCTAssertEqual(vm.snapshot.bravePlaysLogged, 0)
+        XCTAssertFalse(vm.snapshot.evidenceLines.contains(where: { $0.kind == .courage }))
     }
 
     // MARK: - Name joining

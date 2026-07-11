@@ -196,6 +196,29 @@ struct FirstTouchView: View {
                 }
             }
 
+            // Scan & Solve — first touch coupled to a called decision
+            Section("Scan & Solve") {
+                NavigationLink {
+                    ScanSolveView(childId: childId)
+                } label: {
+                    HStack(spacing: 12) {
+                        Image(systemName: "eye.trianglebadge.exclamationmark")
+                            .font(.title3)
+                            .foregroundStyle(Color.dsAccentOrange)
+                            .frame(width: 32)
+
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("Coach Calls It")
+                                .font(.subheadline.weight(.medium))
+                                .foregroundStyle(.primary)
+                            Text("First touch where the call says — 10 calls a round")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+                }
+            }
+
             // Juggling drills
             Section("Juggling") {
                 ForEach(FirstTouchViewModel.jugglingDrills, id: \.0) { key, name in

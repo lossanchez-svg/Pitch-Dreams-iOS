@@ -23,12 +23,17 @@ struct SkillTrackView: View {
                         }
                     } else if viewModel.drillStats.isEmpty {
                         emptyState
+
+                        creativityLabCard
                     } else {
                         // Atmospheric hero glow
                         heroGlow
 
                         // Hero summary card
                         skillsSummary
+
+                        // Creativity Lab — variety over repetition
+                        creativityLabCard
 
                         // Section header
                         SectionHeaderView("YOUR DRILLS")
@@ -142,6 +147,51 @@ struct SkillTrackView: View {
             .clipShape(RoundedRectangle(cornerRadius: CornerRadius.lg))
             .ghostBorder()
         }
+    }
+
+    // MARK: - Creativity Lab
+
+    /// Entry to the Creativity Lab (Phase B4b) — the one mode that rewards
+    /// variety instead of repetition.
+    private var creativityLabCard: some View {
+        NavigationLink {
+            CreativityLabView(childId: childId)
+        } label: {
+            HStack(spacing: 14) {
+                ZStack {
+                    RoundedRectangle(cornerRadius: 12)
+                        .fill(Color.dsSecondary.opacity(0.15))
+                        .frame(width: 44, height: 44)
+                    Image(systemName: "paintpalette.fill")
+                        .font(.system(size: 19))
+                        .foregroundStyle(Color.dsSecondary)
+                }
+
+                VStack(alignment: .leading, spacing: 3) {
+                    Text("CREATIVITY LAB")
+                        .font(.system(size: 10, weight: .heavy, design: .rounded))
+                        .tracking(2)
+                        .foregroundStyle(Color.dsSecondary)
+                    Text("Never do the same rep twice.")
+                        .font(.system(size: 15, weight: .bold, design: .rounded))
+                        .foregroundStyle(Color.dsOnSurface)
+                }
+
+                Spacer()
+
+                Image(systemName: "chevron.right")
+                    .font(.system(size: 13, weight: .bold))
+                    .foregroundStyle(Color.dsOnSurfaceVariant)
+            }
+            .padding(Spacing.lg)
+            .background(Color.dsSecondary.opacity(0.08))
+            .clipShape(RoundedRectangle(cornerRadius: CornerRadius.lg))
+            .overlay(
+                RoundedRectangle(cornerRadius: CornerRadius.lg)
+                    .stroke(Color.dsSecondary.opacity(0.25), lineWidth: 1)
+            )
+        }
+        .buttonStyle(.plain)
     }
 
     // MARK: - Drill Card

@@ -5,6 +5,7 @@ struct QuickLogView: View {
     @StateObject private var viewModel: QuickLogViewModel
     @Environment(\.dismiss) private var dismiss
     @State private var showSuccessCheckmark = false
+    @State private var showMatchReflection = false
 
     init(childId: String) {
         self.childId = childId
@@ -123,6 +124,26 @@ struct QuickLogView: View {
                             .font(.subheadline.weight(.medium))
                             .foregroundStyle(.green)
                     }
+
+                    // Match Mode hook: a logged game deserves a bravery
+                    // reflection, not a scoreline post-mortem.
+                    if viewModel.lastSavedType == "game" {
+                        Button {
+                            showMatchReflection = true
+                        } label: {
+                            HStack {
+                                Image(systemName: "bolt.heart.fill")
+                                    .foregroundStyle(Color.dsTertiary)
+                                Text("Played a match? Bank what you tried")
+                                    .font(.subheadline.weight(.semibold))
+                                    .foregroundStyle(Color.dsOnSurface)
+                                Spacer()
+                                Image(systemName: "chevron.right")
+                                    .font(.caption.bold())
+                                    .foregroundStyle(.secondary)
+                            }
+                        }
+                    }
                 }
             }
 
@@ -136,6 +157,9 @@ struct QuickLogView: View {
         }
         .navigationTitle("Quick Log")
         .navigationBarTitleDisplayMode(.inline)
+        .sheet(isPresented: $showMatchReflection) {
+            MatchReflectionView(childId: childId)
+        }
     }
 }
 

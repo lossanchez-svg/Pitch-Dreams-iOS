@@ -58,16 +58,16 @@ final class ConfidenceViewModel: ObservableObject {
         }
         next.personalBests = bests
 
-        // Streak + session volume from the server; failures just omit the
-        // line — the Evidence Bank degrades, it never errors at the kid.
-        if let streaks: StreakData = try? await apiClient.request(APIRouter.getStreaks(childId: childId)) {
-            next.currentStreak = streaks.milestones.max() ?? 0
-        }
+        // Session volume + live streak from the session history; failures just
+        // omit the line — the Evidence Bank degrades, it never errors at the
+        // kid. (StreakData's milestones are earned badges, not the live streak,
+        // so the streak is always derived from sessions via StreakCalculator.)
         if let sessions: [SessionLog] = try? await apiClient.request(
             APIRouter.listSessions(childId: childId, limit: Self.sessionFetchLimit)
         ) {
             next.totalSessions = sessions.count
             next.sessionCountIsFloor = sessions.count >= Self.sessionFetchLimit
+            next.currentStreak = StreakCalculator.currentStreak(from: sessions)
         }
 
         snapshot = next

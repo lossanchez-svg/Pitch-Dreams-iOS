@@ -37,12 +37,21 @@ final class ConfidenceViewModelTests: XCTestCase {
         defaults.set(data, forKey: "move_progress_\(childId)_\(moveId)")
     }
 
-    private func sessionLog(_ id: String) -> SessionLog {
+    private func sessionLog(_ id: String, daysAgo: Int = 30) -> SessionLog {
         SessionLog(
             id: id, childId: childId, activityType: "SELF_TRAINING",
             effortLevel: 5, mood: "GOOD", duration: 20,
-            win: nil, focus: nil, createdAt: "2026-07-01T10:00:00Z"
+            win: nil, focus: nil, createdAt: iso(daysAgo: daysAgo)
         )
+    }
+
+    /// ISO timestamp `daysAgo` days before now — streaks are computed against
+    /// the real clock, so streak fixtures must be relative, not fixed dates.
+    private func iso(daysAgo: Int) -> String {
+        let date = Calendar.current.date(byAdding: .day, value: -daysAgo, to: Date())!
+        let formatter = ISO8601DateFormatter()
+        formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+        return formatter.string(from: date)
     }
 
     // MARK: - Assembly
@@ -53,27 +62,41 @@ final class ConfidenceViewModelTests: XCTestCase {
         _ = await PersonalBestStore(defaults: defaults)
             .checkAndUpdate(metric: "juggling_both_feet", value: 47, childId: childId)
 
-        mockAPI.enqueue(StreakData(freezes: 1, freezesUsed: 0, milestones: [7, 14]))
-        mockAPI.enqueue((0..<12).map { sessionLog("s-\($0)") })
+        // 12 sessions, the last four on a live 4-day run ending today.
+        let sessions = (0..<8).map { sessionLog("old-\($0)", daysAgo: 30 + $0 * 3) }
+            + (0..<4).map { sessionLog("run-\($0)", daysAgo: $0) }
+        mockAPI.enqueue(sessions)
 
         let vm = makeViewModel()
         await vm.load()
 
         XCTAssertEqual(vm.snapshot.masteredMoveNames, [move.name])
-        XCTAssertEqual(vm.snapshot.currentStreak, 14)
+        XCTAssertEqual(vm.snapshot.currentStreak, 4)
         XCTAssertEqual(vm.snapshot.totalSessions, 12)
         XCTAssertFalse(vm.snapshot.sessionCountIsFloor)
 
         let lines = vm.snapshot.evidenceLines
         XCTAssertTrue(lines.contains(where: { $0.kind == .mastery && $0.text.contains(move.name) }))
         XCTAssertTrue(lines.contains(where: { $0.kind == .record && $0.text.contains("47") }))
-        XCTAssertTrue(lines.contains(where: { $0.kind == .consistency && $0.text.contains("14") }))
+        XCTAssertTrue(lines.contains(where: { $0.kind == .consistency && $0.text.contains("4") }))
         XCTAssertTrue(lines.contains(where: { $0.kind == .volume && $0.text.contains("12") }))
+    }
+
+    func testStreakComesFromSessionsNotMilestoneBadges() async {
+        // Regression: currentStreak was read from StreakData.milestones.max(),
+        // which is an earned badge, not the live streak. A kid with an old
+        // 14-day badge and no recent sessions has a streak of zero.
+        mockAPI.enqueue((0..<6).map { sessionLog("stale-\($0)", daysAgo: 20 + $0) })
+
+        let vm = makeViewModel()
+        await vm.load()
+
+        XCTAssertEqual(vm.snapshot.currentStreak, 0)
+        XCTAssertFalse(vm.snapshot.evidenceLines.contains(where: { $0.kind == .consistency }))
     }
 
     func testNewPlayerGetsEncouragingNonEmptySnapshot() async {
         // No local progress, and the API fails — worst case for a new player.
-        mockAPI.enqueueError(APIError.network(URLError(.notConnectedToInternet)))
         mockAPI.enqueueError(APIError.network(URLError(.notConnectedToInternet)))
 
         let vm = makeViewModel()
@@ -85,8 +108,7 @@ final class ConfidenceViewModelTests: XCTestCase {
     }
 
     func testShortStreakAndLowVolumeAreOmitted() async {
-        mockAPI.enqueue(StreakData(freezes: 0, freezesUsed: 0, milestones: [1]))
-        mockAPI.enqueue([sessionLog("s-1")])
+        mockAPI.enqueue([sessionLog("s-1", daysAgo: 0)])
 
         let vm = makeViewModel()
         await vm.load()
@@ -99,7 +121,6 @@ final class ConfidenceViewModelTests: XCTestCase {
     }
 
     func testSessionCapProducesFloorCopy() async {
-        mockAPI.enqueue(StreakData(freezes: 0, freezesUsed: 0, milestones: []))
         mockAPI.enqueue((0..<ConfidenceViewModel.sessionFetchLimit).map { sessionLog("s-\($0)") })
 
         let vm = makeViewModel()
@@ -116,7 +137,6 @@ final class ConfidenceViewModelTests: XCTestCase {
         seedMasteredMove(move.id)
         let before = defaults.data(forKey: "move_progress_\(childId)_\(move.id)")
 
-        mockAPI.enqueue(StreakData(freezes: 0, freezesUsed: 0, milestones: []))
         mockAPI.enqueue([SessionLog]())
 
         let vm = makeViewModel()

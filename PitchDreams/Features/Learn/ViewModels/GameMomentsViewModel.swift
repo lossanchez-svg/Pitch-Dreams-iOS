@@ -8,6 +8,10 @@ final class GameMomentsViewModel: ObservableObject {
 
     enum Phase: Equatable {
         case intro
+        /// Untimed read of the situation, pitch, and options — scanning
+        /// happens BEFORE the ball arrives, so reading speed is never what
+        /// the clock is testing.
+        case scanning
         case deciding
         case feedback(DecisionResult)
         case summary
@@ -53,11 +57,17 @@ final class GameMomentsViewModel: ObservableObject {
 
     // MARK: - Round flow
 
-    func begin(now: Date = Date()) {
+    func begin() {
         guard currentScenario != nil else {
             phase = .summary
             return
         }
+        phase = .scanning
+    }
+
+    /// The kid says they've read the pitch — NOW the ball arrives.
+    func startClock(now: Date = Date()) {
+        guard case .scanning = phase else { return }
         shownAt = now
         phase = .deciding
     }
@@ -85,13 +95,13 @@ final class GameMomentsViewModel: ObservableObject {
         ))
     }
 
-    func next(now: Date = Date()) {
+    func next() {
         guard case .feedback = phase else { return }
         currentIndex += 1
         if currentScenario == nil {
             phase = .summary
         } else {
-            begin(now: now)
+            phase = .scanning
         }
     }
 

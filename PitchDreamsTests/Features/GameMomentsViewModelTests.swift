@@ -41,7 +41,8 @@ final class GameMomentsViewModelTests: XCTestCase {
         let scenario = vm.scenarios[0]
         let shown = Date()
 
-        vm.begin(now: shown)
+        vm.begin()
+        vm.startClock(now: shown)
         vm.choose(scenario.bestOption!.id, now: shown.addingTimeInterval(1.2))
 
         guard case .feedback(let result) = vm.phase else {
@@ -57,7 +58,8 @@ final class GameMomentsViewModelTests: XCTestCase {
         let scenario = vm.scenarios[0]
         let wrong = scenario.options.first(where: { !$0.isBest })!
 
-        vm.begin(now: Date())
+        vm.begin()
+        vm.startClock(now: Date())
         vm.choose(wrong.id, now: Date())
 
         guard case .feedback(let result) = vm.phase else {
@@ -69,7 +71,8 @@ final class GameMomentsViewModelTests: XCTestCase {
 
     func testClockExpiryIsAMiss() {
         let vm = makeViewModel()
-        vm.begin(now: Date())
+        vm.begin()
+        vm.startClock(now: Date())
         vm.timeUp()
 
         guard case .feedback(let result) = vm.phase else {
@@ -84,7 +87,8 @@ final class GameMomentsViewModelTests: XCTestCase {
         let vm = makeViewModel()
         let scenario = vm.scenarios[0]
 
-        vm.begin(now: Date())
+        vm.begin()
+        vm.startClock(now: Date())
         vm.choose(scenario.bestOption!.id, now: Date())
         vm.choose(scenario.options.first(where: { !$0.isBest })!.id, now: Date())
         vm.timeUp()
@@ -98,20 +102,43 @@ final class GameMomentsViewModelTests: XCTestCase {
     func testRoundAdvancesAndEndsInSummary() {
         let vm = makeViewModel(scenarios: fixedScenarios(2))
 
-        vm.begin(now: Date())
+        vm.begin()
+        vm.startClock(now: Date())
         vm.choose(vm.scenarios[0].bestOption!.id, now: Date())
-        vm.next(now: Date())
+        vm.next()
         XCTAssertEqual(vm.currentIndex, 1)
-        guard case .deciding = vm.phase else {
-            return XCTFail("Expected deciding phase for second scenario")
+        guard case .scanning = vm.phase else {
+            return XCTFail("Expected untimed scanning phase for second scenario")
         }
 
+        vm.startClock(now: Date())
         vm.timeUp()
-        vm.next(now: Date())
+        vm.next()
 
         XCTAssertEqual(vm.phase, .summary)
         XCTAssertEqual(vm.results.count, 2)
         XCTAssertEqual(vm.correctCount, 1)
+    }
+
+    func testScanningIsUntimedAndGuarded() {
+        let vm = makeViewModel()
+        vm.begin()
+        XCTAssertEqual(vm.phase, .scanning)
+
+        // Choosing or timing out during the scan does nothing — no clock yet.
+        vm.choose(vm.scenarios[0].bestOption!.id, now: Date())
+        vm.timeUp()
+        XCTAssertEqual(vm.phase, .scanning)
+        XCTAssertTrue(vm.results.isEmpty)
+
+        // Reaction time is measured from clock start, not from scan start.
+        let clockStart = Date()
+        vm.startClock(now: clockStart)
+        vm.choose(vm.scenarios[0].bestOption!.id, now: clockStart.addingTimeInterval(0.8))
+        guard case .feedback(let result) = vm.phase else {
+            return XCTFail("Expected feedback")
+        }
+        XCTAssertEqual(result.reactionMs, 800, accuracy: 5)
     }
 
     func testBestReactionOnlyCountsCorrectAnswers() {
@@ -119,9 +146,11 @@ final class GameMomentsViewModelTests: XCTestCase {
         let shown = Date()
 
         // Fast but wrong, then slower but right.
-        vm.begin(now: shown)
+        vm.begin()
+        vm.startClock(now: shown)
         vm.choose(vm.scenarios[0].options.first(where: { !$0.isBest })!.id, now: shown.addingTimeInterval(0.4))
-        vm.next(now: shown)
+        vm.next()
+        vm.startClock(now: shown)
         vm.choose(vm.scenarios[1].bestOption!.id, now: shown.addingTimeInterval(1.5))
 
         XCTAssertEqual(vm.bestReactionMsThisRound, 1500)
@@ -134,7 +163,8 @@ final class GameMomentsViewModelTests: XCTestCase {
         let vm = GameMomentsViewModel(childId: childId, scenarios: fixedScenarios(1), store: store)
         let shown = Date()
 
-        vm.begin(now: shown)
+        vm.begin()
+        vm.startClock(now: shown)
         vm.choose(vm.scenarios[0].bestOption!.id, now: shown.addingTimeInterval(0.9))
 
         // The record happens on a Task; give it a beat.

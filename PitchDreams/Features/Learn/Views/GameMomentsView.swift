@@ -21,6 +21,8 @@ struct GameMomentsView: View {
             switch viewModel.phase {
             case .intro:
                 intro
+            case .scanning:
+                scanning
             case .deciding:
                 deciding
             case .feedback(let result):
@@ -57,7 +59,7 @@ struct GameMomentsView: View {
                 .foregroundStyle(Color.dsOnSurface)
                 .multilineTextAlignment(.center)
 
-            Text("A real moment from a match freezes on screen. You get \(Int(viewModel.scenarios.first?.clockSeconds ?? 3)) seconds to pick the best option — because in a game, the clock is always running.")
+            Text("A real moment from a match freezes on screen. Scan it as long as you like — then play the ball, and you get \(Int(viewModel.scenarios.first?.clockSeconds ?? 3)) seconds to make the call. Scanning early is the whole trick.")
                 .font(.system(size: 15))
                 .foregroundStyle(Color.dsOnSurfaceVariant)
                 .multilineTextAlignment(.center)
@@ -79,7 +81,6 @@ struct GameMomentsView: View {
 
             Button {
                 viewModel.begin()
-                clockStartedAt = Date()
             } label: {
                 Text("PLAY THE MOMENT")
                     .font(.system(size: 14, weight: .black, design: .rounded))
@@ -110,6 +111,64 @@ struct GameMomentsView: View {
         .padding(.vertical, 10)
         .background(Color.dsSurfaceContainer)
         .clipShape(RoundedRectangle(cornerRadius: CornerRadius.lg))
+    }
+
+    // MARK: - Scanning (untimed read — the ball hasn't arrived yet)
+
+    @ViewBuilder
+    private var scanning: some View {
+        if let scenario = viewModel.currentScenario {
+            ScrollView {
+                VStack(spacing: Spacing.lg) {
+                    progressHeader
+
+                    Text(scenario.situation)
+                        .font(.system(size: 15, weight: .semibold))
+                        .foregroundStyle(Color.dsOnSurface)
+                        .multilineTextAlignment(.center)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .padding(.horizontal, Spacing.lg)
+
+                    AnimatedTacticalPitchView(diagram: scenario.diagram, stepIndex: 0)
+                        .aspectRatio(1.4, contentMode: .fit)
+                        .clipShape(RoundedRectangle(cornerRadius: CornerRadius.lg))
+
+                    Text("Read the pitch and your options. No rush — scanning happens before the ball arrives.")
+                        .font(.system(size: 12))
+                        .foregroundStyle(Color.dsOnSurfaceVariant)
+                        .multilineTextAlignment(.center)
+
+                    VStack(spacing: 10) {
+                        ForEach(scenario.options) { option in
+                            Text(option.label)
+                                .font(.system(size: 15, weight: .bold, design: .rounded))
+                                .foregroundStyle(Color.dsOnSurfaceVariant)
+                                .frame(maxWidth: .infinity)
+                                .padding(.vertical, 14)
+                                .background(Color.dsSurfaceContainer)
+                                .clipShape(RoundedRectangle(cornerRadius: CornerRadius.lg))
+                        }
+                    }
+
+                    Button {
+                        viewModel.startClock()
+                        clockStartedAt = Date()
+                    } label: {
+                        Text("I'VE SCANNED — PLAY THE BALL")
+                            .font(.system(size: 14, weight: .black, design: .rounded))
+                            .tracking(1.5)
+                            .foregroundStyle(Color.dsCTALabel)
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 18)
+                            .background(DSGradient.primaryCTA)
+                            .clipShape(RoundedRectangle(cornerRadius: CornerRadius.lg))
+                            .dsPrimaryShadow()
+                    }
+                    .buttonStyle(.plain)
+                }
+                .padding(Spacing.xl)
+            }
+        }
     }
 
     // MARK: - Deciding
@@ -234,7 +293,6 @@ struct GameMomentsView: View {
 
                 Button {
                     viewModel.next()
-                    clockStartedAt = Date()
                 } label: {
                     Text(viewModel.currentIndex + 1 < viewModel.scenarios.count ? "NEXT MOMENT" : "SEE YOUR ROUND")
                         .font(.system(size: 14, weight: .black, design: .rounded))

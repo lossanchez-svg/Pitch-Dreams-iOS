@@ -13,6 +13,7 @@ final class ScanSolveViewModel: ObservableObject {
     }
 
     @Published var phase: Phase = .intro
+    @Published var pace: ScanPace = ScanSolveRound.defaultPace
     @Published var round: ScanSolveRound?
     @Published var cleanCount: Int = 0
     @Published var isSaving = false
@@ -50,7 +51,8 @@ final class ScanSolveViewModel: ObservableObject {
     }
 
     func start(seed: UInt64? = nil) {
-        round = seed.map { ScanSolveRound.generate(seed: $0) } ?? ScanSolveRound.generate()
+        round = seed.map { ScanSolveRound.generate(pace: pace, seed: $0) }
+            ?? ScanSolveRound.generate(pace: pace)
         cleanCount = 0
         errorMessage = nil
         phase = .playing

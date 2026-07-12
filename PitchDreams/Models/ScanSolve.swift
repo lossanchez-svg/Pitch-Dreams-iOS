@@ -44,21 +44,72 @@ enum ScanCommand: String, CaseIterable, Equatable {
     }
 }
 
+/// How fast the calls come. The base state of a round is PLAYING, not
+/// waiting: the kid keeps a continuous wall-ball rhythm and calls drop in
+/// at jittered moments inside the pace's gap range. Fixed intervals felt
+/// unnatural in play-testing (standing over the ball waiting for a call);
+/// random gaps also force real listening — a metronome can be counted.
+enum ScanPace: String, CaseIterable, Equatable {
+    case steady
+    case quick
+    case blazing
+
+    /// Bounds for the random gap between calls, in seconds.
+    /// `minGap` stays >= `ScanSolveRound.callDisplayDuration` so a call
+    /// never clips the next one off the screen.
+    var minGap: TimeInterval {
+        switch self {
+        case .steady: return 4
+        case .quick: return 3
+        case .blazing: return 2.5
+        }
+    }
+
+    var maxGap: TimeInterval {
+        switch self {
+        case .steady: return 7
+        case .quick: return 5.5
+        case .blazing: return 4
+        }
+    }
+
+    var label: String {
+        switch self {
+        case .steady: return "STEADY"
+        case .quick: return "QUICK"
+        case .blazing: return "BLAZING"
+        }
+    }
+
+    var hint: String {
+        switch self {
+        case .steady: return "Learning the calls"
+        case .quick: return "Match rhythm"
+        case .blazing: return "No thinking time"
+        }
+    }
+}
+
 /// One round of calls. Pure sequence data — deterministic under a seed so
 /// tests can pin the exact commands and timing; the view animates it.
 struct ScanSolveRound: Equatable {
     let commands: [ScanCommand]
-    /// Seconds between calls — long enough to play the ball and re-set.
-    let interval: TimeInterval
-    /// "Get ready" seconds before the first call.
+    /// Absolute call times in seconds from round start; strictly increasing.
+    let callTimes: [TimeInterval]
+    /// Rhythm warm-up seconds before the first call.
     let leadIn: TimeInterval
 
     static let defaultCount = 10
-    static let defaultInterval: TimeInterval = 6
-    static let defaultLeadIn: TimeInterval = 3
+    static let defaultPace: ScanPace = .quick
+    /// "Get your rhythm going" seconds before the first call can land.
+    static let defaultLeadIn: TimeInterval = 5
+    /// Seconds a call stays on screen before returning to the rhythm prompt.
+    static let callDisplayDuration: TimeInterval = 2.5
 
     enum Moment: Equatable {
         case leadIn(remaining: TimeInterval)
+        /// Between calls — the kid keeps passing; the next call is pending.
+        case rhythm(nextIndex: Int)
         case command(index: Int, command: ScanCommand)
         case finished
     }
@@ -76,10 +127,12 @@ struct ScanSolveRound: Equatable {
         }
     }
 
-    /// No two consecutive identical calls — a repeat teaches nothing.
+    /// No two consecutive identical calls — a repeat teaches nothing — and
+    /// gaps between calls are drawn uniformly from the pace's range so the
+    /// kid has to actually listen instead of counting a metronome.
     static func generate(
         count: Int = defaultCount,
-        interval: TimeInterval = defaultInterval,
+        pace: ScanPace = defaultPace,
         leadIn: TimeInterval = defaultLeadIn,
         seed: UInt64 = UInt64.random(in: 0..<UInt64.max)
     ) -> ScanSolveRound {
@@ -90,19 +143,43 @@ struct ScanSolveRound: Equatable {
             let candidates = ScanCommand.allCases.filter { $0 != commands.last }
             commands.append(candidates.randomElement(using: &rng)!)
         }
-        return ScanSolveRound(commands: commands, interval: interval, leadIn: leadIn)
+
+        var callTimes: [TimeInterval] = []
+        callTimes.reserveCapacity(count)
+        var t = leadIn
+        for i in 0..<count {
+            if i > 0 {
+                let fraction = Double(rng.next() % 1_000_000) / 1_000_000
+                t += pace.minGap + fraction * (pace.maxGap - pace.minGap)
+            }
+            callTimes.append(t)
+        }
+
+        return ScanSolveRound(commands: commands, callTimes: callTimes, leadIn: leadIn)
     }
 
     var totalDuration: TimeInterval {
-        leadIn + Double(commands.count) * interval
+        (callTimes.last ?? leadIn) + Self.callDisplayDuration
     }
 
     func moment(at elapsed: TimeInterval) -> Moment {
         if elapsed < leadIn {
             return .leadIn(remaining: leadIn - elapsed)
         }
-        let index = Int((elapsed - leadIn) / interval)
-        guard index < commands.count else { return .finished }
-        return .command(index: index, command: commands[index])
+        // Last call whose time has passed, if any.
+        var current = -1
+        for (i, time) in callTimes.enumerated() {
+            if elapsed >= time { current = i } else { break }
+        }
+        if current == -1 {
+            return .rhythm(nextIndex: 0)
+        }
+        if elapsed < callTimes[current] + Self.callDisplayDuration {
+            return .command(index: current, command: commands[current])
+        }
+        if current + 1 < callTimes.count {
+            return .rhythm(nextIndex: current + 1)
+        }
+        return .finished
     }
 }

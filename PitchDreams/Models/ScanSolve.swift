@@ -44,17 +44,51 @@ enum ScanCommand: String, CaseIterable, Equatable {
     }
 }
 
+/// How fast the calls come. Play-testing showed a fixed 6s left kids
+/// standing around between plays — pace tiers keep the wall-ball rhythm
+/// going for every age.
+enum ScanPace: String, CaseIterable, Equatable {
+    case steady
+    case quick
+    case blazing
+
+    var interval: TimeInterval {
+        switch self {
+        case .steady: return 5
+        case .quick: return 4
+        case .blazing: return 3
+        }
+    }
+
+    var label: String {
+        switch self {
+        case .steady: return "STEADY"
+        case .quick: return "QUICK"
+        case .blazing: return "BLAZING"
+        }
+    }
+
+    var hint: String {
+        switch self {
+        case .steady: return "Learning the calls"
+        case .quick: return "Match rhythm"
+        case .blazing: return "No thinking time"
+        }
+    }
+}
+
 /// One round of calls. Pure sequence data — deterministic under a seed so
 /// tests can pin the exact commands and timing; the view animates it.
 struct ScanSolveRound: Equatable {
     let commands: [ScanCommand]
-    /// Seconds between calls — long enough to play the ball and re-set.
+    /// Seconds between calls.
     let interval: TimeInterval
     /// "Get ready" seconds before the first call.
     let leadIn: TimeInterval
 
     static let defaultCount = 10
-    static let defaultInterval: TimeInterval = 6
+    static let defaultPace: ScanPace = .quick
+    static let defaultInterval: TimeInterval = ScanPace.quick.interval
     static let defaultLeadIn: TimeInterval = 3
 
     enum Moment: Equatable {

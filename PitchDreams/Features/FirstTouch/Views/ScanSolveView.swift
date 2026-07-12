@@ -83,6 +83,41 @@ struct ScanSolveView: View {
                 }
             }
 
+            VStack(alignment: .leading, spacing: 8) {
+                Text("PACE")
+                    .font(.system(size: 10, weight: .bold))
+                    .tracking(2)
+                    .foregroundStyle(Color.dsOnSurfaceVariant)
+
+                HStack(spacing: 8) {
+                    ForEach(ScanPace.allCases, id: \.self) { pace in
+                        let isSelected = viewModel.pace == pace
+                        Button {
+                            viewModel.pace = pace
+                        } label: {
+                            VStack(spacing: 3) {
+                                Text(pace.label)
+                                    .font(.system(size: 11, weight: .heavy, design: .rounded))
+                                    .tracking(1)
+                                Text(pace.hint)
+                                    .font(.system(size: 9))
+                            }
+                            .foregroundStyle(isSelected ? Color.dsAccentOrange : Color.dsOnSurfaceVariant)
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 10)
+                            .background(isSelected ? Color.dsAccentOrange.opacity(0.15) : Color.dsSurfaceContainerHighest)
+                            .clipShape(RoundedRectangle(cornerRadius: CornerRadius.md))
+                            .overlay(
+                                RoundedRectangle(cornerRadius: CornerRadius.md)
+                                    .stroke(isSelected ? Color.dsAccentOrange.opacity(0.35) : .clear, lineWidth: 1)
+                            )
+                        }
+                        .buttonStyle(.plain)
+                    }
+                }
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+
             if viewModel.bestClean > 0 {
                 Text("Your best: \(viewModel.bestClean)/\(viewModel.commandCount) clean")
                     .font(.system(size: 13, weight: .bold, design: .rounded))

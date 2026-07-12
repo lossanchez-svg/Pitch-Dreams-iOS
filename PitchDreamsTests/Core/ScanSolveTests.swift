@@ -49,7 +49,7 @@ final class ScanSolveTests: XCTestCase {
     }
 
     func testMomentTimeline() {
-        let round = ScanSolveRound.generate(seed: 7)  // leadIn 3, interval 6, 10 commands
+        let round = ScanSolveRound.generate(seed: 7)  // leadIn 3, interval 4, 10 commands
 
         guard case .leadIn(let remaining) = round.moment(at: 1.0) else {
             return XCTFail("Expected lead-in at 1s")
@@ -61,15 +61,28 @@ final class ScanSolveTests: XCTestCase {
         }
         XCTAssertEqual(first, 0)
 
-        guard case .command(let last, _) = round.moment(at: 3.0 + 9 * 6 + 5.9) else {
+        guard case .command(let last, _) = round.moment(at: 3.0 + 9 * 4 + 3.9) else {
             return XCTFail("Last call still active just before the end")
         }
         XCTAssertEqual(last, 9)
 
-        XCTAssertEqual(round.totalDuration, 63.0)
+        XCTAssertEqual(round.totalDuration, 43.0)
         guard case .finished = round.moment(at: round.totalDuration) else {
             return XCTFail("Round is over at total duration")
         }
+    }
+
+    func testPaceTiersOrderedAndDefaultMatches() {
+        XCTAssertGreaterThan(ScanPace.steady.interval, ScanPace.quick.interval)
+        XCTAssertGreaterThan(ScanPace.quick.interval, ScanPace.blazing.interval)
+        XCTAssertEqual(ScanSolveRound.defaultInterval, ScanSolveRound.defaultPace.interval)
+    }
+
+    func testViewModelUsesSelectedPace() {
+        let vm = makeViewModel()
+        vm.pace = .blazing
+        vm.start(seed: 3)
+        XCTAssertEqual(vm.round?.interval, ScanPace.blazing.interval)
     }
 
     // MARK: - View model flow

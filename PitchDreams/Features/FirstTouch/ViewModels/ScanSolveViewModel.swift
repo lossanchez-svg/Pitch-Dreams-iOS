@@ -51,8 +51,8 @@ final class ScanSolveViewModel: ObservableObject {
     }
 
     func start(seed: UInt64? = nil) {
-        round = seed.map { ScanSolveRound.generate(interval: pace.interval, seed: $0) }
-            ?? ScanSolveRound.generate(interval: pace.interval)
+        round = seed.map { ScanSolveRound.generate(pace: pace, seed: $0) }
+            ?? ScanSolveRound.generate(pace: pace)
         cleanCount = 0
         errorMessage = nil
         phase = .playing

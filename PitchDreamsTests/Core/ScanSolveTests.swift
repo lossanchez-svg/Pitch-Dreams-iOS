@@ -37,6 +37,36 @@ final class ScanSolveTests: XCTestCase {
         let b = ScanSolveRound.generate(seed: 42)
         XCTAssertEqual(a, b)
         XCTAssertEqual(a.commands.count, ScanSolveRound.defaultCount)
+        XCTAssertEqual(a.callTimes, b.callTimes)
+        XCTAssertEqual(a.callTimes.first, a.leadIn, "First call lands when the warm-up ends")
+    }
+
+    func testGapsWithinPaceBoundsAcrossSeeds() {
+        for pace in ScanPace.allCases {
+            for seed in UInt64(0)..<30 {
+                let round = ScanSolveRound.generate(pace: pace, seed: seed)
+                for (prev, next) in zip(round.callTimes, round.callTimes.dropFirst()) {
+                    let gap = next - prev
+                    XCTAssertGreaterThanOrEqual(gap, pace.minGap, "\(pace) seed \(seed)")
+                    XCTAssertLessThanOrEqual(gap, pace.maxGap, "\(pace) seed \(seed)")
+                }
+            }
+        }
+    }
+
+    func testGapsActuallyVary() {
+        let round = ScanSolveRound.generate(seed: 7)
+        let gaps = zip(round.callTimes, round.callTimes.dropFirst()).map { $1 - $0 }
+        XCTAssertGreaterThan(Set(gaps.map { Int($0 * 1000) }).count, 1, "A metronome can be counted — gaps must jitter")
+    }
+
+    func testNoPaceGapShorterThanCallDisplay() {
+        for pace in ScanPace.allCases {
+            XCTAssertGreaterThanOrEqual(
+                pace.minGap, ScanSolveRound.callDisplayDuration,
+                "\(pace): a call must never clip the next one off the screen"
+            )
+        }
     }
 
     func testNoConsecutiveRepeats() {
@@ -49,40 +79,57 @@ final class ScanSolveTests: XCTestCase {
     }
 
     func testMomentTimeline() {
-        let round = ScanSolveRound.generate(seed: 7)  // leadIn 3, interval 4, 10 commands
+        let round = ScanSolveRound.generate(seed: 7)
+        let display = ScanSolveRound.callDisplayDuration
 
         guard case .leadIn(let remaining) = round.moment(at: 1.0) else {
             return XCTFail("Expected lead-in at 1s")
         }
-        XCTAssertEqual(remaining, 2.0, accuracy: 0.001)
+        XCTAssertEqual(remaining, round.leadIn - 1.0, accuracy: 0.001)
 
-        guard case .command(let first, _) = round.moment(at: 3.0) else {
-            return XCTFail("First call lands when the lead-in ends")
+        // Each call shows for the display window, then back to rhythm.
+        let first = round.callTimes[0]
+        guard case .command(let firstIndex, _) = round.moment(at: first) else {
+            return XCTFail("First call lands at its call time")
         }
-        XCTAssertEqual(first, 0)
+        XCTAssertEqual(firstIndex, 0)
+        guard case .rhythm(let next) = round.moment(at: first + display + 0.01) else {
+            return XCTFail("Back to rhythm after the call display")
+        }
+        XCTAssertEqual(next, 1)
 
-        guard case .command(let last, _) = round.moment(at: 3.0 + 9 * 4 + 3.9) else {
-            return XCTFail("Last call still active just before the end")
+        // Mid-gap between calls 3 and 4 is rhythm pointing at 4.
+        let midGap = (round.callTimes[3] + display + round.callTimes[4]) / 2
+        guard case .rhythm(let upcoming) = round.moment(at: midGap) else {
+            return XCTFail("Expected rhythm between calls")
+        }
+        XCTAssertEqual(upcoming, 4)
+
+        XCTAssertEqual(round.totalDuration, round.callTimes[9] + display, accuracy: 0.001)
+        guard case .command(let last, _) = round.moment(at: round.totalDuration - 0.01) else {
+            return XCTFail("Last call still showing just before the end")
         }
         XCTAssertEqual(last, 9)
-
-        XCTAssertEqual(round.totalDuration, 43.0)
         guard case .finished = round.moment(at: round.totalDuration) else {
             return XCTFail("Round is over at total duration")
         }
     }
 
-    func testPaceTiersOrderedAndDefaultMatches() {
-        XCTAssertGreaterThan(ScanPace.steady.interval, ScanPace.quick.interval)
-        XCTAssertGreaterThan(ScanPace.quick.interval, ScanPace.blazing.interval)
-        XCTAssertEqual(ScanSolveRound.defaultInterval, ScanSolveRound.defaultPace.interval)
+    func testPaceTiersOrderedFastToSlow() {
+        XCTAssertGreaterThan(ScanPace.steady.minGap, ScanPace.quick.minGap)
+        XCTAssertGreaterThan(ScanPace.quick.minGap, ScanPace.blazing.minGap)
+        XCTAssertGreaterThan(ScanPace.steady.maxGap, ScanPace.quick.maxGap)
+        XCTAssertGreaterThan(ScanPace.quick.maxGap, ScanPace.blazing.maxGap)
     }
 
     func testViewModelUsesSelectedPace() {
         let vm = makeViewModel()
         vm.pace = .blazing
         vm.start(seed: 3)
-        XCTAssertEqual(vm.round?.interval, ScanPace.blazing.interval)
+        guard let round = vm.round else { return XCTFail("No round") }
+        for (prev, next) in zip(round.callTimes, round.callTimes.dropFirst()) {
+            XCTAssertLessThanOrEqual(next - prev, ScanPace.blazing.maxGap)
+        }
     }
 
     // MARK: - View model flow

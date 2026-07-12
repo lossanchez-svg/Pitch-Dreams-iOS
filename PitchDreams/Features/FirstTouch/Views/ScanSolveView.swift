@@ -60,7 +60,7 @@ struct ScanSolveView: View {
                 .font(.system(size: 28, weight: .heavy, design: .rounded))
                 .foregroundStyle(Color.dsOnSurface)
 
-            Text("Play the ball against the wall. While it's coming back, the coach calls a direction — LEFT, RIGHT, TURN, or STOP. Your first touch has to go there. \(viewModel.commandCount) calls, one round.")
+            Text("Keep a wall-ball rhythm going the whole round — don't stop passing. When the coach calls LEFT, RIGHT, TURN, or STOP, your very next first touch goes there, then straight back to your rhythm. \(viewModel.commandCount) calls, random timing. Stay listening.")
                 .font(.system(size: 15))
                 .foregroundStyle(Color.dsOnSurfaceVariant)
                 .multilineTextAlignment(.center)
@@ -158,14 +158,42 @@ struct ScanSolveView: View {
                 case .leadIn(let remaining):
                     VStack(spacing: Spacing.xl) {
                         Spacer()
-                        Text("GET READY")
+                        Text("GET YOUR RHYTHM GOING")
                             .font(.system(size: 14, weight: .heavy))
                             .tracking(3)
+                            .foregroundStyle(Color.dsOnSurfaceVariant)
+                        Text("Start passing the wall — calls are coming.")
+                            .font(.system(size: 14))
                             .foregroundStyle(Color.dsOnSurfaceVariant)
                         Text("\(Int(ceil(remaining)))")
                             .font(.system(size: 96, weight: .heavy, design: .rounded))
                             .foregroundStyle(Color.dsAccentOrange)
                             .contentTransition(.numericText())
+                        Spacer()
+                        cancelButton
+                    }
+                    .padding(Spacing.xl)
+
+                case .rhythm(let nextIndex):
+                    VStack(spacing: Spacing.xl) {
+                        HStack(spacing: 6) {
+                            ForEach(0..<round.commands.count, id: \.self) { i in
+                                Capsule()
+                                    .fill(i < nextIndex ? Color.dsAccentOrange : Color.dsSurfaceContainerHighest)
+                                    .frame(height: 4)
+                            }
+                        }
+
+                        Spacer()
+
+                        Text("KEEP THE RHYTHM")
+                            .font(.system(size: 26, weight: .heavy, design: .rounded))
+                            .foregroundStyle(Color.dsOnSurfaceVariant)
+
+                        Text("Ears open — the next call comes when it comes.")
+                            .font(.system(size: 13))
+                            .foregroundStyle(Color.dsOnSurfaceVariant.opacity(0.8))
+
                         Spacer()
                         cancelButton
                     }
